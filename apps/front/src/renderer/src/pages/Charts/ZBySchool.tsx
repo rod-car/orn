@@ -43,8 +43,9 @@ ChartJS.register(
     ArcElement
 )
 
-export function SchoolsByClasses(): JSX.Element {
-    const [scholarYear, setScholarYear] = useState<string>(scholar_years().at(0) as string)
+export function ZBySchool(): JSX.Element {
+    const [surveyId, setSurveyId] = useState(2)
+    const [stateType, setStateType] = useState('MA')
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
@@ -62,14 +63,13 @@ export function SchoolsByClasses(): JSX.Element {
         Client: StateClient,
         datas: StateDatas,
         RequestState
-    } = useApi<StudentState>({
+    } = useApi<SurveySchoolZ>({
         baseUrl: config.baseUrl,
-        url: '/students',
-        key: 'data'
+        url: '/students'
     })
 
     const getData = useCallback(() => {
-        StateClient.get({}, '/state/school-class')
+        StateClient.get({}, '/state/student-school-z')
         SchoolCLient.get()
         ClassCLient.get()
     }, [])
@@ -79,40 +79,60 @@ export function SchoolsByClasses(): JSX.Element {
     }, [])
 
     const data = useMemo(() => {
-        const realData = StateDatas.data
+        const realData = StateDatas.datas as SchoolZ
+        if (realData === undefined) return []
+
+        const stateTypes = ['G', 'M', 'S']
+
         const labels = schools.map((school) => school.name)
-        const datasets = classes.map((classe) => {
+        const datasets = stateTypes.map((type) => {
             const red = Math.floor(Math.random() * 255)
             const green = Math.floor(Math.random() * 255)
             const blue = Math.floor(Math.random() * 255)
-            const data = realData[scholarYear]
+            const data = realData[surveyId]
             return {
-                label: classe.notation,
-                data: schools.map((school) => (data ? data[school.name][classe.notation] : 0)),
+                label: type,
+                data: schools.map((school) =>
+                    data ? data[school.name][stateType][type]['value'] : 0
+                ),
                 backgroundColor: `rgba(${red}, ${green}, ${blue}, 0.5)`
             }
         })
+
         return {
             labels,
             datasets
         }
-    }, [classes, schools, StateDatas, scholarYear])
+    }, [classes, schools, StateDatas, surveyId, stateType])
 
     return (
         <>
             <div className="shadow-lg rounded p-4">
-                <h4 className="mb-4 text-muted">Effectif par école et par classe</h4>
-                <div className="mb-4">
-                    <Select
-                        controlled
-                        label="Année scolaire"
-                        value={scholarYear}
-                        options={scholar_years()}
-                        onChange={({ target }): void => setScholarYear(target.value)}
-                    />
+                <h4 className="mb-4 text-muted">Statistique de malnutrition</h4>
+                <div className="row mb-4">
+                    <div className="col-6">
+                        <Select
+                            controlled
+                            placeholder={null}
+                            label="Phase d'enquête"
+                            value={surveyId}
+                            options={[1, 2, 3, 4, 5]}
+                            onChange={({ target }): void => setSurveyId(parseInt(target.value))}
+                        />
+                    </div>
+                    <div className="col-6">
+                        <Select
+                            controlled
+                            placeholder={null}
+                            label="Type d'état"
+                            value={stateType}
+                            options={['MA', 'IP', 'CH']}
+                            onChange={({ target }): void => setStateType(target.value)}
+                        />
+                    </div>
                 </div>
                 {RequestState.loading && <Spinner className="text-center w-100" />}
-                {data && <Bar options={options} data={data} />}
+                {data && data.labels && data.labels.length > 0 && <Bar options={options} data={data} />}
             </div>
         </>
     )

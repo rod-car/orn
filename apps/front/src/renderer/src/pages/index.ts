@@ -1,3 +1,4 @@
+export { ZBySchool } from './Charts/ZBySchool'
 export { Home } from './Home'
 export { Root } from './Root'
 export { Student } from './Student'

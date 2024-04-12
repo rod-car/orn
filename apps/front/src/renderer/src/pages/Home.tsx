@@ -2,7 +2,7 @@ import { useApi } from 'hooks'
 import React, { useCallback, useEffect } from 'react'
 import { config } from '../../config'
 import { HomeCard, Spinner } from 'ui'
-import { SchoolsByClasses, SchoolsByScholarYear } from '../pages'
+import { SchoolsByClasses, SchoolsByScholarYear, ZBySchool } from '../pages'
 import { NavLink } from 'react-router-dom'
 
 import './Home.modules.scss'
@@ -68,6 +68,12 @@ export function Home(): React.ReactElement {
                         value={'count' in surveyCount ? surveyCount.count : <Spinner />}
                     />
                 </NavLink>
+            </div>
+
+            <div className="row mb-5">
+                <div className="col-12">
+                    <ZBySchool />
+                </div>
             </div>
 
             <div className="row mb-5">

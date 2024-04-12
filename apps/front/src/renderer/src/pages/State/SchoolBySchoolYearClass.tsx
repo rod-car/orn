@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import { useApi } from 'hooks'
 import { config } from '../../../config'
 import { useCallback, useEffect } from 'react'
