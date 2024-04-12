@@ -67,7 +67,7 @@ export function Home(): React.ReactElement {
 
                 <NavLink to="/survey/list" className="col-4 clickable-card">
                     <HomeCard
-                        title="Enquêtes"
+                        title="Mésures antrhopo"
                         icon="bar-chart"
                         type="success"
                         value={'count' in surveyCount ? surveyCount.count : <Spinner />}
