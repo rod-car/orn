@@ -30,9 +30,7 @@ import {
     School,
     State,
     Student,
-    Survey,
-    Login,
-    Register
+    Survey
 } from './pages'
 import { PrivateRoute } from './PrivateRoute'
 

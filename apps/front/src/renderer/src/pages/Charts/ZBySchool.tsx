@@ -132,7 +132,9 @@ export function ZBySchool(): JSX.Element {
                     </div>
                 </div>
                 {RequestState.loading && <Spinner className="text-center w-100" />}
-                {data && data.labels && data.labels.length > 0 && <Bar options={options} data={data} />}
+                {data && data.labels && data.labels.length > 0 && (
+                    <Bar options={options} data={data} />
+                )}
             </div>
         </>
     )
