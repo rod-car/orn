@@ -44,7 +44,7 @@ ChartJS.register(
 )
 
 export function SchoolsByClasses(): JSX.Element {
-    const [scholarYear, setScholarYear] = useState<string>(scholar_years().at(0) as string)
+    const [scholarYear, setScholarYear] = useState<string>(scholar_years().at(1) as string)
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
