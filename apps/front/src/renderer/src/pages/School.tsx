@@ -99,10 +99,13 @@ export function School(): JSX.Element {
                 />
             )}
 
-            <table className="table table-striped mb-5">
+            <div className="d-flex justify-content-end mb-3">
+                <h4 className="text-primary">Arrếté au nombre de {schools.length} école(s)</h4>
+            </div>
+
+            <table className="table table-striped table-bordered mb-5">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Nom</th>
                         <th>Commune</th>
                         <th>District</th>
@@ -122,7 +125,6 @@ export function School(): JSX.Element {
                     {schools.length > 0 &&
                         schools.map((school) => (
                             <tr key={school.id}>
-                                <td>{school.id}</td>
                                 <td>{school.name}</td>
                                 <td>{school?.commune?.name}</td>
                                 <td>{school?.commune?.district.name}</td>
@@ -155,7 +157,7 @@ export function School(): JSX.Element {
                         ))}
                     {!RequestState.loading && schools.length <= 0 && (
                         <tr>
-                            <td colSpan={8} className="text-center">
+                            <td colSpan={7} className="text-center">
                                 Aucune données
                             </td>
                         </tr>

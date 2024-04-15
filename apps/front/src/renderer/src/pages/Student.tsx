@@ -2,14 +2,14 @@ import { useApi, useExcelReader, usePdf } from 'hooks'
 import { Link } from 'react-router-dom'
 import { config } from '../../config'
 import { Button, Select } from 'ui'
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
 import { ageFull, number_array, scholar_years } from 'functions'
 
 import { Pagination } from 'react-laravel-paginex'
 
-const defaultScholarYear = scholar_years()[1]
+const defaultScholarYear = scholar_years().at(1)
 
 /**
  * Page d'accueil de gestion des étudiants
@@ -18,13 +18,12 @@ const defaultScholarYear = scholar_years()[1]
 export function Student(): JSX.Element {
     const [school, setSchool] = useState(0)
     const [classe, setClasse] = useState(0)
-    const [perPage, setPerPage] = useState(10)
+    const [perPage, setPerPage] = useState(30)
     const [scholarYear, setScholarYear] = useState(defaultScholarYear)
     const { toExcel } = useExcelReader()
     const { exportToPdf } = usePdf()
 
     const studentRef = useRef()
-    const actionRef = useRef()
 
     const {
         Client: SClient,
@@ -142,8 +141,7 @@ export function Student(): JSX.Element {
             'Age',
             'Parents',
             'Etablissement',
-            'Classe',
-            'Annee scolaire'
+            'Classe'
         ]
         const list: unknown[][] = [headers]
         const fileName = 'Liste des etudiants.xlsx'
@@ -178,7 +176,7 @@ export function Student(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>Liste des etudiants</h1>
+                <h2 className="text-muted">Liste des etudiants</h2>
                 <div className="d-flex align-items-between">
                     <Button
                         icon="refresh"
@@ -201,7 +199,7 @@ export function Student(): JSX.Element {
 
             {Serror && <div className="alert alert-danger">{Serror.message}</div>}
 
-            <div className="mb-5 mt-3">
+            <Block className="mb-5 mt-3">
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -227,7 +225,7 @@ export function Student(): JSX.Element {
                             </td>
                             <td>
                                 <Select
-                                    placeholder="Tous"
+                                    placeholder={null}
                                     value={scholarYear}
                                     options={scholar_years()}
                                     name="scholar-year"
@@ -278,83 +276,91 @@ export function Student(): JSX.Element {
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </Block>
 
-            <table ref={studentRef} className="table table-striped mb-5">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nom</th>
-                        <th>Prenoms</th>
-                        <th className="text-nowrap">Date de naissance</th>
-                        <th>Age</th>
-                        <th>Parents</th>
-                        <th>Classes</th>
-                        <th className="text-nowrap">Annee scolaire</th>
-                        <th ref={actionRef} style={{ width: '15%' }}>
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {SRequestState.loading && (
-                        <tr>
-                            <td colSpan={9} className="text-center">
-                                Chargement...
-                            </td>
-                        </tr>
-                    )}
-                    {students.data?.length > 0 &&
-                        students.data.map((studentClass) => {
-                            const student = studentClass.student
-                            const classe = studentClass.classe
-                            return (
-                                <tr key={studentClass.id}>
-                                    <td>{student.id}</td>
-                                    <td>{student.firstname}</td>
-                                    <td>{student.lastname}</td>
-                                    <td>{student.birth_date}</td>
-                                    <td>{ageFull(student.birth_date)}</td>
-                                    <td>{student.parents}</td>
-                                    <td>{classe.name}</td>
-                                    <td>{studentClass.scholar_year}</td>
-                                    <td>
-                                        <Link
-                                            className="btn-sm me-2 btn btn-info text-white"
-                                            to={`/student/details/${student.id}`}
-                                        >
-                                            <i className="fa fa-folder"></i>
-                                        </Link>
-                                        <Link
-                                            className="btn-sm me-2 btn btn-primary"
-                                            to={`/student/edit/${student.id}`}
-                                        >
-                                            <i className="fa fa-edit"></i>
-                                        </Link>
-                                        <Button
-                                            type="button"
-                                            mode="danger"
-                                            icon="trash"
-                                            size="sm"
-                                            onClick={(): void => {
-                                                handleDelete(student.id)
-                                            }}
-                                        />
+            <Block>
+                <div className="d-flex justify-content-end mb-3">
+                    <h5 className="text-primary">
+                        Arrếté au nombre de {students.total} étudiants(s)
+                    </h5>
+                </div>
+                <div className="table-responsive">
+                    <table ref={studentRef} className="table table-striped table-bordered mb-5">
+                        <thead>
+                            <tr>
+                                <th>Numéro</th>
+                                <th>Nom</th>
+                                <th>Prenoms</th>
+                                <th className="text-nowrap">Date de naissance</th>
+                                <th>Age</th>
+                                <th>Parents</th>
+                                <th>Classes</th>
+                                <th style={{ width: '15%' }}>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {SRequestState.loading && (
+                                <tr>
+                                    <td colSpan={8} className="text-center">
+                                        Chargement...
                                     </td>
                                 </tr>
-                            )
-                        })}
-                    {!SRequestState.loading && students.total === 0 && (
-                        <tr>
-                            <td colSpan={9} className="text-center">
-                                Aucune données
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-
-            {students.total > 0 && <Pagination changePage={changePage} data={students} />}
+                            )}
+                            {students.data?.length > 0 &&
+                                students.data.map((studentClass) => {
+                                    const student = studentClass.student
+                                    const classe = studentClass.classe
+                                    return (
+                                        <tr key={studentClass.id}>
+                                            <td>{student.number}</td>
+                                            <td>{student.firstname}</td>
+                                            <td>{student.lastname}</td>
+                                            <td>{student.birth_date}</td>
+                                            <td>{ageFull(student.birth_date)}</td>
+                                            <td>{student.parents}</td>
+                                            <td>{classe.name}</td>
+                                            <td>
+                                                <Link
+                                                    className="btn-sm me-2 btn btn-info text-white"
+                                                    to={`/student/details/${student.id}`}
+                                                >
+                                                    <i className="fa fa-folder"></i>
+                                                </Link>
+                                                <Link
+                                                    className="btn-sm me-2 btn btn-primary"
+                                                    to={`/student/edit/${student.id}`}
+                                                >
+                                                    <i className="fa fa-edit"></i>
+                                                </Link>
+                                                <Button
+                                                    type="button"
+                                                    mode="danger"
+                                                    icon="trash"
+                                                    size="sm"
+                                                    onClick={(): void => {
+                                                        handleDelete(student.id)
+                                                    }}
+                                                />
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                            {!SRequestState.loading && students.total === 0 && (
+                                <tr>
+                                    <td colSpan={8} className="text-center">
+                                        Aucune données
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+                {students.total > 0 && <Pagination changePage={changePage} data={students} />}
+            </Block>
         </>
     )
+}
+
+const Block = (props: PropsWithChildren & { className: string }): ReactNode => {
+    return <div className={`rounded shadow-lg p-3 ${props.className}`}>{props.children}</div>
 }

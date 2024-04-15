@@ -28,14 +28,21 @@ export function Classes(): JSX.Element {
                 {
                     label: 'Oui',
                     onClick: async (): Promise<void> => {
-                        await Client.destroy(id ?? 0)
-                        if (success)
+                        const response = await Client.destroy(id ?? 0)
+                        if (response.ok) {
                             toast('Supprimé', {
                                 closeButton: true,
                                 type: 'success',
                                 position: 'bottom-right'
                             })
-                        getData()
+                            getData()
+                        } else {
+                            toast('Impossible de supprimer cette classe', {
+                                closeButton: true,
+                                type: 'error',
+                                position: 'bottom-right'
+                            })
+                        }
                     }
                 },
                 {
@@ -86,10 +93,13 @@ export function Classes(): JSX.Element {
                 />
             )}
 
-            <table className="table table-striped mb-5">
+            <div className="d-flex justify-content-end mb-3">
+                <h4 className="text-primary">Arrếté au nombre de {datas.length} classe(s)</h4>
+            </div>
+
+            <table className="table table-striped mb-5 table-bordered">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Nom</th>
                         <th>Niveau</th>
                         <th>Notation</th>
@@ -99,7 +109,7 @@ export function Classes(): JSX.Element {
                 <tbody>
                     {RequestState.loading && (
                         <tr>
-                            <td colSpan={5} className="text-center">
+                            <td colSpan={4} className="text-center">
                                 Chargement...
                             </td>
                         </tr>
@@ -107,7 +117,6 @@ export function Classes(): JSX.Element {
                     {datas.length > 0 &&
                         datas.map((classes) => (
                             <tr key={classes.id}>
-                                <td>{classes.id}</td>
                                 <td>{classes.name}</td>
                                 <td>{classes.level?.label ?? 'N/A'}</td>
                                 <td>{classes.notation}</td>
@@ -137,7 +146,7 @@ export function Classes(): JSX.Element {
                         ))}
                     {!RequestState.loading && datas.length <= 0 && (
                         <tr>
-                            <td colSpan={5} className="text-center">
+                            <td colSpan={4} className="text-center">
                                 Aucune données
                             </td>
                         </tr>
