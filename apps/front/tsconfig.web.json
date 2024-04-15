@@ -18,7 +18,8 @@
     "paths": {
       "@renderer/*": [
         "src/renderer/src/*"
-      ]
+      ],
+      "react": [ "./node_modules/@types/react" ]
     }
   }
 }

@@ -74,10 +74,19 @@ export function AddStudent(): JSX.Element {
                             <Input label="Numéro" error={error?.data?.errors?.number} />
                         </div>
                         <div className="col-xl-5">
-                            <Input label="Nom" name="firstname" error={error?.data?.errors?.firstname} />
+                            <Input
+                                label="Nom"
+                                name="firstname"
+                                error={error?.data?.errors?.firstname}
+                            />
                         </div>
                         <div className="col-xl-6">
-                            <Input label="Prénoms" name="lastname" error={error?.data?.errors?.lastname} required={false} />
+                            <Input
+                                label="Prénoms"
+                                name="lastname"
+                                error={error?.data?.errors?.lastname}
+                                required={false}
+                            />
                         </div>
                     </div>
 
@@ -92,16 +101,31 @@ export function AddStudent(): JSX.Element {
                             />
                         </div>
                         <div className="col-xl-3">
-                            <Input type="date" label="Date de naissance" name="birth_date" error={error?.data?.errors?.birth_date} />
+                            <Input
+                                type="date"
+                                label="Date de naissance"
+                                name="birth_date"
+                                error={error?.data?.errors?.birth_date}
+                            />
                         </div>
                         <div className="col-xl-6">
-                            <Input label="Lieu de naissance" name="birth_place" error={error?.data?.errors?.birth_place} required={false} />
+                            <Input
+                                label="Lieu de naissance"
+                                name="birth_place"
+                                error={error?.data?.errors?.birth_place}
+                                required={false}
+                            />
                         </div>
                     </div>
 
                     <div className="row mb-3">
                         <div className="col-xl-12">
-                            <Input required={false} label="Parents" name="parents" error={error?.data?.errors?.parents} />
+                            <Input
+                                required={false}
+                                label="Parents"
+                                name="parents"
+                                error={error?.data?.errors?.parents}
+                            />
                         </div>
                     </div>
 

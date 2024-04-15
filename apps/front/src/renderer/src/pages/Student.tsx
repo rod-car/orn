@@ -280,9 +280,7 @@ export function Student(): JSX.Element {
 
             <Block>
                 <div className="d-flex justify-content-end mb-3">
-                    <h5 className="text-primary">
-                        Arrếté au nombre de {students.total} étudiants(s)
-                    </h5>
+                    <h5>Arrếté au nombre de {students.total} étudiants(s)</h5>
                 </div>
                 <div className="table-responsive">
                     <table ref={studentRef} className="table table-striped table-bordered mb-5">
@@ -307,44 +305,52 @@ export function Student(): JSX.Element {
                                 </tr>
                             )}
                             {students.data?.length > 0 &&
-                                students.data.map((studentClass: { student: any; classe: any; id: Key | null | undefined }) => {
-                                    const student = studentClass.student
-                                    const classe = studentClass.classe
-                                    return (
-                                        <tr key={studentClass.id}>
-                                            <td>{student.number}</td>
-                                            <td>{student.firstname}</td>
-                                            <td>{student.lastname}</td>
-                                            <td>{student.birth_date}</td>
-                                            <td className="text-nowrap">{ageFull(student.birth_date)}</td>
-                                            <td>{student.parents}</td>
-                                            <td>{classe.name}</td>
-                                            <td>
-                                                <Link
-                                                    className="btn-sm me-2 btn btn-info text-white"
-                                                    to={`/student/details/${student.id}`}
-                                                >
-                                                    <i className="fa fa-folder"></i>
-                                                </Link>
-                                                <Link
-                                                    className="btn-sm me-2 btn btn-primary"
-                                                    to={`/student/edit/${student.id}`}
-                                                >
-                                                    <i className="fa fa-edit"></i>
-                                                </Link>
-                                                <Button
-                                                    type="button"
-                                                    mode="danger"
-                                                    icon="trash"
-                                                    size="sm"
-                                                    onClick={(): void => {
-                                                        handleDelete(student.id)
-                                                    }}
-                                                />
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
+                                students.data.map(
+                                    (studentClass: {
+                                        student: Student
+                                        classe: Classes
+                                        id: Key | null | undefined
+                                    }) => {
+                                        const student = studentClass.student
+                                        const classe = studentClass.classe
+                                        return (
+                                            <tr key={studentClass.id}>
+                                                <td>{student.number}</td>
+                                                <td>{student.firstname}</td>
+                                                <td>{student.lastname}</td>
+                                                <td>{student.birth_date}</td>
+                                                <td className="text-nowrap">
+                                                    {ageFull(student.birth_date)}
+                                                </td>
+                                                <td>{student.parents}</td>
+                                                <td>{classe.name}</td>
+                                                <td>
+                                                    <Link
+                                                        className="btn-sm me-2 btn btn-info text-white"
+                                                        to={`/student/details/${student.id}`}
+                                                    >
+                                                        <i className="fa fa-folder"></i>
+                                                    </Link>
+                                                    <Link
+                                                        className="btn-sm me-2 btn btn-primary"
+                                                        to={`/student/edit/${student.id}`}
+                                                    >
+                                                        <i className="fa fa-edit"></i>
+                                                    </Link>
+                                                    <Button
+                                                        type="button"
+                                                        mode="danger"
+                                                        icon="trash"
+                                                        size="sm"
+                                                        onClick={(): void => {
+                                                            handleDelete(student.id)
+                                                        }}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        )
+                                    }
+                                )}
                             {!SRequestState.loading && students.total === 0 && (
                                 <tr>
                                     <td colSpan={8} className="text-center">
