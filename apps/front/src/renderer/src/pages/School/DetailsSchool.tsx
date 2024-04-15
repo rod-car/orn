@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { NavLink, useParams } from 'react-router-dom'
-import { ApiErrorMessage } from 'ui'
+import { ApiErrorMessage, Block } from 'ui'
 import { config } from '../../../config'
 import { useEffect, useState } from 'react'
 
@@ -26,25 +26,13 @@ export function DetailsSchool(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>Détails: {school?.name}</h1>
+                <h2>{school?.name}</h2>
                 <NavLink to="/school/list" className="btn btn-primary">
                     <i className="fa fa-list me-2"></i>Liste des établissements
                 </NavLink>
             </div>
 
-            {error && (
-                <ApiErrorMessage
-                    className="mb-3"
-                    message={error.message}
-                    onClose={(): void => {
-                        resetError()
-                    }}
-                />
-            )}
-
-            <p>
-                Plus des détails
-            </p>
+            <Block>Details de l'école</Block>
         </>
     )
 }

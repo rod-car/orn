@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { Link } from 'react-router-dom'
 import { config } from '../../config'
-import { ApiErrorMessage, Button } from 'ui'
+import { ApiErrorMessage, Block, Button } from 'ui'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
@@ -89,81 +89,83 @@ export function School(): JSX.Element {
                 </div>
             </div>
 
-            {error && (
-                <ApiErrorMessage
-                    className="mb-3"
-                    message={error.message}
-                    onClose={(): void => {
-                        resetError()
-                    }}
-                />
-            )}
+            <Block>
+                {error && (
+                    <ApiErrorMessage
+                        className="mb-3"
+                        message={error.message}
+                        onClose={(): void => {
+                            resetError()
+                        }}
+                    />
+                )}
 
-            <div className="d-flex justify-content-end mb-3">
-                <h4 className="text-primary">Arrếté au nombre de {schools.length} école(s)</h4>
-            </div>
+                <div className="d-flex justify-content-end mb-3">
+                    <h4>Arrếté au nombre de {schools.length} école(s)</h4>
+                </div>
 
-            <table className="table table-striped table-bordered mb-5">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Commune</th>
-                        <th>District</th>
-                        <th>Adresse</th>
-                        <th>Responsable</th>
-                        <th style={{ width: '15%' }}>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {RequestState.loading && (
+                <table className="table table-striped table-bordered mb-5">
+                    <thead>
                         <tr>
-                            <td colSpan={7} className="text-center">
-                                Chargement...
-                            </td>
+                            <th>Nom</th>
+                            <th>Commune</th>
+                            <th>District</th>
+                            <th>Adresse</th>
+                            <th>Responsable</th>
+                            <th style={{ width: '15%' }}>Actions</th>
                         </tr>
-                    )}
-                    {schools.length > 0 &&
-                        schools.map((school) => (
-                            <tr key={school.id}>
-                                <td>{school.name}</td>
-                                <td>{school?.commune?.name}</td>
-                                <td>{school?.commune?.district.name}</td>
-                                <td>{school.localisation}</td>
-                                <td>{school.responsable}</td>
-                                <td>
-                                    <Link
-                                        className="btn-sm me-2 btn btn-info text-white"
-                                        to={`/school/details/${school.id}`}
-                                    >
-                                        <i className="fa fa-folder"></i>
-                                    </Link>
-                                    <Link
-                                        className="btn-sm me-2 btn btn-primary"
-                                        to={`/school/edit/${school.id}`}
-                                    >
-                                        <i className="fa fa-edit"></i>
-                                    </Link>
-                                    <Button
-                                        type="button"
-                                        mode="danger"
-                                        icon="trash"
-                                        size="sm"
-                                        onClick={(): void => {
-                                            handleDelete(school.id)
-                                        }}
-                                    />
+                    </thead>
+                    <tbody>
+                        {RequestState.loading && (
+                            <tr>
+                                <td colSpan={7} className="text-center">
+                                    Chargement...
                                 </td>
                             </tr>
-                        ))}
-                    {!RequestState.loading && schools.length <= 0 && (
-                        <tr>
-                            <td colSpan={7} className="text-center">
-                                Aucune données
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                        )}
+                        {schools.length > 0 &&
+                            schools.map((school) => (
+                                <tr key={school.id}>
+                                    <td>{school.name}</td>
+                                    <td>{school?.commune?.name}</td>
+                                    <td>{school?.commune?.district.name}</td>
+                                    <td>{school.localisation}</td>
+                                    <td>{school.responsable}</td>
+                                    <td>
+                                        <Link
+                                            className="btn-sm me-2 btn btn-info text-white"
+                                            to={`/school/details/${school.id}`}
+                                        >
+                                            <i className="fa fa-folder"></i>
+                                        </Link>
+                                        <Link
+                                            className="btn-sm me-2 btn btn-primary"
+                                            to={`/school/edit/${school.id}`}
+                                        >
+                                            <i className="fa fa-edit"></i>
+                                        </Link>
+                                        <Button
+                                            type="button"
+                                            mode="danger"
+                                            icon="trash"
+                                            size="sm"
+                                            onClick={(): void => {
+                                                handleDelete(school.id)
+                                            }}
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        {!RequestState.loading && schools.length <= 0 && (
+                            <tr>
+                                <td colSpan={7} className="text-center">
+                                    Aucune données
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </Block>
         </>
     )
 }
