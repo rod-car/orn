@@ -288,7 +288,7 @@ export function Student(): JSX.Element {
                     <table ref={studentRef} className="table table-striped table-bordered mb-5">
                         <thead>
                             <tr>
-                                <th>Numéro</th>
+                                <th>N°</th>
                                 <th>Nom</th>
                                 <th>Prenoms</th>
                                 <th className="text-nowrap">Date de naissance</th>
@@ -316,7 +316,7 @@ export function Student(): JSX.Element {
                                             <td>{student.firstname}</td>
                                             <td>{student.lastname}</td>
                                             <td>{student.birth_date}</td>
-                                            <td>{ageFull(student.birth_date)}</td>
+                                            <td className="text-nowrap">{ageFull(student.birth_date)}</td>
                                             <td>{student.parents}</td>
                                             <td>{classe.name}</td>
                                             <td>

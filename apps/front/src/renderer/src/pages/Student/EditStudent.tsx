@@ -12,7 +12,8 @@ export function EditStudent(): JSX.Element {
     const {
         Client: StudentClient,
         data: student,
-        RequestState: SRequestState
+        RequestState: SRequestState,
+        error
     } = useApi<Student>({
         baseUrl: config.baseUrl,
         url: '/students'
@@ -95,10 +96,20 @@ export function EditStudent(): JSX.Element {
                     <form action="" onSubmit={handleSubmit} method="post" className="mb-5">
                         <div className="row mb-3">
                             <div className="col-xl-1">
-                                <Input auto label="Numéro" defaultValue={student?.id} />
+                                <Input
+                                    auto
+                                    label="Numéro"
+                                    defaultValue={student?.number}
+                                    error={error?.data?.errors?.number}
+                                />
                             </div>
                             <div className="col-xl-5">
-                                <Input label="Nom" name="firstname" defaultValue={student?.firstname} />
+                                <Input
+                                    label="Nom"
+                                    name="firstname"
+                                    defaultValue={student?.firstname}
+                                    error={error?.data?.errors?.firstname}
+                                />
                             </div>
                             <div className="col-xl-6">
                                 <Input
@@ -106,6 +117,7 @@ export function EditStudent(): JSX.Element {
                                     name="lastname"
                                     defaultValue={student?.lastname}
                                     required={false}
+                                    error={error?.data?.errors?.lastname}
                                 />
                             </div>
                         </div>
@@ -117,11 +129,13 @@ export function EditStudent(): JSX.Element {
                                     defaultOption={student?.gender}
                                     name="gender"
                                     options={gender}
+                                    error={error?.data?.errors?.gender}
                                 />
                             </div>
                             <div className="col-xl-3">
                                 <Input
                                     defaultValue={student?.birth_date}
+                                    error={error?.data?.errors?.birth_date}
                                     type="date"
                                     label="Date de naissance"
                                     name="birth_date"
@@ -130,6 +144,7 @@ export function EditStudent(): JSX.Element {
                             <div className="col-xl-6">
                                 <Input
                                     defaultValue={student?.birth_place}
+                                    error={error?.data?.errors?.birth_place}
                                     label="Lieu de naissance"
                                     name="birth_place"
                                     required={false}
@@ -141,6 +156,7 @@ export function EditStudent(): JSX.Element {
                             <div className="col-xl-12">
                                 <Input
                                     defaultValue={student?.parents}
+                                    error={error?.data?.errors?.parents}
                                     required={false}
                                     label="Parents"
                                     name="father"
@@ -156,6 +172,7 @@ export function EditStudent(): JSX.Element {
                                     config={{ optionKey: 'id', valueKey: 'name' }}
                                     name="school"
                                     defaultOption={student?.schools?.at(0)?.id}
+                                    error={error?.data?.errors?.school}
                                 />
                             </div>
                             <div className="col-xl-3">
@@ -165,6 +182,7 @@ export function EditStudent(): JSX.Element {
                                     config={{ optionKey: 'id', valueKey: 'name' }}
                                     name="classes"
                                     defaultOption={student?.classes?.at(0)?.id}
+                                    error={error?.data?.errors?.classes}
                                 />
                             </div>
                             <div className="col-xl-3">
@@ -173,6 +191,7 @@ export function EditStudent(): JSX.Element {
                                     options={scholar_years()}
                                     label="Année scolaire"
                                     defaultOption={student?.classes?.at(0)?.pivot?.scholar_year}
+                                    error={error?.data?.errors?.scholar_year}
                                 />
                             </div>
                         </div>

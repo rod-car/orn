@@ -248,7 +248,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
      * @param {string | number} id Identifiant de l'enregistrement a modifier
      * @param {Omit<T, "id">} data Les nouvelles valeurs
      */
-    const put = async (id: string | number, data: Omit<T, "id">) => {
+    const put = async (id: string | number, data: Omit<T, "id">): Promise<PostResponse> => {
         reset();
         setRequestState({ updating: true });
 
@@ -270,10 +270,13 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
             }
         }
         catch (e) {
-            setError(e as APIError);
+            const error = e as AxiosError
+            setError(error.response as unknown as APIError);
+            res = error
         }
 
         setRequestState({ updating: false });
+        return res
     }
 
 
@@ -310,9 +313,12 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
             }
         }
         catch (e) {
-            const error = e as APIError
-            setError(e as APIError);
-            res = { ok: false, status: error.status, message: error.message, data: null }
+            /* const error = e as APIError
+            setError(error);
+            res = { ok: false, status: error.status, message: error.message, data: null } */
+            const error = e as AxiosError
+            setError(error.response as unknown as APIError);
+            res = error
         }
 
         setRequestState({ updating: false });
