@@ -92,8 +92,11 @@ export function SchoolsByScholarYear(): ReactNode {
 
     return (
         <>
-            {RequestState.loading && <Spinner className="text-center w-100" />}
-            {data && <Line options={options} data={data} />}
+            <div className="shadow-lg rounded p-4">
+                <h4 className="mb-4 text-muted">Effectif par année scolaire</h4>
+                {RequestState.loading && <Spinner className="text-center w-100" />}
+                {data && <Line options={options} data={data} />}
+            </div>
         </>
     )
 }

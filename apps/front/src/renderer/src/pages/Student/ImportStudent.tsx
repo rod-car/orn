@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Button, Input, Spinner } from 'ui'
 import { config } from '../../../config'
 import { toast } from 'react-toastify'
+import { isDate } from 'functions'
 
 export function ImportStudent(): JSX.Element {
     const { json, importing, toJSON, resetJSON } = useExcelReader()
@@ -110,7 +111,11 @@ export function ImportStudent(): JSX.Element {
                             <tr key={json['numero']}>
                                 <td>{json['numero']}</td>
                                 <td>{json['noms']}</td>
-                                <td>{json['date_naissance']?.toLocaleDateString()}</td>
+                                <td>
+                                    {isDate(json['date_naissance'])
+                                        ? json['date_naissance'].toLocaleDateString()
+                                        : json['date_naissance']}
+                                </td>
                                 <td>{json['sexe']}</td>
                                 <td>{json['parents']}</td>
                                 <td>{json['classe']}</td>

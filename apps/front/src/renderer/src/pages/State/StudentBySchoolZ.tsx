@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useApi } from 'hooks'
 import { config } from '../../../config'
 import { ReactNode, useCallback, useEffect } from 'react'

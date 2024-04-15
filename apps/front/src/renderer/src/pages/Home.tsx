@@ -2,8 +2,8 @@ import { useApi } from 'hooks'
 import React, { useCallback, useEffect } from 'react'
 import { config } from '../../config'
 import { HomeCard, Spinner } from 'ui'
-import { SchoolsByClasses, SchoolsByScholarYear } from '../pages'
-import { NavLink } from 'react-router-dom'
+import { SchoolsByClasses, SchoolsByScholarYear, ZBySchool } from '../pages'
+import { Link, NavLink } from 'react-router-dom'
 
 import './Home.modules.scss'
 
@@ -39,7 +39,12 @@ export function Home(): React.ReactElement {
 
     return (
         <>
-            <h1 className="mb-5">Dashboard</h1>
+            <div className="mb-5 d-flex justify-content-between align-items-center">
+                <h1>Tableau de bord</h1>
+                <Link to="/states" className="btn btn-primary">
+                    <i className="fa fa-list me-2"></i>Etats
+                </Link>
+            </div>
 
             <div className="row mb-5">
                 <NavLink to="/student/list" className="col-4 clickable-card">
@@ -62,12 +67,18 @@ export function Home(): React.ReactElement {
 
                 <NavLink to="/survey/list" className="col-4 clickable-card">
                     <HomeCard
-                        title="Enquêtes"
+                        title="Mésures antrhopo"
                         icon="bar-chart"
                         type="success"
                         value={'count' in surveyCount ? surveyCount.count : <Spinner />}
                     />
                 </NavLink>
+            </div>
+
+            <div className="row mb-5">
+                <div className="col-12">
+                    <ZBySchool />
+                </div>
             </div>
 
             <div className="row mb-5">

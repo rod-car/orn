@@ -92,59 +92,58 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                 <>
                                     <li className="nav-item">
                                         <NavLink className={`nav-link`} aria-current="page" to="/">
-                                            Dashboard
-                                        </NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink
-                                            className={`nav-link`}
-                                            aria-current="page"
-                                            to="/states"
-                                        >
-                                            Etats
+                                            <i className="fa fa-gauge me-2"></i>Tableau de bord
                                         </NavLink>
                                     </li>
                                     <DropDown
                                         id="student-dropdown"
                                         label="Étudiants"
                                         base="/student"
+                                        icon="users"
                                         items={[
-                                            { url: '/add', label: 'Ajouter un étudiant' },
-                                            { url: '/list', label: 'Liste des étudiants' },
-                                            { url: '/import', label: 'Importer une liste' }
+                                            { url: '/add', label: 'Ajouter un étudiant', icon: 'plus' },
+                                            { url: '/list', label: 'Liste des étudiants', icon: 'list' },
+                                            { url: '/import', label: 'Importer une liste', icon: 'file' }
                                         ]}
                                     ></DropDown>
-                                    <DropDown
-                                        id="anthropo-measure"
-                                        label="Mésures anthropo"
-                                        base="/measure"
-                                        items={[
-                                            { url: '/add', label: 'Ajouter un mésure' },
-                                            { url: '/list', label: 'Liste des mésures' },
-                                            { url: '/import', label: 'Importer une liste' }
-                                        ]}
-                                    ></DropDown>
+
                                     <DropDown
                                         id="school-dropdown"
-                                        label="Établissements"
+                                        label="Écoles"
                                         base="/school"
+                                        icon="school"
                                         items={[
-                                            { url: '/add', label: 'Ajouter un établissement' },
-                                            { url: '/list', label: 'Liste des établissements' },
-                                            { url: '/classes/list', label: 'Classe' },
-                                            { url: '/levels/list', label: 'Niveau' }
+                                            { url: '/add', label: 'Ajouter un école', icon: 'plus' },
+                                            { url: '/list', label: 'Liste des écoles', icon: 'list' },
+                                            { url: '/classes/list', label: 'Classe', icon:'list' },
+                                            { url: '/levels/list', label: 'Niveau', icon:'list' }
                                         ]}
                                     ></DropDown>
+
                                     <DropDown
-                                        id="survey-dropdown"
-                                        label="Enquête"
-                                        base="/survey"
+                                        id="abaques"
+                                        label="Abaques"
+                                        base="/measure"
+                                        icon="database"
                                         items={[
-                                            { url: '/add', label: 'Nouvelle enquête' },
-                                            { url: '/list', label: 'Liste des enquêtes' },
-                                            { url: '/add-student', label: 'Ajouter un étudiant' }
+                                            { url: '/add', label: 'Ajouter', icon: 'plus' },
+                                            { url: '/list', label: 'Liste', icon: 'list' },
+                                            { url: '/import', label: 'Importer une liste', icon: 'file' }
                                         ]}
                                     ></DropDown>
+
+                                    <DropDown
+                                        id="anthropo-measure"
+                                        label="Mesure antropo"
+                                        base="/survey"
+                                        icon="ruler"
+                                        items={[
+                                            { url: '/add', label: 'Nouvelle mesure', icon: 'plus' },
+                                            { url: '/list', label: 'Liste des mesures', icon: 'list' },
+                                            { url: '/add-student', label: 'Mesurer un étudiant', icon: 'user-plus' }
+                                        ]}
+                                    ></DropDown>
+
                                     <li className="nav-item dropdown ms-3">
                                         <NavLink
                                             className="nav-link dropdown-toggle"
@@ -218,12 +217,14 @@ const DropDown = ({
     id,
     items,
     label,
-    base
+    base,
+    icon
 }: {
     id: string
     label: string
     base: string
-    items: Array<{ url: string; label: string }>
+    icon: string
+    items: Array<{ url: string; label: string; icon?: string }>
 }): JSX.Element => {
     return (
         <li className="nav-item dropdown">
@@ -235,12 +236,14 @@ const DropDown = ({
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
             >
+                {icon && <span className={`fa fa-${icon} me-2`}></span>}
                 {label}
             </NavLink>
             <ul className="dropdown-menu" aria-labelledby={id}>
                 {items.map((item) => (
                     <li key={item.url}>
                         <NavLink className="dropdown-item" to={base + item.url}>
+                            {item.icon && <i className={`fa fa-${item.icon} me-2`}></i>}
                             {item.label}
                         </NavLink>
                     </li>
