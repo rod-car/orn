@@ -1,6 +1,6 @@
 export const config = {
-    // baseUrl: 'http://localhost:8000/api'
-    baseUrl: 'http://192.168.88.47/api'
+    baseUrl: 'http://localhost:8000/api'
+    // baseUrl: 'http://192.168.88.47/api'
 }
 
 const abaqueTypes = [

@@ -87,13 +87,11 @@ app.on('window-all-closed', () => {
 })
 
 ipcMain.on('logged-in', (event, data) => {
-    // mainWindow?.close()
     loginWindow?.close()
     createWindow()
 })
 
 ipcMain.on('logged-out', (event, data) => {
     mainWindow?.close()
-    // loginWindow?.close()
     createLoginWindow()
 })
