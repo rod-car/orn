@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { ErrorResponse, NavLink, Outlet, useRouteError } from 'react-router-dom'
+import { Navigation } from '../components'
 
 import 'react-toastify/dist/ReactToastify.css?asset'
 import 'bootstrap/dist/css/bootstrap.min.css?asset'
@@ -101,9 +102,21 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                         base="/student"
                                         icon="users"
                                         items={[
-                                            { url: '/add', label: 'Ajouter un étudiant', icon: 'plus' },
-                                            { url: '/list', label: 'Liste des étudiants', icon: 'list' },
-                                            { url: '/import', label: 'Importer une liste', icon: 'file' }
+                                            {
+                                                url: '/add',
+                                                label: 'Ajouter un étudiant',
+                                                icon: 'plus'
+                                            },
+                                            {
+                                                url: '/list',
+                                                label: 'Liste des étudiants',
+                                                icon: 'list'
+                                            },
+                                            {
+                                                url: '/import',
+                                                label: 'Importer une liste',
+                                                icon: 'file'
+                                            }
                                         ]}
                                     ></DropDown>
 
@@ -113,10 +126,18 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                         base="/school"
                                         icon="school"
                                         items={[
-                                            { url: '/add', label: 'Ajouter un école', icon: 'plus' },
-                                            { url: '/list', label: 'Liste des écoles', icon: 'list' },
-                                            { url: '/classes/list', label: 'Classe', icon:'list' },
-                                            { url: '/levels/list', label: 'Niveau', icon:'list' }
+                                            {
+                                                url: '/add',
+                                                label: 'Ajouter un école',
+                                                icon: 'plus'
+                                            },
+                                            {
+                                                url: '/list',
+                                                label: 'Liste des écoles',
+                                                icon: 'list'
+                                            },
+                                            { url: '/classes/list', label: 'Classe', icon: 'list' },
+                                            { url: '/levels/list', label: 'Niveau', icon: 'list' }
                                         ]}
                                     ></DropDown>
 
@@ -128,7 +149,11 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                         items={[
                                             { url: '/add', label: 'Ajouter', icon: 'plus' },
                                             { url: '/list', label: 'Liste', icon: 'list' },
-                                            { url: '/import', label: 'Importer une liste', icon: 'file' }
+                                            {
+                                                url: '/import',
+                                                label: 'Importer une liste',
+                                                icon: 'file'
+                                            }
                                         ]}
                                     ></DropDown>
 
@@ -139,8 +164,16 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                         icon="ruler"
                                         items={[
                                             { url: '/add', label: 'Nouvelle mesure', icon: 'plus' },
-                                            { url: '/list', label: 'Liste des mesures', icon: 'list' },
-                                            { url: '/add-student', label: 'Mesurer un étudiant', icon: 'user-plus' }
+                                            {
+                                                url: '/list',
+                                                label: 'Liste des mesures',
+                                                icon: 'list'
+                                            },
+                                            {
+                                                url: '/add-student',
+                                                label: 'Mesurer un étudiant',
+                                                icon: 'user-plus'
+                                            }
                                         ]}
                                     ></DropDown>
 
@@ -196,6 +229,7 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
 
             <div className="container mb-5" style={{ marginTop: 130, minHeight: '90vh' }}>
                 <ToastContainer />
+                <Navigation />
                 {error ? <ErrorComponent error={errorResponse.error} /> : <Outlet />}
             </div>
 

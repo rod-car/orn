@@ -1,8 +1,8 @@
 import { useApi, useExcelReader, usePdf } from 'hooks'
 import { Link } from 'react-router-dom'
 import { config } from '../../config'
-import { Button, Select } from 'ui'
-import { ChangeEvent, PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react'
+import { Block, Button, Select } from 'ui'
+import { ChangeEvent, Key, PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
 import { ageFull, number_array, scholar_years } from 'functions'
@@ -307,7 +307,7 @@ export function Student(): JSX.Element {
                                 </tr>
                             )}
                             {students.data?.length > 0 &&
-                                students.data.map((studentClass) => {
+                                students.data.map((studentClass: { student: any; classe: any; id: Key | null | undefined }) => {
                                     const student = studentClass.student
                                     const classe = studentClass.classe
                                     return (
@@ -359,8 +359,4 @@ export function Student(): JSX.Element {
             </Block>
         </>
     )
-}
-
-const Block = (props: PropsWithChildren & { className: string }): ReactNode => {
-    return <div className={`rounded shadow-lg p-3 ${props.className}`}>{props.children}</div>
 }

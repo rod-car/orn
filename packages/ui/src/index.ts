@@ -10,3 +10,4 @@ export { PageTitle } from "./Atoms/Nav";
 
 export { SearchableSelect } from './Atoms/SearchableSelect/SearchableSelect';
 export { HomeCard } from './Atoms/HomeCard/HomeCard';
+export { Block } from './Atoms/Block/Block';

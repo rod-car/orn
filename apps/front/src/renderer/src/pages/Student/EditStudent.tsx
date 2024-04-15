@@ -1,5 +1,5 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react'
-import { Button, Input, Select, Spinner } from 'ui'
+import { Block, Button, Input, Select, Spinner } from 'ui'
 import { Link, useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
 import { config } from '../../../config'
@@ -85,118 +85,111 @@ export function EditStudent(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>{student?.fullname}</h1>
+                <h2>{student?.fullname}</h2>
                 <Link to="/student/list" className="btn btn-primary">
                     <i className="fa fa-list me-2"></i>Liste des étudiants
                 </Link>
             </div>
+            <Block>
+                {student ? (
+                    <form action="" onSubmit={handleSubmit} method="post" className="mb-5">
+                        <div className="row mb-3">
+                            <div className="col-xl-1">
+                                <Input auto label="Numéro" defaultValue={student?.id} />
+                            </div>
+                            <div className="col-xl-5">
+                                <Input label="Nom" name="firstname" defaultValue={student?.firstname} />
+                            </div>
+                            <div className="col-xl-6">
+                                <Input
+                                    label="Prénoms"
+                                    name="lastname"
+                                    defaultValue={student?.lastname}
+                                    required={false}
+                                />
+                            </div>
+                        </div>
 
-            {student ? (
-                <form action="" onSubmit={handleSubmit} method="post" className="mb-5">
-                    <div className="row mb-3">
-                        <div className="col-xl-1">
-                            <Input auto label="Numéro" defaultValue={student?.id} />
+                        <div className="row mb-3">
+                            <div className="col-xl-3">
+                                <Select
+                                    label="Sexe"
+                                    defaultOption={student?.gender}
+                                    name="gender"
+                                    options={gender}
+                                />
+                            </div>
+                            <div className="col-xl-3">
+                                <Input
+                                    defaultValue={student?.birth_date}
+                                    type="date"
+                                    label="Date de naissance"
+                                    name="birth_date"
+                                />
+                            </div>
+                            <div className="col-xl-6">
+                                <Input
+                                    defaultValue={student?.birth_place}
+                                    label="Lieu de naissance"
+                                    name="birth_place"
+                                    required={false}
+                                />
+                            </div>
                         </div>
-                        <div className="col-xl-5">
-                            <Input label="Nom" name="firstname" defaultValue={student?.firstname} />
-                        </div>
-                        <div className="col-xl-6">
-                            <Input
-                                label="Prénoms"
-                                name="lastname"
-                                defaultValue={student?.lastname}
-                                required={false}
-                            />
-                        </div>
-                    </div>
 
-                    <div className="row mb-3">
-                        <div className="col-xl-3">
-                            <Select
-                                label="Sexe"
-                                defaultOption={student?.gender}
-                                name="gender"
-                                options={gender}
-                            />
+                        <div className="row mb-3">
+                            <div className="col-xl-12">
+                                <Input
+                                    defaultValue={student?.parents}
+                                    required={false}
+                                    label="Parents"
+                                    name="father"
+                                />
+                            </div>
                         </div>
-                        <div className="col-xl-3">
-                            <Input
-                                defaultValue={student?.birth_date}
-                                type="date"
-                                label="Date de naissance"
-                                name="birth_date"
-                            />
-                        </div>
-                        <div className="col-xl-6">
-                            <Input
-                                defaultValue={student?.birth_place}
-                                label="Lieu de naissance"
-                                name="birth_place"
-                                required={false}
-                            />
-                        </div>
-                    </div>
 
-                    <div className="row mb-3">
-                        <div className="col-xl-6">
-                            <Input
-                                defaultValue={student?.father}
-                                required={false}
-                                label="Père"
-                                name="father"
-                            />
+                        <div className="row mb-4">
+                            <div className="col-xl-6">
+                                <Select
+                                    label="Etablissement"
+                                    options={ScDatas}
+                                    config={{ optionKey: 'id', valueKey: 'name' }}
+                                    name="school"
+                                    defaultOption={student?.schools?.at(0)?.id}
+                                />
+                            </div>
+                            <div className="col-xl-3">
+                                <Select
+                                    label="Classe"
+                                    options={ClDatas}
+                                    config={{ optionKey: 'id', valueKey: 'name' }}
+                                    name="classes"
+                                    defaultOption={student?.classes?.at(0)?.id}
+                                />
+                            </div>
+                            <div className="col-xl-3">
+                                <Select
+                                    name="scholar_year"
+                                    options={scholar_years()}
+                                    label="Année scolaire"
+                                    defaultOption={student?.classes?.at(0)?.pivot?.scholar_year}
+                                />
+                            </div>
                         </div>
-                        <div className="col-xl-6">
-                            <Input
-                                defaultValue={student?.father}
-                                required={false}
-                                label="Mère"
-                                name="mother"
-                            />
-                        </div>
-                    </div>
 
-                    <div className="row mb-4">
-                        <div className="col-xl-6">
-                            <Select
-                                label="Etablissement"
-                                options={ScDatas}
-                                config={{ optionKey: 'id', valueKey: 'name' }}
-                                name="school"
-                                defaultOption={student?.schools?.at(0)?.id}
-                            />
-                        </div>
-                        <div className="col-xl-3">
-                            <Select
-                                label="Classe"
-                                options={ClDatas}
-                                config={{ optionKey: 'id', valueKey: 'name' }}
-                                name="classes"
-                                defaultOption={student?.classes?.at(0)?.id}
-                            />
-                        </div>
-                        <div className="col-xl-3">
-                            <Select
-                                name="scholar_year"
-                                options={scholar_years()}
-                                label="Année scolaire"
-                                defaultOption={student?.classes?.at(0)?.pivot?.scholar_year}
-                            />
-                        </div>
-                    </div>
-
-                    <Button
-                        loading={SRequestState.updating}
-                        icon="save"
-                        type="submit"
-                        mode="primary"
-                    >
-                        Enregistrer
-                    </Button>
-                </form>
-            ) : (
-                <Spinner className="text-center" />
-            )}
+                        <Button
+                            loading={SRequestState.updating}
+                            icon="save"
+                            type="submit"
+                            mode="primary"
+                        >
+                            Enregistrer
+                        </Button>
+                    </form>
+                ) : (
+                    <Spinner className="text-center" />
+                )}
+            </Block>
         </>
     )
 }
