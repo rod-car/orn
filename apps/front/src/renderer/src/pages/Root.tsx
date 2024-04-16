@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css?asset'
 import '../assets/icons.css?asset'
 import '../assets/custom.css?asset'
 import logo from '../assets/logo.png'
+
 import { useAuth } from 'hooks'
 import { config } from '../../config'
 import { Button } from 'ui'
@@ -50,9 +51,9 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
         <>
             <nav className="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top mb-5 p-0">
                 <div className="container container-fluid">
-                    <NavLink className="navbar-brand fw-bold text-muted" to="/">
+                    <NavLink className="navbar-brand fw-bold d-flex align-items-center" to="/">
                         <img className="w-15 me-3" src={logo} alt="Logo" />
-                        <span>ORN DC</span>
+                        <span style={{ color: '#071E78', fontFamily: 'arial' }}>ORN</span>
                     </NavLink>
                     <button
                         className="navbar-toggler"
