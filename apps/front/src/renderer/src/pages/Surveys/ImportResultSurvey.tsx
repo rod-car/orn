@@ -1,7 +1,7 @@
 import { useApi, useExcelReader } from 'hooks'
 import { NavLink, useParams } from 'react-router-dom'
 import { ApiErrorMessage, Button, Input, Spinner } from 'ui'
-import { config } from '../../../config'
+import { config, token } from '../../../config'
 import { ChangeEvent } from 'react'
 import { toast } from 'react-toastify'
 
@@ -9,6 +9,7 @@ export function ImportResultSurvey(): JSX.Element {
     const { json, importing, toJSON, resetJSON } = useExcelReader()
     const { Client, RequestState, error, resetError } = useApi<Survey>({
         baseUrl: config.baseUrl,
+        token: token,
         url: 'surveys'
     })
 

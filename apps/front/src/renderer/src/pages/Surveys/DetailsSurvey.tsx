@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { Link, useParams } from 'react-router-dom'
 import { ApiErrorMessage, Button } from 'ui'
-import { config } from '../../../config'
+import { config, token } from '../../../config'
 import { useCallback, useEffect } from 'react'
 import { ageMonth } from 'functions'
 
@@ -14,6 +14,7 @@ export function DetailsSurvey(): JSX.Element {
         resetError
     } = useApi<Survey>({
         baseUrl: config.baseUrl,
+        token: token,
         url: 'surveys'
     })
 

@@ -2,14 +2,15 @@ import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { Link, useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config } from '../../../config'
+import { config, token } from '../../../config'
 import { toast } from 'react-toastify'
 
 export function EditSurvey(): JSX.Element {
-    const [survey, setSurvey] = useState<Survey>({ id: 0, phase: 0, date: '' })
+    const [survey, setSurvey] = useState<Partial<Survey>>({ id: 0, phase: 0, date: '' })
     const { id } = useParams()
     const { Client, RequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/surveys'
     })
 

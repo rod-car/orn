@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { config, abaque } from '../../../config'
+import { config, token, abaque } from '../../../config'
 import { Button, Input, Select } from 'ui'
 import { toast } from 'react-toastify'
 
@@ -13,6 +13,7 @@ export function AddMeasure(): JSX.Element {
 
     const { Client, RequestState } = useApi<MeasureLengthAge>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/measures'
     })
 

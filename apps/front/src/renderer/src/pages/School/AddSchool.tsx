@@ -1,8 +1,8 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { ApiErrorMessage, Block, Button, Input, Select } from 'ui'
-import { config } from '../../../config'
+import { Block, Button, Input, Select } from 'ui'
+import { config, token } from '../../../config'
 import { toast } from 'react-toastify'
 
 const defaultSchool: School = {
@@ -18,11 +18,13 @@ export function AddSchool(): JSX.Element {
 
     const { Client, RequestState, error, resetError } = useApi<School>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/schools'
     })
 
     const { Client: CC, datas: communes } = useApi<Commune>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/communes'
     })
 

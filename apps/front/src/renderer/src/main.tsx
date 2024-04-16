@@ -30,9 +30,12 @@ import {
     School,
     State,
     Student,
-    Survey
+    Survey,
+    Login,
+    Register
 } from './pages'
-import { PrivateRoute } from './PrivateRoute'
+import { PrivateRoute } from './components/PrivateRoute'
+import { GuestRoute } from './components/GuestRoute'
 
 const router = createHashRouter([
     {
@@ -46,6 +49,22 @@ const router = createHashRouter([
                     <PrivateRoute>
                         <Home />
                     </PrivateRoute>
+                )
+            },
+            {
+                path: 'login',
+                element: (
+                    <GuestRoute>
+                        <Login />
+                    </GuestRoute>
+                )
+            },
+            {
+                path: 'register',
+                element: (
+                    <GuestRoute>
+                        <Register />
+                    </GuestRoute>
                 )
             },
             {

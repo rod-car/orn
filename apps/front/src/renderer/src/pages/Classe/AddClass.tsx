@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { ApiErrorMessage, Button, Input, Select } from 'ui'
-import { config } from '../../../config'
+import { config, token } from '../../../config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
@@ -9,6 +9,7 @@ export function AddClass(): JSX.Element {
     const [classes, setClasses] = useState<Classes>({ id: 0, name: '', level_id: 0, notation: '' })
     const { Client, datas } = useApi<Niveau>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/levels',
         key: 'data'
     })
@@ -20,6 +21,7 @@ export function AddClass(): JSX.Element {
         resetError
     } = useApi<Classes>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/classes'
     })
 

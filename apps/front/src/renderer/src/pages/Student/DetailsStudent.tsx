@@ -1,13 +1,14 @@
 import { useApi } from 'hooks'
 import { NavLink, useParams } from 'react-router-dom'
 import { ApiErrorMessage, Block } from 'ui'
-import { config } from '../../../config'
+import { config, token } from '../../../config'
 import { useEffect, useState } from 'react'
 import { StudentEvolution, StudentStatus } from '@renderer/charts'
 
 export function DetailsStudent(): JSX.Element {
     const { Client, error, resetError } = useApi<Student>({
         baseUrl: config.baseUrl,
+        token: token,
         url: 'students'
     })
 

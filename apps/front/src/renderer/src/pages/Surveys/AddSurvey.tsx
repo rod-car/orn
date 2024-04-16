@@ -2,12 +2,13 @@ import { FormEvent } from 'react'
 import { Button, Input } from 'ui'
 import { Link } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config } from '../../../config'
+import { config, token } from '../../../config'
 import { toast } from 'react-toastify'
 
 export function AddSurvey(): JSX.Element {
     const { Client, RequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/surveys'
     })
 

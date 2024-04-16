@@ -1,11 +1,12 @@
 import { useApi } from 'hooks'
-import { config } from '../../../config'
+import { config, token } from '../../../config'
 import { useCallback, useEffect } from 'react'
 import { Button, Spinner } from 'ui'
 
 export function SchoolByScholarYear(): JSX.Element {
     const { Client, RequestState, error, datas } = useApi<Student>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/students',
         key: 'data'
     })

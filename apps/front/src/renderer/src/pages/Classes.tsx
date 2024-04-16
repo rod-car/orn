@@ -1,14 +1,15 @@
 import { FormEvent, useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
-import { config } from '../../config'
+import { config, token } from '../../config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { ApiErrorMessage, Button } from 'ui'
 import { NavLink } from 'react-router-dom'
 
 export function Classes(): JSX.Element {
-    const { Client, datas, RequestState, success, error, resetError } = useApi<Classes>({
+    const { Client, datas, RequestState, error, resetError } = useApi<Classes>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/classes',
         key: 'data'
     })

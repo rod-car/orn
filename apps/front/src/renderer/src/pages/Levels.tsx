@@ -1,5 +1,5 @@
 import { FormEvent, useEffect } from 'react'
-import { config } from '../../config'
+import { config, token } from '../../config'
 import { useApi } from 'hooks'
 import { ApiErrorMessage, Button } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 export function Levels(): JSX.Element {
     const { Client, datas, RequestState, error, resetError, success } = useApi<Niveau>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/levels',
         key: 'data'
     })
@@ -110,12 +111,12 @@ export function Levels(): JSX.Element {
                                 <td>{level.label}</td>
                                 <td>{level.description ?? 'N/A'}</td>
                                 <td>
-                                    <a
+                                    <Link
                                         className="btn-sm me-2 btn btn-primary"
-                                        href={`/school/levels/edit/${level.id}`}
+                                        to={`/school/levels/edit/${level.id}`}
                                     >
                                         <i className="fa fa-edit"></i>
-                                    </a>
+                                    </Link>
                                     <form
                                         className="d-inline"
                                         action=""

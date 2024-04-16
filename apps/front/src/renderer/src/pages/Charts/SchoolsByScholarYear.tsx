@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useMemo } from 'react'
-import { config } from '../../../config'
+import { config, token } from '../../../config'
 import { Spinner } from 'ui'
 
 import {
@@ -45,6 +45,7 @@ ChartJS.register(
 export function SchoolsByScholarYear(): ReactNode {
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/schools',
         key: 'data'
     })

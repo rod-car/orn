@@ -1,8 +1,8 @@
 import { useApi, useExcelReader, usePdf } from 'hooks'
 import { Link } from 'react-router-dom'
-import { config } from '../../config'
+import { config, token } from '../../config'
 import { Block, Button, Select } from 'ui'
-import { ChangeEvent, Key, PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, Key, useEffect, useRef, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
 import { ageFull, number_array, scholar_years } from 'functions'
@@ -32,18 +32,21 @@ export function Student(): JSX.Element {
         datas: students
     } = useApi<Student>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/students',
         key: 'data'
     })
 
     const { Client: ScClient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClClient, datas: classes } = useApi<Classes>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/classes',
         key: 'data'
     })

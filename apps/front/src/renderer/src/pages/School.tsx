@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { Link } from 'react-router-dom'
-import { config } from '../../config'
+import { config, token } from '../../config'
 import { ApiErrorMessage, Block, Button } from 'ui'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
@@ -19,6 +19,7 @@ export function School(): JSX.Element {
         resetError
     } = useApi<School>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/schools',
         key: 'data'
     })

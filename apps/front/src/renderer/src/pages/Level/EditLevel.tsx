@@ -2,13 +2,15 @@ import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { ApiErrorMessage, Button, Input } from 'ui'
-import { config } from '../../../config'
+import { config, token } from '../../../config'
 import { toast } from 'react-toastify'
+import { Link } from 'react-router-dom'
 
 export function EditLevel(): JSX.Element {
     const [level, setLevel] = useState<Niveau>({ id: 0, label: '', description: '' })
     const { Client, RequestState, error, resetError } = useApi<Niveau>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/levels'
     })
 
@@ -36,10 +38,10 @@ export function EditLevel(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>Éditer un niveau {id}</h1>
-                <a href="/school/levels/list" className="btn btn-primary">
+                <h2>Éditer: {level?.label}</h2>
+                <Link to="/school/levels/list" className="btn btn-primary">
                     <i className="fa fa-list me-2"></i>Liste des niveaux
-                </a>
+                </Link>
             </div>
 
             {error && (

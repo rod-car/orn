@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useMemo } from 'react'
-import { config } from '../../config'
+import { config, token } from '../../config'
 import { Spinner } from 'ui'
 
 import {
@@ -60,6 +60,7 @@ ChartJS.register(
 export function StudentEvolution({ student_id }: { student_id: number }): ReactNode {
     const { Client: SurveyClient, datas: surveys } = useApi<Survey>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/surveys',
         key: 'data'
     })
@@ -70,6 +71,7 @@ export function StudentEvolution({ student_id }: { student_id: number }): ReactN
         RequestState
     } = useApi<Student>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/students'
     })
 

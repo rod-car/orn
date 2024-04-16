@@ -13,7 +13,7 @@ import {
 import { useApi } from 'hooks'
 import React, { useCallback, useEffect } from 'react'
 import { Bar, Doughnut, Line, Pie } from 'react-chartjs-2'
-import { config } from '../../config'
+import { config, token } from '../../config'
 import { Spinner } from 'ui'
 
 ChartJS.register(
@@ -116,12 +116,14 @@ export const dognutData = {
 export function Home(): React.ReactElement {
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schoolCount } = useApi<Student>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/schools',
         key: 'data'
     })

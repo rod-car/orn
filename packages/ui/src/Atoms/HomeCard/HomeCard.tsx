@@ -4,7 +4,7 @@ import './HomeCard.modules.scss'
 export function HomeCard({
     title, icon, value, type = "primary"
 }: {
-    title: ReactNode, icon: string, value: ReactNode, type: ElementMode
+    title: ReactNode, icon: string, value: ReactNode | unknown, type: ElementMode
 }): ReactNode {
     return <>
         <div className="card card-stats mb-4 mb-xl-0 shadow">
@@ -15,7 +15,7 @@ export function HomeCard({
                             {title}
                         </h5>
                         <span className="h2 font-weight-bold mb-0">
-                            {value}
+                            {value as ReactNode}
                         </span>
                     </div>
                     <div className="col-auto">

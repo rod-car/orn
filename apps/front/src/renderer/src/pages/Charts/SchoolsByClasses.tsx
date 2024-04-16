@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { config } from '../../../config'
+import { config, token } from '../../../config'
 import { Select, Spinner } from 'ui'
 
 import {
@@ -48,12 +48,14 @@ export function SchoolsByClasses(): JSX.Element {
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassCLient, datas: classes } = useApi<Classes>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/classes',
         key: 'data'
     })
@@ -64,6 +66,7 @@ export function SchoolsByClasses(): JSX.Element {
         RequestState
     } = useApi<StudentState>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/students',
         key: 'data'
     })

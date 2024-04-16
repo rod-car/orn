@@ -1,12 +1,13 @@
 import { useApi } from 'hooks'
 import { NavLink, useParams } from 'react-router-dom'
-import { ApiErrorMessage, Block } from 'ui'
-import { config } from '../../../config'
+import { Block } from 'ui'
+import { config, token } from '../../../config'
 import { useEffect, useState } from 'react'
 
 export function DetailsSchool(): JSX.Element {
     const { Client, error, resetError } = useApi<School>({
         baseUrl: config.baseUrl,
+        token: token,
         url: 'schools'
     })
 

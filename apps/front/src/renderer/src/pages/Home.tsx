@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import React, { useCallback, useEffect } from 'react'
-import { config } from '../../config'
+import { config, token } from '../../config'
 import { HomeCard, Spinner } from 'ui'
 import { SchoolsByClasses, SchoolsByScholarYear, ZBySchool } from '../pages'
 import { Link, NavLink } from 'react-router-dom'
@@ -10,18 +10,21 @@ import './Home.modules.scss'
 export function Home(): React.ReactElement {
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schoolCount } = useApi<School>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/schools',
         key: 'data'
     })
 
     const { Client: SurveyClient, datas: surveyCount } = useApi<Survey>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/surveys',
         key: 'data'
     })

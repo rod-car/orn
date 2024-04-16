@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { config } from '../../../config'
+import { config, token } from '../../../config'
 import { Select, Spinner } from 'ui'
 
 import {
@@ -16,7 +16,6 @@ import {
     ArcElement
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
-import { scholar_years } from 'functions'
 
 export const options = {
     responsive: true,
@@ -49,12 +48,14 @@ export function ZBySchool(): JSX.Element {
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassCLient, datas: classes } = useApi<Classes>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/classes',
         key: 'data'
     })
@@ -65,6 +66,7 @@ export function ZBySchool(): JSX.Element {
         RequestState
     } = useApi<SurveySchoolZ>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/students'
     })
 

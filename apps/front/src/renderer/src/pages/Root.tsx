@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
-import { ErrorResponse, NavLink, Outlet, useRouteError } from 'react-router-dom'
+import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
 import { Navigation } from '../components'
 
 import 'react-toastify/dist/ReactToastify.css?asset'
@@ -23,6 +23,7 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
     const errorResponse = err as { error: ErrorResponse }
     const { user, logout, loading } = useAuth({ baseUrl: config.baseUrl })
     const userData = user()
+    const navigate = useNavigate()
 
     const handleLogout = async (): Promise<void> => {
         toast('Deconnexion en cours', {
@@ -42,7 +43,7 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                 position: 'bottom-right'
             })
         }
-        window.electron.ipcRenderer.send('logged-out', true)
+        navigate('/login')
     }
 
     return (
@@ -74,6 +75,7 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                             aria-current="page"
                                             to="/login"
                                         >
+                                            <i className="fa fa-right-to-bracket me-2"></i>
                                             Connexion
                                         </NavLink>
                                     </li>
@@ -83,6 +85,7 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                             aria-current="page"
                                             to="/register"
                                         >
+                                            <i className="fa fa-right-to-bracket me-2"></i>
                                             Inscription
                                         </NavLink>
                                     </li>
@@ -186,7 +189,8 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                             data-bs-toggle="dropdown"
                                             aria-expanded="false"
                                         >
-                                            <i className="fa fa-user me-2"></i> {userData.user.name}
+                                            <i className="fa fa-user me-2"></i>
+                                            {userData.user.name}
                                         </NavLink>
                                         <ul
                                             className="dropdown-menu"
@@ -229,7 +233,7 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
 
             <div className="container mb-5" style={{ marginTop: 130, minHeight: '90vh' }}>
                 <ToastContainer />
-                <Navigation />
+                {userData !== null && <Navigation />}
                 {error ? <ErrorComponent error={errorResponse.error} /> : <Outlet />}
             </div>
 

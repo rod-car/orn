@@ -107,10 +107,17 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
             if (query) requestUri += query;
             let response: { data: T[], status: number, statusText: string }
 
+            const headers = {
+                "Authorization": `Bearer ${token}`
+            }
+
             if (params?.prefix === false && addUrl !== undefined) response = await axios.get(addUrl, {
-                baseURL: baseUrl.replace(params.replace, '')
+                baseURL: baseUrl.replace(params.replace, ''),
+                headers: headers
             });
-            else response = await axios.get(requestUri);
+            else response = await axios.get(requestUri, {
+                headers: headers
+            })
 
             if (response.status === 200) datas = key ? response.data[key] : response.data;
             else setError({
@@ -145,7 +152,11 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
             let newUrl = url + '/' + id
             if (query) newUrl += query;
 
-            const response = await axios.get(newUrl);
+            const response = await axios.get(newUrl, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
 
             if (response.status === 200) data = response.data as T
             else {
@@ -255,6 +266,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
         try {
             const response = await axios.put(getUri(id), data, {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/ld+json"
                 }
             });
@@ -295,6 +307,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
         try {
             const response = await axios.patch(getUri(id), data, {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/merge-patch+json"
                 },
                 params: params
@@ -337,7 +350,10 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
 
         try {
             const response = await axios.delete(getUri(id), {
-                params: params
+                params: params,
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                }
             });
 
             if (response.status === 204) {

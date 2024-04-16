@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from 'ui'
 
-export const Navigation = (className: { className: string }): ReactNode => {
+export const Navigation = (className: { className?: string }): ReactNode => {
     const navigate = useNavigate()
 
     return (
