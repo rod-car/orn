@@ -1,5 +1,5 @@
 import { useApi } from 'hooks'
-import { Link } from 'react-router-dom'
+import { Link } from '@renderer/components'
 import { config, token } from '../../config'
 import { ApiErrorMessage, Block, Button } from 'ui'
 import { useEffect } from 'react'
@@ -73,7 +73,7 @@ export function School(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>Liste des établissement</h1>
+                <h2>Liste des établissement</h2>
                 <div className="d-flex align-items-between">
                     <Button
                         onClick={getSchools}
@@ -84,7 +84,7 @@ export function School(): JSX.Element {
                     >
                         Rechargher
                     </Button>
-                    <Link to="/school/add" className="btn btn-primary me-2">
+                    <Link to="/school/add" className="btn primary-link">
                         <i className="fa fa-plus me-2"></i>Nouveau
                     </Link>
                 </div>

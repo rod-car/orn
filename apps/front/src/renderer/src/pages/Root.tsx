@@ -296,8 +296,8 @@ const ErrorComponent = ({ error }: { error: ErrorResponse }): JSX.Element => {
     return (
         <>
             <div className="text-center">
-                <h1>{error?.statusText}</h1>
-                <h1>{error?.status}</h1>
+                <h2>{error?.statusText}</h2>
+                <h2>{error?.status}</h2>
             </div>
         </>
     )

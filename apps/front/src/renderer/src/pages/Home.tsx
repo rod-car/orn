@@ -44,7 +44,7 @@ export function Home(): React.ReactElement {
     return (
         <>
             <div className="mb-5 d-flex justify-content-between align-items-center">
-                <h1>Tableau de bord</h1>
+                <h2>Tableau de bord</h2>
                 <Link to="/states" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Etats
                 </Link>
