@@ -56,6 +56,7 @@ export function SchoolsByScholarYear(): ReactNode {
         RequestState
     } = useApi<Student>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/students',
         key: 'data'
     })
