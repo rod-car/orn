@@ -46,8 +46,8 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
 
     type PostResponse = { ok: boolean, data: T | null, message: string, status?: number }
 
-    const resetError = () => {
-        setError(null)
+    const resetError = (key?: string) => {
+        if (key === undefined) setError(null)
     }
 
     const resetSuccess = () => {

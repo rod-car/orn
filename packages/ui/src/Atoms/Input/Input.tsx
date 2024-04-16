@@ -18,7 +18,7 @@ export function Input({
     type = 'text',
     required = true,
     elementSize = "md",
-    controlled = false,
+    controlled = true,
     className,
     auto = false,
     error = undefined,

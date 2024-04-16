@@ -1,10 +1,11 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react'
 import { Block, Button, Input, Select, Spinner } from 'ui'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config } from '../../../config'
+import { config, token } from '../../../config'
 import { toast } from 'react-toastify'
 import { gender, scholar_years } from 'functions'
+import { Link } from '@renderer/components'
 
 export function EditStudent(): JSX.Element {
     const { id } = useParams()
@@ -16,17 +17,20 @@ export function EditStudent(): JSX.Element {
         error
     } = useApi<Student>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/students'
     })
 
     const { Client: ScClient, datas: ScDatas } = useApi<School>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClClient, datas: ClDatas } = useApi<Classes>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/classes',
         key: 'data'
     })
@@ -87,7 +91,7 @@ export function EditStudent(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>{student?.fullname}</h2>
-                <Link to="/student/list" className="btn btn-primary">
+                <Link to="/student/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des étudiants
                 </Link>
             </div>

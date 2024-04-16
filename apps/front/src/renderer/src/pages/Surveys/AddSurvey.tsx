@@ -1,6 +1,6 @@
 import { FormEvent } from 'react'
-import { Button, Input } from 'ui'
-import { Link } from 'react-router-dom'
+import { Block, Button, Input } from 'ui'
+import { Link } from '@renderer/components'
 import { useApi } from 'hooks'
 import { config, token } from '../../../config'
 import { toast } from 'react-toastify'
@@ -40,26 +40,33 @@ export function AddSurvey(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>Nouvelle enquête</h1>
-                <Link to="/survey/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Liste des enquêtes
+                <h2>Nouvelle mésure</h2>
+                <Link to="/survey/list" className="btn primary-link">
+                    <i className="fa fa-list me-2"></i>Liste des mésures
                 </Link>
             </div>
 
-            <form action="" onSubmit={handleSubmit} method="post" className="mb-5">
-                <div className="row mb-4">
-                    <div className="col-xl-6">
-                        <Input label="Phase" name="phase" />
+            <Block className="mb-5">
+                <form action="" onSubmit={handleSubmit} method="post">
+                    <div className="row mb-4">
+                        <div className="col-xl-6">
+                            <Input label="Phase" name="phase" />
+                        </div>
+                        <div className="col-xl-6">
+                            <Input label="Date" type="date" name="date" />
+                        </div>
                     </div>
-                    <div className="col-xl-6">
-                        <Input label="Date" type="date" name="date" />
-                    </div>
-                </div>
 
-                <Button loading={RequestState.creating} icon="save" type="submit" mode="primary">
-                    Enregistrer
-                </Button>
-            </form>
+                    <Button
+                        loading={RequestState.creating}
+                        icon="save"
+                        type="submit"
+                        mode="primary"
+                    >
+                        Enregistrer
+                    </Button>
+                </form>
+            </Block>
         </>
     )
 }

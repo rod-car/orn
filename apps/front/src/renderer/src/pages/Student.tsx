@@ -1,5 +1,5 @@
 import { useApi, useExcelReader, usePdf } from 'hooks'
-import { Link } from 'react-router-dom'
+import { Link } from '@renderer/components'
 import { config, token } from '../../config'
 import { Block, Button, Select } from 'ui'
 import { ChangeEvent, Key, useEffect, useRef, useState } from 'react'
@@ -191,10 +191,10 @@ export function Student(): JSX.Element {
                     >
                         Recharger
                     </Button>
-                    <Link to="/student/add" className="btn btn-primary me-2">
+                    <Link to="/student/add" className="btn secondary-link me-2">
                         <i className="fa fa-plus me-2"></i>Nouveau
                     </Link>
-                    <Link to="/student/import" className="btn btn-warning">
+                    <Link to="/student/import" className="btn primary-link">
                         <i className="fa fa-file me-2"></i>Importer une liste
                     </Link>
                 </div>

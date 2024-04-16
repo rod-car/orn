@@ -1,9 +1,10 @@
 import { useApi } from 'hooks'
-import { NavLink, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { ApiErrorMessage, Block } from 'ui'
 import { config, token } from '../../../config'
 import { useEffect, useState } from 'react'
 import { StudentEvolution, StudentStatus } from '@renderer/charts'
+import { Link } from '@renderer/components'
 
 export function DetailsStudent(): JSX.Element {
     const { Client, error, resetError } = useApi<Student>({
@@ -29,9 +30,9 @@ export function DetailsStudent(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>{student && student.fullname}</h2>
-                <NavLink to="/student/list" className="btn btn-primary">
+                <Link to="/student/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des étudiants
-                </NavLink>
+                </Link>
             </div>
 
             {error && (

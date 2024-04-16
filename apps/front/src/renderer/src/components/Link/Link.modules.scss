@@ -1,0 +1,22 @@
+.primary-link {
+    color: #8f6900;
+    background: transparent;
+    border: 1px solid #F1C038;
+}
+  
+.primary-link:hover {
+    background: #F1C038;
+    border-color: #d19c0b;
+}
+
+.secondary-link {
+  color: #071E78;
+  background: transparent;
+  border: 1px solid #071E78;
+}
+
+.secondary-link:hover {
+  background: #071E78;
+  border-color: #041558;
+  color: white;
+}

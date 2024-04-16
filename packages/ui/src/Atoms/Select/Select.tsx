@@ -21,7 +21,7 @@ type SelectProps = {
         valueKey: keyof Option
     }
     placeholder?: string | null
-    error: string[]
+    error?: string[]
     onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
 }
 

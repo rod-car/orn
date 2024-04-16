@@ -1,6 +1,6 @@
 import { useApi, useExcelReader } from 'hooks'
 import { ChangeEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from '@renderer/components'
 import { Block, Button, Input, Spinner } from 'ui'
 import { config, token } from '../../../config'
 import { toast } from 'react-toastify'
@@ -51,7 +51,7 @@ export function ImportStudent(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Importer une liste des étudiants</h2>
-                <Link to="/student/list" className="btn btn-primary">
+                <Link to="/student/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des étudiants
                 </Link>
             </div>

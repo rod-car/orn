@@ -1,6 +1,6 @@
 import { FormEvent, useEffect } from 'react'
 import { Block, Button, Input, Select } from 'ui'
-import { Link } from 'react-router-dom'
+import { Link } from '@renderer/components'
 import { useApi } from 'hooks'
 import { config, token } from '../../../config'
 import { toast } from 'react-toastify'
@@ -65,7 +65,7 @@ export function AddStudent(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2 className="text-muted">Ajouter un étudiant</h2>
-                <Link to="/student/list" className="btn btn-primary">
+                <Link to="/student/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des étudiants
                 </Link>
             </div>
