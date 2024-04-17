@@ -147,7 +147,7 @@ export function Home(): React.ReactElement {
 
     return (
         <>
-            <h1 className="mb-5">Dashboard</h1>
+            <h2 className="mb-5">Dashboard</h2>
             <div className="row mb-5">
                 <div className="col-xl-4 col-lg-4">
                     <div className="card card-stats mb-4 mb-xl-0 shadow">

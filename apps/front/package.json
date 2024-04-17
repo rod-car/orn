@@ -30,6 +30,8 @@
     "file-saver": "^2.0.5",
     "functions": "workspace:*",
     "hooks": "workspace:*",
+    "html-to-image": "^1.11.11",
+    "jspdf": "^2.5.1",
     "react-chartjs-2": "^5.2.0",
     "react-confirm-alert": "^3.0.6",
     "react-laravel-paginex": "^2.0.8",

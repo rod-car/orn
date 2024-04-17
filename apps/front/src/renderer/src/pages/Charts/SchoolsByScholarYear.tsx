@@ -1,7 +1,7 @@
-import { useApi } from 'hooks'
-import { ReactNode, useCallback, useEffect, useMemo } from 'react'
+import { useApi, usePdf } from 'hooks'
+import { ReactNode, useCallback, useEffect, useMemo, useRef } from 'react'
 import { config, token } from '../../../config'
-import { Spinner } from 'ui'
+import { Button, Spinner } from 'ui'
 
 import {
     Chart as ChartJS,
@@ -43,6 +43,8 @@ ChartJS.register(
 )
 
 export function SchoolsByScholarYear(): ReactNode {
+    const { exportToPdf } = usePdf()
+
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
         token: token,
@@ -92,12 +94,28 @@ export function SchoolsByScholarYear(): ReactNode {
         return { labels, datasets }
     }, [StateDatas, schools])
 
+    const chartRef = useRef()
+
+    const exportPdf = useCallback(() => {
+        exportToPdf(chartRef, 'Effectif_par_année_scolaire.pdf')
+    }, [])
+
     return (
         <>
             <div className="shadow-lg rounded p-4">
-                <h4 className="mb-4 text-muted">Effectif par année scolaire</h4>
+                <div className="d-flex align-items-center justify-content-between">
+                    <h4 className="text-muted">Effectif par année scolaire</h4>
+                    <Button onClick={exportPdf} icon="file" type="button" mode="info">
+                        Exporter vers PDF
+                    </Button>
+                </div>
                 {RequestState.loading && <Spinner className="text-center w-100" />}
-                {data && <Line options={options} data={data} />}
+                {data && (
+                    <div className="custom-chart" ref={chartRef}>
+                        <p className="d-none text-uppercase">Effectif par année scolaire</p>
+                        <Line options={options} data={data} />
+                    </div>
+                )}
             </div>
         </>
     )

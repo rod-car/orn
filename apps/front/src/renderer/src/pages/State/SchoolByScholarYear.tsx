@@ -1,7 +1,8 @@
 import { useApi } from 'hooks'
 import { config, token } from '../../../config'
 import { useCallback, useEffect } from 'react'
-import { Button, Spinner } from 'ui'
+import { Block, Button, Spinner } from 'ui'
+import { getPdf } from '../utils'
 
 export function SchoolByScholarYear(): JSX.Element {
     const { Client, RequestState, error, datas } = useApi<Student>({
@@ -22,49 +23,64 @@ export function SchoolByScholarYear(): JSX.Element {
     const headers = datas.headers
     const realData = datas.data
 
+    const exportPdf = useCallback(async (className = 'custom') => {
+        const fileName = 'Etat_etudiant_ecole_annee_scolaire'
+
+        getPdf({ fileName: `${fileName}.pdf`, className: className, title: 'États des étudiants' })
+    }, [])
+
     return (
-        <>
-            <h1 className="mb-5">Etudiant par ecole et par annee scolaire</h1>
+        <Block>
+            <div className="d-flex align-items-center justify-content-between mb-5">
+                <h2>Étudiant par école et par année scolaire</h2>
+                <Button
+                    onClick={(): Promise<void> => exportPdf('student-sy-state')}
+                    icon="file"
+                    className="btn secondary-link"
+                >
+                    Exporter vers PDF
+                </Button>
+            </div>
             {error && <div className="alert alert-danger">{error.message}</div>}
 
             {RequestState.loading && <Spinner />}
 
-            <div className="d-flex align-items-center justify-content-between mb-5">
-                <h4 className="text-muted m-0">Etat</h4>
-                <Button icon="print" mode="info">
-                    Imprimer
-                </Button>
+            <div className="global-state student-sy-state">
+                <p className="d-none h4 mb-4">Étudiant par école et par année scolaire</p>
+                <table className={`table table-striped table-bordered`}>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            {headers &&
+                                Object.values(headers).map((header: string) => (
+                                    <th key={header}>{header}</th>
+                                ))}
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {realData &&
+                            Object.keys(realData).map((school) => (
+                                <tr key={school}>
+                                    <td>{school}</td>
+                                    {Object.values(headers).map((scholar_year) => {
+                                        return (
+                                            <td
+                                                key={realData[school][scholar_year]}
+                                                className="text-primary"
+                                            >
+                                                {realData[school][scholar_year] ?? (
+                                                    <span className="text-danger">0</span>
+                                                )}
+                                            </td>
+                                        )
+                                    })}
+                                    <td className="fw-bold">{realData[school].total}</td>
+                                </tr>
+                            ))}
+                    </tbody>
+                </table>
             </div>
-            <table className="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th></th>
-                        {headers && Object.values(headers).map((header) => <th>{header}</th>)}
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {realData &&
-                        Object.keys(realData).map((school) => (
-                            <tr key={school}>
-                                <td>{school}</td>
-                                {Object.values(headers).map((scholar_year) => {
-                                    return (
-                                        <td
-                                            key={realData[school][scholar_year]}
-                                            className="text-primary"
-                                        >
-                                            {realData[school][scholar_year] ?? (
-                                                <span className="text-danger">0</span>
-                                            )}
-                                        </td>
-                                    )
-                                })}
-                                <td className="fw-bold">{realData[school].total}</td>
-                            </tr>
-                        ))}
-                </tbody>
-            </table>
-        </>
+        </Block>
     )
 }

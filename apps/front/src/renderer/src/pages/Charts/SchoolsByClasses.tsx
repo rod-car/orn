@@ -1,7 +1,7 @@
-import { useApi } from 'hooks'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useApi, usePdf } from 'hooks'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { config, token } from '../../../config'
-import { Select, Spinner } from 'ui'
+import { Button, Select, Spinner } from 'ui'
 
 import {
     Chart as ChartJS,
@@ -45,6 +45,7 @@ ChartJS.register(
 
 export function SchoolsByClasses(): JSX.Element {
     const [scholarYear, setScholarYear] = useState<string>(scholar_years().at(1) as string)
+    const { exportToPdf } = usePdf()
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
@@ -81,6 +82,8 @@ export function SchoolsByClasses(): JSX.Element {
         getData()
     }, [])
 
+    const chartRef = useRef()
+
     const data = useMemo(() => {
         const realData = StateDatas.data
         const labels = schools.map((school) => school.name)
@@ -101,10 +104,19 @@ export function SchoolsByClasses(): JSX.Element {
         }
     }, [classes, schools, StateDatas, scholarYear])
 
+    const exportPdf = useCallback(() => {
+        exportToPdf(chartRef, 'Effectif_par_école_par_classe_année_scolaire.pdf')
+    }, [])
+
     return (
         <>
             <div className="shadow-lg rounded p-4">
-                <h4 className="mb-4 text-muted">Effectif par école et par classe</h4>
+                <div className="mb-4 d-flex align-items-center justify-content-between">
+                    <h4 className="text-muted">Effectif par école et par classe</h4>
+                    <Button onClick={exportPdf} icon="file" type="button" mode="info">
+                        Exporter vers PDF
+                    </Button>
+                </div>
                 <div className="mb-4">
                     <Select
                         controlled
@@ -115,7 +127,14 @@ export function SchoolsByClasses(): JSX.Element {
                     />
                 </div>
                 {RequestState.loading && <Spinner className="text-center w-100" />}
-                {data && <Bar options={options} data={data} />}
+                {data && (
+                    <div className="custom-chart" ref={chartRef}>
+                        <p className="d-none text-uppercase">
+                            Effectif par école et par classe: {scholarYear}
+                        </p>
+                        <Bar options={options} data={data} />
+                    </div>
+                )}
             </div>
         </>
     )

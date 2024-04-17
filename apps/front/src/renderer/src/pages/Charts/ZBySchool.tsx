@@ -1,7 +1,7 @@
-import { useApi } from 'hooks'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useApi, usePdf } from 'hooks'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { config, token } from '../../../config'
-import { Select, Spinner } from 'ui'
+import { Button, Select, Spinner } from 'ui'
 
 import {
     Chart as ChartJS,
@@ -45,6 +45,7 @@ ChartJS.register(
 export function ZBySchool(): JSX.Element {
     const [surveyId, setSurveyId] = useState(2)
     const [stateType, setStateType] = useState('MA')
+    const { exportToPdf } = usePdf()
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
@@ -107,10 +108,21 @@ export function ZBySchool(): JSX.Element {
         }
     }, [classes, schools, StateDatas, surveyId, stateType])
 
+    const chartRef = useRef()
+    const exportPdf = useCallback(() => {
+        exportToPdf(chartRef, 'Effectif_de_mal_nutrition.pdf')
+    }, [])
+
     return (
         <>
             <div className="shadow-lg rounded p-4">
-                <h4 className="mb-4 text-muted">Statistique de malnutrition</h4>
+                <div className="mb-4 d-flex align-items-center justify-content-between">
+                    <h4 className="text-muted">Statistique de malnutrition</h4>
+                    <Button onClick={exportPdf} icon="file" type="button" mode="info">
+                        Exporter vers PDF
+                    </Button>
+                </div>
+
                 <div className="row mb-4">
                     <div className="col-6">
                         <Select
@@ -135,7 +147,12 @@ export function ZBySchool(): JSX.Element {
                 </div>
                 {RequestState.loading && <Spinner className="text-center w-100" />}
                 {data && data.labels && data.labels.length > 0 && (
-                    <Bar options={options} data={data} />
+                    <div className="custom-chart" ref={chartRef}>
+                        <p className="d-none text-uppercase">
+                            Statistique de malnutrition {stateType} phase: {surveyId}
+                        </p>
+                        <Bar options={options} data={data} />
+                    </div>
                 )}
             </div>
         </>

@@ -1,14 +1,16 @@
-import { useApi } from 'hooks'
-import React, { useCallback, useEffect } from 'react'
+import { useApi, usePdf } from 'hooks'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { config, token } from '../../config'
-import { HomeCard, Spinner } from 'ui'
+import { Button, HomeCard, Spinner } from 'ui'
 import { SchoolsByClasses, SchoolsByScholarYear, ZBySchool } from '../pages'
 import { NavLink } from 'react-router-dom'
 import { Link } from '@renderer/components'
+import { getPdf } from './utils'
 
 import './Home.modules.scss'
 
 export function Home(): React.ReactElement {
+    const { exportToPdf } = usePdf()
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
         baseUrl: config.baseUrl,
         token: token,
@@ -39,6 +41,11 @@ export function Home(): React.ReactElement {
 
     useEffect(() => {
         getCount()
+    }, [])
+
+    const chartRef = useRef()
+    const exportPdf = useCallback(async () => {
+        getPdf({ fileName: 'Statistiques.pdf' })
     }, [])
 
     return (
@@ -79,21 +86,27 @@ export function Home(): React.ReactElement {
                 </NavLink>
             </div>
 
-            <div className="row mb-5">
-                <div className="col-12">
-                    <ZBySchool />
-                </div>
-            </div>
+            <Button onClick={exportPdf} icon="file" className="btn secondary-link mb-4">
+                Exporter tous vers PDF
+            </Button>
 
-            <div className="row mb-5">
-                <div className="col-12">
-                    <SchoolsByClasses />
+            <div ref={chartRef}>
+                <div className="row mb-5">
+                    <div className="col-12">
+                        <ZBySchool />
+                    </div>
                 </div>
-            </div>
 
-            <div className="row mb-5">
-                <div className="col-12">
-                    <SchoolsByScholarYear />
+                <div className="row mb-5">
+                    <div className="col-12">
+                        <SchoolsByClasses />
+                    </div>
+                </div>
+
+                <div className="row mb-5">
+                    <div className="col-12">
+                        <SchoolsByScholarYear />
+                    </div>
                 </div>
             </div>
         </>
