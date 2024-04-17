@@ -29,6 +29,8 @@ importers:
       file-saver: ^2.0.5
       functions: workspace:*
       hooks: workspace:*
+      html-to-image: ^1.11.11
+      jspdf: ^2.5.1
       prettier: ^2.8.7
       react: ^18.2.0
       react-chartjs-2: ^5.2.0
@@ -54,6 +56,8 @@ importers:
       file-saver: 2.0.5
       functions: link:../../packages/functions
       hooks: link:../../packages/hooks
+      html-to-image: 1.11.11
+      jspdf: 2.5.1
       react-chartjs-2: 5.2.0_tqnaqekbepegqkbmt2a3sjflbi
       react-confirm-alert: 3.0.6_biqbaboplfbrettd7655fr4n2y
       react-laravel-paginex: 2.0.8_biqbaboplfbrettd7655fr4n2y
@@ -7799,6 +7803,10 @@ packages:
     resolution: {integrity: sha512-ztqyC3kLto0e9WbNp0aeP+M3kTt+nbaIveGmUxAtZa+8iFgKLUOD4YKM5j+f3QD89bra7UeumolZHKuOXnTmeQ==}
     engines: {node: '>=8'}
     dev: true
+
+  /html-to-image/1.11.11:
+    resolution: {integrity: sha512-9gux8QhvjRO/erSnDPv28noDZcPZmYE7e1vFsBLKLlRlKDSqNJYebj6Qz1TGd5lsRV+X+xYyjCKjuZdABinWjA==}
+    dev: false
 
   /html2canvas/1.4.1:
     resolution: {integrity: sha512-fPU6BHNpsyIhr8yyMpTLLxAbkaK8ArIBcmZIRiBLiDhjeqvXolaEmDGmELFuX9I4xDcaKKcJl+TKZLqruBbmWA==}

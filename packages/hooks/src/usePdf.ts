@@ -1,17 +1,18 @@
-import generatePDF, { Margin } from 'react-to-pdf';
+import generatePDF, { Margin, Options, Resolution } from 'react-to-pdf';
 
 export function usePdf() {
 
-    const exportToPdf = (ref: React.MutableRefObject<undefined>, fileName: string) => {
-        const options = {
+    const exportToPdf = (ref: React.MutableRefObject<undefined>, options: Options) => {
+        generatePDF(ref, {
+            resolution: Resolution.HIGH,
+            method: 'save',
             page: {
                 margin: Margin.SMALL,
                 format: 'A4',
-                orientation: 'portrait',
-            }
-        };
-        
-        generatePDF(ref, { ...options, filename: fileName })
+                orientation: 'portrait'
+            },
+            ...options
+        })
     }
 
     return {
