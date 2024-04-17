@@ -27,6 +27,29 @@ export const options = {
             display: true,
             text: 'Effectif par annee scolaire'
         }
+    },
+    scales: {
+        y: {
+            title: {
+                display: true,
+                text: "Nombre d'étudiants"
+            },
+            ticks: {
+                font: {
+                    weight: 'bold',
+                    size: 13
+                }
+            },
+            suggestedMax: 5
+        },
+        x: {
+            ticks: {
+                font: {
+                    weight: 'bold',
+                    size: 13
+                }
+            }
+        }
     }
 }
 
@@ -97,7 +120,7 @@ export function SchoolsByScholarYear(): ReactNode {
     const chartRef = useRef()
 
     const exportPdf = useCallback(() => {
-        exportToPdf(chartRef, 'Effectif_par_année_scolaire.pdf')
+        exportToPdf(chartRef, { filename: 'Effectif_par_année_scolaire.pdf' })
     }, [])
 
     return (

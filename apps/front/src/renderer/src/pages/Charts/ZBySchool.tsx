@@ -27,6 +27,29 @@ export const options = {
             display: true,
             text: 'Effectif par ecole et par classe'
         }
+    },
+    scales: {
+        y: {
+            title: {
+                display: true,
+                text: "Nombre d'étudiants"
+            },
+            ticks: {
+                font: {
+                    weight: 'bold',
+                    size: 13
+                }
+            },
+            suggestedMax: 5
+        },
+        x: {
+            ticks: {
+                font: {
+                    weight: 'bold',
+                    size: 13
+                }
+            }
+        }
     }
 }
 
