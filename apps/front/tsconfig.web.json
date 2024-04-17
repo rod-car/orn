@@ -4,6 +4,10 @@
     "src/renderer/src/env.d.ts",
     "src/renderer/src/pages/*",
     "src/renderer/src/pages/**/*.tsx",
+    "src/renderer/src/charts/*",
+    "src/renderer/src/charts/**/*.tsx",
+    "src/renderer/src/components/*",
+    "src/renderer/src/components/**/*.tsx",
     "src/preload/*.d.ts",
     "src/renderer/config",
   ],
@@ -14,7 +18,8 @@
     "paths": {
       "@renderer/*": [
         "src/renderer/src/*"
-      ]
+      ],
+      "react": [ "./node_modules/@types/react" ]
     }
   }
 }

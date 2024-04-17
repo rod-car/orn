@@ -1,15 +1,17 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
-import { config, abaque as abaqueConfig } from '../../../config'
+import { useParams, useSearchParams } from 'react-router-dom'
+import { config, abaque as abaqueConfig, token } from '../../../config'
 import { Button, Input } from 'ui'
 import { toast } from 'react-toastify'
+import { Link } from '@renderer/components'
 
 export function EditMeasure(): JSX.Element {
     const [abaque, setAbaque] = useState<Partial<MeasureLength>>(abaqueConfig.defaultFields)
     const { id } = useParams()
     const { Client, RequestState } = useApi<MeasureLength>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/measures'
     })
 
@@ -54,10 +56,8 @@ export function EditMeasure(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1 className="m-0">
-                    Modifier: {abaqueConfig.find(type)} - {id}
-                </h1>
-                <Link to="/measure/list" className="btn btn-primary">
+                <h2 className="m-0">Modifier: {abaqueConfig.find(type)}</h2>
+                <Link to="/measure/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des abaques
                 </Link>
             </div>

@@ -1,14 +1,16 @@
 import { FormEvent, useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
-import { config } from '../../config'
+import { config, token } from '../../config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
-import { ApiErrorMessage, Button } from 'ui'
+import { ApiErrorMessage, Block, Button } from 'ui'
 import { NavLink } from 'react-router-dom'
+import { Link } from '@renderer/components'
 
 export function Classes(): JSX.Element {
-    const { Client, datas, RequestState, success, error, resetError } = useApi<Classes>({
+    const { Client, datas, RequestState, error, resetError } = useApi<Classes>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/classes',
         key: 'data'
     })
@@ -28,14 +30,21 @@ export function Classes(): JSX.Element {
                 {
                     label: 'Oui',
                     onClick: async (): Promise<void> => {
-                        await Client.destroy(id ?? 0)
-                        if (success)
+                        const response = await Client.destroy(id ?? 0)
+                        if (response.ok) {
                             toast('Supprimé', {
                                 closeButton: true,
                                 type: 'success',
                                 position: 'bottom-right'
                             })
-                        getData()
+                            getData()
+                        } else {
+                            toast('Impossible de supprimer cette classe', {
+                                closeButton: true,
+                                type: 'error',
+                                position: 'bottom-right'
+                            })
+                        }
                     }
                 },
                 {
@@ -58,7 +67,7 @@ export function Classes(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>Liste des classes</h1>
+                <h2>Liste des classes</h2>
                 <div className="d-flex justify-content-between align-items-center">
                     <Button
                         onClick={getData}
@@ -70,80 +79,84 @@ export function Classes(): JSX.Element {
                     >
                         Recharger
                     </Button>
-                    <NavLink to="/school/classes/add" className="btn btn-primary">
+                    <Link to="/school/classes/add" className="btn primary-link">
                         <i className="fa fa-plus me-2"></i>Nouvelle classe
-                    </NavLink>
+                    </Link>
                 </div>
             </div>
 
-            {error && (
-                <ApiErrorMessage
-                    className="mb-3"
-                    message={error.message}
-                    onClose={(): void => {
-                        resetError()
-                    }}
-                />
-            )}
+            <Block>
+                {error && (
+                    <ApiErrorMessage
+                        className="mb-3"
+                        message={error.message}
+                        onClose={(): void => {
+                            resetError()
+                        }}
+                    />
+                )}
 
-            <table className="table table-striped mb-5">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nom</th>
-                        <th>Niveau</th>
-                        <th>Notation</th>
-                        <th style={{ width: '15%' }}>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {RequestState.loading && (
+                <div className="d-flex justify-content-end mb-3">
+                    <h5 className="text-primary">Arrếté au nombre de {datas.length} classe(s)</h5>
+                </div>
+
+                <table className="table table-striped mb-5 table-bordered">
+                    <thead>
                         <tr>
-                            <td colSpan={5} className="text-center">
-                                Chargement...
-                            </td>
+                            <th>Nom</th>
+                            <th>Niveau</th>
+                            <th>Notation</th>
+                            <th style={{ width: '15%' }}>Actions</th>
                         </tr>
-                    )}
-                    {datas.length > 0 &&
-                        datas.map((classes) => (
-                            <tr key={classes.id}>
-                                <td>{classes.id}</td>
-                                <td>{classes.name}</td>
-                                <td>{classes.level?.label ?? 'N/A'}</td>
-                                <td>{classes.notation}</td>
-                                <td>
-                                    <NavLink
-                                        className="btn-sm me-2 btn btn-primary"
-                                        to={`/school/classes/edit/${classes.id}`}
-                                    >
-                                        <i className="fa fa-edit"></i>
-                                    </NavLink>
-                                    <form
-                                        className="d-inline"
-                                        action=""
-                                        method="post"
-                                        onSubmit={handleSubmit}
-                                    >
-                                        <input type="hidden" name="id" value={classes.id} />
-                                        <Button
-                                            type="submit"
-                                            mode="danger"
-                                            icon="trash"
-                                            size="sm"
-                                        />
-                                    </form>
+                    </thead>
+                    <tbody>
+                        {RequestState.loading && (
+                            <tr>
+                                <td colSpan={4} className="text-center">
+                                    Chargement...
                                 </td>
                             </tr>
-                        ))}
-                    {!RequestState.loading && datas.length <= 0 && (
-                        <tr>
-                            <td colSpan={5} className="text-center">
-                                Aucune données
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                        )}
+                        {datas.length > 0 &&
+                            datas.map((classes) => (
+                                <tr key={classes.id}>
+                                    <td>{classes.name}</td>
+                                    <td>{classes.level?.label ?? 'N/A'}</td>
+                                    <td>{classes.notation}</td>
+                                    <td>
+                                        <NavLink
+                                            className="btn-sm me-2 btn btn-primary"
+                                            to={`/school/classes/edit/${classes.id}`}
+                                        >
+                                            <i className="fa fa-edit"></i>
+                                        </NavLink>
+                                        <form
+                                            className="d-inline"
+                                            action=""
+                                            method="post"
+                                            onSubmit={handleSubmit}
+                                        >
+                                            <input type="hidden" name="id" value={classes.id} />
+                                            <Button
+                                                type="submit"
+                                                mode="danger"
+                                                icon="trash"
+                                                size="sm"
+                                            />
+                                        </form>
+                                    </td>
+                                </tr>
+                            ))}
+                        {!RequestState.loading && datas.length <= 0 && (
+                            <tr>
+                                <td colSpan={4} className="text-center">
+                                    Aucune données
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </Block>
         </>
     )
 }

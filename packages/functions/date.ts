@@ -1,5 +1,5 @@
-import { differenceInMonths, differenceInYears, getDate, getYear } from 'date-fns'
-
+import { differenceInMonths, differenceInYears, format as dateFnsFormat, getYear } from 'date-fns'
+import { fr } from 'date-fns/locale'
 
 /**
  * Recuperer une liste d'années scolaires
@@ -58,4 +58,8 @@ const parse = (_date: string, _format: string = "yyyy-MM-dd", _delimiter: string
 
     let formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
     return formatedDate;
+}
+
+export const format  = (date: string, format: string): string => {
+    return dateFnsFormat(date, format, { locale: fr })
 }

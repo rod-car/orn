@@ -1,12 +1,15 @@
 import { useApi } from 'hooks'
-import { NavLink, useParams } from 'react-router-dom'
-import { ApiErrorMessage } from 'ui'
-import { config } from '../../../config'
+import { useParams } from 'react-router-dom'
+import { ApiErrorMessage, Block } from 'ui'
+import { config, token } from '../../../config'
 import { useEffect, useState } from 'react'
+import { StudentEvolution, StudentStatus } from '@renderer/charts'
+import { Link } from '@renderer/components'
 
 export function DetailsStudent(): JSX.Element {
     const { Client, error, resetError } = useApi<Student>({
         baseUrl: config.baseUrl,
+        token: token,
         url: 'students'
     })
 
@@ -26,10 +29,10 @@ export function DetailsStudent(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>{student && student.fullname}</h1>
-                <NavLink to="/student/list" className="btn btn-primary">
+                <h2>{student && student.fullname}</h2>
+                <Link to="/student/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des étudiants
-                </NavLink>
+                </Link>
             </div>
 
             {error && (
@@ -42,31 +45,43 @@ export function DetailsStudent(): JSX.Element {
                 />
             )}
 
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Classe</th>
-                        <th>Annee scolaire</th>
-                        <th>Etablissement</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {student &&
-                        student.classes?.map((classe) => {
-                            const school = student.schools?.find((school) => {
-                                return school.pivot.scholar_year === classe.pivot.scholar_year
-                            })
+            <Block className="mb-5">
+                <h3 className="mb-3">Classes</h3>
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Classe</th>
+                            <th>Annee scolaire</th>
+                            <th>Etablissement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {student &&
+                            student.classes?.map((classe) => {
+                                const school = student.schools?.find((school) => {
+                                    return school.pivot.scholar_year === classe.pivot.scholar_year
+                                })
 
-                            return (
-                                <tr key={classe.name}>
-                                    <td>{classe.name}</td>
-                                    <td>{classe.pivot.scholar_year}</td>
-                                    <td>{school.name}</td>
-                                </tr>
-                            )
-                        })}
-                </tbody>
-            </table>
+                                return (
+                                    <tr key={classe.name}>
+                                        <td>{classe.name}</td>
+                                        <td>{classe.pivot.scholar_year}</td>
+                                        <td>{school.name}</td>
+                                    </tr>
+                                )
+                            })}
+                    </tbody>
+                </table>
+            </Block>
+
+            {student && (
+                <>
+                    <div className="mb-5">
+                        <StudentEvolution student_id={student.id} />
+                    </div>
+                    <StudentStatus student_id={student.id} />
+                </>
+            )}
         </>
     )
 }

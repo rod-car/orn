@@ -1,8 +1,8 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { ApiErrorMessage, Button, Input, Select } from 'ui'
-import { config } from '../../../config'
+import { Block, Button, Input, Select } from 'ui'
+import { config, token } from '../../../config'
 import { toast } from 'react-toastify'
 
 const defaultSchool: School = {
@@ -10,7 +10,7 @@ const defaultSchool: School = {
     localisation: '',
     commune_id: 0,
     name: '',
-    responsable: '',
+    responsable: ''
 }
 
 export function AddSchool(): JSX.Element {
@@ -18,11 +18,13 @@ export function AddSchool(): JSX.Element {
 
     const { Client, RequestState, error, resetError } = useApi<School>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/schools'
     })
 
     const { Client: CC, datas: communes } = useApi<Commune>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/communes'
     })
 
@@ -69,67 +71,68 @@ export function AddSchool(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>Ajouter un établissement</h1>
+                <h2>Ajouter un établissement</h2>
                 <NavLink to="/school/list" className="btn btn-primary">
                     <i className="fa fa-list me-2"></i>Liste des établissements
                 </NavLink>
             </div>
 
-            {error && (
-                <ApiErrorMessage
-                    className="mb-3"
-                    message={error.message}
-                    onClose={(): void => {
-                        resetError()
-                    }}
-                />
-            )}
+            <Block className="mb-5">
+                <form action="#" onSubmit={handleSubmit} method="post">
+                    <div className="row mb-3">
+                        <div className="col-xl-6">
+                            <Input
+                                label="Nom de l'établissement"
+                                onChange={setName}
+                                value={school.name}
+                                error={error?.data?.errors?.name}
+                                controlled
+                            />
+                        </div>
+                        <div className="col-xl-6">
+                            <Select
+                                onChange={setCommune}
+                                value={school.commune_id}
+                                label="Commune"
+                                options={communes}
+                                config={{ valueKey: 'name', optionKey: 'id' }}
+                                error={error?.data?.errors?.commune_id}
+                                controlled
+                            />
+                        </div>
+                    </div>
+                    <div className="row mb-3">
+                        <div className="col-xl-6">
+                            <Input
+                                label="Responsable"
+                                onChange={setResponsable}
+                                value={school.responsable}
+                                required={false}
+                                error={error?.data?.errors?.responsable}
+                                controlled
+                            />
+                        </div>
+                        <div className="col-xl-6">
+                            <Input
+                                label="Adresse"
+                                onChange={setLocalisation}
+                                value={school.localisation}
+                                error={error?.data?.errors?.localisation}
+                                controlled
+                            />
+                        </div>
+                    </div>
 
-            <form className="mb-5" action="" onSubmit={handleSubmit} method="post">
-                <div className="row mb-3">
-                    <div className="col-xl-6">
-                        <Input
-                            label="Nom de l'établissement"
-                            onChange={setName}
-                            value={school.name}
-                            controlled
-                        />
-                    </div>
-                    <div className="col-xl-6">
-                        <Select
-                            onChange={setCommune}
-                            value={school.commune_id}
-                            label="Commune"
-                            options={communes}
-                            config={{ valueKey: 'name', optionKey: 'id' }}
-                            controlled
-                        />
-                    </div>
-                </div>
-                <div className="row mb-3">
-                    <div className="col-xl-6">
-                        <Input
-                            label="Responsable"
-                            onChange={setResponsable}
-                            value={school.responsable}
-                            required={false}
-                            controlled
-                        />
-                    </div>
-                    <div className="col-xl-6">
-                        <Input
-                            label="Adresse"
-                            onChange={setLocalisation}
-                            value={school.localisation}
-                            controlled
-                        />
-                    </div>
-                </div>
-
-                <Button type="submit" icon="save" mode="primary" loading={RequestState.creating}>
-                    Enregistrer
-                </Button>
-            </form>
+                    <Button
+                        type="submit"
+                        icon="save"
+                        mode="primary"
+                        loading={RequestState.creating}
+                    >
+                        Enregistrer
+                    </Button>
+                </form>
+            </Block>
         </>
     )
 }

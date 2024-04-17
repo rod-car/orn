@@ -1,14 +1,15 @@
 import { FormEvent, useEffect } from 'react'
-import { config } from '../../config'
+import { config, token } from '../../config'
 import { useApi } from 'hooks'
-import { ApiErrorMessage, Button } from 'ui'
+import { ApiErrorMessage, Block, Button } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
-import { Link } from 'react-router-dom'
+import { Link } from '@renderer/components'
 
 export function Levels(): JSX.Element {
     const { Client, datas, RequestState, error, resetError, success } = useApi<Niveau>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/levels',
         key: 'data'
     })
@@ -58,7 +59,7 @@ export function Levels(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>Liste des niveaux</h1>
+                <h2>Liste des niveaux</h2>
                 <div className="d-flex justify-content-between align-items-center">
                     <Button
                         onClick={getData}
@@ -70,78 +71,80 @@ export function Levels(): JSX.Element {
                     >
                         Recharger
                     </Button>
-                    <Link to="/school/levels/add" className="btn btn-primary">
+                    <Link to="/school/levels/add" className="btn primary-link">
                         <i className="fa fa-plus me-2"></i>Nouveau niveau
                     </Link>
                 </div>
             </div>
 
-            {error && (
-                <ApiErrorMessage
-                    className="mb-3"
-                    message={error.message}
-                    onClose={(): void => {
-                        resetError()
-                    }}
-                />
-            )}
+            <Block>
+                {error && (
+                    <ApiErrorMessage
+                        className="mb-3"
+                        message={error.message}
+                        onClose={(): void => {
+                            resetError()
+                        }}
+                    />
+                )}
 
-            <table className="table table-striped mb-5">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Label</th>
-                        <th>Description</th>
-                        <th style={{ width: '15%' }}>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {RequestState.loading && (
+                <table className="table table-striped mb-5">
+                    <thead>
                         <tr>
-                            <td colSpan={4} className="text-center">
-                                Chargement...
-                            </td>
+                            <th>ID</th>
+                            <th>Label</th>
+                            <th>Description</th>
+                            <th style={{ width: '15%' }}>Actions</th>
                         </tr>
-                    )}
-                    {datas.length > 0 &&
-                        datas.map((level) => (
-                            <tr key={level.id}>
-                                <td>{level.id}</td>
-                                <td>{level.label}</td>
-                                <td>{level.description ?? 'N/A'}</td>
-                                <td>
-                                    <a
-                                        className="btn-sm me-2 btn btn-primary"
-                                        href={`/school/levels/edit/${level.id}`}
-                                    >
-                                        <i className="fa fa-edit"></i>
-                                    </a>
-                                    <form
-                                        className="d-inline"
-                                        action=""
-                                        method="post"
-                                        onSubmit={handleSubmit}
-                                    >
-                                        <input type="hidden" name="id" value={level.id} />
-                                        <Button
-                                            type="submit"
-                                            mode="danger"
-                                            icon="trash"
-                                            size="sm"
-                                        />
-                                    </form>
+                    </thead>
+                    <tbody>
+                        {RequestState.loading && (
+                            <tr>
+                                <td colSpan={4} className="text-center">
+                                    Chargement...
                                 </td>
                             </tr>
-                        ))}
-                    {!RequestState.loading && datas.length <= 0 && (
-                        <tr>
-                            <td colSpan={4} className="text-center">
-                                Aucune données
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                        )}
+                        {datas.length > 0 &&
+                            datas.map((level) => (
+                                <tr key={level.id}>
+                                    <td>{level.id}</td>
+                                    <td>{level.label}</td>
+                                    <td>{level.description ?? 'N/A'}</td>
+                                    <td>
+                                        <Link
+                                            className="btn-sm me-2 btn btn-primary"
+                                            to={`/school/levels/edit/${level.id}`}
+                                        >
+                                            <i className="fa fa-edit"></i>
+                                        </Link>
+                                        <form
+                                            className="d-inline"
+                                            action=""
+                                            method="post"
+                                            onSubmit={handleSubmit}
+                                        >
+                                            <input type="hidden" name="id" value={level.id} />
+                                            <Button
+                                                type="submit"
+                                                mode="danger"
+                                                icon="trash"
+                                                size="sm"
+                                            />
+                                        </form>
+                                    </td>
+                                </tr>
+                            ))}
+                        {!RequestState.loading && datas.length <= 0 && (
+                            <tr>
+                                <td colSpan={4} className="text-center">
+                                    Aucune données
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </Block>
         </>
     )
 }

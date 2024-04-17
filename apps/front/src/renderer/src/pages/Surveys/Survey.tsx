@@ -1,10 +1,11 @@
 import { useApi } from 'hooks'
-import { Link } from 'react-router-dom'
-import { config } from '../../../config'
-import { Button } from 'ui'
+import { Link } from '@renderer/components'
+import { config, token } from '../../../config'
+import { Block, Button } from 'ui'
 import { useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
+import { format } from 'functions'
 
 /**
  * Page d'accueil de gestion des étudiants
@@ -18,6 +19,7 @@ export function Survey(): JSX.Element {
         datas: surveys
     } = useApi<Survey>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/surveys',
         key: 'data'
     })
@@ -71,7 +73,7 @@ export function Survey(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>Liste des enquêtes</h1>
+                <h2>Liste des mésures</h2>
                 <div className="d-flex align-items-between">
                     <Button
                         icon="refresh"
@@ -83,74 +85,76 @@ export function Survey(): JSX.Element {
                     >
                         Recharger
                     </Button>
-                    <Link to="/survey/add" className="btn btn-primary me-2">
-                        <i className="fa fa-plus me-2"></i>Nouveau
+                    <Link to="/survey/add" className="btn secondary-link me-2">
+                        <i className="fa fa-plus me-2"></i>Nouvelle mésure
                     </Link>
-                    <Link to="/survey/add-student" className="btn btn-warning">
+                    <Link to="/survey/add-student" className="btn primary-link">
                         <i className="fa fa-plus me-2"></i>Formulaire de mesure
                     </Link>
                 </div>
             </div>
 
-            {error && <div className="alert alert-danger">{error.message}</div>}
+            <Block className="mb-5">
+                {error && <div className="alert alert-danger">{error.message}</div>}
 
-            <table className="table table-striped mb-5">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Phase d'enquête</th>
-                        <th>Date</th>
-                        <th className="w-15">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {RequestState.loading && (
+                <table className="table table-striped">
+                    <thead>
                         <tr>
-                            <td colSpan={4} className="text-center">
-                                Chargement...
-                            </td>
+                            <th>ID</th>
+                            <th>Phase d'enquête</th>
+                            <th>Date</th>
+                            <th className="w-15">Actions</th>
                         </tr>
-                    )}
-                    {surveys &&
-                        surveys.map((survey) => (
-                            <tr key={survey.id}>
-                                <td>{survey.id}</td>
-                                <td>{survey.phase}</td>
-                                <td>{survey.date}</td>
-                                <td>
-                                    <Link
-                                        className="btn-sm me-2 btn btn-info text-white"
-                                        to={`/survey/details/${survey.id}`}
-                                    >
-                                        <i className="fa fa-folder"></i>
-                                    </Link>
-                                    <Link
-                                        className="btn-sm me-2 btn btn-primary"
-                                        to={`/survey/edit/${survey.id}`}
-                                    >
-                                        <i className="fa fa-edit"></i>
-                                    </Link>
-                                    <Button
-                                        type="button"
-                                        mode="danger"
-                                        icon="trash"
-                                        size="sm"
-                                        onClick={(): void => {
-                                            handleDelete(survey.id)
-                                        }}
-                                    />
+                    </thead>
+                    <tbody>
+                        {RequestState.loading && (
+                            <tr>
+                                <td colSpan={4} className="text-center">
+                                    Chargement...
                                 </td>
                             </tr>
-                        ))}
-                    {!RequestState.loading && surveys.length <= 0 && (
-                        <tr>
-                            <td colSpan={4} className="text-center">
-                                Aucune données
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                        )}
+                        {surveys &&
+                            surveys.map((survey) => (
+                                <tr key={survey.id}>
+                                    <td>{survey.id}</td>
+                                    <td>{survey.phase}</td>
+                                    <td>{format(survey.date, 'dd MMMM y')}</td>
+                                    <td>
+                                        <Link
+                                            className="btn-sm me-2 btn btn-info text-white"
+                                            to={`/survey/details/${survey.id}`}
+                                        >
+                                            <i className="fa fa-folder"></i>
+                                        </Link>
+                                        <Link
+                                            className="btn-sm me-2 btn btn-primary"
+                                            to={`/survey/edit/${survey.id}`}
+                                        >
+                                            <i className="fa fa-edit"></i>
+                                        </Link>
+                                        <Button
+                                            type="button"
+                                            mode="danger"
+                                            icon="trash"
+                                            size="sm"
+                                            onClick={(): void => {
+                                                handleDelete(survey.id)
+                                            }}
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        {!RequestState.loading && surveys.length <= 0 && (
+                            <tr>
+                                <td colSpan={4} className="text-center">
+                                    Aucune données
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </Block>
         </>
     )
 }

@@ -1,10 +1,11 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { config } from '../../../config'
-import { Button, Input, Select, SearchableSelect, Spinner } from 'ui'
+import { useParams } from 'react-router-dom'
+import { config, token } from '../../../config'
+import { Button, Input, Select, SearchableSelect, Spinner, Block } from 'ui'
 import { toast } from 'react-toastify'
 import { isNumber } from 'functions/number'
+import { Link } from '@renderer/components'
 
 type BaseValue = { name: string; value: number }
 type Measure = {
@@ -36,6 +37,7 @@ export function AddSurveyStudent(): JSX.Element {
         RequestState: SurveyRequestState
     } = useApi<Survey>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/surveys',
         key: 'data'
     })
@@ -48,6 +50,7 @@ export function AddSurveyStudent(): JSX.Element {
 
     const { Client: StudentClient } = useApi<Student>({
         baseUrl: config.baseUrl,
+        token: token,
         url: '/students',
         key: 'data'
     })
@@ -183,13 +186,13 @@ export function AddSurveyStudent(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>Formulaire de mesure</h1>
-                <Link to="/survey/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Liste des enquêtes
+                <h2>Formulaire de mesure</h2>
+                <Link to="/survey/list" className="btn primary-link">
+                    <i className="fa fa-list me-2"></i>Liste des mésures
                 </Link>
             </div>
 
-            <div className="mb-5">
+            <Block className="mb-5">
                 <SearchableSelect
                     search
                     debounce={500}
@@ -199,148 +202,152 @@ export function AddSurveyStudent(): JSX.Element {
                     getOptions={(query): Promise<BaseValue[]> => getStudents(query)}
                     onChange={(value, option): void => handleStudentChange(option, value)}
                 />
-            </div>
+            </Block>
 
-            <form action="" onSubmit={handleSubmit} method="post" className="mb-5">
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th className="bg-primary text-white w-50">
-                                Information de l'étudiant
-                            </th>
-                            <th className="bg-primary text-white">Information du mésure</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div className="row mt-3 pe-4">
-                                    <div className="col-2 mb-3">
-                                        <Input
-                                            auto
-                                            label="Numéro"
-                                            value={selectedStudent?.number ?? 0}
-                                        />
-                                    </div>
-                                    <div className="col-10 mb-3">
-                                        <Input
-                                            auto
-                                            label="Nom et prénoms"
-                                            value={selectedStudent?.fullname ?? ''}
-                                        />
-                                    </div>
-                                    <div className="col-12 mb-3">
-                                        <Input
-                                            auto
-                                            label="Etablissement"
-                                            value={selectedStudent?.schools?.at(0)?.name ?? ''}
-                                        />
-                                    </div>
-                                    <div className="col-6 mb-3">
-                                        <Input
-                                            auto
-                                            label="Classe"
-                                            value={selectedStudent?.classes?.at(0)?.name ?? ''}
-                                        />
-                                    </div>
-                                    <div className="col-6 mb-3">
-                                        <Input
-                                            auto
-                                            label="Année scolaire"
-                                            value={
-                                                selectedStudent?.classes?.at(0)?.pivot
-                                                    .scholar_year ?? ''
-                                            }
-                                        />
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={`${selectedStudent === undefined && 'align-middle'}`}>
-                                {selectedStudent !== undefined ? (
-                                    <div className="row mt-3">
-                                        <div className="col-6 mb-3">
-                                            <Select
-                                                label="Phase de l'enquête"
-                                                placeholder="Selectionner une phase"
-                                                config={{
-                                                    optionKey: 'phase',
-                                                    valueKey: 'phase'
-                                                }}
-                                                value={phase}
-                                                onChange={handlePhaseChange}
-                                                options={surveys ?? []}
-                                                controlled
+            <Block className="mb-5">
+                <form action="" onSubmit={handleSubmit} method="post">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th className="bg-primary text-white w-50">
+                                    Information de l'étudiant
+                                </th>
+                                <th className="bg-primary text-white">Information du mésure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div className="row mt-3 pe-4">
+                                        <div className="col-2 mb-3">
+                                            <Input
+                                                auto
+                                                label="Numéro"
+                                                value={selectedStudent?.number ?? 0}
+                                            />
+                                        </div>
+                                        <div className="col-10 mb-3">
+                                            <Input
+                                                auto
+                                                label="Nom et prénoms"
+                                                value={selectedStudent?.fullname ?? ''}
+                                            />
+                                        </div>
+                                        <div className="col-12 mb-3">
+                                            <Input
+                                                auto
+                                                label="Etablissement"
+                                                value={selectedStudent?.schools?.at(0)?.name ?? ''}
                                             />
                                         </div>
                                         <div className="col-6 mb-3">
                                             <Input
-                                                name="date"
-                                                value={measureData.date}
-                                                onChange={handleMeasureDataChange}
-                                                type="date"
-                                                label="Date de pesée"
+                                                auto
+                                                label="Classe"
+                                                value={selectedStudent?.classes?.at(0)?.name ?? ''}
                                             />
                                         </div>
                                         <div className="col-6 mb-3">
                                             <Input
-                                                name="weight"
-                                                value={measureData.weight}
-                                                onChange={handleMeasureDataChange}
-                                                type="number"
-                                                label="Poids (Kg)"
+                                                auto
+                                                label="Année scolaire"
+                                                value={
+                                                    selectedStudent?.classes?.at(0)?.pivot
+                                                        .scholar_year ?? ''
+                                                }
                                             />
                                         </div>
-                                        <div className="col-6 mb-3">
-                                            <Input
-                                                name="length"
-                                                type="number"
-                                                label="Taille (Cm)"
-                                                value={measureData.length}
-                                                onChange={handleMeasureDataChange}
-                                            />
-                                        </div>
+                                    </div>
+                                </td>
+                                <td
+                                    className={`${selectedStudent === undefined && 'align-middle'}`}
+                                >
+                                    {selectedStudent !== undefined ? (
+                                        <div className="row mt-3">
+                                            <div className="col-6 mb-3">
+                                                <Select
+                                                    label="Phase de l'enquête"
+                                                    placeholder="Selectionner une phase"
+                                                    config={{
+                                                        optionKey: 'phase',
+                                                        valueKey: 'phase'
+                                                    }}
+                                                    value={phase}
+                                                    onChange={handlePhaseChange}
+                                                    options={surveys ?? []}
+                                                    controlled
+                                                />
+                                            </div>
+                                            <div className="col-6 mb-3">
+                                                <Input
+                                                    name="date"
+                                                    value={measureData.date}
+                                                    onChange={handleMeasureDataChange}
+                                                    type="date"
+                                                    label="Date de pesée"
+                                                />
+                                            </div>
+                                            <div className="col-6 mb-3">
+                                                <Input
+                                                    name="weight"
+                                                    value={measureData.weight}
+                                                    onChange={handleMeasureDataChange}
+                                                    type="number"
+                                                    label="Poids (Kg)"
+                                                />
+                                            </div>
+                                            <div className="col-6 mb-3">
+                                                <Input
+                                                    name="length"
+                                                    type="number"
+                                                    label="Taille (Cm)"
+                                                    value={measureData.length}
+                                                    onChange={handleMeasureDataChange}
+                                                />
+                                            </div>
 
-                                        <div className="col-6 mb-4">
-                                            <div className="form-group">
-                                                <label className="form-label">
-                                                    Poids précédent (Kg)
-                                                </label>
-                                                <div className="form-control bg-warning">
-                                                    {precedentMeasureData.weight} Kg
+                                            <div className="col-6 mb-4">
+                                                <div className="form-group">
+                                                    <label className="form-label">
+                                                        Poids précédent (Kg)
+                                                    </label>
+                                                    <div className="form-control bg-warning">
+                                                        {precedentMeasureData.weight} Kg
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="col-6 mb-4">
-                                            <div className="form-group">
-                                                <label className="form-label">
-                                                    Taille précédent (Cm)
-                                                </label>
-                                                <div className="form-control bg-warning">
-                                                    {precedentMeasureData.length} Cm
+                                            <div className="col-6 mb-4">
+                                                <div className="form-group">
+                                                    <label className="form-label">
+                                                        Taille précédent (Cm)
+                                                    </label>
+                                                    <div className="form-control bg-warning">
+                                                        {precedentMeasureData.length} Cm
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="col-12 text-end">
-                                            <Button
-                                                loading={SurveyRequestState.creating}
-                                                disabled={selectedStudent === undefined}
-                                                type="submit"
-                                                icon="save"
-                                                mode="primary"
-                                            >
-                                                Enregistrer
-                                            </Button>
+                                            <div className="col-12 text-end">
+                                                <Button
+                                                    loading={SurveyRequestState.creating}
+                                                    disabled={selectedStudent === undefined}
+                                                    type="submit"
+                                                    icon="save"
+                                                    mode="primary"
+                                                >
+                                                    Enregistrer
+                                                </Button>
+                                            </div>
                                         </div>
-                                    </div>
-                                ) : (
-                                    <Spinner className="text-primary text-center" />
-                                )}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
+                                    ) : (
+                                        <Spinner className="text-primary text-center" />
+                                    )}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </Block>
         </>
     )
 }

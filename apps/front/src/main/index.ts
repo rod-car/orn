@@ -3,39 +3,9 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
-let loginWindow: BrowserWindow | null = null
-let mainWindow: BrowserWindow | null = null
-
-function createLoginWindow(): void {
-    loginWindow = new BrowserWindow({
-        width: 400,
-        height: 600,
-        autoHideMenuBar: true,
-        maximizable: false,
-        resizable: false,
-        ...(process.platform === 'linux' ? { icon } : {}),
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: join(__dirname, '../preload/index.js'),
-            sandbox: false
-        }
-    })
-
-    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-        loginWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/auth.html')
-    } else {
-        loginWindow.loadFile(join(__dirname, '../renderer/auth.html'))
-    }
-
-    loginWindow.on('closed', () => {
-        loginWindow = null
-    })
-}
-
 function createWindow(): void {
     // Create the browser window.
-    mainWindow = new BrowserWindow({
+    const mainWindow = new BrowserWindow({
         width: 900,
         height: 670,
         show: false,
@@ -73,10 +43,10 @@ app.whenReady().then(() => {
         optimizer.watchWindowShortcuts(window)
     })
 
-    createLoginWindow()
+    createWindow()
 
     app.on('activate', function () {
-        if (BrowserWindow.getAllWindows().length === 0) createLoginWindow()
+        if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
 })
 
@@ -84,14 +54,4 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
     }
-})
-
-ipcMain.on('logged-in', (event, data) => {
-    loginWindow?.close()
-    createWindow()
-})
-
-ipcMain.on('logged-out', (event, data) => {
-    mainWindow?.close()
-    createLoginWindow()
 })

@@ -30,6 +30,5 @@ export {
     ImportResultSurvey
 } from './Surveys'
 
-export { Auth } from './Auth'
 export { Login } from './Auth/Login'
 export { Register } from './Auth/Register'

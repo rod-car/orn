@@ -1,12 +1,14 @@
 import { useApi } from 'hooks'
-import { NavLink, useParams } from 'react-router-dom'
-import { ApiErrorMessage } from 'ui'
-import { config } from '../../../config'
+import { useParams } from 'react-router-dom'
+import { ApiErrorMessage, Block } from 'ui'
+import { config, token } from '../../../config'
 import { useEffect, useState } from 'react'
+import { Link } from '@renderer/components'
 
 export function DetailsMeasure(): JSX.Element {
     const { Client, error, resetError } = useApi<Student>({
         baseUrl: config.baseUrl,
+        token: token,
         url: 'students'
     })
 
@@ -26,38 +28,33 @@ export function DetailsMeasure(): JSX.Element {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1>Détails: {student && student[0]?.student?.lastname}</h1>
-                <NavLink to="/student/list" className="btn btn-primary">
+                <h2>Détails: {student && student[0]?.student?.lastname}</h2>
+                <Link to="/student/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des étudiants
-                </NavLink>
+                </Link>
             </div>
 
-            {error && (
-                <ApiErrorMessage
-                    className="mb-3"
-                    message={error.message}
-                    onClose={(): void => {
-                        resetError()
-                    }}
-                />
-            )}
-
-            <table className='table table-striped'>
-                <thead>
-                    <tr>
-                        <th>Classe</th>
-                        <th>Annee scolaire</th>
-                        <th>Etablissement</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {student && student.map(st => <tr key={st.id}>
-                        <td>{st.classe.name}</td>
-                        <td>{st.scholar_year}</td>
-                        <td>{st.school.name}</td>
-                    </tr>)}
-                </tbody>
-            </table>
+            <Block>
+                <table className="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Classe</th>
+                            <th>Annee scolaire</th>
+                            <th>Etablissement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {student &&
+                            student.map((st) => (
+                                <tr key={st.id}>
+                                    <td>{st.classe.name}</td>
+                                    <td>{st.scholar_year}</td>
+                                    <td>{st.school.name}</td>
+                                </tr>
+                            ))}
+                    </tbody>
+                </table>
+            </Block>
         </>
     )
 }

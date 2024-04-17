@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
-import { ErrorResponse, NavLink, Outlet, useRouteError } from 'react-router-dom'
+import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
+import { Navigation } from '../components'
 
 import 'react-toastify/dist/ReactToastify.css?asset'
 import 'bootstrap/dist/css/bootstrap.min.css?asset'
@@ -13,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css?asset'
 import '../assets/icons.css?asset'
 import '../assets/custom.css?asset'
 import logo from '../assets/logo.png'
+
 import { useAuth } from 'hooks'
 import { config } from '../../config'
 import { Button } from 'ui'
@@ -22,6 +24,7 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
     const errorResponse = err as { error: ErrorResponse }
     const { user, logout, loading } = useAuth({ baseUrl: config.baseUrl })
     const userData = user()
+    const navigate = useNavigate()
 
     const handleLogout = async (): Promise<void> => {
         toast('Deconnexion en cours', {
@@ -41,16 +44,16 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                 position: 'bottom-right'
             })
         }
-        window.electron.ipcRenderer.send('logged-out', true)
+        navigate('/login')
     }
 
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top mb-5 p-0">
                 <div className="container container-fluid">
-                    <NavLink className="navbar-brand fw-bold text-muted" to="/">
+                    <NavLink className="navbar-brand fw-bold d-flex align-items-center" to="/">
                         <img className="w-15 me-3" src={logo} alt="Logo" />
-                        <span>ORN DC</span>
+                        <span style={{ color: '#071E78', fontFamily: 'arial' }}>ORN</span>
                     </NavLink>
                     <button
                         className="navbar-toggler"
@@ -73,6 +76,7 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                             aria-current="page"
                                             to="/login"
                                         >
+                                            <i className="fa fa-right-to-bracket me-2"></i>
                                             Connexion
                                         </NavLink>
                                     </li>
@@ -82,6 +86,7 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                             aria-current="page"
                                             to="/register"
                                         >
+                                            <i className="fa fa-right-to-bracket me-2"></i>
                                             Inscription
                                         </NavLink>
                                     </li>
@@ -101,9 +106,21 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                         base="/student"
                                         icon="users"
                                         items={[
-                                            { url: '/add', label: 'Ajouter un étudiant', icon: 'plus' },
-                                            { url: '/list', label: 'Liste des étudiants', icon: 'list' },
-                                            { url: '/import', label: 'Importer une liste', icon: 'file' }
+                                            {
+                                                url: '/add',
+                                                label: 'Ajouter un étudiant',
+                                                icon: 'plus'
+                                            },
+                                            {
+                                                url: '/list',
+                                                label: 'Liste des étudiants',
+                                                icon: 'list'
+                                            },
+                                            {
+                                                url: '/import',
+                                                label: 'Importer une liste',
+                                                icon: 'file'
+                                            }
                                         ]}
                                     ></DropDown>
 
@@ -113,10 +130,18 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                         base="/school"
                                         icon="school"
                                         items={[
-                                            { url: '/add', label: 'Ajouter un école', icon: 'plus' },
-                                            { url: '/list', label: 'Liste des écoles', icon: 'list' },
-                                            { url: '/classes/list', label: 'Classe', icon:'list' },
-                                            { url: '/levels/list', label: 'Niveau', icon:'list' }
+                                            {
+                                                url: '/add',
+                                                label: 'Ajouter un école',
+                                                icon: 'plus'
+                                            },
+                                            {
+                                                url: '/list',
+                                                label: 'Liste des écoles',
+                                                icon: 'list'
+                                            },
+                                            { url: '/classes/list', label: 'Classe', icon: 'list' },
+                                            { url: '/levels/list', label: 'Niveau', icon: 'list' }
                                         ]}
                                     ></DropDown>
 
@@ -128,7 +153,11 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                         items={[
                                             { url: '/add', label: 'Ajouter', icon: 'plus' },
                                             { url: '/list', label: 'Liste', icon: 'list' },
-                                            { url: '/import', label: 'Importer une liste', icon: 'file' }
+                                            {
+                                                url: '/import',
+                                                label: 'Importer une liste',
+                                                icon: 'file'
+                                            }
                                         ]}
                                     ></DropDown>
 
@@ -139,8 +168,16 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                         icon="ruler"
                                         items={[
                                             { url: '/add', label: 'Nouvelle mesure', icon: 'plus' },
-                                            { url: '/list', label: 'Liste des mesures', icon: 'list' },
-                                            { url: '/add-student', label: 'Mesurer un étudiant', icon: 'user-plus' }
+                                            {
+                                                url: '/list',
+                                                label: 'Liste des mesures',
+                                                icon: 'list'
+                                            },
+                                            {
+                                                url: '/add-student',
+                                                label: 'Mesurer un étudiant',
+                                                icon: 'user-plus'
+                                            }
                                         ]}
                                     ></DropDown>
 
@@ -153,7 +190,8 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                             data-bs-toggle="dropdown"
                                             aria-expanded="false"
                                         >
-                                            <i className="fa fa-user me-2"></i> {userData.user.name}
+                                            <i className="fa fa-user me-2"></i>
+                                            {userData.user.name}
                                         </NavLink>
                                         <ul
                                             className="dropdown-menu"
@@ -196,6 +234,7 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
 
             <div className="container mb-5" style={{ marginTop: 130, minHeight: '90vh' }}>
                 <ToastContainer />
+                {userData !== null && <Navigation />}
                 {error ? <ErrorComponent error={errorResponse.error} /> : <Outlet />}
             </div>
 
@@ -257,8 +296,8 @@ const ErrorComponent = ({ error }: { error: ErrorResponse }): JSX.Element => {
     return (
         <>
             <div className="text-center">
-                <h1>{error?.statusText}</h1>
-                <h1>{error?.status}</h1>
+                <h2>{error?.statusText}</h2>
+                <h2>{error?.status}</h2>
             </div>
         </>
     )
