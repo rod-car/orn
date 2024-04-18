@@ -5,6 +5,7 @@ import { config, token } from '../../../config'
 import { ChangeEvent } from 'react'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
+import { isDate } from 'functions'
 
 export function ImportResultSurvey(): JSX.Element {
     const { json, importing, toJSON, resetJSON } = useExcelReader()
@@ -112,10 +113,14 @@ export function ImportResultSurvey(): JSX.Element {
                                 <tr key={json['numero']}>
                                     <td>{json['numero']}</td>
                                     <td>{json['noms']}</td>
-                                    <td>{json['date'].toLocaleDateString()}</td>
-                                    <td>{json['poids']}</td>
-                                    <td>{json['taille']}</td>
-                                    <td>{json['age']}</td>
+                                    <td>
+                                        {isDate(json['date'])
+                                            ? json['date'].toLocaleDateString()
+                                            : json['date']}
+                                    </td>
+                                    <td>{json['poids'] ?? '-'}</td>
+                                    <td>{json['taille'] ?? '-'}</td>
+                                    <td>{json['age'] ?? '-'}</td>
                                 </tr>
                             ))}
                         </tbody>

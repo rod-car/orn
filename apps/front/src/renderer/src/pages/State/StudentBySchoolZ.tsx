@@ -201,9 +201,10 @@ const Td = ({
                             <span className={school === 'TOTAL' ? 'fw-bold' : ''}>
                                 {schoolTab[keyTwo]['value']}{' '}
                                 {schoolTab[keyTwo]['value'] > 0 && school !== 'TOTAL' && (
-                                    <span className="text-primary">{`(${round(
-                                        schoolTab[keyTwo]['percent']
-                                    )}%)`}</span>
+                                    <span className="text-primary">
+                                        <br />
+                                        {`(${round(schoolTab[keyTwo]['percent'])}%)`}
+                                    </span>
                                 )}
                             </span>
                         ) : school === 'TOTAL' ? (

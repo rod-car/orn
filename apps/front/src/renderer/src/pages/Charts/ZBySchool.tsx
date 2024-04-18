@@ -66,7 +66,7 @@ ChartJS.register(
 )
 
 export function ZBySchool(): JSX.Element {
-    const [surveyId, setSurveyId] = useState(2)
+    const [surveyId, setSurveyId] = useState(1)
     const [stateType, setStateType] = useState('MA')
     const { exportToPdf } = usePdf()
 
@@ -74,13 +74,6 @@ export function ZBySchool(): JSX.Element {
         baseUrl: config.baseUrl,
         token: token,
         url: '/schools',
-        key: 'data'
-    })
-
-    const { Client: ClassCLient, datas: classes } = useApi<Classes>({
-        baseUrl: config.baseUrl,
-        token: token,
-        url: '/classes',
         key: 'data'
     })
 
@@ -94,10 +87,12 @@ export function ZBySchool(): JSX.Element {
         url: '/students'
     })
 
-    const getData = useCallback(() => {
-        StateClient.get({}, '/state/student-school-z')
+    useEffect(() => {
+        StateClient.get({}, `/state/student-school-z/${surveyId}`)
+    }, [surveyId])
+
+    const getData = useCallback(async () => {
         SchoolCLient.get()
-        ClassCLient.get()
     }, [])
 
     useEffect(() => {
@@ -129,11 +124,11 @@ export function ZBySchool(): JSX.Element {
             labels,
             datasets
         }
-    }, [classes, schools, StateDatas, surveyId, stateType])
+    }, [schools, StateDatas, surveyId, stateType])
 
     const chartRef = useRef()
     const exportPdf = useCallback(() => {
-        exportToPdf(chartRef, 'Effectif_de_mal_nutrition.pdf')
+        exportToPdf(chartRef, { filename: 'Effectif_de_mal_nutrition.pdf' })
     }, [])
 
     return (
@@ -153,7 +148,7 @@ export function ZBySchool(): JSX.Element {
                             placeholder={null}
                             label="Phase d'enquête"
                             value={surveyId}
-                            options={[1, 2, 3, 4, 5]}
+                            options={[1, 2, 3]}
                             onChange={({ target }): void => setSurveyId(parseInt(target.value))}
                         />
                     </div>
@@ -169,6 +164,7 @@ export function ZBySchool(): JSX.Element {
                     </div>
                 </div>
                 {RequestState.loading && <Spinner className="text-center w-100" />}
+
                 {data && data.labels && data.labels.length > 0 && (
                     <div className="custom-chart" ref={chartRef}>
                         <p className="d-none text-uppercase">

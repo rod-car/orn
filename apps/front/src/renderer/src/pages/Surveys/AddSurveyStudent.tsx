@@ -61,14 +61,18 @@ export function AddSurveyStudent(): JSX.Element {
                 const student = (await StudentClient.find(student_id, {
                     student_only: 1
                 })) as unknown as Student
-                const survey = (await SurveyClient.find(survey_id)) as Survey
-                const surveys = await SurveyClient.get()
+                const survey = (await SurveyClient.find(survey_id, {
+                    paginate_student: 0
+                })) as Survey
+                const surveys = await SurveyClient.get({
+                    paginate_student: 0
+                })
 
                 setPhase(survey.phase)
                 setSelectedStudent(student)
                 handleSurveyChange(surveys, survey.phase, student.id)
             } else {
-                SurveyClient.get()
+                SurveyClient.get({ paginate_student: 0 })
             }
         }
         getData()

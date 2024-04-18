@@ -10,7 +10,6 @@ import { getPdf } from './utils'
 import './Home.modules.scss'
 
 export function Home(): React.ReactElement {
-    const { exportToPdf } = usePdf()
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
         baseUrl: config.baseUrl,
         token: token,

@@ -1,18 +1,22 @@
-import { useApi } from 'hooks'
+import { useApi, useExcelReader, usePdf } from 'hooks'
 import { useParams } from 'react-router-dom'
-import { ApiErrorMessage, Block, Button } from 'ui'
+import { Block, Button, Select } from 'ui'
 import { config, token } from '../../../config'
-import { useCallback, useEffect } from 'react'
-import { ageMonth } from 'functions'
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
+import { ageFull, ageMonth, number_array } from 'functions'
 import { Link } from '@renderer/components'
+import { Pagination } from 'react-laravel-paginex'
 
 export function DetailsSurvey(): JSX.Element {
+    const [perPage, setPerPage] = useState(10)
+
+    const { toExcel } = useExcelReader()
+    const { exportToPdf } = usePdf()
+
     const {
         Client,
         data: survey,
-        RequestState,
-        error,
-        resetError
+        RequestState
     } = useApi<Survey>({
         baseUrl: config.baseUrl,
         token: token,
@@ -20,9 +24,12 @@ export function DetailsSurvey(): JSX.Element {
     })
 
     const { id } = useParams()
+    const requestData = {
+        per_page: perPage
+    }
 
     const getSurvey = async (id: number): Promise<void> => {
-        await Client.find(id)
+        await Client.find(id, requestData)
     }
 
     const refresh = useCallback(() => {
@@ -30,13 +37,71 @@ export function DetailsSurvey(): JSX.Element {
     }, [])
 
     useEffect(() => {
-        getSurvey(id as unknown as number)
+        refresh()
     }, [])
+
+    const changePage = (data: { page: number }): void => {
+        Client.find(parseInt(id as string), { ...requestData, page: data.page })
+    }
+
+    const filterStudents = async (e: ChangeEvent<HTMLSelectElement>): Promise<void> => {
+        e.preventDefault()
+        const target = e.target
+
+        if (target.name === 'per-page') {
+            setPerPage(target.value as unknown as number)
+            await Client.find(parseInt(id as string), {
+                ...requestData,
+                per_page: target.value as unknown as number
+            })
+        }
+    }
+
+    const studentRef = useRef()
+
+    const printList = (): void => {
+        const headers: unknown = [
+            'Numero',
+            'Nom',
+            'Prenoms',
+            'Date de naissance',
+            'Age',
+            'Parents',
+            'Etablissement',
+            'Classe'
+        ]
+        const list: unknown[][] = [headers]
+        const fileName = 'Liste des etudiants.xlsx'
+
+        const datas = survey?.students.data as {
+            student: Student
+            school: School
+            classe: Classes
+        }[]
+        datas.map((data) => {
+            list.push([
+                data.student.number,
+                data.student.firstname,
+                data.student.lastname,
+                data.student.birth_date,
+                ageFull(data.student.birth_date),
+                data.student.parents,
+                data.school.name,
+                data.classe.name
+            ])
+        })
+
+        toExcel(list, fileName)
+    }
+
+    const printPdf = (): void => {
+        exportToPdf(studentRef, { filename: 'Liste des etudiants.pdf' })
+    }
 
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Détails de la mésure phase: {survey && survey.phase}</h2>
+                <h5 className="m-0">Détails de la mésure phase: {survey && survey.phase}</h5>
                 <div className="d-flex">
                     <Link to="/survey/list" className="btn secondary-link me-2">
                         <i className="fa fa-list me-2"></i>Liste des mésures
@@ -68,9 +133,55 @@ export function DetailsSurvey(): JSX.Element {
                 </table>
             </Block>
 
+            <Block className="mb-5 mt-3">
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre d'éléments</th>
+                            <th className="w-25">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <Select
+                                    placeholder={null}
+                                    value={perPage}
+                                    options={number_array(100, 10)}
+                                    name="per-page"
+                                    onChange={filterStudents}
+                                    controlled
+                                />
+                            </td>
+                            <td>
+                                <Button
+                                    icon="print"
+                                    type="button"
+                                    className="me-2"
+                                    onClick={printPdf}
+                                    mode="primary"
+                                >
+                                    Imprimer
+                                </Button>
+                                <Button
+                                    icon="print"
+                                    mode="warning"
+                                    type="button"
+                                    onClick={printList}
+                                >
+                                    Exporter
+                                </Button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </Block>
+
             <Block>
                 <div className="mb-5 d-flex justify-content-between">
-                    <h3 className="mb-0 text-primary">Resultat de l&apos;enquête</h3>
+                    <h4 className="mb-0 text-primary">
+                        Resultat de l&apos;enquête ({survey?.students?.total} étudiant(s))
+                    </h4>
                     <Button
                         loading={RequestState.loading}
                         onClick={refresh}
@@ -81,11 +192,16 @@ export function DetailsSurvey(): JSX.Element {
                         Recharger
                     </Button>
                 </div>
-                <div className="table-responsive">
-                    <table className="table table-striped table-bordered">
+
+                <div className="table-responsive mb-5">
+                    <table
+                        style={{ fontSize: '9pt' }}
+                        ref={studentRef}
+                        className="table table-striped table-bordered"
+                    >
                         <thead>
                             <tr className="bg-danger">
-                                <th className="text-nowrap">Numéro</th>
+                                <th className="text-nowrap">N°</th>
                                 <th className="text-nowrap">Nom et prénoms</th>
                                 <th className="text-nowrap">Date de pésée</th>
                                 <th className="text-nowrap">Poids (g)</th>
@@ -102,7 +218,7 @@ export function DetailsSurvey(): JSX.Element {
                             </tr>
                         </thead>
                         <tbody>
-                            {RequestState.loading === false && survey?.students.length === 0 && (
+                            {RequestState.loading === false && survey?.students.total === 0 && (
                                 <tr>
                                     <td className="text-center" colSpan={14}>
                                         Aucune données
@@ -117,7 +233,8 @@ export function DetailsSurvey(): JSX.Element {
                                 </tr>
                             )}
                             {survey &&
-                                survey.students.map((student) => (
+                                survey.students &&
+                                survey.students.data.map((student) => (
                                     <tr key={student.id}>
                                         <td className="fw-bold">{student.number}</td>
                                         <td className="text-nowrap">
@@ -126,7 +243,11 @@ export function DetailsSurvey(): JSX.Element {
                                         <td>{student.pivot.date}</td>
                                         <td>{student.pivot.length}</td>
                                         <td>{student.pivot.weight}</td>
-                                        <td>{ageMonth(student.birth_date)}</td>
+                                        <td>
+                                            {student.birth_date
+                                                ? ageMonth(student.birth_date)
+                                                : '-'}
+                                        </td>
                                         <td className="text-center text-nowrap">
                                             {student.pivot.imc}
                                         </td>
@@ -151,22 +272,27 @@ export function DetailsSurvey(): JSX.Element {
                                         <td className="text-center text-nowrap">
                                             <Link
                                                 to={`/survey/edit-student/${student.id}/${survey.id}`}
+                                                style={{ fontSize: '9pt' }}
                                                 className="btn btn-primary btn-sm me-2"
                                             >
                                                 <i className="fa fa-edit"></i>
                                             </Link>
-                                            <Button
-                                                className="text-light"
-                                                icon="folder"
-                                                size="sm"
-                                                mode="info"
-                                            />
+                                            <Link
+                                                to={`/student/details/${student.id}`}
+                                                style={{ fontSize: '9pt' }}
+                                                className="btn btn-info btn-sm"
+                                            >
+                                                <i className="fa fa-folder"></i>
+                                            </Link>
                                         </td>
                                     </tr>
                                 ))}
                         </tbody>
                     </table>
                 </div>
+                {survey?.students?.total > 0 && (
+                    <Pagination changePage={changePage} data={survey?.students} />
+                )}
             </Block>
         </>
     )

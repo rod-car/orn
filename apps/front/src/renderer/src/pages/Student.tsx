@@ -173,7 +173,7 @@ export function Student(): JSX.Element {
     }
 
     const printPdf = (): void => {
-        exportToPdf(studentRef, 'Liste des etudiants.pdf')
+        exportToPdf(studentRef, { filename: 'Liste des etudiants.pdf' })
     }
 
     return (
