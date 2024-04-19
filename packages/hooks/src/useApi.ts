@@ -21,6 +21,13 @@ type RequestState = {
     deleting?: boolean;
 }
 
+const defaultRequestState = {
+    loading: false,
+    creating: false,
+    deleting: false,
+    updating: false
+}
+
 /**
  * Description placeholder
  *
@@ -37,12 +44,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
     const [datas, setDatas] = useState<T[]>([]);
     const [error, setError] = useState<APIError | null>(null);
     const [success, setSuccess] = useState(false);
-    const [RequestState, setRequestState] = useState<RequestState>({
-        loading: false,
-        creating: false,
-        deleting: false,
-        updating: false
-    })
+    const [RequestState, setRequestState] = useState<RequestState>(defaultRequestState)
 
     type PostResponse = { ok: boolean, data: T | null, message: string, status?: number }
 
@@ -55,12 +57,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
     }
 
     const resetRequestState = () => {
-        setRequestState({
-            loading: false,
-            creating: false,
-            deleting: false,
-            updating: false
-        });
+        setRequestState(defaultRequestState);
     }
 
     const reset = (datas?: boolean) => {

@@ -1,9 +1,9 @@
-import { Button } from 'ui'
+import { Button, Spinner } from 'ui'
 import { SchoolByScholarYear } from './SchoolByScholarYear'
 import { SchoolBySchoolYearClass } from './SchoolBySchoolYearClass'
 import { StudentBySchoolZ } from './StudentBySchoolZ'
 import { useCallback } from 'react'
-import { getPdf } from '../utils'
+import { getPdf } from '@renderer/utils'
 
 export function State(): JSX.Element {
     const exportPdf = useCallback(async (className = 'custom') => {
@@ -26,13 +26,15 @@ export function State(): JSX.Element {
             </div>
 
             <div className="mb-5">
-                <StudentBySchoolZ />
-            </div>
-            <div className="mb-5">
                 <SchoolBySchoolYearClass />
             </div>
+
             <div className="mb-5">
                 <SchoolByScholarYear />
+            </div>
+
+            <div className="mb-5">
+                <StudentBySchoolZ />
             </div>
         </>
     )

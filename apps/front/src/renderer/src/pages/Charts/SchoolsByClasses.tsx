@@ -2,6 +2,7 @@ import { useApi, usePdf } from 'hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { config, token } from '../../../config'
 import { Button, Select, Spinner } from 'ui'
+import { generateColor } from '@renderer/utils'
 
 import {
     Chart as ChartJS,
@@ -110,15 +111,14 @@ export function SchoolsByClasses(): JSX.Element {
     const data = useMemo(() => {
         const realData = StateDatas.data
         const labels = schools.map((school) => school.name)
-        const datasets = classes.map((classe) => {
-            const red = Math.floor(Math.random() * 255)
-            const green = Math.floor(Math.random() * 255)
-            const blue = Math.floor(Math.random() * 255)
+
+        const datasets = classes.map((classe, key) => {
             const data = realData[scholarYear]
+
             return {
                 label: classe.notation,
                 data: schools.map((school) => (data ? data[school.name][classe.notation] : 0)),
-                backgroundColor: `rgba(${red}, ${green}, ${blue}, 0.5)`
+                backgroundColor: generateColor(classe.notation ?? '', key)
             }
         })
         return {

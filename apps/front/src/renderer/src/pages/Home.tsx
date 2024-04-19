@@ -1,11 +1,11 @@
-import { useApi, usePdf } from 'hooks'
-import React, { useCallback, useEffect, useRef } from 'react'
+import { useApi } from 'hooks'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { config, token } from '../../config'
 import { Button, HomeCard, Spinner } from 'ui'
 import { SchoolsByClasses, SchoolsByScholarYear, ZBySchool } from '../pages'
 import { NavLink } from 'react-router-dom'
 import { Link } from '@renderer/components'
-import { getPdf } from './utils'
+import { getPdf } from '@renderer/utils'
 
 import './Home.modules.scss'
 
@@ -31,11 +31,14 @@ export function Home(): React.ReactElement {
         key: 'data'
     })
 
-    const getCount = useCallback(() => {
+    const [loaded, setLoaded] = useState(false)
+
+    const getCount = useCallback(async () => {
         const option = { count: 1 }
-        StudentClient.get(option)
-        SchoolClient.get(option)
-        SurveyClient.get(option)
+        await StudentClient.get(option)
+        await SchoolClient.get(option)
+        await SurveyClient.get(option)
+        setLoaded(true)
     }, [])
 
     useEffect(() => {
@@ -92,12 +95,6 @@ export function Home(): React.ReactElement {
             <div ref={chartRef}>
                 <div className="row mb-5">
                     <div className="col-12">
-                        <ZBySchool />
-                    </div>
-                </div>
-
-                <div className="row mb-5">
-                    <div className="col-12">
                         <SchoolsByClasses />
                     </div>
                 </div>
@@ -106,6 +103,10 @@ export function Home(): React.ReactElement {
                     <div className="col-12">
                         <SchoolsByScholarYear />
                     </div>
+                </div>
+
+                <div className="row mb-5">
+                    <div className="col-12">{loaded ? <ZBySchool /> : <Spinner />}</div>
                 </div>
             </div>
         </>

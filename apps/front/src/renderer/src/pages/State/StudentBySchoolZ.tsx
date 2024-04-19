@@ -1,13 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useApi, usePdf } from 'hooks'
+import { useApi } from 'hooks'
 import { config, token } from '../../../config'
 import { ReactNode, useCallback, useEffect, useRef } from 'react'
 import { Block, Button, Spinner } from 'ui'
 import { round } from 'functions'
-import { getPdf } from '../utils'
+import { getPdf } from '@renderer/utils'
 
 export function StudentBySchoolZ(): ReactNode {
-    const { exportToPdf } = usePdf()
     const { Client, RequestState, error, datas } = useApi<SurveySchoolZ>({
         baseUrl: config.baseUrl,
         token: token,
@@ -198,10 +197,10 @@ const Td = ({
                 return (
                     <td key={school}>
                         {typeof schoolTab === 'object' ? (
-                            <span className={school === 'TOTAL' ? 'fw-bold' : ''}>
+                            <span className={school === 'TOTAL' ? 'fw-bold' : 'fw-bold'}>
                                 {schoolTab[keyTwo]['value']}{' '}
                                 {schoolTab[keyTwo]['value'] > 0 && school !== 'TOTAL' && (
-                                    <span className="text-primary">
+                                    <span className="text-primary fw-normal">
                                         <br />
                                         {`(${round(schoolTab[keyTwo]['percent'])}%)`}
                                     </span>

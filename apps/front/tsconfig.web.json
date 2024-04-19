@@ -8,8 +8,10 @@
     "src/renderer/src/charts/**/*.tsx",
     "src/renderer/src/components/*",
     "src/renderer/src/components/**/*.tsx",
+    "src/renderer/src/utils/*",
+    "src/renderer/src/utils/**/*.tsx",
     "src/preload/*.d.ts",
-    "src/renderer/config",
+    "src/renderer/config", "src/renderer/src/utils/utils.ts",
   ],
   "compilerOptions": {
     "composite": true,

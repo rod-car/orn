@@ -2,6 +2,7 @@ import { useApi, usePdf } from 'hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { config, token } from '../../../config'
 import { Button, Select, Spinner } from 'ui'
+import { generateColor } from '@renderer/utils'
 
 import {
     Chart as ChartJS,
@@ -88,11 +89,14 @@ export function ZBySchool(): JSX.Element {
     })
 
     useEffect(() => {
-        StateClient.get({}, `/state/student-school-z/${surveyId}`)
+        const fetchState = async (): Promise<void> => {
+            await StateClient.get({}, `/state/student-school-z/${surveyId}`)
+        }
+        fetchState()
     }, [surveyId])
 
     const getData = useCallback(async () => {
-        SchoolCLient.get()
+        await SchoolCLient.get()
     }, [])
 
     useEffect(() => {
@@ -106,17 +110,14 @@ export function ZBySchool(): JSX.Element {
         const stateTypes = ['G', 'M', 'S']
 
         const labels = schools.map((school) => school.name)
-        const datasets = stateTypes.map((type) => {
-            const red = Math.floor(Math.random() * 255)
-            const green = Math.floor(Math.random() * 255)
-            const blue = Math.floor(Math.random() * 255)
+        const datasets = stateTypes.map((type, key) => {
             const data = realData[surveyId]
             return {
                 label: type,
                 data: schools.map((school) =>
                     data ? data[school.name][stateType][type]['value'] : 0
                 ),
-                backgroundColor: `rgba(${red}, ${green}, ${blue}, 0.5)`
+                backgroundColor: generateColor(type, key + 15)
             }
         })
 

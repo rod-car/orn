@@ -81,6 +81,7 @@ export function School(): JSX.Element {
                         type="button"
                         mode="secondary"
                         icon="refresh"
+                        loading={RequestState.loading}
                     >
                         Rechargher
                     </Button>

@@ -95,6 +95,20 @@ export function SchoolsByScholarYear(): ReactNode {
         getData()
     }, [])
 
+    const generateColor = (notation: string, seed: number): string => {
+        const hash = (notation + seed).split('').reduce((acc, char) => {
+            const chr = char.charCodeAt(0)
+            acc = (acc << 5) - acc + chr
+            return acc & acc
+        }, 0)
+
+        const red = (hash & 0xff0000) >> 16
+        const green = (hash & 0x00ff00) >> 8
+        const blue = hash & 0x0000ff
+
+        return `rgba(${red}, ${green}, ${blue}, 0.8)`
+    }
+
     const data = useMemo(() => {
         const realData = StateDatas.data
         const labels = schools.map((school) => school.name)
@@ -103,14 +117,13 @@ export function SchoolsByScholarYear(): ReactNode {
         const datasets =
             headers &&
             headers.map((scholar_year) => {
-                const red = Math.floor(Math.random() * 255)
-                const green = Math.floor(Math.random() * 255)
-                const blue = Math.floor(Math.random() * 255)
-
                 return {
                     label: scholar_year,
                     data: schools.map((school) => realData[school.name][scholar_year]),
-                    backgroundColor: `rgba(${red}, ${green}, ${blue}, 0.5)`
+                    backgroundColor: generateColor(
+                        scholar_year,
+                        parseInt(scholar_year.split('-')[0]) - 2000
+                    )
                 }
             })
 

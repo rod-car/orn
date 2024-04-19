@@ -68,3 +68,17 @@ async function creatPdf({
     }
     h2.remove()
 }
+
+export const generateColor = (notation: string, seed: number): string => {
+    const hash = (notation + seed).split('').reduce((acc, char) => {
+        const chr = char.charCodeAt(0)
+        acc = (acc << 5) - acc + chr
+        return acc & acc
+    }, 0)
+
+    const red = (hash & 0xff0000) >> 16
+    const green = (hash & 0x00ff00) >> 8
+    const blue = hash & 0x0000ff
+
+    return `rgba(${red}, ${green}, ${blue}, 0.6)`
+}

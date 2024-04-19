@@ -16,6 +16,7 @@ import {
     ArcElement
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
+import { generateColor } from '@renderer/utils'
 
 export const options = {
     responsive: true,
@@ -41,7 +42,8 @@ export const options = {
             title: {
                 display: true,
                 text: "Phase d'enquête"
-            }
+            },
+            suggestedMin: 0
         }
     }
 }
@@ -92,15 +94,11 @@ export function StudentStatus({ student_id }: { student_id: number }): ReactNode
 
         const datasets =
             headers &&
-            headers.map((header) => {
-                const red = Math.floor(Math.random() * 255)
-                const green = Math.floor(Math.random() * 255)
-                const blue = Math.floor(Math.random() * 255)
-
+            headers.map((header, key) => {
                 return {
                     label: header,
                     data: surveys.map((survey) => realData[header][survey.phase]),
-                    backgroundColor: `rgba(${red}, ${green}, ${blue}, 0.5)`
+                    backgroundColor: generateColor(header, key + 50)
                 }
             })
 
