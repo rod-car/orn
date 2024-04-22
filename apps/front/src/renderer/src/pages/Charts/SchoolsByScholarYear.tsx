@@ -25,7 +25,10 @@ export const options = {
         },
         title: {
             display: true,
-            text: 'Effectif par annee scolaire'
+            text: 'EFFECTIF PAR ANNEE SCOLAIRE',
+            font: {
+                size: 14
+            }
         }
     },
     scales: {
@@ -148,7 +151,7 @@ export function SchoolsByScholarYear(): ReactNode {
                 {RequestState.loading && <Spinner className="text-center w-100" />}
                 {data && (
                     <div className="custom-chart" ref={chartRef}>
-                        <p className="d-none text-uppercase">Effectif par année scolaire</p>
+                        {/*<p className="d-none text-uppercase">Effectif par année scolaire</p>*/}
                         <Line options={options} data={data} />
                     </div>
                 )}

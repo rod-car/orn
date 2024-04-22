@@ -40,12 +40,12 @@ async function creatPdf({
 
     for (let i = 0; i < elements.length; i++) {
         const el = elements.item(i) as HTMLElement
-        el.querySelector('p')?.classList.remove('d-none')
+        // el.querySelector('p')?.classList.remove('d-none')
 
         const imgData = await htmlToImage.toPng(el)
-        el.querySelector('p')?.classList.add('d-none')
+        // el.querySelector('p')?.classList.add('d-none')
 
-        let elHeight = el.offsetHeight
+        let elHeight = el.offsetHeight + 5
         let elWidth = el.offsetWidth
 
         const pageWidth = doc.internal.pageSize.getWidth()

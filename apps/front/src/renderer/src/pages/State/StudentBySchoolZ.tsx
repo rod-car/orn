@@ -56,7 +56,7 @@ export function StudentBySchoolZ(): ReactNode {
             {realData &&
                 Object.keys(realData).map((survey_id) => {
                     const data = realData[survey_id]
-                    const types = { G: 'Global', M: 'Modéré', S: 'Sévère' }
+                    const types = ['Global', 'Modéré', 'Sévère']
 
                     return (
                         <div key={survey_id} className="mb-5">
@@ -111,15 +111,15 @@ export function StudentBySchoolZ(): ReactNode {
                                                     Mal nutrition
                                                 </td>
                                             </tr>
-                                            {Object.keys(types).map((key) => (
-                                                <tr key={key}>
+                                            {types.map((type) => (
+                                                <tr key={type}>
                                                     <td className="text-nowrap text-uppercase">
-                                                        {types[key]}
+                                                        {type}
                                                     </td>
                                                     <Td
                                                         headers={headers}
                                                         keyOne="MA"
-                                                        keyTwo={key}
+                                                        keyTwo={type}
                                                         schoolZ={data}
                                                     />
                                                 </tr>
@@ -133,15 +133,15 @@ export function StudentBySchoolZ(): ReactNode {
                                                     Insuffisance pondérale
                                                 </td>
                                             </tr>
-                                            {Object.keys(types).map((key) => (
-                                                <tr key={key}>
+                                            {types.map((type) => (
+                                                <tr key={type}>
                                                     <td className="text-nowrap text-uppercase">
-                                                        {types[key]}
+                                                        {type}
                                                     </td>
                                                     <Td
                                                         headers={headers}
                                                         keyOne="IP"
-                                                        keyTwo={key}
+                                                        keyTwo={type}
                                                         schoolZ={data}
                                                     />
                                                 </tr>
@@ -155,15 +155,15 @@ export function StudentBySchoolZ(): ReactNode {
                                                     Chronique
                                                 </td>
                                             </tr>
-                                            {Object.keys(types).map((key) => (
-                                                <tr key={key}>
+                                            {types.map((type) => (
+                                                <tr key={type}>
                                                     <td className="text-nowrap text-uppercase">
-                                                        {types[key]}
+                                                        {type}
                                                     </td>
                                                     <Td
                                                         headers={headers}
                                                         keyOne="CH"
-                                                        keyTwo={key}
+                                                        keyTwo={type}
                                                         schoolZ={data}
                                                     />
                                                 </tr>

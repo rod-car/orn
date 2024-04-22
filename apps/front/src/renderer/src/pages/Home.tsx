@@ -45,9 +45,8 @@ export function Home(): React.ReactElement {
         getCount()
     }, [])
 
-    const chartRef = useRef()
     const exportPdf = useCallback(async () => {
-        getPdf({ fileName: 'Statistiques.pdf' })
+        getPdf({ fileName: 'Statistiques.pdf', title: 'Statistiques' })
     }, [])
 
     return (
@@ -55,7 +54,7 @@ export function Home(): React.ReactElement {
             <div className="mb-5 d-flex justify-content-between align-items-center">
                 <h2>Tableau de bord</h2>
                 <Link to="/states" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Etats
+                    <i className="fa fa-list me-2"></i>États
                 </Link>
             </div>
 
@@ -92,22 +91,20 @@ export function Home(): React.ReactElement {
                 Exporter tous vers PDF
             </Button>
 
-            <div ref={chartRef}>
-                <div className="row mb-5">
-                    <div className="col-12">
-                        <SchoolsByClasses />
-                    </div>
+            <div className="row mb-5">
+                <div className="col-12">
+                    <SchoolsByClasses />
                 </div>
+            </div>
 
-                <div className="row mb-5">
-                    <div className="col-12">
-                        <SchoolsByScholarYear />
-                    </div>
+            <div className="row mb-5">
+                <div className="col-12">
+                    <SchoolsByScholarYear />
                 </div>
+            </div>
 
-                <div className="row mb-5">
-                    <div className="col-12">{loaded ? <ZBySchool /> : <Spinner />}</div>
-                </div>
+            <div className="row mb-5">
+                <div className="col-12">{loaded ? <ZBySchool /> : <Spinner />}</div>
             </div>
         </>
     )

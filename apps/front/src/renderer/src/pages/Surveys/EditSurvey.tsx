@@ -9,7 +9,7 @@ import { Link } from '@renderer/components'
 export function EditSurvey(): JSX.Element {
     const [survey, setSurvey] = useState<Partial<Survey>>({ id: 0, phase: 0, date: '' })
     const { id } = useParams()
-    const { Client, RequestState } = useApi<Survey>({
+    const { Client, RequestState, error } = useApi<Survey>({
         baseUrl: config.baseUrl,
         token: token,
         url: '/surveys'
@@ -46,9 +46,15 @@ export function EditSurvey(): JSX.Element {
     }, [])
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        if (e.target.name === 'phase')
+        if (e.target.name === 'phase') {
             setSurvey({ ...survey, phase: e.target.value as unknown as number })
-        if (e.target.name === 'date') setSurvey({ ...survey, date: e.target.value })
+        }
+        if (e.target.name === 'date') {
+            setSurvey({ ...survey, date: e.target.value })
+        }
+        if (e.target.value.length > 0 && error?.data.errors[e.target.name]) {
+            error.data.errors[e.target.name] = null
+        }
     }
 
     useEffect(() => {
@@ -69,6 +75,7 @@ export function EditSurvey(): JSX.Element {
                     <div className="row mb-4">
                         <div className="col-xl-6">
                             <Input
+                                error={error?.data?.errors?.phase}
                                 onChange={handleChange}
                                 value={survey.phase}
                                 label="Phase"
@@ -77,6 +84,7 @@ export function EditSurvey(): JSX.Element {
                         </div>
                         <div className="col-xl-6">
                             <Input
+                                error={error?.data?.errors?.date}
                                 onChange={handleChange}
                                 value={survey.date}
                                 label="Date"
@@ -86,7 +94,12 @@ export function EditSurvey(): JSX.Element {
                         </div>
                     </div>
 
-                    <Button loading={RequestState.creating} icon="save" type="submit" mode="primary">
+                    <Button
+                        loading={RequestState.creating}
+                        icon="save"
+                        type="submit"
+                        mode="primary"
+                    >
                         Enregistrer
                     </Button>
                 </form>

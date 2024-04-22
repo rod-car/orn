@@ -1,4 +1,4 @@
-import { FormEvent } from 'react'
+import { FormEvent, useState } from 'react'
 import { Block, Button, Input } from 'ui'
 import { Link } from '@renderer/components'
 import { useApi } from 'hooks'
@@ -6,7 +6,11 @@ import { config, token } from '../../../config'
 import { toast } from 'react-toastify'
 
 export function AddSurvey(): JSX.Element {
-    const { Client, RequestState } = useApi<Survey>({
+    const [survey, setSurvey] = useState<{ phase: string; date: string }>({
+        phase: '',
+        date: ''
+    })
+    const { Client, RequestState, error } = useApi<Survey>({
         baseUrl: config.baseUrl,
         token: token,
         url: '/surveys'
@@ -14,11 +18,9 @@ export function AddSurvey(): JSX.Element {
 
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
-        const form = e.target as HTMLFormElement
-        const formData = new FormData(form)
         const response = await Client.post({
-            phase: parseInt(formData.get('phase') as string),
-            date: formData.get('date') as string
+            phase: parseInt(survey.phase),
+            date: survey.date
         })
 
         if (response.ok) {
@@ -27,7 +29,7 @@ export function AddSurvey(): JSX.Element {
                 type: 'success',
                 position: 'bottom-right'
             })
-            form.reset()
+            setSurvey({ phase: '', date: '' })
         } else {
             toast('Formulaire invalide', {
                 closeButton: true,
@@ -50,10 +52,36 @@ export function AddSurvey(): JSX.Element {
                 <form action="" onSubmit={handleSubmit} method="post">
                     <div className="row mb-4">
                         <div className="col-xl-6">
-                            <Input label="Phase" name="phase" />
+                            <Input
+                                onChange={({ target }): void => {
+                                    const phase = target.value
+                                    setSurvey({ ...survey, phase: phase })
+                                    if (phase.length > 0 && error?.data.errors.phase) {
+                                        error.data.errors.phase = null
+                                    }
+                                }}
+                                value={survey.phase}
+                                error={error?.data?.errors?.phase}
+                                label="Phase"
+                                name="phase"
+                                type="number"
+                            />
                         </div>
                         <div className="col-xl-6">
-                            <Input label="Date" type="date" name="date" />
+                            <Input
+                                onChange={({ target }): void => {
+                                    const date = target.value
+                                    setSurvey({ ...survey, date: date })
+                                    if (date.length > 0 && error?.data.errors.date) {
+                                        error.data.errors.date = null
+                                    }
+                                }}
+                                value={survey.date}
+                                error={error?.data?.errors?.date}
+                                label="Date"
+                                type="date"
+                                name="date"
+                            />
                         </div>
                     </div>
 

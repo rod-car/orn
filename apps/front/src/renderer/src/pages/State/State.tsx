@@ -1,4 +1,4 @@
-import { Button, Spinner } from 'ui'
+import { Button } from 'ui'
 import { SchoolByScholarYear } from './SchoolByScholarYear'
 import { SchoolBySchoolYearClass } from './SchoolBySchoolYearClass'
 import { StudentBySchoolZ } from './StudentBySchoolZ'

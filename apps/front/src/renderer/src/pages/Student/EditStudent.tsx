@@ -1,79 +1,19 @@
-import { FormEvent, useCallback, useEffect, useState } from 'react'
-import { Block, Button, Input, Select, Spinner } from 'ui'
+import { useCallback, useEffect } from 'react'
+import { Block } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
 import { config, token } from '../../../config'
-import { toast } from 'react-toastify'
-import { gender, scholar_years } from 'functions'
 import { Link } from '@renderer/components'
+import { StudentForm } from './StudentForm'
 
 export function EditStudent(): JSX.Element {
     const { id } = useParams()
 
-    const {
-        Client: StudentClient,
-        data: student,
-        RequestState: SRequestState,
-        error
-    } = useApi<Student>({
+    const { Client: StudentClient, data: student } = useApi<Student>({
         baseUrl: config.baseUrl,
         token: token,
         url: '/students'
     })
-
-    const { Client: ScClient, datas: ScDatas } = useApi<School>({
-        baseUrl: config.baseUrl,
-        token: token,
-        url: '/schools',
-        key: 'data'
-    })
-
-    const { Client: ClClient, datas: ClDatas } = useApi<Classes>({
-        baseUrl: config.baseUrl,
-        token: token,
-        url: '/classes',
-        key: 'data'
-    })
-
-    const handleSubmit = async (e: FormEvent): Promise<void> => {
-        e.preventDefault()
-        const form = e.target as HTMLFormElement
-        const formData = new FormData(form)
-        const response = await StudentClient.patch(parseInt(id as string), {
-            firstname: formData.get('firstname'),
-            lastname: formData.get('lastname'),
-            gender: formData.get('gender'),
-            birth_date: formData.get('birth_date'),
-            birth_place: formData.get('birth_place'),
-            father: formData.get('father'),
-            mother: formData.get('mother'),
-            school: formData.get('school'),
-            classes: formData.get('classes'),
-            scholar_year: formData.get('scholar_year')
-        })
-
-        if (response.ok) {
-            toast(response.message, {
-                closeButton: true,
-                type: 'success',
-                position: 'bottom-right'
-            })
-        } else {
-            toast(response.message, {
-                closeButton: true,
-                type: 'error',
-                position: 'bottom-right'
-            })
-        }
-    }
-
-    const getClasses = async (): Promise<void> => {
-        await ClClient.get()
-    }
-
-    const getSchools = async (): Promise<void> => {
-        await ScClient.get()
-    }
 
     const getStudent = useCallback(async () => {
         await StudentClient.find(parseInt(id ?? ''), {
@@ -82,8 +22,6 @@ export function EditStudent(): JSX.Element {
     }, [])
 
     useEffect(() => {
-        getClasses()
-        getSchools()
         getStudent()
     }, [])
 
@@ -95,124 +33,8 @@ export function EditStudent(): JSX.Element {
                     <i className="fa fa-list me-2"></i>Liste des étudiants
                 </Link>
             </div>
-            <Block>
-                {student ? (
-                    <form action="" onSubmit={handleSubmit} method="post" className="mb-5">
-                        <div className="row mb-3">
-                            <div className="col-xl-1">
-                                <Input
-                                    auto
-                                    label="Numéro"
-                                    defaultValue={student?.number}
-                                    error={error?.data?.errors?.number}
-                                />
-                            </div>
-                            <div className="col-xl-5">
-                                <Input
-                                    label="Nom"
-                                    name="firstname"
-                                    defaultValue={student?.firstname}
-                                    error={error?.data?.errors?.firstname}
-                                />
-                            </div>
-                            <div className="col-xl-6">
-                                <Input
-                                    label="Prénoms"
-                                    name="lastname"
-                                    defaultValue={student?.lastname}
-                                    required={false}
-                                    error={error?.data?.errors?.lastname}
-                                />
-                            </div>
-                        </div>
 
-                        <div className="row mb-3">
-                            <div className="col-xl-3">
-                                <Select
-                                    label="Sexe"
-                                    defaultOption={student?.gender}
-                                    name="gender"
-                                    options={gender}
-                                    error={error?.data?.errors?.gender}
-                                />
-                            </div>
-                            <div className="col-xl-3">
-                                <Input
-                                    defaultValue={student?.birth_date}
-                                    error={error?.data?.errors?.birth_date}
-                                    type="date"
-                                    label="Date de naissance"
-                                    name="birth_date"
-                                />
-                            </div>
-                            <div className="col-xl-6">
-                                <Input
-                                    defaultValue={student?.birth_place}
-                                    error={error?.data?.errors?.birth_place}
-                                    label="Lieu de naissance"
-                                    name="birth_place"
-                                    required={false}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="row mb-3">
-                            <div className="col-xl-12">
-                                <Input
-                                    defaultValue={student?.parents}
-                                    error={error?.data?.errors?.parents}
-                                    required={false}
-                                    label="Parents"
-                                    name="father"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="row mb-4">
-                            <div className="col-xl-6">
-                                <Select
-                                    label="Etablissement"
-                                    options={ScDatas}
-                                    config={{ optionKey: 'id', valueKey: 'name' }}
-                                    name="school"
-                                    defaultOption={student?.schools?.at(0)?.id}
-                                    error={error?.data?.errors?.school}
-                                />
-                            </div>
-                            <div className="col-xl-3">
-                                <Select
-                                    label="Classe"
-                                    options={ClDatas}
-                                    config={{ optionKey: 'id', valueKey: 'name' }}
-                                    name="classes"
-                                    defaultOption={student?.classes?.at(0)?.id}
-                                    error={error?.data?.errors?.classes}
-                                />
-                            </div>
-                            <div className="col-xl-3">
-                                <Select
-                                    name="scholar_year"
-                                    options={scholar_years()}
-                                    label="Année scolaire"
-                                    defaultOption={student?.classes?.at(0)?.pivot?.scholar_year}
-                                    error={error?.data?.errors?.scholar_year}
-                                />
-                            </div>
-                        </div>
-
-                        <Button
-                            loading={SRequestState.updating}
-                            icon="save"
-                            type="submit"
-                            mode="primary"
-                        >
-                            Enregistrer
-                        </Button>
-                    </form>
-                ) : (
-                    <Spinner className="text-center" />
-                )}
-            </Block>
+            <Block>{student && <StudentForm editedStudent={student} />}</Block>
         </>
     )
 }

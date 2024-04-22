@@ -19,42 +19,6 @@ import {
 import { Bar } from 'react-chartjs-2'
 import { scholar_years } from 'functions'
 
-export const options = {
-    responsive: true,
-    plugins: {
-        legend: {
-            position: 'top' as const
-        },
-        title: {
-            display: true,
-            text: 'Effectif par ecole et par classe'
-        }
-    },
-    scales: {
-        y: {
-            title: {
-                display: true,
-                text: "Nombre d'étudiants"
-            },
-            ticks: {
-                font: {
-                    weight: 'bold',
-                    size: 13
-                }
-            },
-            suggestedMax: 5
-        },
-        x: {
-            ticks: {
-                font: {
-                    weight: 'bold',
-                    size: 13
-                }
-            }
-        }
-    }
-}
-
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -127,6 +91,45 @@ export function SchoolsByClasses(): JSX.Element {
         }
     }, [classes, schools, StateDatas, scholarYear])
 
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top' as const
+            },
+            title: {
+                display: true,
+                text: `EFFECTIF PAR ECOLE ET PAR CLASSE (${scholarYear})`,
+                font: {
+                    size: 14
+                }
+            }
+        },
+        scales: {
+            y: {
+                title: {
+                    display: true,
+                    text: "Nombre d'étudiants"
+                },
+                ticks: {
+                    font: {
+                        weight: 'bold',
+                        size: 13
+                    }
+                },
+                suggestedMax: 5
+            },
+            x: {
+                ticks: {
+                    font: {
+                        weight: 'bold',
+                        size: 13
+                    }
+                }
+            }
+        }
+    }
+
     const exportPdf = useCallback(() => {
         exportToPdf(chartRef, { filename: 'Effectif_par_école_par_classe_année_scolaire.pdf' })
     }, [])
@@ -152,9 +155,6 @@ export function SchoolsByClasses(): JSX.Element {
                 {RequestState.loading && <Spinner className="text-center w-100" />}
                 {data && (
                     <div className="custom-chart" ref={chartRef}>
-                        <p className="d-none text-uppercase">
-                            Effectif par école et par classe: {scholarYear}
-                        </p>
                         <Bar options={options} data={data} />
                     </div>
                 )}
