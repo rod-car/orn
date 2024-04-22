@@ -1,13 +1,14 @@
 import { useApi, useExcelReader, usePdf } from 'hooks'
 import { Link } from '@renderer/components'
 import { config, token } from '../../config'
-import { Block, Button, Select } from 'ui'
-import { ChangeEvent, Key, useEffect, useRef, useState } from 'react'
+import { Block, Button, Input, Select } from 'ui'
+import { useEffect, useRef, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
-import { ageFull, number_array, scholar_years } from 'functions'
+import { ageFull, number_array, range, scholar_years } from 'functions'
 
 import { Pagination } from 'react-laravel-paginex'
+import Skeleton from 'react-loading-skeleton'
 
 const defaultScholarYear = scholar_years().at(1)
 
@@ -19,11 +20,12 @@ export function Student(): JSX.Element {
     const [school, setSchool] = useState(0)
     const [classe, setClasse] = useState(0)
     const [perPage, setPerPage] = useState(30)
-    const [scholarYear, setScholarYear] = useState(defaultScholarYear)
+    const [scholarYear, setScholarYear] = useState(defaultScholarYear ?? '2023-2024')
+    const [query, setQuery] = useState<string | number>('RAKOTO')
+    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
+
     const { toExcel } = useExcelReader()
     const { exportToPdf } = usePdf()
-
-    const studentRef = useRef()
 
     const {
         Client: SClient,
@@ -55,7 +57,8 @@ export function Student(): JSX.Element {
         school_id: school,
         scholar_year: scholarYear,
         classe_id: classe,
-        per_page: perPage
+        per_page: perPage,
+        q: query
     }
 
     const getDatas = (): void => {
@@ -106,29 +109,49 @@ export function Student(): JSX.Element {
         })
     }
 
-    const filterStudents = async (e: ChangeEvent<HTMLSelectElement>): Promise<void> => {
-        e.preventDefault()
-        const target = e.target
+    const filterStudents = async (
+        target: EventTarget & (HTMLSelectElement | HTMLInputElement)
+    ): Promise<void> => {
+        const { value, name } = target
 
-        if (target.name === 'scholar-year') {
-            setScholarYear(target.value as string)
-            await SClient.get({ ...requestData, scholar_year: target.value as string })
+        if (name === 'scholar-year') {
+            setScholarYear(value)
+            requestData['scholar_year'] = value
         }
 
-        if (target.name === 'school') {
-            setSchool(target.value as unknown as number)
-            await SClient.get({ ...requestData, school_id: target.value as unknown as number })
+        if (name === 'school') {
+            setSchool(parseInt(value))
+            requestData['school_id'] = parseInt(value)
         }
 
-        if (target.name === 'classe') {
-            setClasse(target.value as unknown as number)
-            await SClient.get({ ...requestData, classe_id: target.value as unknown as number })
+        if (name === 'classe') {
+            setClasse(parseInt(value))
+            requestData['classe_id'] = parseInt(value)
         }
 
-        if (target.name === 'per-page') {
-            setPerPage(target.value as unknown as number)
-            await SClient.get({ ...requestData, per_page: target.value as unknown as number })
+        if (name === 'per-page') {
+            setPerPage(parseInt(value))
+            requestData['per_page'] = parseInt(value)
         }
+
+        await SClient.get(requestData)
+    }
+
+    const handleSearch = async (target: EventTarget & HTMLInputElement): void => {
+        const { value } = target
+
+        setQuery(value)
+        requestData['q'] = value
+
+        if (timeoutId) {
+            clearTimeout(timeoutId)
+        }
+
+        const newTimeoutId = setTimeout(() => {
+            filterStudents(target)
+        }, 500)
+
+        setTimeoutId(newTimeoutId)
     }
 
     const changePage = (data: { page: number }): void => {
@@ -172,9 +195,9 @@ export function Student(): JSX.Element {
         toExcel(list, fileName)
     }
 
-    const printPdf = (): void => {
+    /* const printPdf = (): void => {
         exportToPdf(studentRef, { filename: 'Liste des etudiants.pdf' })
-    }
+    }*/
 
     return (
         <>
@@ -222,7 +245,7 @@ export function Student(): JSX.Element {
                                     options={schools}
                                     value={school}
                                     name="school"
-                                    onChange={filterStudents}
+                                    onChange={({ target }): Promise<void> => filterStudents(target)}
                                     controlled
                                 />
                             </td>
@@ -232,7 +255,7 @@ export function Student(): JSX.Element {
                                     value={scholarYear}
                                     options={scholar_years()}
                                     name="scholar-year"
-                                    onChange={filterStudents}
+                                    onChange={({ target }): Promise<void> => filterStudents(target)}
                                     controlled
                                 />
                             </td>
@@ -243,7 +266,7 @@ export function Student(): JSX.Element {
                                     value={classe}
                                     options={classes}
                                     name="classe"
-                                    onChange={filterStudents}
+                                    onChange={({ target }): Promise<void> => filterStudents(target)}
                                     controlled
                                 />
                             </td>
@@ -253,7 +276,7 @@ export function Student(): JSX.Element {
                                     value={perPage}
                                     options={number_array(100, 10)}
                                     name="per-page"
-                                    onChange={filterStudents}
+                                    onChange={({ target }): Promise<void> => filterStudents(target)}
                                     controlled
                                 />
                             </td>
@@ -262,7 +285,7 @@ export function Student(): JSX.Element {
                                     icon="print"
                                     type="button"
                                     className="me-2"
-                                    onClick={printPdf}
+                                    onClick={(): void => {}}
                                     mode="primary"
                                 >
                                     Imprimer
@@ -281,12 +304,32 @@ export function Student(): JSX.Element {
                 </table>
             </Block>
 
+            <Block className="mb-5 mt-3 d-flex">
+                <Input
+                    value={query}
+                    name="query"
+                    onChange={({ target }): void => handleSearch(target)}
+                    placeholder="Rechercher un étudiant..."
+                    className="w-100 me-1"
+                />
+                <Button
+                    icon="search"
+                    loading={SRequestState.loading}
+                    type="button"
+                    mode="primary"
+                    size="sm"
+                />
+            </Block>
+
             <Block>
                 <div className="d-flex justify-content-end mb-3">
                     <h5>Arrếté au nombre de {students.total} étudiants(s)</h5>
                 </div>
                 <div className="table-responsive">
-                    <table ref={studentRef} className="table table-striped table-bordered mb-5">
+                    <table
+                        style={{ fontSize: '10pt' }}
+                        className="table table-striped table-bordered mb-5"
+                    >
                         <thead>
                             <tr>
                                 <th>N°</th>
@@ -300,13 +343,16 @@ export function Student(): JSX.Element {
                             </tr>
                         </thead>
                         <tbody>
-                            {SRequestState.loading && (
-                                <tr>
-                                    <td colSpan={8} className="text-center">
-                                        Chargement...
-                                    </td>
-                                </tr>
-                            )}
+                            {SRequestState.loading &&
+                                range(10).map((number) => (
+                                    <tr key={number}>
+                                        {range(8).map((key) => (
+                                            <td key={key} className="text-center">
+                                                <Skeleton count={1} style={{ height: 30 }} />
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
                             {students.data?.length > 0 &&
                                 students.data.map(
                                     (studentClass: {
@@ -318,7 +364,7 @@ export function Student(): JSX.Element {
                                         const classe = studentClass.classe
                                         return (
                                             <tr key={studentClass.id}>
-                                                <td>{student.number}</td>
+                                                <td className="fw-bold">{student.number}</td>
                                                 <td>{student.firstname}</td>
                                                 <td>{student.lastname}</td>
                                                 <td>{student.birth_date}</td>
@@ -326,7 +372,9 @@ export function Student(): JSX.Element {
                                                     {ageFull(student.birth_date)}
                                                 </td>
                                                 <td>{student.parents}</td>
-                                                <td>{classe.name}</td>
+                                                <td className="text-nowrap">
+                                                    {classe.name} - {studentClass.school.name}
+                                                </td>
                                                 <td>
                                                     <Link
                                                         className="btn-sm me-2 btn btn-info text-white"

@@ -8,7 +8,7 @@ import { Link } from '@renderer/components'
 import { Pagination } from 'react-laravel-paginex'
 
 export function DetailsSurvey(): JSX.Element {
-    const [perPage, setPerPage] = useState(10)
+    const [perPage, setPerPage] = useState(30)
 
     const { toExcel } = useExcelReader()
     const { exportToPdf } = usePdf()
