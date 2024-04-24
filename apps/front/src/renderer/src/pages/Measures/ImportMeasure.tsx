@@ -2,7 +2,7 @@ import { useApi, useExcelReader } from 'hooks'
 import { ChangeEvent, useState } from 'react'
 import { Link } from '@renderer/components'
 import { Block, Button, Input, Select, Spinner } from 'ui'
-import { config, abaque, token } from '../../../config'
+import { config, abaque, getToken } from '../../../config'
 import { toast } from 'react-toastify'
 
 export function ImportMeasure(): JSX.Element {
@@ -11,7 +11,7 @@ export function ImportMeasure(): JSX.Element {
 
     const { Client, RequestState } = useApi<MeasureLengthAge>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/measures'
     })
 

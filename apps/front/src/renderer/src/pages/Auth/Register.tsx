@@ -1,11 +1,12 @@
 import { useAuth } from 'hooks'
 import { FormEvent, ReactNode, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Block, Button, Input } from 'ui'
 import { config } from '../../../config'
 import { toast } from 'react-toastify'
 
 export function Register(): ReactNode {
+    const navigate = useNavigate()
     const [user, setUser] = useState<Partial<User>>({
         name: '',
         email: '',
@@ -34,7 +35,7 @@ export function Register(): ReactNode {
                 type: 'success',
                 position: 'bottom-right'
             })
-            window.electron.ipcRenderer.send('logged-in', true)
+            navigate('/')
         } else {
             setErrors(response.data.errors)
             toast(response.statusText, {

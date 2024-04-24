@@ -10,8 +10,8 @@ export function useAuth<T>({ baseUrl }: { baseUrl: string }) {
     })
 
     const user = (): User | null => {
-        const storedUser = localStorage.getItem('user')
-        if (storedUser !== null) return JSON.parse(storedUser)
+        const storedUser = JSON.parse(localStorage.getItem('user') ?? '{}')
+        if (storedUser !== null) return storedUser.user
         return null
     }
 

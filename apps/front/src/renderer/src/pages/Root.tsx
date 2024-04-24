@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
 import { Navigation } from '../components'
@@ -15,16 +15,37 @@ import '../assets/icons.css?asset'
 import '../assets/custom.css?asset'
 import logo from '../assets/logo.png'
 
-import { useAuth } from 'hooks'
-import { config } from '../../config'
+import { useApi, useAuth } from 'hooks'
+import { config, getToken } from '../../config'
 import { Button } from 'ui'
 
 export function Root({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()
     const errorResponse = err as { error: ErrorResponse }
     const { user, logout, loading } = useAuth({ baseUrl: config.baseUrl })
-    const userData = user()
+    const token = getToken()
+
+    const localUser = user()
+    const userData = localUser && localUser.name ? localUser : null
+
+    const { Client } = useApi<User>({
+        baseUrl: config.baseUrl,
+        url: '/auth',
+        token: token
+    })
+
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const getUser = async (): Promise<void> => {
+            const users = await Client.get({}, '/user')
+            if (users.length === 0) {
+                localStorage.removeItem('user')
+                navigate('/login')
+            }
+        }
+        getUser()
+    }, [token])
 
     const handleLogout = async (): Promise<void> => {
         toast('Deconnexion en cours', {
@@ -68,7 +89,7 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav ms-auto">
-                            {userData === null && (
+                            {userData === null && userData !== undefined && (
                                 <>
                                     <li className="nav-item">
                                         <NavLink
@@ -191,7 +212,7 @@ export function Root({ error = false }: { error?: boolean }): ReactNode {
                                             aria-expanded="false"
                                         >
                                             <i className="fa fa-user me-2"></i>
-                                            {userData.user.name}
+                                            {userData.name}
                                         </NavLink>
                                         <ul
                                             className="dropdown-menu"

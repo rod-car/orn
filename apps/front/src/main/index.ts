@@ -19,7 +19,7 @@ function createWindow(): void {
 
     mainWindow.on('ready-to-show', () => {
         mainWindow?.maximize()
-        // mainWindow?.webContents.openDevTools()
+        mainWindow?.webContents.openDevTools()
         mainWindow?.show()
     })
 

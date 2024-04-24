@@ -2,7 +2,7 @@ import { useApi, useExcelReader } from 'hooks'
 import { ChangeEvent } from 'react'
 import { Link } from '@renderer/components'
 import { Block, Button, Input, Spinner } from 'ui'
-import { config, token } from '../../../config'
+import { config, getToken } from '../../../config'
 import { toast } from 'react-toastify'
 import { isDate } from 'functions'
 
@@ -11,7 +11,7 @@ export function ImportStudent(): JSX.Element {
 
     const { Client, RequestState } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/students'
     })
 
@@ -89,7 +89,7 @@ export function ImportStudent(): JSX.Element {
                 <hr />
 
                 <div className="table-responsive border mb-5">
-                    <table className="table table-striped">
+                    <table className="table table-striped" style={{ fontSize: '10pt' }}>
                         <thead>
                             <tr>
                                 <th>Numero</th>

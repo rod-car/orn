@@ -102,7 +102,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
         try {
             if (addUrl) requestUri += addUrl
             if (query) requestUri += query;
-            let response: { data: T[], status: number, statusText: string }
+            let response: { data: T[], status: number, statusText: string, ok: boolean }
 
             const headers = {
                 "Authorization": `Bearer ${token}`
@@ -116,6 +116,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
                 headers: headers
             })
 
+            response.ok = response.status === 200
             if (response.status === 200) datas = key ? response.data[key] : response.data;
             else setError({
                 message: response.statusText,
@@ -139,7 +140,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
      * @returns 
      */
     const find = async (id: string | number, params?: Record<string, string | number>): Promise<T | null> => {
-        reset();
+        reset(true);
         setRequestState({ loading: true });
         let data: T | null = null
 

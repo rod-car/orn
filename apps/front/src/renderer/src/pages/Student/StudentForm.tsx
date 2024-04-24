@@ -1,8 +1,7 @@
-import { FormEvent, ReactNode, useEffect, useState } from 'react'
-import { Block, Button, Input, Select } from 'ui'
-import { Link } from '@renderer/components'
+import { FormEvent, useEffect, useState } from 'react'
+import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
-import { config, token } from '../../../config'
+import { config, getToken } from '../../../config'
 import { toast } from 'react-toastify'
 import { gender, scholar_years } from 'functions'
 
@@ -34,26 +33,27 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
         error
     } = useApi<typeof defaultStudent>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/students'
     })
 
     const { Client: ScClient, datas: ScDatas } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClClient, datas: ClDatas } = useApi<Classes>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/classes',
         key: 'data'
     })
 
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
+
         const response = editedStudent
             ? await SClient.patch(editedStudent.id, student)
             : await SClient.post(student)
@@ -67,6 +67,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                 position: 'bottom-right'
             })
             editedStudent === undefined && setStudent(defaultStudent)
+            // editedStudent === undefined && getNumber()
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,

@@ -1,6 +1,6 @@
 import { useApi, usePdf } from 'hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { config, token } from '../../../config'
+import { config, getToken } from '../../../config'
 import { Button, Select, Spinner } from 'ui'
 import { generateColor } from '@renderer/utils'
 
@@ -37,14 +37,14 @@ export function SchoolsByClasses(): JSX.Element {
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassCLient, datas: classes } = useApi<Classes>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/classes',
         key: 'data'
     })
@@ -55,7 +55,7 @@ export function SchoolsByClasses(): JSX.Element {
         RequestState
     } = useApi<StudentState>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/students',
         key: 'data'
     })

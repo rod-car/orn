@@ -1,14 +1,17 @@
 import { useApi, useExcelReader, usePdf } from 'hooks'
 import { useParams } from 'react-router-dom'
-import { Block, Button, Select } from 'ui'
-import { config, token } from '../../../config'
+import { Block, Button, Input, Select } from 'ui'
+import { config, getToken } from '../../../config'
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
-import { ageFull, ageMonth, number_array } from 'functions'
+import { ageFull, ageMonth, number_array, range } from 'functions'
 import { Link } from '@renderer/components'
 import { Pagination } from 'react-laravel-paginex'
+import Skeleton from 'react-loading-skeleton'
 
 export function DetailsSurvey(): JSX.Element {
     const [perPage, setPerPage] = useState(30)
+    const [query, setQuery] = useState<string | number>('')
+    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
 
     const { toExcel } = useExcelReader()
     const { exportToPdf } = usePdf()
@@ -19,13 +22,14 @@ export function DetailsSurvey(): JSX.Element {
         RequestState
     } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: 'surveys'
     })
 
     const { id } = useParams()
     const requestData = {
-        per_page: perPage
+        per_page: perPage,
+        q: query
     }
 
     const getSurvey = async (id: number): Promise<void> => {
@@ -33,6 +37,7 @@ export function DetailsSurvey(): JSX.Element {
     }
 
     const refresh = useCallback(() => {
+        if (survey) survey['students'] = []
         getSurvey(id as unknown as number)
     }, [])
 
@@ -44,17 +49,32 @@ export function DetailsSurvey(): JSX.Element {
         Client.find(parseInt(id as string), { ...requestData, page: data.page })
     }
 
-    const filterStudents = async (e: ChangeEvent<HTMLSelectElement>): Promise<void> => {
-        e.preventDefault()
-        const target = e.target
-
+    const filterStudents = async (
+        target: EventTarget & (HTMLSelectElement | HTMLInputElement)
+    ): Promise<void> => {
         if (target.name === 'per-page') {
             setPerPage(target.value as unknown as number)
-            await Client.find(parseInt(id as string), {
-                ...requestData,
-                per_page: target.value as unknown as number
-            })
+            requestData['per_page'] = parseInt(target.value)
         }
+
+        await Client.find(parseInt(id as string), requestData)
+    }
+
+    const handleSearch = async (target: EventTarget & HTMLInputElement): Promise<void> => {
+        const { value } = target
+
+        setQuery(value)
+        requestData['q'] = value
+
+        if (timeoutId) {
+            clearTimeout(timeoutId)
+        }
+
+        const newTimeoutId = setTimeout(() => {
+            filterStudents(target)
+        }, 500)
+
+        setTimeoutId(newTimeoutId)
     }
 
     const studentRef = useRef()
@@ -193,6 +213,23 @@ export function DetailsSurvey(): JSX.Element {
                     </Button>
                 </div>
 
+                <Block className="mb-5 mt-3 d-flex">
+                    <Input
+                        value={query}
+                        name="query"
+                        onChange={({ target }): Promise<void> => handleSearch(target)}
+                        placeholder="Rechercher un étudiant..."
+                        className="w-100 me-1"
+                    />
+                    <Button
+                        icon="search"
+                        loading={RequestState.loading}
+                        type="button"
+                        mode="primary"
+                        size="sm"
+                    />
+                </Block>
+
                 <div className="table-responsive mb-5">
                     <table
                         style={{ fontSize: '9pt' }}
@@ -225,14 +262,18 @@ export function DetailsSurvey(): JSX.Element {
                                     </td>
                                 </tr>
                             )}
-                            {RequestState.loading && (
-                                <tr>
-                                    <td className="text-center" colSpan={14}>
-                                        Chargement des données
-                                    </td>
-                                </tr>
-                            )}
+                            {RequestState.loading &&
+                                range(10).map((number) => (
+                                    <tr key={number}>
+                                        {range(14).map((key) => (
+                                            <td key={key} className="text-center">
+                                                <Skeleton count={1} style={{ height: 30 }} />
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
                             {survey &&
+                                RequestState.loading === false &&
                                 survey.students &&
                                 survey.students.data.map((student) => (
                                     <tr key={student.id}>
@@ -290,7 +331,7 @@ export function DetailsSurvey(): JSX.Element {
                         </tbody>
                     </table>
                 </div>
-                {survey?.students?.total > 0 && (
+                {survey?.students?.total > 0 && survey?.students?.last_page > 1 && (
                     <Pagination changePage={changePage} data={survey?.students} />
                 )}
             </Block>

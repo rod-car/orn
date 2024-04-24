@@ -39,7 +39,7 @@ const find = (key: string): string | null => {
     return null
 }
 
-export const token: string = JSON.parse(localStorage.getItem('user') ?? '')?.token
+export const getToken = (): string => JSON.parse(localStorage.getItem('user') ?? '{}')?.token
 
 const defaultFields = {
     age: 0,

@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
-import { config, token } from '../../../config'
+import { config, getToken } from '../../../config'
 import { toast } from 'react-toastify'
 
 type SchoolFormProps = {
@@ -24,14 +24,14 @@ export function SchoolForm({ editedSchool }: SchoolFormProps): JSX.Element {
         RequestState
     } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/schools',
         key: 'data'
     })
 
     const { Client: CommuneClient, datas: communes } = useApi<Commune>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/communes'
     })
 

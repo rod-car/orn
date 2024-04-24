@@ -1,6 +1,6 @@
 import { FormEvent, useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
-import { config, token } from '../../config'
+import { config, getToken } from '../../config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { ApiErrorMessage, Block, Button } from 'ui'
@@ -10,7 +10,7 @@ import { Link } from '@renderer/components'
 export function Classes(): JSX.Element {
     const { Client, datas, RequestState, error, resetError } = useApi<Classes>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/classes',
         key: 'data'
     })
@@ -97,7 +97,7 @@ export function Classes(): JSX.Element {
                 )}
 
                 <div className="d-flex justify-content-end mb-3">
-                    <h5 className="text-primary">Arrếté au nombre de {datas.length} classe(s)</h5>
+                    <h5 className="text-primary">Arrêté au nombre de {datas.length} classe(s)</h5>
                 </div>
 
                 <table className="table table-striped mb-5 table-bordered">

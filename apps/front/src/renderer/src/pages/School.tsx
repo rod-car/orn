@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { Link } from '@renderer/components'
-import { config, token } from '../../config'
+import { config, getToken } from '../../config'
 import { ApiErrorMessage, Block, Button } from 'ui'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
@@ -19,7 +19,7 @@ export function School(): JSX.Element {
         resetError
     } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/schools',
         key: 'data'
     })
@@ -103,7 +103,7 @@ export function School(): JSX.Element {
                 )}
 
                 <div className="d-flex justify-content-end mb-3">
-                    <h4>Arrếté au nombre de {schools.length} école(s)</h4>
+                    <h4>Arrêté au nombre de {schools.length} école(s)</h4>
                 </div>
 
                 <table className="table table-striped table-bordered mb-5">

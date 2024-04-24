@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
-import { config, token } from '../../../config'
+import { config, getToken } from '../../../config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
@@ -11,7 +11,7 @@ export function EditClass(): JSX.Element {
     const { id } = useParams()
     const { Client, datas } = useApi<Niveau>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/levels',
         key: 'data'
     })
@@ -22,7 +22,7 @@ export function EditClass(): JSX.Element {
         error
     } = useApi<Classes>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/classes'
     })
 

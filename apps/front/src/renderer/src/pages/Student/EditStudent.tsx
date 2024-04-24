@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { Block } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config, token } from '../../../config'
+import { config, getToken } from '../../../config'
 import { Link } from '@renderer/components'
 import { StudentForm } from './StudentForm'
 
@@ -11,7 +11,7 @@ export function EditStudent(): JSX.Element {
 
     const { Client: StudentClient, data: student } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/students'
     })
 

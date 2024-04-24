@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { config, abaque as abaqueConfig, token } from '../../../config'
+import { config, abaque as abaqueConfig, getToken } from '../../../config'
 import { Button, Input } from 'ui'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
@@ -11,7 +11,7 @@ export function EditMeasure(): JSX.Element {
     const { id } = useParams()
     const { Client, RequestState } = useApi<MeasureLength>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/measures'
     })
 

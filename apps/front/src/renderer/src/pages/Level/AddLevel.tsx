@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Block, Button, Input } from 'ui'
-import { config, token } from '../../../config'
+import { config, getToken } from '../../../config'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
 
@@ -9,7 +9,7 @@ export function AddLevel(): JSX.Element {
     const [level, setLevel] = useState<Niveau>({ id: 0, label: '', description: '' })
     const { Client, RequestState, error } = useApi<Niveau>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/levels'
     })
 

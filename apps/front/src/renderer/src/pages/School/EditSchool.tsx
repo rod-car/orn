@@ -2,7 +2,7 @@ import { useApi } from 'hooks'
 import { useEffect } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block, Spinner } from 'ui'
-import { config, token } from '../../../config'
+import { config, getToken } from '../../../config'
 import { SchoolForm } from './SchoolForm'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -10,7 +10,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 export function EditSchool(): JSX.Element {
     const { Client, data: school } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/schools'
     })
 

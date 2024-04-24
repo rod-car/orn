@@ -1,11 +1,11 @@
 import { useApi, useExcelReader, usePdf } from 'hooks'
 import { Link } from '@renderer/components'
-import { config, token } from '../../config'
+import { config, getToken } from '../../config'
 import { Block, Button, Input, Select } from 'ui'
 import { useEffect, useRef, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
-import { ageFull, number_array, range, scholar_years } from 'functions'
+import { ageFull, format, number_array, range, scholar_years } from 'functions'
 
 import { Pagination } from 'react-laravel-paginex'
 import Skeleton from 'react-loading-skeleton'
@@ -21,11 +21,11 @@ export function Student(): JSX.Element {
     const [classe, setClasse] = useState(0)
     const [perPage, setPerPage] = useState(30)
     const [scholarYear, setScholarYear] = useState(defaultScholarYear ?? '2023-2024')
-    const [query, setQuery] = useState<string | number>('RAKOTO')
+    const [query, setQuery] = useState<string | number>('')
+    const [category, setCategory] = useState<string>('')
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
 
     const { toExcel } = useExcelReader()
-    const { exportToPdf } = usePdf()
 
     const {
         Client: SClient,
@@ -34,21 +34,21 @@ export function Student(): JSX.Element {
         datas: students
     } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/students',
         key: 'data'
     })
 
     const { Client: ScClient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClClient, datas: classes } = useApi<Classes>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/classes',
         key: 'data'
     })
@@ -58,7 +58,8 @@ export function Student(): JSX.Element {
         scholar_year: scholarYear,
         classe_id: classe,
         per_page: perPage,
-        q: query
+        q: query,
+        category: category
     }
 
     const getDatas = (): void => {
@@ -134,10 +135,15 @@ export function Student(): JSX.Element {
             requestData['per_page'] = parseInt(value)
         }
 
+        if (name === 'category') {
+            setCategory(value)
+            requestData['category'] = value
+        }
+
         await SClient.get(requestData)
     }
 
-    const handleSearch = async (target: EventTarget & HTMLInputElement): void => {
+    const handleSearch = async (target: EventTarget & HTMLInputElement): Promise<void> => {
         const { value } = target
 
         setQuery(value)
@@ -160,17 +166,44 @@ export function Student(): JSX.Element {
 
     const printList = (): void => {
         const headers: unknown = [
-            'Numero',
-            'Nom',
-            'Prenoms',
+            'N°',
+            'Nom et prénoms',
+            'Nom des parents',
+            'G',
+            'F',
             'Date de naissance',
-            'Age',
-            'Parents',
-            'Etablissement',
-            'Classe'
+            'Taille',
+            'Poids',
+            'IMC'
         ]
-        const list: unknown[][] = [headers]
-        const fileName = 'Liste des etudiants.xlsx'
+
+        const selectedSchool = school > 0 && schools.find((sc) => sc.id === school)
+        const schoolParts = ['EPP', 'ROMIALO']
+        if (selectedSchool) {
+            const parts = selectedSchool.name.split(' ')
+            schoolParts[0] = parts.at(0) as string
+            schoolParts[1] = parts.at(1) as string
+        }
+        const selectedClass = classe > 0 && classes.find((c) => c.id === classe)
+
+        const list: unknown | string[][] = [
+            ['DREN ATSINANANA', '', 'OFFICE NATIONAL DE NUTRITION'],
+            ['CISCO: TOAMASINA', '', 'OFFICE REGIONAL DE NUTRITION ATSINANANA'],
+            [
+                'ZAP: TOAMASINA',
+                '',
+                'COLLECTE DE RÉSULTAT DE TEST COGNITIF ET TEST ANTHROPOMÉTRIQUE'
+            ],
+            [`${schoolParts[0]}: ${schoolParts[1]}`, '', 'EVALUATION N°:.................'],
+            [`CLASSE: ${selectedClass && selectedClass.name} ${category}`],
+            [``],
+            [``],
+            ['', '', '', '', '', '', 'MESURE ANTHROPO'],
+            headers
+        ]
+        const fileName = `Liste des etudiants_${selectedSchool && selectedSchool.name}_${
+            selectedClass && selectedClass.name
+        }_${category}.xlsx`
 
         const datas = students.data as {
             student: Student
@@ -178,19 +211,24 @@ export function Student(): JSX.Element {
             classe: Classes
             scholar_year: string
         }[]
-        datas.map((data) => {
+        datas.map((data, key) => {
             list.push([
-                data.student.number,
-                data.student.firstname,
-                data.student.lastname,
-                data.student.birth_date,
-                ageFull(data.student.birth_date),
+                key + 1,
+                data.student.firstname +
+                    ' ' +
+                    (data.student.lastname === null ? '' : data.student.lastname),
                 data.student.parents,
-                data.school.name,
-                data.classe.name,
-                data.scholar_year
+                data.student.gender === 'Fille' ? '' : 'X',
+                data.student.gender === 'Fille' ? 'X' : '',
+                data.student.birth_date ? format(data.student.birth_date, 'dd/MM/y') : '',
+                '',
+                '',
+                ''
             ])
         })
+
+        list.push([''])
+        list.push(['Le responsable', '', '', '', '', '', 'Le Directeur'])
 
         toExcel(list, fileName)
     }
@@ -232,6 +270,7 @@ export function Student(): JSX.Element {
                             <th>Etablissement</th>
                             <th>Annee scolaire</th>
                             <th>Classe</th>
+                            <th>Catégorie</th>
                             <th>Elements</th>
                             <th className="w-25">Actions</th>
                         </tr>
@@ -266,6 +305,16 @@ export function Student(): JSX.Element {
                                     value={classe}
                                     options={classes}
                                     name="classe"
+                                    onChange={({ target }): Promise<void> => filterStudents(target)}
+                                    controlled
+                                />
+                            </td>
+                            <td>
+                                <Select
+                                    placeholder={null}
+                                    value={category}
+                                    options={['Tous', 'A', 'B', 'C', 'I', 'II', 'III', 'ZA', 'ZB']}
+                                    name="category"
                                     onChange={({ target }): Promise<void> => filterStudents(target)}
                                     controlled
                                 />
@@ -308,7 +357,7 @@ export function Student(): JSX.Element {
                 <Input
                     value={query}
                     name="query"
-                    onChange={({ target }): void => handleSearch(target)}
+                    onChange={({ target }): Promise<void> => handleSearch(target)}
                     placeholder="Rechercher un étudiant..."
                     className="w-100 me-1"
                 />
@@ -323,7 +372,7 @@ export function Student(): JSX.Element {
 
             <Block>
                 <div className="d-flex justify-content-end mb-3">
-                    <h5>Arrếté au nombre de {students.total} étudiants(s)</h5>
+                    <h5>Arrêté au nombre de {students.total} étudiants(s)</h5>
                 </div>
                 <div className="table-responsive">
                     <table
@@ -375,7 +424,7 @@ export function Student(): JSX.Element {
                                                 <td className="text-nowrap">
                                                     {classe.name} - {studentClass.school.name}
                                                 </td>
-                                                <td>
+                                                <td className="text-nowrap">
                                                     <Link
                                                         className="btn-sm me-2 btn btn-info text-white"
                                                         to={`/student/details/${student.id}`}
@@ -412,7 +461,9 @@ export function Student(): JSX.Element {
                         </tbody>
                     </table>
                 </div>
-                {students.total > 0 && <Pagination changePage={changePage} data={students} />}
+                {students.total > 0 && students.last_page > 1 && (
+                    <Pagination changePage={changePage} data={students} />
+                )}
             </Block>
         </>
     )

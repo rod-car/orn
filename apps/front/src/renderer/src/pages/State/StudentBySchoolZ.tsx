@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useApi } from 'hooks'
-import { config, token } from '../../../config'
+import { config, getToken } from '../../../config'
 import { ReactNode, useCallback, useEffect, useRef } from 'react'
 import { Block, Button, Spinner } from 'ui'
 import { round } from 'functions'
@@ -9,7 +9,7 @@ import { getPdf } from '@renderer/utils'
 export function StudentBySchoolZ(): ReactNode {
     const { Client, RequestState, error, datas } = useApi<SurveySchoolZ>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/students'
     })
 

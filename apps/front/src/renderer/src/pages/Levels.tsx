@@ -1,5 +1,5 @@
 import { FormEvent, useEffect } from 'react'
-import { config, token } from '../../config'
+import { config, getToken } from '../../config'
 import { useApi } from 'hooks'
 import { ApiErrorMessage, Block, Button } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
@@ -9,7 +9,7 @@ import { Link } from '@renderer/components'
 export function Levels(): JSX.Element {
     const { Client, datas, RequestState, error, resetError, success } = useApi<Niveau>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/levels',
         key: 'data'
     })

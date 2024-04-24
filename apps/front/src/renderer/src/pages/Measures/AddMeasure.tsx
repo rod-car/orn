@@ -13,7 +13,7 @@ export function AddMeasure(): JSX.Element {
 
     const { Client, RequestState } = useApi<MeasureLengthAge>({
         baseUrl: config.baseUrl,
-        token: token,
+        token: getToken(),
         url: '/measures'
     })
 
