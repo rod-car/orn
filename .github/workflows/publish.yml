@@ -44,9 +44,9 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --filter=web --frozen-lockfile
+        run: pnpm --filter=web install --frozen-lockfile
       - name: Build
-        run: pnpm run build --filter=web
+        run: pnpm --filter=web run build
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
