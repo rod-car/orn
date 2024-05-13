@@ -116,6 +116,14 @@ type Unit = {
     notation: string
 }
 
+type Site = {
+    id: number
+    name: string
+    commune_id: number
+    commune?: Commune
+    district?: District
+}
+
 interface SchoolZ {
     [schoolName: string]: {
         'Nb élève pesé': number
