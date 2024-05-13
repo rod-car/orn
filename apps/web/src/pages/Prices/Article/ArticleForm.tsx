@@ -5,50 +5,48 @@ import { config, getToken } from '@renderer/config'
 import { toast } from 'react-toastify'
 
 type ArticleFormProps = {
-    editedActivity?: Activity
+    editedArticle?: Article
 }
 
-const defaultActivity: Activity = {
+const defaultArticle: Article = {
     id: 0,
-    title: '',
-    date: '',
-    place: '',
-    details: '',
-    files: null
+    designation: '',
+    description: '',
+    code: ''
 }
 
-export function ArticleForm({ editedActivity }: ArticleFormProps): JSX.Element {
-    const [activity, setActivity] = useState(defaultActivity)
+export function ArticleForm({ editedArticle }: ArticleFormProps): JSX.Element {
+    const [article, setArticle] = useState(defaultArticle)
     const {
         Client,
         error,
         RequestState
-    } = useApi<Activity>({
+    } = useApi<Article>({
         baseUrl: config.baseUrl,
         token: getToken(),
-        url: '/activities',
+        url: '/prices/articles',
         key: 'data'
     })
 
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
 
-        const response = editedActivity
-            ? await Client.patch(editedActivity.id, activity)
-            : await Client.post(activity, '', {}, {
+        const response = editedArticle
+            ? await Client.patch(editedArticle.id, article)
+            : await Client.post(article, '', {}, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
             })
 
         if (response.ok) {
-            const message = editedActivity ? 'Mis à jour' : 'Enregistré'
+            const message = editedArticle ? 'Mis à jour' : 'Enregistré'
             toast(message, {
                 closeButton: true,
                 type: 'success',
                 position: config.toastPosition
             })
-            editedActivity === undefined && setActivity(defaultActivity)
+            editedArticle === undefined && setArticle(defaultArticle)
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
@@ -58,22 +56,16 @@ export function ArticleForm({ editedActivity }: ArticleFormProps): JSX.Element {
         }
     }
 
-    if (editedActivity !== undefined && activity.id === 0)
-        setActivity({
-            ...editedActivity,
+    if (editedArticle !== undefined && article.id === 0)
+        setArticle({
+            ...editedArticle,
         })
 
     const handleChange = (target: EventTarget & (HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement)): void => {
-        setActivity({ ...activity, [target.name]: target.name === 'files' ? Array.from(target.files) : target.value })
+        setArticle({ ...article, [target.name]: target.value })
         if (target.value.length > 0 && error?.data.errors[target.name]) {
             error.data.errors[target.name] = null
         }
-    }
-
-    const removeFile = (index: number): void => {
-        activity.files?.splice(index, 1)
-        const a = { ...activity }
-        setActivity(a)
     }
 
     return (
@@ -81,64 +73,34 @@ export function ArticleForm({ editedActivity }: ArticleFormProps): JSX.Element {
             <div className="row mb-3">
                 <div className="col-xl-6">
                     <Input
-                        label="Titre de l'activité"
-                        value={activity.title}
-                        error={error?.data?.errors?.title}
+                        label="Code"
+                        value={article.code}
+                        error={error?.data?.errors?.code}
                         onChange={({ target }): void => handleChange(target)}
-                        name="title"
-                    />
-                </div>
-                <div className="col-xl-6">
-                    <Input
-                        label="Lieu"
-                        value={activity.place}
-                        error={error?.data?.errors?.place}
-                        onChange={({ target }): void => handleChange(target)}
-                        name="place"
-                    />
-                </div>
-            </div>
-
-            <div className="row mb-3">
-                <div className="col-xl-6">
-                    <Input
-                        label="Date"
-                        value={activity.date}
-                        error={error?.data?.errors?.date}
-                        onChange={({ target }): void => handleChange(target)}
-                        type="date"
-                        name="date"
-                    />
-                </div>
-                <div className="col-xl-6 mb-3">
-                    <Input
-                        label="Pièces jointes"
-                        type='file'
-                        multiple
-                        accept='image/*, video/*'
-                        error={error?.data?.errors?.files}
-                        onChange={({ target }): void => handleChange(target)}
-                        name="files"
+                        name="code"
                         required={false}
                     />
                 </div>
-                {activity.files && activity.files.length > 0 && <div className="row">{activity.files.map((file, index) => {
-                    const url = URL.createObjectURL(file)
-                    return <div key={index} className="col-3 mb-3" style={{ position: 'relative' }}>
-                        <Button onClick={() => removeFile(index)} style={{ position: 'absolute', top: 10, right: 20 }} icon="close" size="sm" mode="danger" />
-                        <img className="w-100" src={url} />
-                    </div>
-                })}</div>}
+                <div className="col-xl-6">
+                    <Input
+                        label="Désignation / Nom"
+                        value={article.designation}
+                        error={error?.data?.errors?.designation}
+                        onChange={({ target }): void => handleChange(target)}
+                        name="designation"
+                    />
+                </div>
             </div>
 
             <div className="row mb-4">
                 <div className="col-xl-12">
                     <Textarea
-                        label="Compte rendu"
-                        value={activity.details}
-                        error={error?.data?.errors?.details}
+                        label="Description"
+                        value={article.description}
+                        error={error?.data?.errors?.description}
                         onChange={({ target }): void => handleChange(target)}
-                        name="details"
+                        name="description"
+                        required={false}
                     />
                 </div>
             </div>

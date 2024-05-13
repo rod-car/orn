@@ -10,21 +10,20 @@ import { toast } from "react-toastify";
 export function ArticleList(): ReactNode {
     const {
         Client,
-        datas: activities,
+        datas: articles,
         RequestState
-    } = useApi<Activity>({
+    } = useApi<Article>({
         baseUrl: config.baseUrl,
         token: getToken(),
-        url: '/activities'
+        url: '/prices/articles'
     })
 
     const queryParams = {
         paginate: true,
-        perPage: 15,
-        imagesCount: 4
+        perPage: 15
     }
 
-    const getActivities = async () => {
+    const getArticles = async () => {
         await Client.get(queryParams)
     }
 
@@ -36,7 +35,7 @@ export function ArticleList(): ReactNode {
     }
 
     useEffect(() => {
-        getActivities()
+        getArticles()
     }, [])
 
     const handleDelete = async (id: number): Promise<void> => {
@@ -54,7 +53,7 @@ export function ArticleList(): ReactNode {
                                 type: 'success',
                                 position: config.toastPosition
                             })
-                            getActivities()
+                            getArticles()
                         } else {
                             toast('Erreur de soumission', {
                                 closeButton: true,
@@ -97,15 +96,15 @@ export function ArticleList(): ReactNode {
                     </tr>
                 </thead>
                 <tbody>
-                    {activities && activities.data?.map((activity: Activity) => <tr>
-                        <td>{activity.id}</td>
-                        <td>{activity.title}</td>
-                        <td>{activity.date}</td>
-                        <td>{activity.place}</td>
+                    {articles && articles.data?.map((article: Article) => <tr key={article.id}>
+                        <td>{article.code ?? '-'}</td>
+                        <td>{article.designation}</td>
+                        <td>{article.description ?? '-'}</td>
+                        <td>-</td>
                         <td className="text-nowrap">
                             <Link
                                 className="btn-sm me-2 btn btn-primary"
-                                to={`/prices/articles/edit/${activity.id}`}
+                                to={`/prices/articles/edit/${article.id}`}
                             >
                                 <i className="fa fa-edit"></i>
                             </Link>
@@ -115,7 +114,7 @@ export function ArticleList(): ReactNode {
                                 icon="trash"
                                 size="sm"
                                 onClick={(): void => {
-                                    handleDelete(activity.id)
+                                    handleDelete(article.id)
                                 }}
                             />
                         </td>
@@ -123,6 +122,6 @@ export function ArticleList(): ReactNode {
                 </tbody>
             </table>
         </Block>}
-        {activities?.meta?.total > activities?.meta?.per_page && <Pagination changePage={changePage} data={activities} />}
+        {articles?.meta?.total > articles?.meta?.per_page && <Pagination changePage={changePage} data={articles} />}
     </>
 }

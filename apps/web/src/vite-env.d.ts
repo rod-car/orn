@@ -124,6 +124,13 @@ type Site = {
     district?: District
 }
 
+type Article = {
+    id: number
+    designation: string
+    code?: string
+    description?: string
+}
+
 interface SchoolZ {
     [schoolName: string]: {
         'Nb élève pesé': number
