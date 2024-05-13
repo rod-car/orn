@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { config, abaque as abaqueConfig, getToken } from '../../../config'
+import { config, abaque as abaqueConfig, getToken } from '../../config'
 import { Button, Input } from 'ui'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
@@ -69,112 +69,112 @@ export function EditMeasure(): JSX.Element {
                     'length-age-male',
                     'length-age-female'
                 ].includes(type as string) && (
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Age</th>
-                                <th>Z-3</th>
-                                <th>Z-2</th>
-                                <th>Z-1</th>
-                                <th>Z+0</th>
-                                <th>Z+1</th>
-                                <th>Z+2</th>
-                                <th>Z+3</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div className="form-control">{abaque.age ?? 0}</div>
-                                </td>
-                                <td>
-                                    <Input
-                                        onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-                                            handleChange(
-                                                'Z-3',
-                                                parseFloat(e.target as unknown as string)
-                                            )
-                                        }
-                                        value={abaque['Z-3']}
-                                        type="number"
-                                    />
-                                </td>
-                                <td>
-                                    <Input
-                                        onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-                                            handleChange(
-                                                'Z-2',
-                                                parseFloat(e.target as unknown as string)
-                                            )
-                                        }
-                                        value={abaque['Z-2']}
-                                        type="number"
-                                    />
-                                </td>
-                                <td>
-                                    <Input
-                                        onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-                                            handleChange(
-                                                'Z-1',
-                                                parseFloat(e.target as unknown as string)
-                                            )
-                                        }
-                                        value={abaque['Z-1']}
-                                        type="number"
-                                    />
-                                </td>
-                                <td>
-                                    <Input
-                                        onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-                                            handleChange(
-                                                'Z+0',
-                                                parseFloat(e.target as unknown as string)
-                                            )
-                                        }
-                                        value={abaque['Z+0']}
-                                        type="number"
-                                    />
-                                </td>
-                                <td>
-                                    <Input
-                                        onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-                                            handleChange(
-                                                'Z+1',
-                                                parseFloat(e.target as unknown as string)
-                                            )
-                                        }
-                                        value={abaque['Z+1']}
-                                        type="number"
-                                    />
-                                </td>
-                                <td>
-                                    <Input
-                                        onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-                                            handleChange(
-                                                'Z+2',
-                                                parseFloat(e.target as unknown as string)
-                                            )
-                                        }
-                                        value={abaque['Z+2']}
-                                        type="number"
-                                    />
-                                </td>
-                                <td>
-                                    <Input
-                                        onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-                                            handleChange(
-                                                'Z+3',
-                                                parseFloat(e.target as unknown as string)
-                                            )
-                                        }
-                                        value={abaque['Z+3']}
-                                        type="number"
-                                    />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                )}
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Age</th>
+                                    <th>Z-3</th>
+                                    <th>Z-2</th>
+                                    <th>Z-1</th>
+                                    <th>Z+0</th>
+                                    <th>Z+1</th>
+                                    <th>Z+2</th>
+                                    <th>Z+3</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div className="form-control">{abaque.age ?? 0}</div>
+                                    </td>
+                                    <td>
+                                        <Input
+                                            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                                                handleChange(
+                                                    'Z-3',
+                                                    parseFloat(e.target as unknown as string)
+                                                )
+                                            }
+                                            value={abaque['Z-3']}
+                                            type="number"
+                                        />
+                                    </td>
+                                    <td>
+                                        <Input
+                                            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                                                handleChange(
+                                                    'Z-2',
+                                                    parseFloat(e.target as unknown as string)
+                                                )
+                                            }
+                                            value={abaque['Z-2']}
+                                            type="number"
+                                        />
+                                    </td>
+                                    <td>
+                                        <Input
+                                            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                                                handleChange(
+                                                    'Z-1',
+                                                    parseFloat(e.target as unknown as string)
+                                                )
+                                            }
+                                            value={abaque['Z-1']}
+                                            type="number"
+                                        />
+                                    </td>
+                                    <td>
+                                        <Input
+                                            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                                                handleChange(
+                                                    'Z+0',
+                                                    parseFloat(e.target as unknown as string)
+                                                )
+                                            }
+                                            value={abaque['Z+0']}
+                                            type="number"
+                                        />
+                                    </td>
+                                    <td>
+                                        <Input
+                                            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                                                handleChange(
+                                                    'Z+1',
+                                                    parseFloat(e.target as unknown as string)
+                                                )
+                                            }
+                                            value={abaque['Z+1']}
+                                            type="number"
+                                        />
+                                    </td>
+                                    <td>
+                                        <Input
+                                            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                                                handleChange(
+                                                    'Z+2',
+                                                    parseFloat(e.target as unknown as string)
+                                                )
+                                            }
+                                            value={abaque['Z+2']}
+                                            type="number"
+                                        />
+                                    </td>
+                                    <td>
+                                        <Input
+                                            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                                                handleChange(
+                                                    'Z+3',
+                                                    parseFloat(e.target as unknown as string)
+                                                )
+                                            }
+                                            value={abaque['Z+3']}
+                                            type="number"
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    )}
 
                 {type === 'imc-age' && (
                     <table className="table table-striped">

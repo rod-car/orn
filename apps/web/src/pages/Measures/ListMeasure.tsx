@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { createSearchParams } from 'react-router-dom'
-import { config, abaque, getToken } from '../../../config'
+import { config, abaque, getToken } from '../../config'
 import { Block, Button, Select } from 'ui'
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
@@ -112,71 +112,71 @@ export function ListMeasure(): JSX.Element {
                         'length-age-male',
                         'length-age-female'
                     ].includes(abaqueType) && (
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Age</th>
-                                    <th>Z-3</th>
-                                    <th>Z-2</th>
-                                    <th>Z-1</th>
-                                    <th>Z+0</th>
-                                    <th>Z+1</th>
-                                    <th>Z+2</th>
-                                    <th>Z+3</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {RequestState.loading === false && abaques.length <= 0 && (
+                            <table className="table table-striped">
+                                <thead>
                                     <tr>
-                                        <td className="text-center" colSpan={8}>
-                                            Aucun données
-                                        </td>
+                                        <th>Age</th>
+                                        <th>Z-3</th>
+                                        <th>Z-2</th>
+                                        <th>Z-1</th>
+                                        <th>Z+0</th>
+                                        <th>Z+1</th>
+                                        <th>Z+2</th>
+                                        <th>Z+3</th>
+                                        <th>Actions</th>
                                     </tr>
-                                )}
-                                {abaques.map((abaque) => (
-                                    <tr key={abaque['age']}>
-                                        <td>{abaque['age']}</td>
-                                        <td>{abaque['Z-3']}</td>
-                                        <td>{abaque['Z-2']}</td>
-                                        <td>{abaque['Z-1']}</td>
-                                        <td>{abaque['Z+0']}</td>
-                                        <td>{abaque['Z+1']}</td>
-                                        <td>{abaque['Z+2']}</td>
-                                        <td>{abaque['Z+3']}</td>
-                                        <td>
-                                            <Link
-                                                className="me-2 btn btn-primary btn-sm"
-                                                to={{
-                                                    pathname: `/measure/edit/${abaque.id}`,
-                                                    search: `?${createSearchParams({
-                                                        type: abaqueType
-                                                    })}`
-                                                }}
-                                            >
-                                                <i className="fa fa-edit"></i>
-                                            </Link>
+                                </thead>
+                                <tbody>
+                                    {RequestState.loading === false && abaques.length <= 0 && (
+                                        <tr>
+                                            <td className="text-center" colSpan={8}>
+                                                Aucun données
+                                            </td>
+                                        </tr>
+                                    )}
+                                    {abaques.map((abaque) => (
+                                        <tr key={abaque['age']}>
+                                            <td>{abaque['age']}</td>
+                                            <td>{abaque['Z-3']}</td>
+                                            <td>{abaque['Z-2']}</td>
+                                            <td>{abaque['Z-1']}</td>
+                                            <td>{abaque['Z+0']}</td>
+                                            <td>{abaque['Z+1']}</td>
+                                            <td>{abaque['Z+2']}</td>
+                                            <td>{abaque['Z+3']}</td>
+                                            <td>
+                                                <Link
+                                                    className="me-2 btn btn-primary btn-sm"
+                                                    to={{
+                                                        pathname: `/measure/edit/${abaque.id}`,
+                                                        search: `?${createSearchParams({
+                                                            type: abaqueType
+                                                        })}`
+                                                    }}
+                                                >
+                                                    <i className="fa fa-edit"></i>
+                                                </Link>
 
-                                            <Button
-                                                onClick={(): Promise<void> => remove(abaque.id)}
-                                                type="button"
-                                                icon="trash"
-                                                mode="danger"
-                                                size="sm"
-                                            />
-                                        </td>
-                                    </tr>
-                                ))}
-                                {RequestState.loading && (
-                                    <tr>
-                                        <td className="text-center" colSpan={8}>
-                                            Chargement
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    )}
+                                                <Button
+                                                    onClick={(): Promise<void> => remove(abaque.id)}
+                                                    type="button"
+                                                    icon="trash"
+                                                    mode="danger"
+                                                    size="sm"
+                                                />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {RequestState.loading && (
+                                        <tr>
+                                            <td className="text-center" colSpan={8}>
+                                                Chargement
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        )}
 
                     {abaqueType === 'imc-age' && (
                         <table className="table table-striped">

@@ -46,6 +46,7 @@ export const Button = ({
             disabled={props.disabled || props.loading}
             onClick={props.onClick}
             type={type}
+            style={props.style}
             className={`btn btn-${mode} btn-${size} shadow ${props.className}`}
         >
             {props.loading

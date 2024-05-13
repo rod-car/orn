@@ -1,5 +1,5 @@
 import { FormEvent, useEffect } from 'react'
-import { config, getToken } from '../../config'
+import { config, getToken } from '../config'
 import { useApi } from 'hooks'
 import { ApiErrorMessage, Block, Button } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'

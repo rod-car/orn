@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '../../config'
 import { toast } from 'react-toastify'
 import { gender, scholar_years } from 'functions'
 

@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosRequestConfig } from "axios";
 import axios from "./axios";
 import { useState } from "react"
 
@@ -209,7 +209,8 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
     const post = async (
         data: Partial<T>,
         addUrl: string | undefined = undefined,
-        params?: Record<string, string | number>
+        params?: Record<string, string | number>,
+        config?: AxiosRequestConfig
     ): Promise<PostResponse> => {
         reset(false);
         setRequestState({ creating: true });
@@ -222,7 +223,8 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
             const response = await axios.post(url, data, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/ld+json"
+                    "Content-Type": "application/ld+json",
+                    ...config?.headers
                 },
                 params: params
             });

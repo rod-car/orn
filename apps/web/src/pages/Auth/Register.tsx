@@ -1,12 +1,13 @@
 import { useAuth } from 'hooks'
 import { FormEvent, ReactNode, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Block, Button, Input } from 'ui'
-import { config } from '../../../config'
+import { Block, Button, Checkbox, Input } from 'ui'
+import { config } from '../../config'
 import { toast } from 'react-toastify'
 
 export function Register(): ReactNode {
     const navigate = useNavigate()
+    const [showPassword, setShowPassword] = useState(false)
     const [user, setUser] = useState<Partial<User>>({
         name: '',
         email: '',
@@ -96,7 +97,7 @@ export function Register(): ReactNode {
                                 setErrors({ ...errors, password: [] })
                         }}
                         required={false}
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         label="Mot de passe"
                         className="mb-3"
                         error={errors?.password}
@@ -109,13 +110,16 @@ export function Register(): ReactNode {
                                 setErrors({ ...errors, password_confirmation: [] })
                         }}
                         required={false}
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         label="Confirmer le mot de passe"
-                        className="mb-5"
+                        className="mb-4"
                         error={errors?.password_confirmation}
                     />
+                    <div className="mb-5">
+                        <Checkbox checked={showPassword} onCheck={() => setShowPassword(!showPassword)} label="Afficher le mot de passe" />
+                    </div>
                     <div className="d-flex justify-content-between align-items-center">
-                        <Link to="/login">Se connecter</Link>
+                        <Link to="/auth/login">Se connecter</Link>
                         <Button
                             loading={loading}
                             type="submit"

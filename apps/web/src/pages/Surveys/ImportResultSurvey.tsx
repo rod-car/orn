@@ -1,7 +1,7 @@
 import { useApi, useExcelReader } from 'hooks'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block, Button, Input, Spinner } from 'ui'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '../../config'
 import { ChangeEvent } from 'react'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'

@@ -1,6 +1,4 @@
 export { ZBySchool } from './Charts/ZBySchool'
-export { Home } from './Home'
-export { Root } from './Root'
 export { Student } from './Student'
 export { School } from './School'
 export { AddStudent } from './Student/AddStudent'
@@ -29,6 +27,3 @@ export {
     AddSurveyStudent,
     ImportResultSurvey
 } from './Surveys'
-
-export { Login } from './Auth/Login'
-export { Register } from './Auth/Register'

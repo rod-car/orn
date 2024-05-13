@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '../../config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'

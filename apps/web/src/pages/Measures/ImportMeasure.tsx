@@ -2,7 +2,7 @@ import { useApi, useExcelReader } from 'hooks'
 import { ChangeEvent, useState } from 'react'
 import { Link } from '@renderer/components'
 import { Block, Button, Input, Select, Spinner } from 'ui'
-import { config, abaque, getToken } from '../../../config'
+import { config, abaque, getToken } from '../../config'
 import { toast } from 'react-toastify'
 
 export function ImportMeasure(): JSX.Element {
@@ -113,42 +113,42 @@ export function ImportMeasure(): JSX.Element {
                         'length-age-male',
                         'length-age-female'
                     ].includes(abaqueType) && (
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Age</th>
-                                    <th>Z-3</th>
-                                    <th>Z-2</th>
-                                    <th>Z-1</th>
-                                    <th>Z+0</th>
-                                    <th>Z+1</th>
-                                    <th>Z+2</th>
-                                    <th>Z+3</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {json.length <= 0 && (
+                            <table className="table table-striped">
+                                <thead>
                                     <tr>
-                                        <td className="text-center" colSpan={8}>
-                                            Aucun données
-                                        </td>
+                                        <th>Age</th>
+                                        <th>Z-3</th>
+                                        <th>Z-2</th>
+                                        <th>Z-1</th>
+                                        <th>Z+0</th>
+                                        <th>Z+1</th>
+                                        <th>Z+2</th>
+                                        <th>Z+3</th>
                                     </tr>
-                                )}
-                                {json.map((json) => (
-                                    <tr key={json['age']}>
-                                        <td>{json['age']}</td>
-                                        <td>{json['Z-3']}</td>
-                                        <td>{json['Z-2']}</td>
-                                        <td>{json['Z-1']}</td>
-                                        <td>{json['Z+0']}</td>
-                                        <td>{json['Z+1']}</td>
-                                        <td>{json['Z+2']}</td>
-                                        <td>{json['Z+3']}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
+                                </thead>
+                                <tbody>
+                                    {json.length <= 0 && (
+                                        <tr>
+                                            <td className="text-center" colSpan={8}>
+                                                Aucun données
+                                            </td>
+                                        </tr>
+                                    )}
+                                    {json.map((json) => (
+                                        <tr key={json['age']}>
+                                            <td>{json['age']}</td>
+                                            <td>{json['Z-3']}</td>
+                                            <td>{json['Z-2']}</td>
+                                            <td>{json['Z-1']}</td>
+                                            <td>{json['Z+0']}</td>
+                                            <td>{json['Z+1']}</td>
+                                            <td>{json['Z+2']}</td>
+                                            <td>{json['Z+3']}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
 
                     {abaqueType === 'imc-age' && (
                         <table className="table table-striped">

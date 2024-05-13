@@ -9,11 +9,13 @@ type TextareaProps = {
     controlled?: boolean;
     rows?: number;
     cols?: number;
+    name?: string;
     value?: string | number;
+    error?: string[];
     onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-export function Textarea({ label, onChange, controlled = true, required = true, ...props }: TextareaProps) {
+export function Textarea({ label, onChange, controlled = true, required = true, error = undefined, ...props }: TextareaProps) {
     const id = useId()
 
     return <div className="form-group">
@@ -26,8 +28,10 @@ export function Textarea({ label, onChange, controlled = true, required = true, 
             value={controlled ? props.value : undefined}
             onChange={controlled ? onChange : () => { }}
             className="form-control"
+            name={props.name}
             rows={props.rows ?? 5}
             cols={props.cols ?? 1}
         />
+        {error && error.length > 0 && <span className="text-danger d-block mt-1">{error.at(0)}</span>}
     </div>
 }

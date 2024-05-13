@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '../../config'
 import { Button, Input, Select, SearchableSelect, Spinner, Block } from 'ui'
 import { toast } from 'react-toastify'
 import { isNumber } from 'functions/number'

@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { useApi } from 'hooks'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '../../config'
 import { useCallback, useEffect } from 'react'
 import { Block, Button, Spinner } from 'ui'
 import { getPdf } from '@renderer/utils'

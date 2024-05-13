@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useApi } from 'hooks'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '../../config'
 import { ReactNode, useCallback, useEffect, useRef } from 'react'
 import { Block, Button, Spinner } from 'ui'
 import { round } from 'functions'

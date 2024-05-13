@@ -1,6 +1,6 @@
 import { useApi, usePdf } from 'hooks'
 import { ReactNode, useCallback, useEffect, useMemo, useRef } from 'react'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '../../config'
 import { Button, Spinner } from 'ui'
 
 import {

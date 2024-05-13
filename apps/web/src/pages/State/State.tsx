@@ -15,7 +15,7 @@ export function State(): JSX.Element {
     return (
         <>
             <div className="d-flex align-items-center justify-content-between mb-5">
-                <h2>Liste des états</h2>
+                <h2>Statistiques</h2>
                 <Button
                     onClick={(): Promise<void> => exportPdf('global-state')}
                     icon="file"

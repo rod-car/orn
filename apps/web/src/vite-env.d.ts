@@ -101,6 +101,21 @@ type Survey = {
     students: Student[]
 }
 
+type Activity = {
+    id: number
+    title: string
+    date: string
+    place: string
+    details: string
+    files: File[] | null
+}
+
+type Unit = {
+    id: number
+    name: string
+    notation: string
+}
+
 interface SchoolZ {
     [schoolName: string]: {
         'Nb élève pesé': number
@@ -143,3 +158,4 @@ interface SchoolZ {
 interface SurveySchoolZ {
     [id: string]: School
 }
+

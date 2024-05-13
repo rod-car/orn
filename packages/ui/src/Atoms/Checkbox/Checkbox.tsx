@@ -19,6 +19,6 @@ export function Checkbox ({ label, name, onCheck, checked, mode = "default" }: C
             onChange={onCheck}
             className={`form-check-input bg-${mode}`}
         />
-        <label className="form-check-label me-2" htmlFor={id}>{label}</label>
+        <label className="form-check-label ms-2" htmlFor={id}>{label}</label>
     </div>
 }

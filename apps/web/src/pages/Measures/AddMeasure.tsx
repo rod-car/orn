@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Link } from '@renderer/components'
-import { config, token, abaque } from '../../../config'
+import { config, token, abaque } from '../../config'
 import { Block, Button, Input, Select } from 'ui'
 import { toast } from 'react-toastify'
 
@@ -87,146 +87,146 @@ export function AddMeasure(): JSX.Element {
                         'length-age-male',
                         'length-age-female'
                     ].includes(abaqueType) && (
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Age</th>
-                                    <th>Z-3</th>
-                                    <th>Z-2</th>
-                                    <th>Z-1</th>
-                                    <th>Z+0</th>
-                                    <th>Z+1</th>
-                                    <th>Z+2</th>
-                                    <th>Z+3</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {abaqueFields.map((field, key) => (
-                                    <tr key={key}>
-                                        <td>
-                                            <Input
-                                                onChange={(e): void =>
-                                                    handleFieldChange(
-                                                        key,
-                                                        'age',
-                                                        e.target.value as unknown as number
-                                                    )
-                                                }
-                                                value={field.age}
-                                                type="number"
-                                            />
-                                        </td>
-                                        <td>
-                                            <Input
-                                                onChange={(e): void =>
-                                                    handleFieldChange(
-                                                        key,
-                                                        'Z-3',
-                                                        e.target.value as unknown as number
-                                                    )
-                                                }
-                                                value={field['Z-3']}
-                                                type="number"
-                                            />
-                                        </td>
-                                        <td>
-                                            <Input
-                                                onChange={(e): void =>
-                                                    handleFieldChange(
-                                                        key,
-                                                        'Z-2',
-                                                        e.target.value as unknown as number
-                                                    )
-                                                }
-                                                value={field['Z-2']}
-                                                type="number"
-                                            />
-                                        </td>
-                                        <td>
-                                            <Input
-                                                onChange={(e): void =>
-                                                    handleFieldChange(
-                                                        key,
-                                                        'Z-1',
-                                                        e.target.value as unknown as number
-                                                    )
-                                                }
-                                                value={field['Z-1']}
-                                                type="number"
-                                            />
-                                        </td>
-                                        <td>
-                                            <Input
-                                                onChange={(e): void =>
-                                                    handleFieldChange(
-                                                        key,
-                                                        'Z+0',
-                                                        e.target.value as unknown as number
-                                                    )
-                                                }
-                                                value={field['Z+0']}
-                                                type="number"
-                                            />
-                                        </td>
-                                        <td>
-                                            <Input
-                                                onChange={(e): void =>
-                                                    handleFieldChange(
-                                                        key,
-                                                        'Z+1',
-                                                        e.target.value as unknown as number
-                                                    )
-                                                }
-                                                value={field['Z+1']}
-                                                type="number"
-                                            />
-                                        </td>
-                                        <td>
-                                            <Input
-                                                onChange={(e): void =>
-                                                    handleFieldChange(
-                                                        key,
-                                                        'Z+2',
-                                                        e.target.value as unknown as number
-                                                    )
-                                                }
-                                                value={field['Z+2']}
-                                                type="number"
-                                            />
-                                        </td>
-                                        <td>
-                                            <Input
-                                                onChange={(e): void =>
-                                                    handleFieldChange(
-                                                        key,
-                                                        'Z+3',
-                                                        e.target.value as unknown as number
-                                                    )
-                                                }
-                                                value={field['Z+3']}
-                                                type="number"
-                                            />
-                                        </td>
-                                        <td>
-                                            {key > 0 ? (
-                                                <Button
-                                                    icon="minus"
-                                                    onClick={(): void => remove(key)}
-                                                    mode="danger"
-                                                ></Button>
-                                            ) : (
-                                                <Button
-                                                    icon="plus"
-                                                    onClick={add}
-                                                    mode="primary"
-                                                ></Button>
-                                            )}
-                                        </td>
+                            <table className="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Age</th>
+                                        <th>Z-3</th>
+                                        <th>Z-2</th>
+                                        <th>Z-1</th>
+                                        <th>Z+0</th>
+                                        <th>Z+1</th>
+                                        <th>Z+2</th>
+                                        <th>Z+3</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
+                                </thead>
+                                <tbody>
+                                    {abaqueFields.map((field, key) => (
+                                        <tr key={key}>
+                                            <td>
+                                                <Input
+                                                    onChange={(e): void =>
+                                                        handleFieldChange(
+                                                            key,
+                                                            'age',
+                                                            e.target.value as unknown as number
+                                                        )
+                                                    }
+                                                    value={field.age}
+                                                    type="number"
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    onChange={(e): void =>
+                                                        handleFieldChange(
+                                                            key,
+                                                            'Z-3',
+                                                            e.target.value as unknown as number
+                                                        )
+                                                    }
+                                                    value={field['Z-3']}
+                                                    type="number"
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    onChange={(e): void =>
+                                                        handleFieldChange(
+                                                            key,
+                                                            'Z-2',
+                                                            e.target.value as unknown as number
+                                                        )
+                                                    }
+                                                    value={field['Z-2']}
+                                                    type="number"
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    onChange={(e): void =>
+                                                        handleFieldChange(
+                                                            key,
+                                                            'Z-1',
+                                                            e.target.value as unknown as number
+                                                        )
+                                                    }
+                                                    value={field['Z-1']}
+                                                    type="number"
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    onChange={(e): void =>
+                                                        handleFieldChange(
+                                                            key,
+                                                            'Z+0',
+                                                            e.target.value as unknown as number
+                                                        )
+                                                    }
+                                                    value={field['Z+0']}
+                                                    type="number"
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    onChange={(e): void =>
+                                                        handleFieldChange(
+                                                            key,
+                                                            'Z+1',
+                                                            e.target.value as unknown as number
+                                                        )
+                                                    }
+                                                    value={field['Z+1']}
+                                                    type="number"
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    onChange={(e): void =>
+                                                        handleFieldChange(
+                                                            key,
+                                                            'Z+2',
+                                                            e.target.value as unknown as number
+                                                        )
+                                                    }
+                                                    value={field['Z+2']}
+                                                    type="number"
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    onChange={(e): void =>
+                                                        handleFieldChange(
+                                                            key,
+                                                            'Z+3',
+                                                            e.target.value as unknown as number
+                                                        )
+                                                    }
+                                                    value={field['Z+3']}
+                                                    type="number"
+                                                />
+                                            </td>
+                                            <td>
+                                                {key > 0 ? (
+                                                    <Button
+                                                        icon="minus"
+                                                        onClick={(): void => remove(key)}
+                                                        mode="danger"
+                                                    ></Button>
+                                                ) : (
+                                                    <Button
+                                                        icon="plus"
+                                                        onClick={add}
+                                                        mode="primary"
+                                                    ></Button>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
 
                     {abaqueType === 'imc-age' && (
                         <table className="table table-striped">

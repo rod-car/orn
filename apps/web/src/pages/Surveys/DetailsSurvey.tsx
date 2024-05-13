@@ -1,7 +1,7 @@
 import { useApi, useExcelReader, usePdf } from 'hooks'
 import { useParams } from 'react-router-dom'
 import { Block, Button, Input, Select } from 'ui'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '../../config'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ageFull, ageMonth, number_array, range } from 'functions'
 import { Link } from '@renderer/components'

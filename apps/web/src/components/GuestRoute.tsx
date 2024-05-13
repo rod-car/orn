@@ -2,7 +2,7 @@
 import React, { PropsWithChildren, ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from 'hooks'
-import { config } from '../../config'
+import { config } from '../config'
 
 export function GuestRoute({ children }: PropsWithChildren): ReactNode {
     const { user } = useAuth<User>({

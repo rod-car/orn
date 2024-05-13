@@ -1,13 +1,14 @@
 import { useAuth } from 'hooks'
 import { FormEvent, ReactNode, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Block, Button, Input } from 'ui'
-import { config } from '../../../config'
+import { Block, Button, Checkbox, Input } from 'ui'
+import { config } from '../../config'
 import { toast } from 'react-toastify'
 
 export function Login(): ReactNode {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
     const [errors, setErrors] = useState<{ username: string[]; password: string[] }>()
     const navigate = useNavigate()
     const { login, loading } = useAuth<User>({
@@ -59,11 +60,15 @@ export function Login(): ReactNode {
                                 setErrors({ ...errors, password: [] })
                         }}
                         value={password}
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         label="Mot de passe"
-                        className="mb-5"
+                        className="mb-4"
                         error={errors?.password}
                     />
+                    <div className="mb-5">
+                        <Checkbox checked={showPassword} onCheck={() => setShowPassword(!showPassword)} label="Afficher le mot de passe" />
+                    </div>
+
                     <div className="d-flex justify-content-between align-items-center">
                         <Link to="/register">Créer un compte</Link>
                         <Button
