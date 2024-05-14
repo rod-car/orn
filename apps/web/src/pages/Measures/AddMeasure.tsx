@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Link } from '@renderer/components'
-import { config, token, abaque } from '../../config'
+import { config, getToken, abaque } from '@renderer/config'
 import { Block, Button, Input, Select } from 'ui'
 import { toast } from 'react-toastify'
 

@@ -5,6 +5,7 @@ type Option = Partial<{
     id: string | number
     label: string | number
     name: string | number,
+    designation: string,
     phase: number
 }>
 
@@ -27,7 +28,7 @@ type SelectProps = {
 
 export function Select({ label, name, value, options, defaultOption, onChange, controlled = false, required = true, config = { optionKey: 'id', valueKey: 'label' }, placeholder = "Selectionner un option", error = undefined }: SelectProps) {
     const id = useId()
-    
+
     return <div className="form-group">
         {label && <label className="form-label" htmlFor={id}>
             {label}

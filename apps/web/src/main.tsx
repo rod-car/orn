@@ -30,7 +30,7 @@ import { ActivityRoot, ActivityHome, ActivityAdd, ActivityList, ActivityEdit, Ad
 import { MeasureRoot, ListMeasure, AddMeasure, EditMeasure, ImportMeasure, DetailsMeasure, HomeMeasure } from '@renderer/pages/Measures'
 import { Login, Register, AuthRoot } from '@renderer/pages/Auth'
 import { AppRoot, About, Contributors, HomePage } from '@renderer/pages/App'
-import { ArticleAdd, ArticleEdit, ArticleList, ArticleShow, PriceAdd, PriceEdit, PriceHome, PriceList, PriceRoot, SiteAdd, SiteEdit, SiteList, UnitAdd, UnitEdit, UnitList } from '@renderer/pages/Prices'
+import { ArticleAdd, ArticleEdit, ArticleList, ArticleShow, PriceAdd, PriceHome, PriceList, PriceRoot, SiteAdd, SiteEdit, SiteList, UnitAdd, UnitEdit, UnitList } from '@renderer/pages/Prices'
 
 const router = createBrowserRouter([
     {
@@ -306,10 +306,6 @@ const router = createBrowserRouter([
             {
                 path: 'list',
                 element: <PriceList />
-            },
-            {
-                path: 'edit/:id',
-                element: <PriceEdit />
             },
             {
                 path: 'articles',

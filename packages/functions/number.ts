@@ -1,10 +1,10 @@
-export const number_array  = (max: number, step: number): number[] => {
+export const number_array = (max: number, step: number): number[] => {
     const numbers: number[] = []
     for (let i = step; i <= max; i += step) {
         numbers.push(i);
     }
     return numbers
-} 
+}
 
 export const range = (length: number): number[] => {
     let numbers: number[] = [];
@@ -21,4 +21,12 @@ export const isNumber = (str: string) => {
 export const round = (nb: number, decimal: number = 2): number => {
     const factor = Math.pow(10, decimal);
     return Math.round((nb + Number.EPSILON) * factor) / factor;
+}
+
+export const formatPrice = (price: number, format: string = 'mg-MG', currency: string = 'MGA'): string => {
+    const formatter = new Intl.NumberFormat(format, {
+        style: 'currency',
+        currency: currency
+    });
+    return formatter.format(price);
 }

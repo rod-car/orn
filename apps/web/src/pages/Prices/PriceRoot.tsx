@@ -140,7 +140,7 @@ export function PriceRoot({ error = false }: { error?: boolean }): ReactNode {
                                 icon="money-bill"
                                 items={[
                                     {
-                                        url: '/add-article',
+                                        url: '/add',
                                         label: 'Ajouter un prix d\'article',
                                         icon: 'plus'
                                     },

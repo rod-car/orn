@@ -1,54 +1,114 @@
-import { FormEvent, useState } from 'react'
-import { Button, Input, Textarea } from 'ui'
+import { FormEvent, useEffect, useState } from 'react'
+import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
 import { config, getToken } from '../../config'
 import { toast } from 'react-toastify'
+import { years, months } from 'functions'
 
-type PriceFormProps = {
-    editedActivity?: Activity
+type AddInfo = {
+    month: number
+    year: number
+    site_id: number,
+    acn: string
 }
 
-const defaultActivity: Activity = {
+const defaultAddInfo: AddInfo = { month: 0, year: 0, site_id: 0, acn: '' }
+
+const d: ArticlePrice = {
     id: 0,
-    title: '',
-    date: '',
-    place: '',
-    details: '',
-    files: null
+    site_id: 0,
+    article_id: 0,
+    unit_id: 0,
+    year: 0,
+    month: 0,
+    acn: '',
+    price: 0
 }
 
-export function PriceForm({ editedActivity }: PriceFormProps): JSX.Element {
-    const [activity, setActivity] = useState(defaultActivity)
+const defaultArticlePrice: ArticlePrice[] = [d]
+
+export function PriceForm(): JSX.Element {
+    const [articlePrice, setArticlePrice] = useState(defaultArticlePrice)
+    const [addInfo, setAddInfo] = useState(defaultAddInfo)
     const {
         Client,
         error,
         RequestState
-    } = useApi<Activity>({
+    } = useApi<ArticlePrice[]>({
         baseUrl: config.baseUrl,
         token: getToken(),
-        url: '/activities',
+        url: '/prices',
         key: 'data'
     })
 
+    const {
+        Client: SiteClient, datas: sites
+    } = useApi<Site>({
+        baseUrl: config.baseUrl,
+        token: getToken(),
+        url: '/prices/sites',
+        key: 'data'
+    })
+
+    const {
+        Client: ArticleClient, datas: articles
+    } = useApi<Article>({
+        baseUrl: config.baseUrl,
+        token: getToken(),
+        url: '/prices/articles',
+        key: 'data'
+    })
+
+    const {
+        Client: UnitClient, datas: units
+    } = useApi<Unit>({
+        baseUrl: config.baseUrl,
+        token: getToken(),
+        url: '/prices/units',
+        key: 'data'
+    })
+
+    useEffect(() => {
+        ArticleClient.get()
+        SiteClient.get()
+        UnitClient.get()
+    }, [])
+
+    const updateData = async () => {
+        if (addInfo.month !== 0 && addInfo.site_id !== 0 && addInfo.year !== 0) {
+            const data = await Client.get({
+                month: addInfo.month,
+                site_id: addInfo.site_id,
+                year: addInfo.year
+            }) as unknown as ArticlePrice[]
+            if (data.length > 0) {
+                setAddInfo({ ...addInfo, acn: data.at(0)?.acn as string })
+                setArticlePrice([...data])
+            } else {
+                setArticlePrice([...defaultArticlePrice])
+            }
+        }
+    }
+
+    useEffect(() => {
+        updateData()
+    }, [addInfo.month, addInfo.site_id, addInfo.year])
+
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
+        const temp = articlePrice.map(ap => {
+            return { ...ap, month: addInfo.month, year: addInfo.year, acn: addInfo.acn, site_id: addInfo.site_id }
+        })
 
-        const response = editedActivity
-            ? await Client.patch(editedActivity.id, activity)
-            : await Client.post(activity, '', {}, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            })
+        const response = await Client.post(temp)
 
         if (response.ok) {
-            const message = editedActivity ? 'Mis à jour' : 'Enregistré'
+            const message = 'Enregistré'
             toast(message, {
                 closeButton: true,
                 type: 'success',
                 position: config.toastPosition
             })
-            editedActivity === undefined && setActivity(defaultActivity)
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
@@ -58,90 +118,108 @@ export function PriceForm({ editedActivity }: PriceFormProps): JSX.Element {
         }
     }
 
-    if (editedActivity !== undefined && activity.id === 0)
-        setActivity({
-            ...editedActivity,
+    const handleChange = (target: EventTarget & (HTMLSelectElement | HTMLInputElement)): void => {
+        const value = (target.name === "year" || target.name === "month") ? parseInt(target.value) : target.value
+        const temp = articlePrice.map(a => {
+            return { ...a, [target.name]: value }
         })
-
-    const handleChange = (target: EventTarget & (HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement)): void => {
-        setActivity({ ...activity, [target.name]: target.name === 'files' ? Array.from(target.files) : target.value })
-        if (target.value.length > 0 && error?.data.errors[target.name]) {
-            error.data.errors[target.name] = null
-        }
+        setAddInfo({ ...addInfo, [target.name]: value })
+        setArticlePrice([...temp])
     }
 
-    const removeFile = (index: number): void => {
-        activity.files?.splice(index, 1)
-        const a = { ...activity }
-        setActivity(a)
+    const addElement = () => {
+        setArticlePrice([...articlePrice, d])
+    }
+
+    const removeElement = (index: number) => {
+        setArticlePrice([...articlePrice.filter((_value, key) => key !== index)])
+    }
+
+    const handleFieldChange = (value: string | number, index: number, key: keyof ArticlePrice) => {
+        articlePrice[index] = { ...articlePrice[index], [key]: value }
+        setArticlePrice([...articlePrice])
     }
 
     return (
-        <form action="#" onSubmit={handleSubmit} method="post" encType="multipart/form-data">
+        <form action="#" onSubmit={handleSubmit} method="post">
             <div className="row mb-3">
                 <div className="col-xl-6">
-                    <Input
-                        label="Titre de l'activité"
-                        value={activity.title}
-                        error={error?.data?.errors?.title}
+                    <Select
+                        label="Site"
+                        options={sites}
+                        config={{ optionKey: 'id', valueKey: 'name' }}
+                        value={addInfo.site_id}
+                        error={error?.data?.errors?.site_id}
                         onChange={({ target }): void => handleChange(target)}
-                        name="title"
+                        name="site_id"
+                        controlled
                     />
                 </div>
                 <div className="col-xl-6">
                     <Input
-                        label="Lieu"
-                        value={activity.place}
-                        error={error?.data?.errors?.place}
+                        label="ACN"
+                        value={addInfo.acn}
+                        error={error?.data?.errors?.acn}
                         onChange={({ target }): void => handleChange(target)}
-                        name="place"
-                    />
-                </div>
-            </div>
-
-            <div className="row mb-3">
-                <div className="col-xl-6">
-                    <Input
-                        label="Date"
-                        value={activity.date}
-                        error={error?.data?.errors?.date}
-                        onChange={({ target }): void => handleChange(target)}
-                        type="date"
-                        name="date"
-                    />
-                </div>
-                <div className="col-xl-6 mb-3">
-                    <Input
-                        label="Pièces jointes"
-                        type='file'
-                        multiple
-                        accept='image/*, video/*'
-                        error={error?.data?.errors?.files}
-                        onChange={({ target }): void => handleChange(target)}
-                        name="files"
+                        name="acn"
                         required={false}
                     />
                 </div>
-                {activity.files && activity.files.length > 0 && <div className="row">{activity.files.map((file, index) => {
-                    const url = URL.createObjectURL(file)
-                    return <div key={index} className="col-3 mb-3" style={{ position: 'relative' }}>
-                        <Button onClick={() => removeFile(index)} style={{ position: 'absolute', top: 10, right: 20 }} icon="close" size="sm" mode="danger" />
-                        <img className="w-100" src={url} />
-                    </div>
-                })}</div>}
             </div>
 
-            <div className="row mb-4">
-                <div className="col-xl-12">
-                    <Textarea
-                        label="Compte rendu"
-                        value={activity.details}
-                        error={error?.data?.errors?.details}
+            <div className="row mb-3">
+                <div className="col-xl-6">
+                    <Select
+                        label="Mois"
+                        options={months}
+                        config={{ optionKey: 'id', valueKey: 'label' }}
+                        value={addInfo.month}
+                        error={error?.data?.errors?.month}
                         onChange={({ target }): void => handleChange(target)}
-                        name="details"
+                        name="month"
+                        controlled
+                    />
+                </div>
+                <div className="col-xl-6">
+                    <Select
+                        label="Année"
+                        options={years}
+                        value={addInfo.year}
+                        error={error?.data?.errors?.year}
+                        onChange={({ target }): void => handleChange(target)}
+                        name="year"
+                        controlled
                     />
                 </div>
             </div>
+
+            <hr className="mt-4" />
+
+            <table className="table table-striped mb-4">
+                <thead>
+                    <tr>
+                        <th>Article</th>
+                        <th>Unité</th>
+                        <th>Prix Unitaire (Ar)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {RequestState.loading && <tr>
+                        <td colSpan={4}>Chargement</td>
+                    </tr>}
+                    {articlePrice && articlePrice.map((element: ArticlePrice, index) => <tr key={index}>
+                        <td><Select onChange={({ target }) => handleFieldChange(target.value, index, 'article_id')} value={element.article_id} options={articles} config={{ optionKey: 'id', valueKey: 'designation' }} controlled /></td>
+                        <td><Select onChange={({ target }) => handleFieldChange(target.value, index, 'unit_id')} value={element.unit_id} options={units} config={{ optionKey: 'id', valueKey: 'name' }} controlled /></td>
+                        <td><Input onChange={({ target }) => handleFieldChange(target.value, index, 'price')} value={element.price} type="number" /></td>
+                        <td>
+                            {index === 0 && <Button onClick={addElement} type="button" mode="primary" icon="plus" />}
+                            {index > 0 && <Button onClick={() => removeElement(index)} type="button" mode="danger" icon="minus" />}
+                        </td>
+                    </tr>
+                    )}
+                </tbody>
+            </table>
 
             <Button
                 loading={RequestState.creating || RequestState.updating}

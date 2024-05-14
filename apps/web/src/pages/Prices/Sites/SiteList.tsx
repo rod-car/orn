@@ -13,7 +13,7 @@ export function SiteList(): ReactNode {
         datas: sites,
         RequestState,
         error
-    } = useApi<Unit>({
+    } = useApi<Site>({
         baseUrl: config.baseUrl,
         token: getToken(),
         url: '/prices/sites'

@@ -131,6 +131,20 @@ type Article = {
     description?: string
 }
 
+type ArticlePrice = {
+    id: number
+    site_id: number
+    article_id: number
+    unit_id: number
+    year: number
+    month: number
+    price: number
+    article?: Article
+    site?: Site
+    unit?: Unit
+    acn?: string
+}
+
 interface SchoolZ {
     [schoolName: string]: {
         'Nb élève pesé': number

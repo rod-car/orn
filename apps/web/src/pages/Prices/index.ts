@@ -15,7 +15,6 @@ export { ArticleList } from "./Article/ArticleList";
 export { ArticleForm } from "./Article/ArticleForm";
 
 export { PriceList } from "./PriceList";
-export { PriceEdit } from "./PriceEdit";
 export { PriceAdd } from "./PriceAdd";
 export { PriceRoot } from "./PriceRoot";
 export { PriceHome } from "./PriceHome"
