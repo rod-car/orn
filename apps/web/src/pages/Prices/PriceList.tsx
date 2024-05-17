@@ -67,8 +67,12 @@ export function PriceList(): ReactNode {
         for (const [key, value] of searchParams.entries()) {
             searchParamsObject = { ...searchParamsObject, [key]: value }
         }
-        setQueryParams({ ...queryParams, ...searchParamsObject })
-        return searchParamsObject
+
+        if (Object.values(searchParamsObject).length > 0) {
+            setQueryParams({ ...queryParams, ...searchParamsObject })
+            return searchParamsObject
+        }
+        return undefined
     }
 
     useEffect(() => {
@@ -111,7 +115,7 @@ export function PriceList(): ReactNode {
         </Block>
 
         <Block>
-            <table className="table table-striped">
+            <table className="table table-striped mb-4">
                 <thead>
                     <tr>
                         <th>Site</th>
@@ -132,7 +136,7 @@ export function PriceList(): ReactNode {
                     </tr>)}
                 </tbody>
             </table>
-            {articlePrices?.meta?.total > articlePrices?.meta?.per_page && <Pagination changePage={changePage} data={articlePrices} />}
+            {articlePrices?.total > articlePrices?.per_page && <Pagination changePage={changePage} data={articlePrices} />}
         </Block>
     </>
 }

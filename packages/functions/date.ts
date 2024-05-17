@@ -92,4 +92,5 @@ function getMonths(): Month[] {
 }
 
 export const months = getMonths()
+export const reverseYears = getYears().reverse()
 export const years = getYears()

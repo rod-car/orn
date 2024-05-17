@@ -85,7 +85,9 @@ export function PriceForm(): JSX.Element {
                 setAddInfo({ ...addInfo, acn: data.at(0)?.acn as string })
                 setArticlePrice([...data])
             } else {
-                setArticlePrice([...defaultArticlePrice])
+                setArticlePrice([...articlePrice.map(article => {
+                    return { ...article, price: 0 }
+                })])
             }
         }
     }

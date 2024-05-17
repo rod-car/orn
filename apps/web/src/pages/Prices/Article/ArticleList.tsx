@@ -84,7 +84,7 @@ export function ArticleList(): ReactNode {
             </Link>
         </div>
 
-        {RequestState.loading ? <ArticleLoading /> : <Block>
+        {RequestState.loading ? <ArticleLoading /> : <Block className="mb-4">
             <table className="table table-striped table-bordered">
                 <thead>
                     <tr>
