@@ -70,7 +70,7 @@ export function Login(): ReactNode {
                     </div>
 
                     <div className="d-flex justify-content-between align-items-center">
-                        <Link to="/register">Créer un compte</Link>
+                        <Link to="/auth/register">Créer un compte</Link>
                         <Button
                             loading={loading}
                             type="submit"

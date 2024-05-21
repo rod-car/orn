@@ -90,38 +90,17 @@ export function ActivityTypeList(): ReactNode {
             <table className="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nom du type</th>
-                        <th>Résultats attendu</th>
+                        <th>Nom de l'activité</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {activities && activities.data?.map((activity: Activity) => <tr>
-                        <td>{activity.id}</td>
-                        <td>{activity.title}</td>
-                        <td>{activity.date}</td>
-                        <td className="text-nowrap">
-                            <Link
-                                className="btn-sm me-2 btn btn-primary"
-                                to={`/activities/types/edit/${1}`}
-                            >
-                                <i className="fa fa-edit"></i>
-                            </Link>
-                            <Button
-                                type="button"
-                                mode="danger"
-                                icon="trash"
-                                size="sm"
-                                onClick={(): void => {
-                                    handleDelete(1)
-                                }}
-                            />
-                        </td>
-                    </tr>)}
+                    <tr>
+                        <td>Jardin scolaire</td>
+                        <td>Supprimer</td>
+                    </tr>
                 </tbody>
             </table>
         </Block>}
-        {activities?.meta?.total > activities?.meta?.per_page && <Pagination changePage={changePage} data={activities} />}
     </>
 }

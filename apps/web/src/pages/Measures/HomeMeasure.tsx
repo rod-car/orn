@@ -59,7 +59,7 @@ export function HomeMeasure(): React.ReactElement {
             </div>
 
             <div className="row mb-5">
-                <NavLink to="/student/list" className="col-4 clickable-card">
+                <NavLink to="/anthropo-measure/student/list" className="col-4 clickable-card">
                     <HomeCard
                         title="Étudiant"
                         icon="users"
@@ -68,7 +68,7 @@ export function HomeMeasure(): React.ReactElement {
                     />
                 </NavLink>
 
-                <NavLink to="/school/list" className="col-4 clickable-card">
+                <NavLink to="/anthropo-measure/school/list" className="col-4 clickable-card">
                     <HomeCard
                         title="Écoles"
                         icon="home"
@@ -77,7 +77,7 @@ export function HomeMeasure(): React.ReactElement {
                     />
                 </NavLink>
 
-                <NavLink to="/survey/list" className="col-4 clickable-card">
+                <NavLink to="/anthropo-measure/survey/list" className="col-4 clickable-card">
                     <HomeCard
                         title="Mésures antrhopo"
                         icon="bar-chart"

@@ -90,14 +90,14 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
-                                <NavLink className={`nav-link`} aria-current="page" to="/">
+                                <NavLink className={`nav-link`} aria-current="page" to="/anthropo-measure">
                                     <i className="fa fa-gauge me-2"></i>Tableau de bord
                                 </NavLink>
                             </li>
                             <DropDown
                                 id="student-dropdown"
                                 label="Étudiants"
-                                base="/student"
+                                base="/anthropo-measure/student"
                                 icon="users"
                                 items={[
                                     {
@@ -121,7 +121,7 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                             <DropDown
                                 id="school-dropdown"
                                 label="Écoles"
-                                base="/school"
+                                base="/anthropo-measure/school"
                                 icon="school"
                                 items={[
                                     {
@@ -142,7 +142,7 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                             <DropDown
                                 id="abaques"
                                 label="Abaques"
-                                base="/measure"
+                                base="/anthropo-measure/measure"
                                 icon="database"
                                 items={[
                                     { url: '/add', label: 'Ajouter', icon: 'plus' },
@@ -158,7 +158,7 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                             <DropDown
                                 id="anthropo-measure"
                                 label="Mesure antropo"
-                                base="/survey"
+                                base="/anthropo-measure/survey"
                                 icon="ruler"
                                 items={[
                                     { url: '/add', label: 'Nouvelle mesure', icon: 'plus' },

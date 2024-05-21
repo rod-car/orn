@@ -29,7 +29,7 @@ export function DetailsMeasure(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Détails: {student && student[0]?.student?.lastname}</h2>
-                <Link to="/student/list" className="btn primary-link">
+                <Link to="/anthropo-measure/student/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des étudiants
                 </Link>
             </div>

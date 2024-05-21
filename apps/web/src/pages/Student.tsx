@@ -247,10 +247,10 @@ export function Student(): JSX.Element {
                     >
                         Recharger
                     </Button>
-                    <Link to="/student/add" className="btn secondary-link me-2">
+                    <Link to="/anthropo-measure/student/add" className="btn secondary-link me-2">
                         <i className="fa fa-plus me-2"></i>Nouveau
                     </Link>
-                    <Link to="/student/import" className="btn primary-link">
+                    <Link to="/anthropo-measure/student/import" className="btn primary-link">
                         <i className="fa fa-file me-2"></i>Importer une liste
                     </Link>
                 </div>
@@ -422,13 +422,13 @@ export function Student(): JSX.Element {
                                                 <td className="text-nowrap">
                                                     <Link
                                                         className="btn-sm me-2 btn btn-info text-white"
-                                                        to={`/student/details/${student.id}`}
+                                                        to={`/anthropo-measure/student/details/${student.id}`}
                                                     >
                                                         <i className="fa fa-folder"></i>
                                                     </Link>
                                                     <Link
                                                         className="btn-sm me-2 btn btn-primary"
-                                                        to={`/student/edit/${student.id}`}
+                                                        to={`/anthropo-measure/student/edit/${student.id}`}
                                                     >
                                                         <i className="fa fa-edit"></i>
                                                     </Link>

@@ -32,7 +32,7 @@ export function EditSchool(): JSX.Element {
                 ) : (
                     <Skeleton count={1} style={{ height: 40 }} containerClassName="w-50" />
                 )}
-                <NavLink to="/school/list" className="btn btn-primary">
+                <NavLink to="/anthropo-measure/school/list" className="btn btn-primary">
                     <i className="fa fa-list me-2"></i>Liste des établissements
                 </NavLink>
             </div>

@@ -85,10 +85,10 @@ export function Survey(): JSX.Element {
                     >
                         Recharger
                     </Button>
-                    <Link to="/survey/add" className="btn secondary-link me-2">
+                    <Link to="/anthropo-measure/survey/add" className="btn secondary-link me-2">
                         <i className="fa fa-plus me-2"></i>Nouvelle mésure
                     </Link>
-                    <Link to="/survey/add-student" className="btn primary-link">
+                    <Link to="/anthropo-measure/survey/add-student" className="btn primary-link">
                         <i className="fa fa-plus me-2"></i>Formulaire de mesure
                     </Link>
                 </div>
@@ -123,13 +123,13 @@ export function Survey(): JSX.Element {
                                     <td>
                                         <Link
                                             className="btn-sm me-2 btn btn-info text-white"
-                                            to={`/survey/details/${survey.id}`}
+                                            to={`/anthropo-measure/survey/details/${survey.id}`}
                                         >
                                             <i className="fa fa-folder"></i>
                                         </Link>
                                         <Link
                                             className="btn-sm me-2 btn btn-primary"
-                                            to={`/survey/edit/${survey.id}`}
+                                            to={`/anthropo-measure/survey/edit/${survey.id}`}
                                         >
                                             <i className="fa fa-edit"></i>
                                         </Link>

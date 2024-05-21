@@ -85,7 +85,7 @@ export function School(): JSX.Element {
                     >
                         Rechargher
                     </Button>
-                    <Link to="/school/add" className="btn primary-link">
+                    <Link to="/anthropo-measure/school/add" className="btn primary-link">
                         <i className="fa fa-plus me-2"></i>Nouveau
                     </Link>
                 </div>
@@ -136,13 +136,13 @@ export function School(): JSX.Element {
                                     <td>
                                         <Link
                                             className="btn-sm me-2 btn btn-info text-white"
-                                            to={`/school/details/${school.id}`}
+                                            to={`/anthropo-measure/school/details/${school.id}`}
                                         >
                                             <i className="fa fa-folder"></i>
                                         </Link>
                                         <Link
                                             className="btn-sm me-2 btn btn-primary"
-                                            to={`/school/edit/${school.id}`}
+                                            to={`/anthropo-measure/school/edit/${school.id}`}
                                         >
                                             <i className="fa fa-edit"></i>
                                         </Link>

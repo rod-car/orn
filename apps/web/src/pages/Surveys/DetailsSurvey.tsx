@@ -142,10 +142,10 @@ export function DetailsSurvey(): JSX.Element {
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h5 className="m-0">Détails de la mésure phase: {survey && survey.phase}</h5>
                 <div className="d-flex">
-                    <Link to="/survey/list" className="btn secondary-link me-2">
+                    <Link to="/anthropo-measure/survey/list" className="btn secondary-link me-2">
                         <i className="fa fa-list me-2"></i>Liste des mésures
                     </Link>
-                    <Link to={`/survey/${id}/import-result`} className="btn primary-link">
+                    <Link to={`/anthropo-measure/survey/${id}/import-result`} className="btn primary-link">
                         <i className="fa fa-file me-2"></i>Importer des résultat
                     </Link>
                 </div>
@@ -343,14 +343,14 @@ export function DetailsSurvey(): JSX.Element {
                                         </td>
                                         <td className="text-center text-nowrap">
                                             <Link
-                                                to={`/survey/edit-student/${student.id}/${survey.id}`}
+                                                to={`/anthropo-measure/survey/edit-student/${student.id}/${survey.id}`}
                                                 style={{ fontSize: '9pt' }}
                                                 className="btn btn-primary btn-sm me-1"
                                             >
                                                 <i className="fa fa-edit"></i>
                                             </Link>
                                             <Link
-                                                to={`/student/details/${student.id}`}
+                                                to={`/anthropo-measure/student/details/${student.id}`}
                                                 style={{ fontSize: '9pt' }}
                                                 className="btn btn-info btn-sm me-1"
                                             >
