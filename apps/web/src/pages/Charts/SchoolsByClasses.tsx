@@ -77,7 +77,7 @@ export function SchoolsByClasses(): JSX.Element {
         const labels = schools.map((school) => school.name)
 
         const datasets = classes.map((classe, key) => {
-            const data = realData[scholarYear]
+            const data = realData && realData[scholarYear]
 
             return {
                 label: classe.notation,
