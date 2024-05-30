@@ -23,14 +23,15 @@ import {
     State,
     Student,
     Survey
-} from './pages'
-import { PrivateRoute } from './components/PrivateRoute'
-import { GuestRoute } from './components/GuestRoute'
+} from '@renderer/pages'
+import { PrivateRoute } from '@renderer/components/PrivateRoute'
+import { GuestRoute } from '@renderer/components/GuestRoute'
 import { ActivityRoot, ActivityHome, ActivityAdd, ActivityList, ActivityEdit, AdminActivityList, ActivityTypeList, ActivityTypeEdit, ActivityTypeAdd, ActivityStatistics } from '@renderer/pages/Activities'
 import { MeasureRoot, ListMeasure, AddMeasure, EditMeasure, ImportMeasure, DetailsMeasure, HomeMeasure } from '@renderer/pages/Measures'
 import { Login, Register, AuthRoot } from '@renderer/pages/Auth'
 import { AppRoot, About, Contributors, HomePage } from '@renderer/pages/App'
 import { ArticleAdd, ArticleEdit, ArticleList, ArticleShow, PriceAdd, PriceHome, PriceList, PriceRoot, SiteAdd, SiteEdit, SiteList, UnitAdd, UnitEdit, UnitList } from '@renderer/pages/Prices'
+import { JardinAdd, JardinHome, JardinList, JardinRoot, JardinStatistics, Engrais, Semence, Materiel, Steps, StepsData, JardinEdit, JardinShow } from '@renderer/pages/Activities/JardinScolaire'
 
 const router = createBrowserRouter([
     {
@@ -287,6 +288,57 @@ const router = createBrowserRouter([
             {
                 path: 'edit/:id',
                 element: <ActivityEdit />
+            }
+        ]
+    },
+    {
+        path: '/scholar-garden',
+        element: <JardinRoot />,
+        errorElement: <JardinRoot error={true} />,
+        children: [
+            {
+                path: '',
+                element: <JardinHome />
+            },
+            {
+                path: 'add',
+                element: <JardinAdd />
+            },
+            {
+                path: 'statistics',
+                element: <JardinStatistics />
+            },
+            {
+                path: 'list',
+                element: <JardinList />
+            },
+            {
+                path: 'materiels',
+                element: <Materiel />
+            },
+            {
+                path: 'semences',
+                element: <Semence />
+            },
+            {
+                path: 'engrais',
+                element: <Engrais />
+            },
+            {
+                path: 'steps',
+                element: <Steps />
+            },
+            {
+                path: 'steps-data',
+                element: <StepsData />
+            },
+            {
+                path: 'show/:id',
+                element: <JardinShow />
+            },
+            {
+                path: 'edit/:id',
+                element: <JardinEdit />
             }
         ]
     },

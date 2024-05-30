@@ -2,7 +2,7 @@ import { useApi, useExcelReader } from 'hooks'
 import { ChangeEvent } from 'react'
 import { Link } from '@renderer/components'
 import { Block, Button, Input, Spinner } from 'ui'
-import { config, getToken } from '../../config'
+import { config, getToken } from '@renderer/config'
 import { toast } from 'react-toastify'
 import { isDate } from 'functions'
 

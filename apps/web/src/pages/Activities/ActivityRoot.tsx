@@ -16,7 +16,7 @@ import '../../assets/custom.css?asset'
 import logo from '../../assets/logo.png'
 
 import { useApi, useAuth } from 'hooks'
-import { config, getToken } from '../../config'
+import { config, getToken } from '@renderer/config'
 import { Button } from 'ui'
 
 export function ActivityRoot({ error = false }: { error?: boolean }): ReactNode {

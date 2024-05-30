@@ -54,7 +54,7 @@ export function AuthRoot({ error = false }: { error?: boolean }): ReactNode {
                                 <NavLink
                                     className={`nav-link`}
                                     aria-current="page"
-                                    to="/register"
+                                    to="/auth/register"
                                 >
                                     <i className="fa fa-right-to-bracket me-2"></i>
                                     Inscription

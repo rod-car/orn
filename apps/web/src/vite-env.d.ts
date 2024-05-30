@@ -188,3 +188,43 @@ interface SurveySchoolZ {
     [id: string]: School
 }
 
+type Semence = {
+    id: number
+    name: string
+    unit: string
+}
+
+type Materiel = {
+    key: Key | null | undefined
+    id: number
+    name: string
+    description: string
+}
+
+type Engrais = {
+    id: number
+    name: string
+    unit: string
+    type: string
+}
+
+type Garden = {
+    id: number
+    problem: string,
+    solution: string,
+    perspective: string,
+    annex: string,
+    year: number,
+    school_id: number,
+    school?: School
+    materials?: Partial<Materiel>[],
+    engrais?: Partial<Engrais>[],
+    semences?: Partial<Semence>[]
+}
+
+type Steps = {
+    id: number
+    title: string
+    table: string
+    columns_data?: Record<string, string>
+}

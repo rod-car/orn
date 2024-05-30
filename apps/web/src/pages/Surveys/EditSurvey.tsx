@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
 import { Block, Button, Input } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config, getToken } from '../../config'
+import { config, getToken } from '@renderer/config'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
 

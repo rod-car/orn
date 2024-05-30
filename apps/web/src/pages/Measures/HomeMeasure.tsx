@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import React, { useCallback, useEffect, useState } from 'react'
-import { config, getToken } from '../../config'
+import { config, getToken } from '@renderer/config'
 import { Button, HomeCard, Spinner } from 'ui'
 import { SchoolsByClasses, SchoolsByScholarYear, ZBySchool } from '..'
 import { NavLink } from 'react-router-dom'
@@ -103,9 +103,9 @@ export function HomeMeasure(): React.ReactElement {
                 </div>
             </div>
 
-            <div className="row mb-5">
+            {/*<div className="row mb-5">
                 <div className="col-12">{loaded ? <ZBySchool /> : <Spinner />}</div>
-            </div>
+            </div>*/}
         </>
     )
 }

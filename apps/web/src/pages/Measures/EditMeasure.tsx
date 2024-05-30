@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { config, abaque as abaqueConfig, getToken } from '../../config'
+import { config, abaque as abaqueConfig, getToken } from '@renderer/config'
 import { Button, Input } from 'ui'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'

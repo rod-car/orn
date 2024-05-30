@@ -1,6 +1,6 @@
 import { useApi, usePdf } from 'hooks'
 import { ReactNode, useCallback, useEffect, useMemo, useRef } from 'react'
-import { config, getToken } from '../../config'
+import { config, getToken } from '@renderer/config'
 import { Button, Spinner } from 'ui'
 
 import {
@@ -43,7 +43,7 @@ export const options = {
                     size: 13
                 }
             },
-            suggestedMax: 5
+            suggestedMin: 0
         },
         x: {
             ticks: {

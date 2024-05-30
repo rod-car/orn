@@ -2,7 +2,7 @@ import { useAuth } from 'hooks'
 import { FormEvent, ReactNode, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Block, Button, Checkbox, Input } from 'ui'
-import { config } from '../../config'
+import { config } from '@renderer/config'
 import { toast } from 'react-toastify'
 
 export function Register(): ReactNode {

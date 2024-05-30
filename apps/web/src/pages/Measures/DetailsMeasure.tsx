@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { useParams } from 'react-router-dom'
 import { ApiErrorMessage, Block } from 'ui'
-import { config, getToken } from '../../config'
+import { config, getToken } from '@renderer/config'
 import { useEffect, useState } from 'react'
 import { Link } from '@renderer/components'
 

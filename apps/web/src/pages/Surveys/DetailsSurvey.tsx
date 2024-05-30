@@ -1,9 +1,9 @@
-import { useApi, useExcelReader, usePdf } from 'hooks'
+import { useApi, usePdf } from 'hooks'
 import { useParams } from 'react-router-dom'
 import { Block, Button, Input, Select } from 'ui'
-import { config, getToken } from '../../config'
+import { config, getToken } from '@renderer/config'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ageFull, ageMonth, number_array, range } from 'functions'
+import { ageMonth, ageYear, number_array, range } from 'functions'
 import { Link } from '@renderer/components'
 import { Pagination } from 'react-laravel-paginex'
 import Skeleton from 'react-loading-skeleton'
@@ -13,40 +13,33 @@ export function DetailsSurvey(): JSX.Element {
     const [query, setQuery] = useState<string | number>('')
     const [school, setSchool] = useState<number>(0)
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
-
-    const { toExcel } = useExcelReader()
+    const studentRef = useRef()
+    
+    const { id } = useParams()
     const { exportToPdf } = usePdf()
 
-    const {
-        Client,
-        data: survey,
-        RequestState
-    } = useApi<Survey>({
+    const { Client, data: survey, RequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
         token: getToken(),
         url: 'surveys'
     })
 
-    const {
-        Client: SchoolClient,
-        datas: schools,
-        RequestState: SchoolRequestState
-    } = useApi<Survey>({
+    const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
         baseUrl: config.baseUrl,
         token: getToken(),
         url: 'schools',
         key: 'data'
     })
 
-    const { id } = useParams()
     const requestData = {
         per_page: perPage,
         q: query,
-        school: school
+        school: school,
+        regenerate: false
     }
 
     const getSurvey = async (id: number): Promise<void> => {
-        await Client.find(id, requestData)
+        await Client.find(id, { ...requestData, q: query, regenerate: true })
     }
 
     const refresh = useCallback(() => {
@@ -56,7 +49,7 @@ export function DetailsSurvey(): JSX.Element {
 
     useEffect(() => {
         refresh()
-        // SchoolClient.get()
+        SchoolClient.get()
     }, [])
 
     const changePage = (data: { page: number }): void => {
@@ -79,6 +72,10 @@ export function DetailsSurvey(): JSX.Element {
         await Client.find(parseInt(id as string), requestData)
     }
 
+    /**
+     * Traiter la recherche d'un étudiant
+     * @param target 
+     */
     const handleSearch = async (target: EventTarget & HTMLInputElement): Promise<void> => {
         const { value } = target
 
@@ -96,45 +93,15 @@ export function DetailsSurvey(): JSX.Element {
         setTimeoutId(newTimeoutId)
     }
 
-    const studentRef = useRef()
-
-    const printList = (): void => {
-        const headers: unknown = [
-            'Numero',
-            'Nom',
-            'Prenoms',
-            'Date de naissance',
-            'Age',
-            'Parents',
-            'Etablissement',
-            'Classe'
-        ]
-        const list: unknown[][] = [headers]
-        const fileName = 'Liste des etudiants.xlsx'
-
-        const datas = survey?.students.data as {
-            student: Student
-            school: School
-            classe: Classes
-        }[]
-        datas.map((data) => {
-            list.push([
-                data.student.number,
-                data.student.firstname,
-                data.student.lastname,
-                data.student.birth_date,
-                ageFull(data.student.birth_date),
-                data.student.parents,
-                data.school.name,
-                data.classe.name
-            ])
-        })
-
-        toExcel(list, fileName)
-    }
-
+    /**
+     * Imprimer vers PDF
+     */
     const printPdf = (): void => {
         exportToPdf(studentRef, { filename: 'Liste des etudiants.pdf' })
+    }
+
+    async function exportExcel() {
+        await Client.post({ ...requestData, q: query, paginate: 0 }, '/' + survey?.id + '/to-excel')
     }
 
     return (
@@ -198,6 +165,7 @@ export function DetailsSurvey(): JSX.Element {
                                     placeholder="Tous"
                                     config={{ optionKey: 'id', valueKey: 'name' }}
                                     options={schools}
+                                    loading={SchoolRequestState.loading}
                                     value={school}
                                     name="school"
                                     onChange={({ target }): Promise<void> => filterStudents(target)}
@@ -218,7 +186,7 @@ export function DetailsSurvey(): JSX.Element {
                                     icon="print"
                                     mode="warning"
                                     type="button"
-                                    onClick={printList}
+                                    onClick={exportExcel}
                                 >
                                     Exporter
                                 </Button>
@@ -273,7 +241,7 @@ export function DetailsSurvey(): JSX.Element {
                                 <th className="text-nowrap">Nom et prénoms</th>
                                 <th className="text-nowrap">Date de pésée</th>
                                 <th className="text-nowrap">Taille (cm)</th>
-                                <th className="text-nowrap">Poids (g)</th>
+                                <th className="text-nowrap">Poids (Kg)</th>
                                 <th className="text-nowrap">Age (mois)</th>
                                 <th className="text-nowrap">IMC (kg/m²)</th>
                                 <th className="text-nowrap">Z IMC/A</th>
@@ -317,29 +285,29 @@ export function DetailsSurvey(): JSX.Element {
                                         <td>{student.pivot.weight}</td>
                                         <td>
                                             {student.birth_date
-                                                ? ageMonth(student.birth_date)
+                                                ? `${ageMonth(student.birth_date, student.pivot.date)} (${ageYear(student.birth_date, student.pivot.date)})`
                                                 : '-'}
                                         </td>
                                         <td className="text-center text-nowrap">
                                             {student.pivot.imc}
                                         </td>
                                         <td className="text-center text-nowrap">
-                                            {student.pivot.z_imc_age}
+                                            {student.pivot.age_year > 5 ? student.pivot.z_imc_age : '-'}
                                         </td>
                                         <td className="text-center text-nowrap">
-                                            {student.pivot.z_height_weight}
+                                            {student.pivot.age_year <= 5 ? student.pivot.z_height_weight : '-'}
                                         </td>
                                         <td className="text-center text-nowrap">
-                                            {student.pivot.z_weight_age_female ?? '-'}
+                                            {student.gender === 'Fille' ? student.pivot.z_weight_age : '-'}
                                         </td>
                                         <td className="text-center text-nowrap">
-                                            {student.pivot.z_weight_age_male ?? '-'}
+                                            {student.gender !== 'Fille' ? student.pivot.z_weight_age : '-'}
                                         </td>
                                         <td className="text-center text-nowrap">
-                                            {student.pivot.z_height_age_female ?? '-'}
+                                            {student.gender === 'Fille' ? student.pivot.z_height_age : '-'}
                                         </td>
                                         <td className="text-center text-nowrap">
-                                            {student.pivot.z_height_age_male ?? '-'}
+                                            {student.gender !== 'Fille' ? student.pivot.z_height_age : '-'}
                                         </td>
                                         <td className="text-center text-nowrap">
                                             <Link

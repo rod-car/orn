@@ -34,15 +34,15 @@ export const ageLong = (birth_date: string | null): string => {
     return ageYear.toString() + " ans " + leftMonths.toString() + " mois"
 }
 
-export const getAgeYear = (birth_date: string): number => {
+export const getAgeYear = (birth_date: string, date_compare: string | undefined = undefined): number => {
     const date = parse(birth_date)
-    const currentDate = new Date
+    const currentDate = date_compare === undefined ? new Date : parse(date_compare)
     return differenceInYears(currentDate, date)
 }
 
-export const getAgeMonth = (birth_date: string): number => {
+export const getAgeMonth = (birth_date: string, date_compare: string | undefined = undefined): number => {
     const date = parse(birth_date)
-    const currentDate = new Date
+    const currentDate = date_compare === undefined ? new Date : parse(date_compare)
     return differenceInMonths(currentDate, date)
 }
 

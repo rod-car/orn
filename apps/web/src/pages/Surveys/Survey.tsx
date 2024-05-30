@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { Link } from '@renderer/components'
-import { config, getToken } from '../../config'
+import { config, getToken } from '@renderer/config'
 import { Block, Button } from 'ui'
 import { useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'

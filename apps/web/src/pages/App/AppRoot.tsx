@@ -17,7 +17,7 @@ import logo from '@renderer/assets/logo.png'
 import { useApi, useAuth } from 'hooks'
 import { config, getToken } from '@renderer/config'
 import { Button } from 'ui'
-import { DropDown, ErrorComponent, Navigation } from '@renderer/components'
+import { ErrorComponent, Navigation } from '@renderer/components'
 
 export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()
@@ -99,9 +99,14 @@ export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
                                     <i className="fa fa-ruler me-2"></i>Mésure anthropo
                                 </NavLink>
                             </li>
-                            <li className="nav-item">
+                            {/*<li className="nav-item">
                                 <NavLink className={`nav-link`} aria-current="page" to="/activities">
                                     <i className="fa fa-cog me-2"></i>Activités
+                                </NavLink>
+                            </li>*/}
+                            <li className="nav-item">
+                                <NavLink className={`nav-link`} aria-current="page" to="/scholar-garden">
+                                    <i className="fa fa-cog me-2"></i>Jardin Scolaire
                                 </NavLink>
                             </li>
                             <li className="nav-item">

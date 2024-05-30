@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react'
 import { Button, Input, Textarea } from 'ui'
 import { useApi } from 'hooks'
-import { config, getToken } from '../../config'
+import { config, getToken } from '@renderer/config'
 import { toast } from 'react-toastify'
 
 type ActivityFormProps = {

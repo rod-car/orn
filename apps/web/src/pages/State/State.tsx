@@ -1,9 +1,10 @@
 import { Button } from 'ui'
-import { SchoolByScholarYear } from './SchoolByScholarYear'
 import { SchoolBySchoolYearClass } from './SchoolBySchoolYearClass'
 import { StudentBySchoolZ } from './StudentBySchoolZ'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { getPdf } from '@renderer/utils'
+import { scholar_years } from 'functions'
+import { StudentBySchoolZValue } from './StudentBySchoolZValue'
 
 export function State(): JSX.Element {
     const exportPdf = useCallback(async (className = 'custom') => {
@@ -11,6 +12,8 @@ export function State(): JSX.Element {
 
         getPdf({ fileName: `${fileName}.pdf`, className: className, title: 'États des étudiants' })
     }, [])
+
+    const [scholarYear, _setScholarYear] = useState<string>(scholar_years().at(1) ?? '')
 
     return (
         <>
@@ -30,12 +33,12 @@ export function State(): JSX.Element {
             </div>
 
             <div className="mb-5">
-                <SchoolByScholarYear />
+                <StudentBySchoolZValue scholarYear={scholarYear} />
             </div>
 
-            <div className="mb-5">
-                <StudentBySchoolZ />
-            </div>
+            {<div className="mb-5">
+                <StudentBySchoolZ scholarYear={scholarYear} />
+            </div>}
         </>
     )
 }

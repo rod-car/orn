@@ -227,7 +227,11 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
             <div className="container mb-5" style={{ marginTop: 130, minHeight: '90vh' }}>
                 <ToastContainer />
                 {userData !== null && <Navigation />}
-                {error ? <ErrorComponent error={errorResponse.error} /> : <Outlet />}
+                {error ? <ErrorComponent error={errorResponse.error ?? {
+                    status: 500,
+                    statusText: "Une erreur est survenue",
+                    data: null
+                }} /> : <Outlet />}
             </div>
 
             <footer className="bg-light p-4">

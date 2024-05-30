@@ -1,40 +1,40 @@
 import { useApi } from 'hooks'
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { config, getToken } from '../../config'
-import { Button, Input, Select, SearchableSelect, Spinner, Block } from 'ui'
+import { FormEvent, useEffect, useState } from 'react'
+import { config, getToken } from '@renderer/config'
+import { Input, Select, Block, Spinner } from 'ui'
 import { toast } from 'react-toastify'
-import { isNumber } from 'functions/number'
 import { Link } from '@renderer/components'
 import Skeleton from 'react-loading-skeleton'
+import { scholar_years } from 'functions'
 
-type BaseValue = { name: string; value: number }
-type Measure = {
+type StudentData = {
     student_id: number
-    date: string
-    length: number | string
-    weight: number | string
-}
-
-const defaultMeasure = {
-    student_id: 0,
-    date: '',
-    length: 0,
-    weight: 0
+    fullname: string
+    precedentHeight: number | null | undefined
+    precedentWeight: number | null | undefined
+    height: number
+    weight: number
+    birth_date: string
+    saved: boolean
 }
 
 export function AddSurveyStudent(): JSX.Element {
-    const { student_id, survey_id } = useParams()
-    const [studentId, setStudentId] = useState<number | undefined>(
-        student_id ? parseInt(student_id) : undefined
-    )
+    const [formData, setFormData] = useState<{school_id: 0,
+        class_id: number,
+        survey_id: number,
+        date: string,
+        scholar_year: string,
+        students: StudentData[]
+    }>({
+        school_id: 0,
+        class_id: 0,
+        survey_id: 0,
+        date: '',
+        scholar_year: '',
+        students: []
+    })
 
-    const [selectedStudent, setSelectedStudent] = useState<Student>()
-    const [phase, setPhase] = useState<number>(0)
-    const [measureData, setMeasureData] = useState<Measure>(defaultMeasure)
-    const [precedentMeasureData, setPrecedentMeasureData] =
-        useState<Omit<Measure, 'student_id'>>(defaultMeasure)
-    const [precedentPhase, setPrecedentPhase] = useState(0)
+    const [precedentPhase, setPrecedentPhase] = useState<number | null | undefined>(null)
 
     const {
         Client: SurveyClient,
@@ -47,160 +47,150 @@ export function AddSurveyStudent(): JSX.Element {
         key: 'data'
     })
 
-    const { Client: StudentClient } = useApi<Student>({
+    const { Client: StudentClient, RequestState: StudentRequestState } = useApi<Student>({
         baseUrl: config.baseUrl,
         token: getToken(),
         url: '/students',
         key: 'data'
     })
 
-    useEffect(() => {
-        const getData = async (): Promise<void> => {
-            if (student_id !== undefined && survey_id !== undefined) {
-                const student = (await StudentClient.find(student_id, {
-                    student_only: 1
-                })) as unknown as Student
-                const survey = (await SurveyClient.find(survey_id, {
-                    paginate_student: 0
-                })) as Survey
-                const surveys = await SurveyClient.get({
-                    paginate_student: 0
-                })
+    const { Client: SchoolClient, RequestState: SchoolRS, datas: schools } = useApi<School>({
+        baseUrl: config.baseUrl,
+        token: getToken(),
+        url: '/schools',
+        key: 'data'
+    })
 
-                setPhase(survey.phase)
-                setSelectedStudent(student)
-                handleSurveyChange(surveys, survey.phase, student.id)
-            } else {
-                SurveyClient.get({ paginate_student: 0 })
-            }
-        }
-        getData()
+    const { Client: ClassClient, RequestState: ClassRS, datas: classes } = useApi<School>({
+        baseUrl: config.baseUrl,
+        token: getToken(),
+        url: '/classes',
+        key: 'data'
+    })
+
+    useEffect(() => {
+        SurveyClient.get()
+        ClassClient.get()
+        SchoolClient.get()
     }, [])
 
-    const handleStudentChange = (option, value): void => {
-        const student = option as unknown as Student
-        setSelectedStudent(student)
-        handleSurveyChange(surveys, phase, student.id)
-    }
+    function handleChange(target: EventTarget & (HTMLInputElement | HTMLSelectElement), index?: number) {
+        if (target.name.includes('students') && index !== undefined) {
+            const nameParts = target.name.split('.')
+            
+            formData.students[index][nameParts[1]] = target.value
+            setFormData({...formData})
 
-    const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
-        event.preventDefault()
+            setTimeout(async function() {
+                // Check if can update in the database
+                const selectedStudent = formData.students[index]
+                const height = selectedStudent.height
+                const weight = selectedStudent.weight
 
-        if (selectedStudent === undefined) {
-            toast('Veuillez selectionner un étudiant', {
-                type: 'error',
-                position: config.toastPosition
-            })
-            return
-        }
-
-        if (precedentMeasureData.length > measureData.length) {
-            toast("La taille de l'étudiant ne doit pas être inférieur a la taille précedente", {
-                type: 'error',
-                position: config.toastPosition
-            })
-            return
-        }
-
-        const form = event.target as HTMLFormElement
-        const data = new FormData(form)
-        data.append('student_id', selectedStudent.id as unknown as string)
-        const response = await SurveyClient.post(data, `/${phase}/add-student`)
-
-        if (response.ok) {
-            toast('Enregistré', {
-                type: 'success',
-                position: config.toastPosition
-            })
-
-            setMeasureData({ ...measureData, length: 0, weight: 0 })
-            setSelectedStudent(undefined)
-            setPrecedentMeasureData(defaultMeasure)
+                if (height > 0 && weight > 0) {
+                    if ((selectedStudent.precedentHeight && selectedStudent.precedentHeight > height)) {
+                        toast("La taille de l'étudiant ne doit pas être inférieur a la taille précedente", {
+                            position: config.toastPosition,
+                            type: "error"
+                        })
+                        return
+                    }
+                    const formDatas = {
+                        student_id: selectedStudent.student_id,
+                        date: formData.date,
+                        school_id: formData.school_id,
+                        scholar_year: formData.scholar_year,
+                        weight: selectedStudent.weight,
+                        length: selectedStudent.height
+                    }
+                    const response = await SurveyClient.post(formDatas, `/${formData.survey_id}/add-student`)
+                    if (response.ok) {
+                        formData.students[index].saved = true
+                        setFormData({...formData})
+                    }
+                }
+            }, 1000)
         } else {
-            toast(response.message, {
-                type: 'error',
-                position: config.toastPosition
-            })
+            setFormData({...formData, [target.name]: target.value})
         }
     }
 
-    const handlePhaseChange = (e: ChangeEvent<HTMLSelectElement>): void => {
-        const phase = parseInt(e.target.value)
-        handleSurveyChange(surveys, isNaN(phase) ? 0 : phase, selectedStudent?.id)
-        setPhase(isNaN(phase) ? 0 : phase)
+    function canDisplayTable(): boolean {
+        return formData.school_id !== 0 && formData.class_id !== 0 && formData.scholar_year !== '' && formData.date !== '' && formData.survey_id !== 0
     }
 
-    const handleSurveyChange = (
-        surveys: Survey[],
-        phase: number,
-        student_id: number | undefined
-    ): void => {
-        let precedentSurvey: Survey | undefined = undefined
-        let precedentStudentDatas: Student | undefined = undefined
+    useEffect(() => {
+        async function getStudents() {
+            if (formData.school_id && formData.class_id && formData.scholar_year && formData.survey_id) {
+                // Get list of the students concerned by the criteria
+                let measuredStudents: Student[] = []
+                let precedentMeasuredStudents: Student[] = []
 
-        for (let index = phase; index > 1; index--) {
-            precedentSurvey = surveys.find((survey) => survey.phase == index - 1)
-            setPrecedentPhase(index - 1)
-
-            if (precedentSurvey !== undefined) {
-                precedentStudentDatas = precedentSurvey?.students.find((student) => {
-                    return student.id === student_id
+                const selectedSurvey = await SurveyClient.find(formData.survey_id, {
+                    paginate_student: 0
                 })
 
-                if (precedentStudentDatas !== undefined) break
+                let precedentSurveyId: number | null = null;
+                
+                for (let index = formData.survey_id; index > 1; index--) {
+                    precedentSurveyId = index - 1
+                    if (precedentSurveyId === 1) {
+                        const precedentSurvey = await SurveyClient.find(precedentSurveyId, {
+                            paginate_student: 0
+                        })
+            
+                        if (precedentSurvey !== undefined) {
+                            precedentMeasuredStudents = precedentSurvey?.students as Student[]
+                            break
+                        }
+                    }
+                }
+
+                if (selectedSurvey) {
+                    measuredStudents = selectedSurvey.students;
+                    formData.date = measuredStudents?.at(0)?.pivot?.date
+                }
+
+                const students = await StudentClient.get({
+                    paginate: false,
+                    school_id: formData.school_id,
+                    classe_id: formData.class_id,
+                    scholar_year: formData.scholar_year
+                })
+                
+                if (students && students.length > 0) {
+                    const studentDatas: StudentData[] = []
+
+                    students.map(studentClass => {
+                        const foundStudent = measuredStudents.find(student => student.id === studentClass.student.id)
+                        const precedentStudent = precedentMeasuredStudents.find(student => student.id === studentClass.student.id)
+                        
+                        const firstName = studentClass.student.firstname
+                        const lastName = studentClass.student.lastname
+                        const fullName = firstName + " " + (lastName === null ? '' : lastName)
+                        const precedentHeight = precedentStudent ? precedentStudent.pivot.length : null
+                        const precedentWeight = precedentStudent ? precedentStudent.pivot.weight : null
+
+                        precedentStudent ?? setPrecedentPhase(precedentSurveyId)
+
+                        studentDatas.push({
+                           fullname: fullName,
+                           birth_date: studentClass.student.birth_date,
+                           height: foundStudent ? foundStudent.pivot.length ?? 0 : 0,
+                           student_id: studentClass.student_id,
+                           precedentHeight: precedentHeight,
+                           precedentWeight: precedentWeight,
+                           weight: foundStudent ? foundStudent.pivot.weight ?? 0 : 0,
+                           saved: foundStudent ? true : false
+                       })
+                    })
+                    setFormData({...formData, students: studentDatas})
+                }
             }
         }
 
-        const selectedSurvey = surveys.find((survey) => survey.phase == phase)
-        setStudentId(student_id) // Re assigner la valeur de l'utilisateur
-        const studentDatas = selectedSurvey?.students.find((student) => student.id === student_id)
-
-        if (studentDatas !== undefined) {
-            toast('Cet étudiént a déjà été mesuré pour cette phase', {
-                position: config.toastPosition,
-                type: 'warning',
-                closeButton: true
-            })
-        }
-
-        setMeasureData({
-            date: studentDatas?.pivot.date ?? measureData.date,
-            length: studentDatas?.pivot.length ?? 0,
-            weight: studentDatas?.pivot.weight ?? 0,
-            student_id: studentId ?? 0
-        })
-
-        setPrecedentMeasureData({
-            date: precedentStudentDatas?.pivot.date ?? '',
-            length: precedentStudentDatas?.pivot.length ?? 0,
-            weight: precedentStudentDatas?.pivot.weight ?? 0
-        })
-    }
-
-    const handleMeasureDataChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        const name = e.target.name
-        if (name === 'date') setMeasureData({ ...measureData, date: e.target.value })
-        if (name === 'length') setMeasureData({ ...measureData, length: e.target.value })
-        if (name === 'weight') setMeasureData({ ...measureData, weight: e.target.value })
-    }
-
-    const getStudents = async (query: string): Promise<BaseValue[]> => {
-        let results: BaseValue[] = []
-        const isNum = isNumber(query)
-
-        if (isNum || (!isNum && query.length >= 3)) {
-            const students = await StudentClient.get({ q: query, paginate: false, student_only: 1 })
-            results = students.map((student) => {
-                return {
-                    name: student.number + ' - ' + student.fullname,
-                    value: student.id,
-                    ...student
-                }
-            })
-        }
-
-        return results
-    }
+        getStudents()
+    }, [formData.school_id, formData.class_id, formData.scholar_year, formData.survey_id])
 
     return (
         <>
@@ -212,174 +202,97 @@ export function AddSurveyStudent(): JSX.Element {
             </div>
 
             <Block className="mb-5">
-                <SearchableSelect
-                    search
-                    debounce={500}
-                    fuzzySearch={false}
-                    emptyMessage="Aucune données"
-                    placeholder="Rechercher un étudiant (nom, prénoms, numéro)"
-                    getOptions={(query): Promise<BaseValue[]> => getStudents(query)}
-                    onChange={(value, option): void => handleStudentChange(option, value)}
-                />
-            </Block>
+                <form action="" method="post">
+                    <div className="row mb-5">
+                        <div className="col-6 mb-3">
+                            <Select
+                                label='Etablissement'
+                                options={schools}
+                                config={{ optionKey: 'id', valueKey: 'name' }}
+                                loading={SchoolRS.loading}
+                                placeholder="Selectionner un école"
+                                onChange={({target}) => handleChange(target)}
+                                name='school_id'
+                                value={formData.school_id}
+                                controlled />
+                        </div>
+                        <div className="col-6 mb-3">
+                            <Select
+                                label='Classe'
+                                options={classes}
+                                config={{ optionKey: 'id', valueKey: 'name' }}
+                                loading={ClassRS.loading}
+                                placeholder="Selectionner une classe"
+                                onChange={({target}) => handleChange(target)}
+                                name='class_id'
+                                value={formData.class_id}
+                                controlled />
+                        </div>
+                        <div className="col-6 mb-3">
+                            <Select
+                                label='Année scolaire'
+                                options={scholar_years()}
+                                placeholder="Année scolaire"
+                                onChange={({target}) => handleChange(target)}
+                                name='scholar_year'
+                                value={formData.scholar_year}
+                                controlled />
+                        </div>
+                        <div className="col-3 mb-3">
+                            <Input
+                                type="date"
+                                label='Date de pesée'
+                                onChange={({target}) => handleChange(target)}
+                                name='date'
+                                value={formData.date} />
+                        </div>
+                        <div className="col-3 mb-3">
+                            <Select
+                                label="Phase d'enquête"
+                                options={surveys}
+                                config={{ valueKey: 'phase', optionKey: 'id' }}
+                                placeholder="Selectionner une phase"
+                                onChange={({target}) => handleChange(target)}
+                                name='survey_id'
+                                value={formData.survey_id}
+                                loading={SurveyRequestState.loading}
+                                controlled />
+                        </div>
+                    </div>
 
-            <Block className="mb-5">
-                <form action="" onSubmit={handleSubmit} method="post">
-                    <table className="table">
+                    {SurveyRequestState.loading && <Spinner className="text-center" isBorder />}
+
+                    {canDisplayTable() && <table className='table table-striped table-bordered mb-5'>
                         <thead>
                             <tr>
-                                <th className="bg-primary text-white w-50">
-                                    Information de l'étudiant
-                                </th>
-                                <th className="bg-primary text-white">Information du mésure</th>
+                                <th>N°</th>
+                                <th className='text-nowrap'>Nom et prénoms</th>
+                                <th className='text-nowrap'>Date de naissance</th>
+                                <th className='text-nowrap'>Taille Pr {precedentPhase !== null ? `(${precedentPhase})` : ''}</th>
+                                <th className='text-nowrap'>Poids Pr {precedentPhase !== null ? `(${precedentPhase})` : ''}</th>
+                                <th>Taille</th>
+                                <th>Poids</th>
+                                <th>Etat</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            {(SurveyRequestState.loading || StudentRequestState.loading) && <tr><td className="text-center" colSpan={8}>Chargement</td></tr>}
+                            {formData.students && formData.students.map((student, index) => <tr key={student.student_id} className='align-middle'>
+                                <td>{student.student_id}</td>
+                                <td>{student.fullname}</td>
+                                <td>{student.birth_date}</td>
+                                <td>{student.precedentHeight}</td>
+                                <td>{student.precedentWeight}</td>
                                 <td>
-                                    <div className="row mt-3 pe-4">
-                                        <div className="col-2 mb-3">
-                                            <Input
-                                                auto
-                                                label="Numéro"
-                                                value={selectedStudent?.number ?? 0}
-                                            />
-                                        </div>
-                                        <div className="col-10 mb-3">
-                                            <Input
-                                                auto
-                                                label="Nom et prénoms"
-                                                value={selectedStudent?.fullname ?? ''}
-                                            />
-                                        </div>
-                                        <div className="col-12 mb-3">
-                                            <Input
-                                                auto
-                                                label="Etablissement"
-                                                value={selectedStudent?.schools?.at(0)?.name ?? ''}
-                                            />
-                                        </div>
-                                        <div className="col-6 mb-3">
-                                            <Input
-                                                auto
-                                                label="Classe"
-                                                value={selectedStudent?.classes?.at(0)?.name ?? ''}
-                                            />
-                                        </div>
-                                        <div className="col-6 mb-3">
-                                            <Input
-                                                auto
-                                                label="Année scolaire"
-                                                value={
-                                                    selectedStudent?.classes?.at(0)?.pivot
-                                                        .scholar_year ?? ''
-                                                }
-                                            />
-                                        </div>
-                                    </div>
+                                    <Input onChange={({target}) => handleChange(target, index)} name="students.height" type='number' placeholder='Taille' value={student.height} />
                                 </td>
-                                <td
-                                    className={`${selectedStudent === undefined && 'align-middle'}`}
-                                >
-                                    <div className="row mt-3">
-                                        <div className="col-6 mb-3">
-                                            {surveys.length > 0 ? (
-                                                <Select
-                                                    label="Phase de l'enquête"
-                                                    placeholder="Selectionner une phase"
-                                                    config={{
-                                                        optionKey: 'phase',
-                                                        valueKey: 'phase'
-                                                    }}
-                                                    value={phase}
-                                                    onChange={handlePhaseChange}
-                                                    options={surveys ?? []}
-                                                    controlled
-                                                />
-                                            ) : (
-                                                <>
-                                                    <label htmlFor="" className="form-label">
-                                                        Phase de l'enquête
-                                                    </label>
-                                                    <Skeleton
-                                                        count={1}
-                                                        style={{ height: 35 }}
-                                                    />
-                                                </>
-                                            )}
-                                        </div>
-                                        <div className="col-6 mb-3">
-                                            <Input
-                                                name="date"
-                                                value={measureData.date}
-                                                onChange={handleMeasureDataChange}
-                                                type="date"
-                                                label="Date de pesée"
-                                            />
-                                        </div>
-                                        <div className="col-6 mb-3">
-                                            <Input
-                                                name="length"
-                                                type="number"
-                                                label="Taille (Cm)"
-                                                value={measureData.length}
-                                                onChange={handleMeasureDataChange}
-                                            />
-                                        </div>
-                                        <div className="col-6 mb-3">
-                                            <Input
-                                                name="weight"
-                                                value={measureData.weight}
-                                                onChange={handleMeasureDataChange}
-                                                type="number"
-                                                label="Poids (Kg)"
-                                            />
-                                        </div>
-
-                                        <div className="col-6 mb-4">
-                                            <div className="form-group">
-                                                <label className="form-label">
-                                                    Taille précédente (Cm){' '}
-                                                    {precedentPhase > 0 && (
-                                                        <span>(Phase {precedentPhase})</span>
-                                                    )}
-                                                </label>
-                                                <div className="form-control bg-warning">
-                                                    {precedentMeasureData.length} Cm
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="col-6 mb-4">
-                                            <div className="form-group">
-                                                <label className="form-label">
-                                                    Poids précédent (Kg){' '}
-                                                    {precedentPhase > 0 && (
-                                                        <span>(Phase {precedentPhase})</span>
-                                                    )}
-                                                </label>
-                                                <div className="form-control bg-warning">
-                                                    {precedentMeasureData.weight} Kg
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="col-12 text-end">
-                                            <Button
-                                                loading={SurveyRequestState.creating}
-                                                disabled={selectedStudent === undefined}
-                                                type="submit"
-                                                icon="save"
-                                                mode="primary"
-                                            >
-                                                Enregistrer
-                                            </Button>
-                                        </div>
-                                    </div>
+                                <td>
+                                    <Input onChange={({target}) => handleChange(target, index)} name="students.weight" type='number' placeholder='Poids' value={student.weight} />
                                 </td>
-                            </tr>
+                                <td className="text-center">{student.saved ? <span className="fw-bold text-success">OK</span> : <span className="fw-bold text-danger">KO</span>}</td>
+                            </tr>)}
                         </tbody>
-                    </table>
+                    </table>}
                 </form>
             </Block>
         </>

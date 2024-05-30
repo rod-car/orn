@@ -64,7 +64,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
         resetRequestState();
         resetError();
         resetSuccess();
-        if (datas) setDatas([]);
+        if (datas === true) setDatas([]);
     }
 
 
@@ -139,8 +139,8 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
      * @param params 
      * @returns 
      */
-    const find = async (id: string | number, params?: Record<string, string | number>): Promise<T | null> => {
-        reset(true);
+    const find = async (id: string | number, params?: Record<string, string | number | boolean>): Promise<T | null> => {
+        reset(false);
         setRequestState({ loading: true });
         let data: T | null = null
 
@@ -173,7 +173,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
         return data
     }
 
-    const findOld = async (id: string | number, params?: Record<string, string | number>) => {
+    const findOld = async (id: string | number, params?: Record<string, string | number | boolean>) => {
         reset();
         setRequestState({ loading: true });
 
@@ -209,7 +209,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
     const post = async (
         data: Partial<T>,
         addUrl: string | undefined = undefined,
-        params?: Record<string, string | number>,
+        params?: Record<string, string | number | boolean>,
         config?: AxiosRequestConfig
     ): Promise<PostResponse> => {
         reset(false);
@@ -298,7 +298,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
      * @param {string | number} id Identifiant de l'enregistrement a modifier
      * @param {Partial<Omit<T, "id">>} data Les nouvelles valeurs
      */
-    const patch = async (id: string | number, data: Partial<Omit<T, "id">>, params?: Record<string, string | number>): Promise<PostResponse> => {
+    const patch = async (id: string | number, data: Partial<Omit<T, "id">>, params?: Record<string, string | number | boolean>): Promise<PostResponse> => {
         reset();
         setRequestState({ updating: true });
 
@@ -343,7 +343,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
      * @param id 
      * @returns 
      */
-    const destroy = async (id: string | number, params?: Record<string, string | number>): Promise<{ ok: boolean }> => {
+    const destroy = async (id: string | number, params?: Record<string, string | number | boolean>): Promise<{ ok: boolean }> => {
         reset();
         setRequestState({ deleting: true });
         let res: { ok: boolean } = { ok: false }
@@ -387,7 +387,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
 
     return {
         resetError,
-        datas, data,
+        datas, setDatas, data,
         RequestState,
         error, success,
         Client: {

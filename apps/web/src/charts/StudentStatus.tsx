@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useMemo } from 'react'
-import { config, getToken } from '../config'
+import { config, getToken } from '@renderer/config'
 import { Spinner } from 'ui'
 
 import {

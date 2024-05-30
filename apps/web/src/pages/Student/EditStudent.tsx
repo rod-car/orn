@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { Block } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config, getToken } from '../../config'
+import { config, getToken } from '@renderer/config'
 import { Link } from '@renderer/components'
 import { StudentForm } from './StudentForm'
 

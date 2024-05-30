@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { createSearchParams } from 'react-router-dom'
-import { config, abaque, getToken } from '../../config'
+import { config, abaque, getToken } from '@renderer/config'
 import { Block, Button, Select } from 'ui'
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
@@ -116,20 +116,20 @@ export function ListMeasure(): JSX.Element {
                                 <thead>
                                     <tr>
                                         <th>Age</th>
-                                        <th>Z-3</th>
-                                        <th>Z-2</th>
-                                        <th>Z-1</th>
-                                        <th>Z+0</th>
-                                        <th>Z+1</th>
-                                        <th>Z+2</th>
-                                        <th>Z+3</th>
+                                        <th>3</th>
+                                        <th>10</th>
+                                        <th>25</th>
+                                        <th>50</th>
+                                        <th>75</th>
+                                        <th>90</th>
+                                        <th>97</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {RequestState.loading === false && abaques.length <= 0 && (
                                         <tr>
-                                            <td className="text-center" colSpan={8}>
+                                            <td className="text-center" colSpan={9}>
                                                 Aucun données
                                             </td>
                                         </tr>
@@ -137,13 +137,13 @@ export function ListMeasure(): JSX.Element {
                                     {abaques.map((abaque) => (
                                         <tr key={abaque['age']}>
                                             <td>{abaque['age']}</td>
-                                            <td>{abaque['Z-3']}</td>
-                                            <td>{abaque['Z-2']}</td>
-                                            <td>{abaque['Z-1']}</td>
-                                            <td>{abaque['Z+0']}</td>
-                                            <td>{abaque['Z+1']}</td>
-                                            <td>{abaque['Z+2']}</td>
                                             <td>{abaque['Z+3']}</td>
+                                            <td>{abaque['Z+10']}</td>
+                                            <td>{abaque['Z+25']}</td>
+                                            <td>{abaque['Z+50']}</td>
+                                            <td>{abaque['Z+75']}</td>
+                                            <td>{abaque['Z+90']}</td>
+                                            <td>{abaque['Z+97']}</td>
                                             <td>
                                                 <Link
                                                     className="me-2 btn btn-primary btn-sm"
@@ -169,7 +169,7 @@ export function ListMeasure(): JSX.Element {
                                     ))}
                                     {RequestState.loading && (
                                         <tr>
-                                            <td className="text-center" colSpan={8}>
+                                            <td className="text-center" colSpan={9}>
                                                 Chargement
                                             </td>
                                         </tr>
@@ -258,7 +258,7 @@ export function ListMeasure(): JSX.Element {
                             <tbody>
                                 {RequestState.loading === false && abaques.length <= 0 && (
                                     <tr>
-                                        <td className="text-center" colSpan={8}>
+                                        <td className="text-center" colSpan={9}>
                                             Aucun données
                                         </td>
                                     </tr>
@@ -297,7 +297,7 @@ export function ListMeasure(): JSX.Element {
                                 ))}
                                 {RequestState.loading && (
                                     <tr>
-                                        <td className="text-center" colSpan={8}>
+                                        <td className="text-center" colSpan={9}>
                                             Chargement
                                         </td>
                                     </tr>
