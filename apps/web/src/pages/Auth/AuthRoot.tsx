@@ -76,7 +76,7 @@ export function AuthRoot({ error = false }: { error?: boolean }): ReactNode {
                         &copy; Copyleft ORN Atsinanana {new Date().toLocaleDateString()}
                     </p>
                     <p className="m-0">
-                        Developpé par: <a href="#">Gislain Carino Rodrigue BOUDI</a>
+                        Developpé par: <a target="_blank" href="http://rod-car.lovestoblog.com">Gislain Carino Rodrigue BOUDI</a>
                     </p>
                 </div>
             </footer>

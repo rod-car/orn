@@ -289,7 +289,7 @@ export function AddSurveyStudent(): JSX.Element {
                                 <td>
                                     <Input onChange={({target}) => handleChange(target, index)} name="students.weight" type='number' placeholder='Poids' value={student.weight} />
                                 </td>
-                                <td className="text-center">{student.saved ? <span className="fw-bold text-success">OK</span> : <span className="fw-bold text-danger">KO</span>}</td>
+                                <td className="text-center">{student.saved ? <span className="fw-bold text-success">OK</span> : <span className="fw-bold text-danger">X</span>}</td>
                             </tr>)}
                         </tbody>
                     </table>}

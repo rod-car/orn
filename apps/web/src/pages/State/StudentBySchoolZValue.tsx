@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useApi } from 'hooks'
 import { config, getToken } from '@renderer/config'
-import { ReactNode, useCallback, useEffect, useRef } from 'react'
+import { ReactNode, useCallback, useEffect } from 'react'
 import { Block, Button, Spinner } from 'ui'
 import { getPdf } from '@renderer/utils'
 
@@ -95,6 +95,10 @@ export function StudentBySchoolZValue({scholarYear, surveyId}: {scholarYear: str
                                                         {datas[header][schoolName]}
                                                     </td>)}
                                                 </tr>)}
+                                                <tr>
+                                                    <td>TAUX</td>
+                                                    {headers.map(header => <td key={header}>{datas[header]['TAUX GENERALE']} %</td>)}
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>})}
