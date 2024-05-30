@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
 import { Block, Button, Input } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '@renderer/config'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
 
@@ -65,7 +65,7 @@ export function EditSurvey(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Modifier la mésure phase: {survey.phase}</h2>
-                <Link to="/survey/list" className="btn primary-link">
+                <Link to="/anthropo-measure/survey/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des mésures
                 </Link>
             </div>

@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { useCallback, useEffect, useState } from 'react'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '@renderer/config'
 import { Button, Select, Spinner } from 'ui'
 import { generateColor, getPdf } from '@renderer/utils'
 

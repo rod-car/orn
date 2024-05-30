@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Block, Button, Input } from 'ui'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '@renderer/config'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
 
@@ -47,7 +47,7 @@ export function AddLevel(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Ajouter un niveau</h2>
-                <Link to="/school/levels/list" className="btn primary-link">
+                <Link to="/anthropo-measure/school/levels/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des niveaux
                 </Link>
             </div>

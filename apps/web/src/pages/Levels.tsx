@@ -1,5 +1,5 @@
 import { FormEvent, useEffect } from 'react'
-import { config, getToken } from '../../config'
+import { config, getToken } from '../config'
 import { useApi } from 'hooks'
 import { ApiErrorMessage, Block, Button } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
@@ -71,7 +71,7 @@ export function Levels(): JSX.Element {
                     >
                         Recharger
                     </Button>
-                    <Link to="/school/levels/add" className="btn primary-link">
+                    <Link to="/anthropo-measure/school/levels/add" className="btn primary-link">
                         <i className="fa fa-plus me-2"></i>Nouveau niveau
                     </Link>
                 </div>
@@ -114,7 +114,7 @@ export function Levels(): JSX.Element {
                                     <td>
                                         <Link
                                             className="btn-sm me-2 btn btn-primary"
-                                            to={`/school/levels/edit/${level.id}`}
+                                            to={`/anthropo-measure/school/levels/edit/${level.id}`}
                                         >
                                             <i className="fa fa-edit"></i>
                                         </Link>

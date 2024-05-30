@@ -2,7 +2,7 @@ import { useApi } from 'hooks'
 import { useEffect } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block, Spinner } from 'ui'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '@renderer/config'
 import { SchoolForm } from './SchoolForm'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -32,7 +32,7 @@ export function EditSchool(): JSX.Element {
                 ) : (
                     <Skeleton count={1} style={{ height: 40 }} containerClassName="w-50" />
                 )}
-                <NavLink to="/school/list" className="btn btn-primary">
+                <NavLink to="/anthropo-measure/school/list" className="btn btn-primary">
                     <i className="fa fa-list me-2"></i>Liste des établissements
                 </NavLink>
             </div>

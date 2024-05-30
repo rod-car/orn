@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '@renderer/config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
@@ -81,7 +81,7 @@ export function EditClass(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Editer: {classes.name}</h2>
-                <Link className="btn primary-link" to="/school/classes/list">
+                <Link className="btn primary-link" to="/anthropo-measure/school/classes/list">
                     <i className="fa fa-list me-2"></i>Liste des classes
                 </Link>
             </div>

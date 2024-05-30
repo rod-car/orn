@@ -1,0 +1,13 @@
+.clickable-card {
+    text-decoration: none;
+}
+
+.clickable-card .card {
+    transition: all;
+    transition-duration: .5s;
+}
+
+.clickable-card .card:hover {
+    background: rgb(226, 226, 226);
+    transition-duration: .5s;
+}

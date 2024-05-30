@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { Block } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '@renderer/config'
 import { Link } from '@renderer/components'
 import { StudentForm } from './StudentForm'
 
@@ -29,7 +29,7 @@ export function EditStudent(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>{student?.fullname}</h2>
-                <Link to="/student/list" className="btn primary-link">
+                <Link to="/anthropo-measure/student/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des étudiants
                 </Link>
             </div>

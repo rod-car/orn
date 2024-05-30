@@ -16,14 +16,14 @@ export const Navigation = (className: { className?: string }): ReactNode => {
         >
             <button
                 style={{ borderRadius: '50% 0px 0px 50%', marginRight: '2px' }}
-                className="btn shadow btn-primary"
+                className="btn shadow btn-primary btn-sm"
                 onClick={(): void => navigate(-1)}
             >
                 <i className="fa fa-chevron-left"></i>
             </button>
             <button
                 style={{ borderRadius: '0px 50% 50% 0px' }}
-                className="btn shadow btn-success"
+                className="btn shadow btn-success btn-sm"
                 onClick={(): void => navigate(-1)}
             >
                 <i className="fa fa-chevron-right"></i>

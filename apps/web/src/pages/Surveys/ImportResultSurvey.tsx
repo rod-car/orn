@@ -1,7 +1,7 @@
 import { useApi, useExcelReader } from 'hooks'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block, Button, Input, Spinner } from 'ui'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '@renderer/config'
 import { ChangeEvent } from 'react'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
@@ -52,7 +52,7 @@ export function ImportResultSurvey(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Importer les resultats pour la phase {id}</h2>
-                <Link to={`/survey/details/${id}`} className="btn primary-link">
+                <Link to={`/anthropo-measure/survey/details/${id}`} className="btn primary-link">
                     <i className="fa fa-folder me-2"></i>Détails
                 </Link>
             </div>

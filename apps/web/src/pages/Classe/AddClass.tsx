@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Block, Button, Input, Select } from 'ui'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '@renderer/config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
@@ -67,7 +67,7 @@ export function AddClass(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Ajouter une classe</h2>
-                <Link to="/school/classes/list" className="btn primary-link">
+                <Link to="/anthropo-measure/school/classes/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des classes
                 </Link>
             </div>

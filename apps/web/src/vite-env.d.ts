@@ -101,6 +101,50 @@ type Survey = {
     students: Student[]
 }
 
+type Activity = {
+    id: number
+    title: string
+    date: string
+    place: string
+    details: string
+    files: File[] | null
+}
+
+type Unit = {
+    id: number
+    name: string
+    notation: string
+}
+
+type Site = {
+    id: number
+    name: string
+    commune_id: number
+    commune?: Commune
+    district?: District
+}
+
+type Article = {
+    id: number
+    designation: string
+    code?: string
+    description?: string
+}
+
+type ArticlePrice = {
+    id: number
+    site_id: number
+    article_id: number
+    unit_id: number
+    year: number
+    month: number
+    price: number
+    article?: Article
+    site?: Site
+    unit?: Unit
+    acn?: string
+}
+
 interface SchoolZ {
     [schoolName: string]: {
         'Nb élève pesé': number
@@ -142,4 +186,45 @@ interface SchoolZ {
 
 interface SurveySchoolZ {
     [id: string]: School
+}
+
+type Semence = {
+    id: number
+    name: string
+    unit: string
+}
+
+type Materiel = {
+    key: Key | null | undefined
+    id: number
+    name: string
+    description: string
+}
+
+type Engrais = {
+    id: number
+    name: string
+    unit: string
+    type: string
+}
+
+type Garden = {
+    id: number
+    problem: string,
+    solution: string,
+    perspective: string,
+    annex: string,
+    year: number,
+    school_id: number,
+    school?: School
+    materials?: Partial<Materiel>[],
+    engrais?: Partial<Engrais>[],
+    semences?: Partial<Semence>[]
+}
+
+type Steps = {
+    id: number
+    title: string
+    table: string
+    columns_data?: Record<string, string>
 }

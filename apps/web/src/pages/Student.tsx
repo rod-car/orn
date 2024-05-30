@@ -1,8 +1,8 @@
-import { useApi, useExcelReader, usePdf } from 'hooks'
+import { useApi, useExcelReader } from 'hooks'
 import { Link } from '@renderer/components'
-import { config, getToken } from '../../config'
+import { config, getToken } from '../config'
 import { Block, Button, Input, Select } from 'ui'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
 import { ageFull, format, number_array, range, scholar_years } from 'functions'
@@ -201,9 +201,8 @@ export function Student(): JSX.Element {
             ['', '', '', '', '', '', 'MESURE ANTHROPO'],
             headers
         ]
-        const fileName = `Liste des etudiants_${selectedSchool && selectedSchool.name}_${
-            selectedClass && selectedClass.name
-        }_${category}.xlsx`
+        const fileName = `Liste des etudiants_${selectedSchool && selectedSchool.name}_${selectedClass && selectedClass.name
+            }_${category}.xlsx`
 
         const datas = students.data as {
             student: Student
@@ -215,8 +214,8 @@ export function Student(): JSX.Element {
             list.push([
                 key + 1,
                 data.student.firstname +
-                    ' ' +
-                    (data.student.lastname === null ? '' : data.student.lastname),
+                ' ' +
+                (data.student.lastname === null ? '' : data.student.lastname),
                 data.student.parents,
                 data.student.gender === 'Fille' ? '' : 'X',
                 data.student.gender === 'Fille' ? 'X' : '',
@@ -233,10 +232,6 @@ export function Student(): JSX.Element {
         toExcel(list, fileName)
     }
 
-    /* const printPdf = (): void => {
-        exportToPdf(studentRef, { filename: 'Liste des etudiants.pdf' })
-    }*/
-
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
@@ -252,10 +247,10 @@ export function Student(): JSX.Element {
                     >
                         Recharger
                     </Button>
-                    <Link to="/student/add" className="btn secondary-link me-2">
+                    <Link to="/anthropo-measure/student/add" className="btn secondary-link me-2">
                         <i className="fa fa-plus me-2"></i>Nouveau
                     </Link>
-                    <Link to="/student/import" className="btn primary-link">
+                    <Link to="/anthropo-measure/student/import" className="btn primary-link">
                         <i className="fa fa-file me-2"></i>Importer une liste
                     </Link>
                 </div>
@@ -334,7 +329,7 @@ export function Student(): JSX.Element {
                                     icon="print"
                                     type="button"
                                     className="me-2"
-                                    onClick={(): void => {}}
+                                    onClick={(): void => { }}
                                     mode="primary"
                                 >
                                     Imprimer
@@ -427,13 +422,13 @@ export function Student(): JSX.Element {
                                                 <td className="text-nowrap">
                                                     <Link
                                                         className="btn-sm me-2 btn btn-info text-white"
-                                                        to={`/student/details/${student.id}`}
+                                                        to={`/anthropo-measure/student/details/${student.id}`}
                                                     >
                                                         <i className="fa fa-folder"></i>
                                                     </Link>
                                                     <Link
                                                         className="btn-sm me-2 btn btn-primary"
-                                                        to={`/student/edit/${student.id}`}
+                                                        to={`/anthropo-measure/student/edit/${student.id}`}
                                                     >
                                                         <i className="fa fa-edit"></i>
                                                     </Link>

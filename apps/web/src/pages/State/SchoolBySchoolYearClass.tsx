@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { useApi } from 'hooks'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '@renderer/config'
 import { useCallback, useEffect } from 'react'
 import { Block, Button, Spinner } from 'ui'
 import { getPdf } from '@renderer/utils'
@@ -21,7 +21,7 @@ export function SchoolBySchoolYearClass(): JSX.Element {
         getData()
     }, [])
 
-    const headers = datas.headers
+    const headers = datas.headers as string[]
     const realData = datas.data
 
     const exportPdf = useCallback(async (className = 'custom', scholar_year = '') => {
@@ -79,24 +79,19 @@ export function SchoolBySchoolYearClass(): JSX.Element {
                                     <thead>
                                         <tr>
                                             <th></th>
-                                            {headers &&
-                                                Object.values(headers).map((header) => (
-                                                    <th>{header}</th>
-                                                ))}
+                                            {headers && Object.values(headers).map(header => <th key={header}>{header}</th>)}
                                             <th>Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {Object.keys(data).map((school) => (
-                                            <tr>
+                                            <tr key={school}>
                                                 <td>{school}</td>
-                                                {Object.values(headers).map((classe) => (
-                                                    <td className="text-primary">
-                                                        {data[school][classe] ?? (
-                                                            <span className="text-danger">0</span>
-                                                        )}
-                                                    </td>
-                                                ))}
+                                                {Object.values(headers).map(classe => <td key={classe as string} className="text-primary">
+                                                    {data[school][classe] ?? (
+                                                        <span className="text-danger">0</span>
+                                                    )}
+                                                </td>)}
                                                 <td className="fw-bold">{data[school].total}</td>
                                             </tr>
                                         ))}

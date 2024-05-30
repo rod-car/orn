@@ -1,56 +1,69 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { RouterProvider, createHashRouter } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import {
     AddClass,
     AddLevel,
-    AddMeasure,
     AddSchool,
     AddStudent,
     AddSurvey,
     AddSurveyStudent,
     Classes,
-    DetailsMeasure,
     DetailsSchool,
     DetailsStudent,
     DetailsSurvey,
     ImportResultSurvey,
     EditClass,
     EditLevel,
-    EditMeasure,
     EditSchool,
     EditStudent,
     EditSurvey,
-    Home,
-    ImportMeasure,
     ImportStudent,
     Levels,
-    ListMeasure,
-    Root,
     School,
     State,
     Student,
-    Survey,
-    Login,
-    Register
-} from './pages'
-import { PrivateRoute } from './components/PrivateRoute'
-import { GuestRoute } from './components/GuestRoute'
+    Survey
+} from '@renderer/pages'
+import { PrivateRoute } from '@renderer/components/PrivateRoute'
+import { GuestRoute } from '@renderer/components/GuestRoute'
+import { ActivityRoot, ActivityHome, ActivityAdd, ActivityList, ActivityEdit, AdminActivityList, ActivityTypeList, ActivityTypeEdit, ActivityTypeAdd, ActivityStatistics } from '@renderer/pages/Activities'
+import { MeasureRoot, ListMeasure, AddMeasure, EditMeasure, ImportMeasure, DetailsMeasure, HomeMeasure } from '@renderer/pages/Measures'
+import { Login, Register, AuthRoot } from '@renderer/pages/Auth'
+import { AppRoot, About, Contributors, HomePage } from '@renderer/pages/App'
+import { ArticleAdd, ArticleEdit, ArticleList, ArticleShow, PriceAdd, PriceHome, PriceList, PriceRoot, SiteAdd, SiteEdit, SiteList, UnitAdd, UnitEdit, UnitList } from '@renderer/pages/Prices'
+import { JardinAdd, JardinHome, JardinList, JardinRoot, JardinStatistics, Engrais, Semence, Materiel, Steps, StepsData, JardinEdit, JardinShow } from '@renderer/pages/Activities/JardinScolaire'
 
-const router = createHashRouter([
+const router = createBrowserRouter([
     {
         path: '/',
-        element: <Root />,
-        errorElement: <Root error={true} />,
+        element: <AppRoot />,
+        errorElement: <AppRoot error={true} />,
         children: [
             {
                 path: '',
-                element: (
-                    <PrivateRoute>
-                        <Home />
-                    </PrivateRoute>
-                )
+                element: <PrivateRoute>
+                    <HomePage />
+                </PrivateRoute>
             },
+            {
+                path: 'about',
+                element: <PrivateRoute>
+                    <About />
+                </PrivateRoute>
+            },
+            {
+                path: 'contributors',
+                element: <PrivateRoute>
+                    <Contributors />
+                </PrivateRoute>
+            }
+        ]
+    },
+    {
+        path: '/auth',
+        element: <AuthRoot />,
+        errorElement: <AuthRoot error={true} />,
+        children: [
             {
                 path: 'login',
                 element: (
@@ -67,8 +80,23 @@ const router = createHashRouter([
                     </GuestRoute>
                 )
             },
+        ]
+    },
+    {
+        path: '/anthropo-measure',
+        element: <MeasureRoot />,
+        errorElement: <MeasureRoot error={true} />,
+        children: [
             {
-                path: 'states',
+                path: '',
+                element: (
+                    <PrivateRoute>
+                        <HomeMeasure />
+                    </PrivateRoute>
+                )
+            },
+            {
+                path: 'statistics',
                 element: <State />
             },
             {
@@ -206,6 +234,183 @@ const router = createHashRouter([
                     {
                         path: 'edit-student/:student_id/:survey_id',
                         element: <AddSurveyStudent />
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        path: '/activities',
+        element: <ActivityRoot />,
+        errorElement: <ActivityRoot error={true} />,
+        children: [
+            {
+                path: '',
+                element: <ActivityHome />
+            },
+            {
+                path: 'add',
+                element: <ActivityAdd />
+            },
+            {
+                path: 'statistics',
+                element: <ActivityStatistics />
+            },
+            {
+                path: 'list',
+                element: <ActivityList />
+            },
+            {
+                path: 'types',
+                children: [
+                    {
+                        path: '',
+                        element: <ActivityTypeList />
+                    },
+                    {
+                        path: 'add',
+                        element: <ActivityTypeAdd />
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: <ActivityTypeEdit />
+                    },
+                ],
+            },
+            {
+                path: 'manage/list',
+                element: <AdminActivityList />
+            },
+            {
+                path: 'show/:id',
+                element: <h1>Modifier un activité</h1>
+            },
+            {
+                path: 'edit/:id',
+                element: <ActivityEdit />
+            }
+        ]
+    },
+    {
+        path: '/scholar-garden',
+        element: <JardinRoot />,
+        errorElement: <JardinRoot error={true} />,
+        children: [
+            {
+                path: '',
+                element: <JardinHome />
+            },
+            {
+                path: 'add',
+                element: <JardinAdd />
+            },
+            {
+                path: 'statistics',
+                element: <JardinStatistics />
+            },
+            {
+                path: 'list',
+                element: <JardinList />
+            },
+            {
+                path: 'materiels',
+                element: <Materiel />
+            },
+            {
+                path: 'semences',
+                element: <Semence />
+            },
+            {
+                path: 'engrais',
+                element: <Engrais />
+            },
+            {
+                path: 'steps',
+                element: <Steps />
+            },
+            {
+                path: 'steps-data',
+                element: <StepsData />
+            },
+            {
+                path: 'show/:id',
+                element: <JardinShow />
+            },
+            {
+                path: 'edit/:id',
+                element: <JardinEdit />
+            }
+        ]
+    },
+    {
+        path: '/prices',
+        element: <PriceRoot />,
+        errorElement: <PriceRoot error={true} />,
+        children: [
+            {
+                path: '',
+                element: <PriceHome />
+            },
+            {
+                path: 'add',
+                element: <PriceAdd />
+            },
+            {
+                path: 'list',
+                element: <PriceList />
+            },
+            {
+                path: 'articles',
+                children: [
+                    {
+                        path: 'add',
+                        element: <ArticleAdd />
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: <ArticleEdit />
+                    },
+                    {
+                        path: 'show/:id',
+                        element: <ArticleShow />
+                    },
+                    {
+                        path: 'list',
+                        element: <ArticleList />
+                    }
+                ]
+            },
+            {
+                path: 'units',
+                children: [
+                    {
+                        path: 'add',
+                        element: <UnitAdd />
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: <UnitEdit />
+                    },
+                    {
+                        path: 'list',
+                        element: <UnitList />
+                    }
+                ]
+            },
+            {
+                path: 'sites',
+                children: [
+                    {
+                        path: 'add',
+                        element: <SiteAdd />
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: <SiteEdit />
+                    },
+                    {
+                        path: 'list',
+                        element: <SiteList />
                     }
                 ]
             }

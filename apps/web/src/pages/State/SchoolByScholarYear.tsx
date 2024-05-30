@@ -1,5 +1,5 @@
 import { useApi } from 'hooks'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '@renderer/config'
 import { useCallback, useEffect } from 'react'
 import { Block, Button, Spinner } from 'ui'
 import { getPdf } from '@renderer/utils'

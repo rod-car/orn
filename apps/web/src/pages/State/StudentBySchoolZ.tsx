@@ -1,12 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useApi } from 'hooks'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '@renderer/config'
 import { ReactNode, useCallback, useEffect, useRef } from 'react'
 import { Block, Button, Spinner } from 'ui'
 import { round } from 'functions'
 import { getPdf } from '@renderer/utils'
 
-export function StudentBySchoolZ(): ReactNode {
+export function StudentBySchoolZ({scholarYear, surveyId}: {scholarYear: string, surveyId?: number}): ReactNode {
     const { Client, RequestState, error, datas } = useApi<SurveySchoolZ>({
         baseUrl: config.baseUrl,
         token: getToken(),
@@ -14,7 +14,11 @@ export function StudentBySchoolZ(): ReactNode {
     })
 
     const getData = useCallback(async () => {
-        await Client.get({}, '/state/student-school-z')
+        let url = '/state/student-school-z'
+        if (surveyId !== undefined) url += '/' + surveyId.toString()
+        await Client.get({
+            scholar_year: scholarYear
+        }, url)
     }, [])
 
     useEffect(() => {
@@ -39,7 +43,7 @@ export function StudentBySchoolZ(): ReactNode {
     return (
         <Block>
             <div className="d-flex align-items-center justify-content-between mb-5">
-                <h2>État de la mal nutrition</h2>
+                <h2>Statistique de la mal nutrition ({scholarYear})</h2>
                 <Button
                     onClick={(): Promise<void> => exportPdf('malnutrition-state')}
                     icon="file"
@@ -76,15 +80,9 @@ export function StudentBySchoolZ(): ReactNode {
                                 className={`table-responsive`}
                                 style={{ border: '1px solid silver', fontSize: '10pt' }}
                             >
-                                <div
-                                    className={`state-phase-${survey_id} malnutrition-state global-state`}
-                                >
+                                <div className={`state-phase-${survey_id} malnutrition-state global-state`}>
                                     <p className="d-none mb-4 h4">Mésure phase N°: {survey_id}</p>
-
-                                    <table
-                                        ref={stateRef}
-                                        className="table table-striped table-bordered"
-                                    >
+                                    <table ref={stateRef} className="table table-striped table-bordered">
                                         <thead>
                                             <tr className="text-nowrap">
                                                 <th></th>
@@ -108,13 +106,13 @@ export function StudentBySchoolZ(): ReactNode {
                                                     className="text-uppercase fw-bold"
                                                     colSpan={headers.length + 1}
                                                 >
-                                                    Mal nutrition
+                                                    Mal nutrition aigüe
                                                 </td>
                                             </tr>
                                             {types.map((type) => (
                                                 <tr key={type}>
                                                     <td className="text-nowrap text-uppercase">
-                                                        {type}
+                                                        {type} {type === 'Global' ? '(M + S)' : ''}
                                                     </td>
                                                     <Td
                                                         headers={headers}
@@ -126,17 +124,14 @@ export function StudentBySchoolZ(): ReactNode {
                                             ))}
 
                                             <tr>
-                                                <td
-                                                    className="text-uppercase fw-bold"
-                                                    colSpan={headers.length + 1}
-                                                >
+                                                <td className="text-uppercase fw-bold" colSpan={headers.length + 1}>
                                                     Insuffisance pondérale
                                                 </td>
                                             </tr>
                                             {types.map((type) => (
                                                 <tr key={type}>
                                                     <td className="text-nowrap text-uppercase">
-                                                        {type}
+                                                        {type} {type === 'Global' ? '(M + S)' : ''}
                                                     </td>
                                                     <Td
                                                         headers={headers}
@@ -148,17 +143,14 @@ export function StudentBySchoolZ(): ReactNode {
                                             ))}
 
                                             <tr>
-                                                <td
-                                                    className="text-uppercase fw-bold"
-                                                    colSpan={headers.length + 1}
-                                                >
-                                                    Chronique
+                                                <td className="text-uppercase fw-bold" colSpan={headers.length + 1}>
+                                                    Malnutrition Chronique
                                                 </td>
                                             </tr>
                                             {types.map((type) => (
                                                 <tr key={type}>
                                                     <td className="text-nowrap text-uppercase">
-                                                        {type}
+                                                        {type} {type === 'Global' ? '(M + S)' : ''}
                                                     </td>
                                                     <Td
                                                         headers={headers}
@@ -198,13 +190,17 @@ const Td = ({
                     <td key={school}>
                         {typeof schoolTab === 'object' ? (
                             <span className={school === 'TOTAL' ? 'fw-bold' : 'fw-bold'}>
-                                {schoolTab[keyTwo]['value']}{' '}
+                                {schoolTab[keyTwo]['value']} {keyTwo === 'Global' ? '/' + schoolZ[school]['T'] : ''} {' '}
                                 {schoolTab[keyTwo]['value'] > 0 && school !== 'TOTAL' && (
                                     <span className="text-primary fw-normal">
                                         <br />
                                         {`(${round(schoolTab[keyTwo]['percent'])}%)`}
                                     </span>
                                 )}
+                                {keyTwo === 'Global' && school === 'TOTAL' && <span className="text-primary fw-normal">
+                                    <br />
+                                    ({round(schoolTab[keyTwo]['value'] / schoolZ[school]['T'] * 100, 2)}%)
+                                </span>}
                             </span>
                         ) : school === 'TOTAL' ? (
                             <span className="fw-bold">{schoolTab}</span>

@@ -41,16 +41,17 @@ export const Button = ({
 }: ButtonProps): React.ReactNode => {
     const id = useId()
     return (
-        <button 
+        <button
             id={id}
             disabled={props.disabled || props.loading}
             onClick={props.onClick}
             type={type}
+            style={props.style}
             className={`btn btn-${mode} btn-${size} shadow ${props.className}`}
         >
             {props.loading
                 ? <Spinner className={`d-inline ${props.children ? 'me-2' : ''}`} />
-                : <div className={`d-inline ${props.children ? 'me-2' : ''}`}><i className={`fa fa-${props.icon}`}></i></div>
+                : props.icon && <div className={`d-inline ${props.children ? 'me-2' : ''}`}><i className={`fa fa-${props.icon}`}></i></div>
             }
 
             {props.children}
@@ -61,7 +62,7 @@ export const Button = ({
 
 function Spinner({ className }: { className?: string }) {
     return <div className={className}>
-        <div className="spinner-border"  style={{
+        <div className="spinner-border" style={{
             width: '1em',
             height: '1em',
             borderWidth: 2

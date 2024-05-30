@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block } from 'ui'
-import { config, getToken } from '../../../config'
+import { config, getToken } from '@renderer/config'
 import { useEffect, useState } from 'react'
 
 export function DetailsSchool(): JSX.Element {
@@ -28,7 +28,7 @@ export function DetailsSchool(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>{school?.name}</h2>
-                <NavLink to="/school/list" className="btn btn-primary">
+                <NavLink to="/anthropo-measure/school/list" className="btn btn-primary">
                     <i className="fa fa-list me-2"></i>Liste des établissements
                 </NavLink>
             </div>

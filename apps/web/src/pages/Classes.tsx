@@ -1,6 +1,6 @@
 import { FormEvent, useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
-import { config, getToken } from '../../config'
+import { config, getToken } from '../config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { ApiErrorMessage, Block, Button } from 'ui'
@@ -79,7 +79,7 @@ export function Classes(): JSX.Element {
                     >
                         Recharger
                     </Button>
-                    <Link to="/school/classes/add" className="btn primary-link">
+                    <Link to="/anthropo-measure/school/classes/add" className="btn primary-link">
                         <i className="fa fa-plus me-2"></i>Nouvelle classe
                     </Link>
                 </div>
@@ -126,7 +126,7 @@ export function Classes(): JSX.Element {
                                     <td>
                                         <NavLink
                                             className="btn-sm me-2 btn btn-primary"
-                                            to={`/school/classes/edit/${classes.id}`}
+                                            to={`/anthropo-measure/school/classes/edit/${classes.id}`}
                                         >
                                             <i className="fa fa-edit"></i>
                                         </NavLink>
