@@ -63,7 +63,7 @@ export function AddMeasure(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2 className="m-0">Ajouter un abaque</h2>
-                <Link to="/measure/list" className="btn primary-link">
+                <Link to="/anthropo-measure/measure/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des abaques
                 </Link>
             </div>

@@ -1,6 +1,6 @@
 import { useApi, useExcelReader } from 'hooks'
 import { Link } from '@renderer/components'
-import { config, getToken } from '../config'
+import { class_categories, config, getToken } from '@renderer/config'
 import { Block, Button, Input, Select } from 'ui'
 import { useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
@@ -308,7 +308,7 @@ export function Student(): JSX.Element {
                                 <Select
                                     placeholder={null}
                                     value={category}
-                                    options={['Tous', 'A', 'B', 'C', 'I', 'II', 'III', 'ZA', 'ZB']}
+                                    options={['Tous', ...class_categories]}
                                     name="category"
                                     onChange={({ target }): Promise<void> => filterStudents(target)}
                                     controlled

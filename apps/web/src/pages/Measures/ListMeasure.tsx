@@ -76,7 +76,7 @@ export function ListMeasure(): JSX.Element {
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2 className="m-0">Liste des abaques</h2>
-                <Link to="/measure/add" className="btn primary-link">
+                <Link to="/anthropo-measure/measure/add" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Ajouter un abaque
                 </Link>
             </div>
@@ -148,7 +148,7 @@ export function ListMeasure(): JSX.Element {
                                                 <Link
                                                     className="me-2 btn btn-primary btn-sm"
                                                     to={{
-                                                        pathname: `/measure/edit/${abaque.id}`,
+                                                        pathname: `/anthropo-measure/measure/edit/${abaque.id}`,
                                                         search: `?${createSearchParams({
                                                             type: abaqueType
                                                         })}`
@@ -211,7 +211,7 @@ export function ListMeasure(): JSX.Element {
                                             <Link
                                                 className="me-2 btn btn-primary btn-sm"
                                                 to={{
-                                                    pathname: `/measure/edit/${abaque.id}`,
+                                                    pathname: `/anthropo-measure/measure/edit/${abaque.id}`,
                                                     search: `?${createSearchParams({
                                                         type: abaqueType
                                                     })}`
@@ -276,7 +276,7 @@ export function ListMeasure(): JSX.Element {
                                             <Link
                                                 className="me-2 btn btn-primary btn-sm"
                                                 to={{
-                                                    pathname: `/measure/edit/${abaque.id}`,
+                                                    pathname: `/anthropo-measure/measure/edit/${abaque.id}`,
                                                     search: `?${createSearchParams({
                                                         type: abaqueType
                                                     })}`

@@ -96,7 +96,7 @@ export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
                             </li>
                             <li className="nav-item">
                                 <NavLink className={`nav-link`} aria-current="page" to="/anthropo-measure">
-                                    <i className="fa fa-ruler me-2"></i>Mésure anthropo
+                                    <i className="fa fa-bowl-food me-2"></i>Cantine scolaire
                                 </NavLink>
                             </li>
                             {/*<li className="nav-item">

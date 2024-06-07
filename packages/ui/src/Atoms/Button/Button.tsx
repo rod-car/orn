@@ -39,7 +39,7 @@ export const Button = ({
     type = "button",
     ...props
 }: ButtonProps): React.ReactNode => {
-    const id = useId()
+    const id = props.id ? props.id : useId()
     return (
         <button
             id={id}

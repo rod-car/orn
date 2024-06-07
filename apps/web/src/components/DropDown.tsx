@@ -15,9 +15,8 @@ export function DropDown({
 }): JSX.Element {
     return (
         <li className="nav-item dropdown">
-            <NavLink
+            <a
                 className="nav-link dropdown-toggle"
-                to={base}
                 id={id}
                 role="button"
                 data-bs-toggle="dropdown"
@@ -25,7 +24,7 @@ export function DropDown({
             >
                 {icon && <span className={`fa fa-${icon} me-2`}></span>}
                 {label}
-            </NavLink>
+            </a>
             <ul className="dropdown-menu" aria-labelledby={id}>
                 {items.map((item) => (
                     <li key={item.url}>

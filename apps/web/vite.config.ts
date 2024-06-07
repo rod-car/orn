@@ -7,6 +7,5 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: [{ find: '@renderer', replacement: path.resolve(__dirname, 'src') }]
-  },
-  base: '/orn/'
+  }
 })

@@ -88,26 +88,28 @@ export function StudentEvolution({ student_id }: { student_id: number }): ReactN
 
     const data = useMemo(() => {
         const realData = StateDatas.data
-        const headers = 'headers' in StateDatas ? (StateDatas.headers as string[]) : []
-
-        const nS = surveys.filter((survey) => {
-            const hasValue = realData[headers[0]][survey.phase]
-            return hasValue !== undefined
-        })
-
-        const labels = nS.map((survey) => survey.phase + ` (${survey.date})`)
-
-        const datasets =
-            headers &&
-            headers.map((header, key) => {
-                return {
-                    label: header,
-                    data: nS.map((survey) => realData[header][survey.phase]),
-                    backgroundColor: generateColor(header, key + 30)
-                }
+        if (realData) {
+            const headers = 'headers' in StateDatas ? (StateDatas.headers as string[]) : []
+    
+            const nS = surveys.filter((survey) => {
+                const hasValue = realData[headers[0]][survey.phase]
+                return hasValue !== undefined
             })
-
-        return { labels, datasets }
+    
+            const labels = nS.map((survey) => survey.phase + ` (${survey.date})`)
+    
+            const datasets =
+                headers &&
+                headers.map((header, key) => {
+                    return {
+                        label: header,
+                        data: nS.map((survey) => realData[header][survey.phase]),
+                        backgroundColor: generateColor(header, key + 30)
+                    }
+                })
+    
+            return { labels, datasets }
+        }
     }, [StateDatas, surveys])
 
     return (

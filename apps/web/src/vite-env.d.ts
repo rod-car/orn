@@ -33,7 +33,7 @@ type Student = {
     parents: string
     gender: 'Garçon' | 'Fille'
     schools?: { scholar_year: School }[]
-    classes?: { scholar_year: Classes }[]
+    classes?: { scholar_year: Classes, category: string }[]
 }
 
 type School = {

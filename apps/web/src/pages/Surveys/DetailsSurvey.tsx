@@ -1,6 +1,6 @@
 import { useApi, usePdf } from 'hooks'
 import { useParams } from 'react-router-dom'
-import { Block, Button, Input, Select } from 'ui'
+import { Block, Button, Input, Select, Spinner } from 'ui'
 import { config, getToken } from '@renderer/config'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ageMonth, ageYear, number_array, range } from 'functions'
@@ -23,6 +23,13 @@ export function DetailsSurvey(): JSX.Element {
         token: getToken(),
         url: 'surveys'
     })
+
+    const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
+        baseUrl: config.baseUrl,
+        token: getToken(),
+        url: 'surveys'
+    })
+
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
         baseUrl: config.baseUrl,
@@ -100,8 +107,12 @@ export function DetailsSurvey(): JSX.Element {
         exportToPdf(studentRef, { filename: 'Liste des etudiants.pdf' })
     }
 
-    async function exportExcel() {
-        await Client.post({ ...requestData, q: query, paginate: 0 }, '/' + survey?.id + '/to-excel')
+    async function exportExcel(params: { type: string, result: boolean }) {
+        const response = await ExportClient.post({ ...requestData, q: query, paginate_student: 0, type: params.type, result: params.result }, '/' + survey?.id + '/to-excel')
+        const filePath = response.data;
+        if (filePath) {
+            window.open(filePath as unknown as string, '_blank')
+        }
     }
 
     return (
@@ -172,7 +183,7 @@ export function DetailsSurvey(): JSX.Element {
                                     controlled
                                 />
                             </td>
-                            <td>
+                            <td className="d-flex">
                                 <Button
                                     icon="print"
                                     type="button"
@@ -182,14 +193,27 @@ export function DetailsSurvey(): JSX.Element {
                                 >
                                     Imprimer
                                 </Button>
-                                <Button
-                                    icon="print"
-                                    mode="warning"
-                                    type="button"
-                                    onClick={exportExcel}
-                                >
-                                    Exporter
-                                </Button>
+                                <div className="dropdown">
+                                    <button
+                                        disabled={ExportRequestState.creating}
+                                        className="btn btn-warning dropdown-toggle d-flex align-items-center"
+                                        type="button"
+                                        id="printDropdown"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                    >
+                                        {ExportRequestState.creating
+                                            ? <Spinner className="d-inline me-2" size="sm" isBorder={true} />
+                                            : <div className="d-inline me-2"><i className="fa fa-print"></i></div>}
+                                        Exporter
+                                    </button>
+                                    <ul className="dropdown-menu" aria-labelledby="printDropdown">
+                                        <li><a onClick={() => exportExcel({ type: 'csv', result: false })} className="dropdown-item" href="#">Excel CSV</a></li>
+                                        <li><a onClick={() => exportExcel({ type: 'xlsx', result: false })} className="dropdown-item" href="#">Excel XLSX</a></li>
+                                        <li><a onClick={() => exportExcel({ type: 'csv', result: true })} className="dropdown-item" href="#">Excel avec résultats CSV</a></li>
+                                        <li><a onClick={() => exportExcel({ type: 'xlsx', result: true })} className="dropdown-item" href="#">Excel avec résultats XLSX</a></li>
+                                    </ul>
+                                </div>
                             </td>
                         </tr>
                     </tbody>

@@ -16,3 +16,9 @@ export const gender = [
 export function wrap(str: string, end: number = 100): string {
     return str.substring(0, end)
 }
+
+export function ucWords(str: string): string {
+    return str.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+        return letter.toUpperCase();
+    });
+};

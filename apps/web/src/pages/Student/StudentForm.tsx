@@ -1,9 +1,9 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
-import { config, getToken } from '@renderer/config'
+import { config, getToken, class_categories } from '@renderer/config'
 import { toast } from 'react-toastify'
-import { gender, scholar_years } from 'functions'
+import { capitalize, gender, scholar_years, ucWords } from 'functions'
 
 type StudentFormProps = {
     editedStudent?: Student
@@ -22,29 +22,26 @@ const defaultStudent = {
     parents: '',
     school: '',
     classes: '',
+    category: '',
     scholar_year: ''
 }
 
 export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
     const [student, setStudent] = useState(defaultStudent)
-    const {
-        Client: SClient,
-        RequestState: SRequestState,
-        error
-    } = useApi<typeof defaultStudent>({
+    const { Client: SClient, RequestState: SRequestState, error } = useApi<typeof defaultStudent>({
         baseUrl: config.baseUrl,
         token: getToken(),
         url: '/students'
     })
 
-    const { Client: ScClient, datas: ScDatas } = useApi<School>({
+    const { Client: ScClient, datas: schools, RequestState: ScRequestState } = useApi<School>({
         baseUrl: config.baseUrl,
         token: getToken(),
         url: '/schools',
         key: 'data'
     })
 
-    const { Client: ClClient, datas: ClDatas } = useApi<Classes>({
+    const { Client: ClClient, datas: ClDatas, RequestState: ClRequestState } = useApi<Classes>({
         baseUrl: config.baseUrl,
         token: getToken(),
         url: '/classes',
@@ -67,7 +64,6 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                 position: config.toastPosition
             })
             editedStudent === undefined && setStudent(defaultStudent)
-            // editedStudent === undefined && getNumber()
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
@@ -98,11 +94,15 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
             parents: editedStudent.parents ?? '',
             school: editedStudent?.schools?.at(0)?.id ?? '',
             classes: editedStudent?.classes?.at(0)?.id ?? '',
-            scholar_year: editedStudent?.classes?.at(0)?.pivot?.scholar_year ?? ''
+            scholar_year: editedStudent?.classes?.at(0)?.pivot?.scholar_year ?? '',
+            category: editedStudent?.classes?.at(0)?.pivot?.category ?? ''
         })
 
     const handleChange = (target: EventTarget & (HTMLSelectElement | HTMLInputElement)): void => {
-        setStudent({ ...student, [target.name]: target.value })
+        let value = target.name === 'firstname' ? target.value.toUpperCase() : target.value
+        value = target.name === 'lastname' ? ucWords(value) : value
+
+        setStudent({ ...student, [target.name]: value })
         if (target.value.length > 0 && error?.data.errors[target.name]) {
             error.data.errors[target.name] = null
         }
@@ -119,7 +119,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
             <div className="row mb-3">
                 <div className="col-xl-1">
                     <Input
-                        value={student.number}
+                        value={editedStudent ? student.number : "Auto"}
                         onChange={({ target }): void => handleChange(target)}
                         auto
                         label="Numéro"
@@ -172,19 +172,6 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                 </div>
                 <div className="col-xl-6">
                     <Input
-                        value={student.birth_place}
-                        onChange={({ target }): void => handleChange(target)}
-                        label="Lieu de naissance"
-                        name="birth_place"
-                        error={error?.data?.errors?.birth_place}
-                        required={false}
-                    />
-                </div>
-            </div>
-
-            <div className="row mb-3">
-                <div className="col-xl-12">
-                    <Input
                         value={student.parents}
                         onChange={({ target }): void => handleChange(target)}
                         required={false}
@@ -193,18 +180,29 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                         error={error?.data?.errors?.parents}
                     />
                 </div>
+                {/*<div className="col-xl-6">
+                    <Input
+                        value={student.birth_place}
+                        onChange={({ target }): void => handleChange(target)}
+                        label="Lieu de naissance"
+                        name="birth_place"
+                        error={error?.data?.errors?.birth_place}
+                        required={false}
+                    />
+                </div>*/}
             </div>
 
             <div className="row mb-4">
-                <div className="col-xl-6">
+                <div className="col-xl-3">
                     <Select
                         value={student.school}
                         onChange={({ target }): void => handleChange(target)}
                         label="Etablissement"
-                        options={ScDatas}
+                        options={schools}
                         config={{ optionKey: 'id', valueKey: 'name' }}
                         name="school"
                         error={error?.data?.errors?.school}
+                        loading={ScRequestState.loading}
                         controlled
                     />
                 </div>
@@ -217,6 +215,19 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                         config={{ optionKey: 'id', valueKey: 'name' }}
                         name="classes"
                         error={error?.data?.errors?.classes}
+                        loading={ClRequestState.loading}
+                        controlled
+                    />
+                </div>
+                <div className="col-xl-3">
+                    <Select
+                        value={student.category}
+                        onChange={({ target }): void => handleChange(target)}
+                        label="Categorie"
+                        options={class_categories}
+                        name="category"
+                        error={error?.data?.errors?.category}
+                        required={false}
                         controlled
                     />
                 </div>
