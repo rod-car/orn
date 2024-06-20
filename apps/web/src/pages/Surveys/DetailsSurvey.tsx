@@ -1,22 +1,19 @@
-import { useApi, usePdf } from 'hooks'
+import { useApi } from 'hooks'
 import { useParams } from 'react-router-dom'
-import { Block, Button, Input, Select, Spinner } from 'ui'
+import { Block, Button, Input, Select } from 'ui'
 import { config, getToken } from '@renderer/config'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { ageMonth, ageYear, number_array, range } from 'functions'
-import { Link } from '@renderer/components'
+import { ExcelExportButton, Link } from '@renderer/components'
 import { Pagination } from 'react-laravel-paginex'
 import Skeleton from 'react-loading-skeleton'
 
-export function DetailsSurvey(): JSX.Element {
+export function DetailsSurvey(): ReactNode {
     const [perPage, setPerPage] = useState(30)
     const [query, setQuery] = useState<string | number>('')
     const [school, setSchool] = useState<number>(0)
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
-    const studentRef = useRef()
-    
     const { id } = useParams()
-    const { exportToPdf } = usePdf()
 
     const { Client, data: survey, RequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
@@ -29,7 +26,6 @@ export function DetailsSurvey(): JSX.Element {
         token: getToken(),
         url: 'surveys'
     })
-
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
         baseUrl: config.baseUrl,
@@ -63,6 +59,10 @@ export function DetailsSurvey(): JSX.Element {
         Client.find(parseInt(id as string), { ...requestData, page: data.page })
     }
 
+    /**
+     * Filtrer la liste des étudiants
+     * @param target 
+     */
     const filterStudents = async (
         target: EventTarget & (HTMLSelectElement | HTMLInputElement)
     ): Promise<void> => {
@@ -89,9 +89,7 @@ export function DetailsSurvey(): JSX.Element {
         setQuery(value)
         requestData['q'] = value
 
-        if (timeoutId) {
-            clearTimeout(timeoutId)
-        }
+        if (timeoutId) clearTimeout(timeoutId)
 
         const newTimeoutId = setTimeout(() => {
             filterStudents(target)
@@ -100,25 +98,10 @@ export function DetailsSurvey(): JSX.Element {
         setTimeoutId(newTimeoutId)
     }
 
-    /**
-     * Imprimer vers PDF
-     */
-    const printPdf = (): void => {
-        exportToPdf(studentRef, { filename: 'Liste des etudiants.pdf' })
-    }
-
-    async function exportExcel(params: { type: string, result: boolean }) {
-        const response = await ExportClient.post({ ...requestData, q: query, paginate_student: 0, type: params.type, result: params.result }, '/' + survey?.id + '/to-excel')
-        const filePath = response.data;
-        if (filePath) {
-            window.open(filePath as unknown as string, '_blank')
-        }
-    }
-
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h5 className="m-0">Détails de la mésure phase: {survey && survey.phase}</h5>
+                <h5 className="m-0 text-primary fw-bold">Mésure phase: {survey && survey.phase} ({survey?.date}) - {survey?.students?.total} étudiant(s)</h5>
                 <div className="d-flex">
                     <Link to="/anthropo-measure/survey/list" className="btn secondary-link me-2">
                         <i className="fa fa-list me-2"></i>Liste des mésures
@@ -129,34 +112,13 @@ export function DetailsSurvey(): JSX.Element {
                 </div>
             </div>
 
-            <Block className="mb-5">
+            <Block className="mb-5 mt-3 p-1">
                 <table className="table table-striped">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Phase</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {survey && (
-                            <tr key={survey.id}>
-                                <td>{survey.id}</td>
-                                <td>{survey.phase}</td>
-                                <td>{survey.date}</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </Block>
-
-            <Block className="mb-5 mt-3">
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Nombre d'éléments</th>
+                            <th>Nombre d'étudiants</th>
                             <th>Etablissement</th>
-                            <th className="w-25">Actions</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -184,36 +146,24 @@ export function DetailsSurvey(): JSX.Element {
                                 />
                             </td>
                             <td className="d-flex">
+                                <ExcelExportButton
+                                    ExportClient={ExportClient}
+                                    url={'/' + survey?.id + '/to-excel'}
+                                    loading={ExportRequestState.creating}
+                                    requestData={requestData}
+                                    elements={[
+                                        { params: { type: 'csv', result: false }, label: "Excel CSV"},
+                                        { params: { type: 'xlsx', result: false }, label: "Excel XLSX" },
+                                        { params: { type: 'csv', result: true }, label: "Excel avec résultats CSV" },
+                                        { params: { type: 'xlsx', result: true }, label: "Excel avec résultats XLSX" }
+                                    ]}>Exporter les résultats</ExcelExportButton>
                                 <Button
-                                    icon="print"
+                                    loading={RequestState.loading}
+                                    onClick={refresh}
+                                    icon="refresh"
                                     type="button"
-                                    className="me-2"
-                                    onClick={printPdf}
-                                    mode="primary"
-                                >
-                                    Imprimer
-                                </Button>
-                                <div className="dropdown">
-                                    <button
-                                        disabled={ExportRequestState.creating}
-                                        className="btn btn-warning dropdown-toggle d-flex align-items-center"
-                                        type="button"
-                                        id="printDropdown"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                    >
-                                        {ExportRequestState.creating
-                                            ? <Spinner className="d-inline me-2" size="sm" isBorder={true} />
-                                            : <div className="d-inline me-2"><i className="fa fa-print"></i></div>}
-                                        Exporter
-                                    </button>
-                                    <ul className="dropdown-menu" aria-labelledby="printDropdown">
-                                        <li><a onClick={() => exportExcel({ type: 'csv', result: false })} className="dropdown-item" href="#">Excel CSV</a></li>
-                                        <li><a onClick={() => exportExcel({ type: 'xlsx', result: false })} className="dropdown-item" href="#">Excel XLSX</a></li>
-                                        <li><a onClick={() => exportExcel({ type: 'csv', result: true })} className="dropdown-item" href="#">Excel avec résultats CSV</a></li>
-                                        <li><a onClick={() => exportExcel({ type: 'xlsx', result: true })} className="dropdown-item" href="#">Excel avec résultats XLSX</a></li>
-                                    </ul>
-                                </div>
+                                    mode="secondary"
+                                >Recharger</Button>
                             </td>
                         </tr>
                     </tbody>
@@ -221,22 +171,7 @@ export function DetailsSurvey(): JSX.Element {
             </Block>
 
             <Block>
-                <div className="mb-5 d-flex justify-content-between">
-                    <h4 className="mb-0 text-primary">
-                        Resultat de l&apos;enquête ({survey?.students?.total} étudiant(s))
-                    </h4>
-                    <Button
-                        loading={RequestState.loading}
-                        onClick={refresh}
-                        icon="refresh"
-                        type="button"
-                        mode="secondary"
-                    >
-                        Recharger
-                    </Button>
-                </div>
-
-                <Block className="mb-5 mt-3 d-flex">
+                <div className="mb-5 mt-3 d-flex">
                     <Input
                         value={query}
                         name="query"
@@ -251,14 +186,10 @@ export function DetailsSurvey(): JSX.Element {
                         mode="primary"
                         size="sm"
                     />
-                </Block>
+                </div>
 
                 <div className="table-responsive mb-5">
-                    <table
-                        style={{ fontSize: '9pt' }}
-                        ref={studentRef}
-                        className="table table-striped table-bordered"
-                    >
+                    <table style={{ fontSize: '9pt' }} className="table table-striped table-bordered">
                         <thead>
                             <tr className="bg-danger">
                                 <th className="text-nowrap">N°</th>
@@ -334,13 +265,6 @@ export function DetailsSurvey(): JSX.Element {
                                             {student.gender !== 'Fille' ? student.pivot.z_height_age : '-'}
                                         </td>
                                         <td className="text-center text-nowrap">
-                                            <Link
-                                                to={`/anthropo-measure/survey/edit-student/${student.id}/${survey.id}`}
-                                                style={{ fontSize: '9pt' }}
-                                                className="btn btn-primary btn-sm me-1"
-                                            >
-                                                <i className="fa fa-edit"></i>
-                                            </Link>
                                             <Link
                                                 to={`/anthropo-measure/student/details/${student.id}`}
                                                 style={{ fontSize: '9pt' }}

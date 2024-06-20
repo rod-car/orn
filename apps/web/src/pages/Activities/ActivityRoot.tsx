@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
-import { DropDown, ErrorComponent, Navigation } from '@renderer/components'
+import { DropDown, ErrorComponent, Navigation, UserMenu } from '@renderer/components'
 
 import 'react-toastify/dist/ReactToastify.css?asset'
 import 'bootstrap/dist/css/bootstrap.min.css?asset'
@@ -128,50 +128,7 @@ export function ActivityRoot({ error = false }: { error?: boolean }): ReactNode 
                                 ]}
                             ></DropDown>
 
-                            <li className="nav-item dropdown ms-3">
-                                <NavLink
-                                    className="nav-link dropdown-toggle"
-                                    to="/user"
-                                    id="user-dropdown"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                >
-                                    <i className="fa fa-user me-2"></i>
-                                    {userData?.name}
-                                </NavLink>
-                                <ul
-                                    className="dropdown-menu"
-                                    aria-labelledby="user-dropdown"
-                                >
-                                    <li>
-                                        <NavLink
-                                            className="dropdown-item"
-                                            to="/user/account"
-                                        >
-                                            <i className="fa fa-user me-2"></i> Mon compte
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink
-                                            className="dropdown-item"
-                                            to="/user/account"
-                                        >
-                                            <i className="fa fa-cog me-2"></i> Paramètres
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <Button
-                                            type="button"
-                                            onClick={handleLogout}
-                                            className="dropdown-item shadow-none"
-                                            icon="sign-out"
-                                        >
-                                            Se deconnecter
-                                        </Button>
-                                    </li>
-                                </ul>
-                            </li>
+                            <UserMenu />
                         </ul>
                     </div>
                 </div>

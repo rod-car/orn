@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
 
 import 'react-toastify/dist/ReactToastify.css?asset'
@@ -9,24 +9,18 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js?asset'
 import '@fortawesome/fontawesome-free/js/all.min.js?asset'
 import 'react-confirm-alert/src/react-confirm-alert.css?asset'
 import 'react-toastify/dist/ReactToastify.css?asset'
-
 import '@renderer/assets/icons.css?asset'
 import '@renderer/assets/custom.css?asset'
 import logo from '@renderer/assets/logo.png'
 
-import { useApi, useAuth } from 'hooks'
+import { useApi } from 'hooks'
 import { config, getToken } from '@renderer/config'
-import { Button } from 'ui'
-import { ErrorComponent, Navigation } from '@renderer/components'
+import { ErrorComponent, Navigation, UserMenu } from '@renderer/components'
 
 export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()
     const errorResponse = err as { error: ErrorResponse }
-    const { user, logout, loading } = useAuth({ baseUrl: config.baseUrl })
     const token = getToken()
-
-    const localUser = user()
-    const userData = localUser && localUser.name ? localUser : null
 
     const { Client } = useApi<User>({
         baseUrl: config.baseUrl,
@@ -46,27 +40,6 @@ export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
         }
         getUser()
     }, [token])
-
-    const handleLogout = async (): Promise<void> => {
-        toast('Deconnexion en cours', {
-            type: 'info',
-            isLoading: loading,
-            position: config.toastPosition
-        })
-        const response = await logout()
-        if (response.ok) {
-            toast('Deconnecté', {
-                type: 'success',
-                position: config.toastPosition
-            })
-        } else {
-            toast(response.statusText, {
-                type: 'error',
-                position: config.toastPosition
-            })
-        }
-        navigate('/auth/login')
-    }
 
     return (
         <>
@@ -96,6 +69,11 @@ export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
                             </li>
                             <li className="nav-item">
                                 <NavLink className={`nav-link`} aria-current="page" to="/anthropo-measure">
+                                    <i className="fa fa-ruler me-2"></i>Mésure anthropo
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink className={`nav-link`} aria-current="page" to="/anthropo-measure">
                                     <i className="fa fa-bowl-food me-2"></i>Cantine scolaire
                                 </NavLink>
                             </li>
@@ -106,63 +84,15 @@ export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
                             </li>*/}
                             <li className="nav-item">
                                 <NavLink className={`nav-link`} aria-current="page" to="/scholar-garden">
-                                    <i className="fa fa-cog me-2"></i>Jardin Scolaire
+                                    <i className="fa fa-cog me-2"></i>Activités
                                 </NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink className={`nav-link`} aria-current="page" to="/prices">
-                                    <i className="fa fa-money-bill me-2"></i>Prix
+                                    <i className="fa fa-money-bill me-2"></i>Prix sur le marché
                                 </NavLink>
                             </li>
-                            <li className="nav-item">
-                                <NavLink className={`nav-link`} aria-current="page" to="/about">
-                                    <i className="fa fa-circle-info me-2"></i>A propos
-                                </NavLink>
-                            </li>
-                            <li className="nav-item dropdown ms-3">
-                                <NavLink
-                                    className="nav-link dropdown-toggle"
-                                    to="/user"
-                                    id="user-dropdown"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                >
-                                    <i className="fa fa-user me-2"></i>
-                                    {userData?.name}
-                                </NavLink>
-                                <ul
-                                    className="dropdown-menu"
-                                    aria-labelledby="user-dropdown"
-                                >
-                                    <li>
-                                        <NavLink
-                                            className="dropdown-item"
-                                            to="/user/account"
-                                        >
-                                            <i className="fa fa-user me-2"></i> Mon compte
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink
-                                            className="dropdown-item"
-                                            to="/user/account"
-                                        >
-                                            <i className="fa fa-cog me-2"></i> Paramètres
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <Button
-                                            type="button"
-                                            onClick={handleLogout}
-                                            className="dropdown-item shadow-none"
-                                            icon="sign-out"
-                                        >
-                                            Se deconnecter
-                                        </Button>
-                                    </li>
-                                </ul>
-                            </li>
+                            <UserMenu />
                         </ul>
                     </div>
                 </div>

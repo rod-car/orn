@@ -34,13 +34,13 @@ export function SchoolBySchoolYearClass(): JSX.Element {
     return (
         <Block>
             <div className="mb-5 d-flex align-items-center justify-content-between">
-                <h2>Etudiant par ecole, par classe et par annee scolaire</h2>
+                <h2 className="text-primary fw-semibold">Repartition des étudiants par année scolaire</h2>
                 <Button
                     onClick={(): Promise<void> => exportPdf('school-class-student-state')}
                     icon="print"
                     className="btn secondary-link"
                 >
-                    Exporter tous vers PDF
+                    Exporter tous
                 </Button>
             </div>
             {error && <div className="alert alert-danger">{error.message}</div>}

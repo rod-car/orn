@@ -11,7 +11,7 @@ export function DropDown({
     label: string
     base: string
     icon: string
-    items: Array<{ url: string; label: string; icon?: string }>
+    items: Array<{ url: string; label: string; icon?: string, can?: boolean }>
 }): JSX.Element {
     return (
         <li className="nav-item dropdown">
@@ -26,14 +26,18 @@ export function DropDown({
                 {label}
             </a>
             <ul className="dropdown-menu" aria-labelledby={id}>
-                {items.map((item) => (
-                    <li key={item.url}>
+                {items.map((item) => {
+                    const link = <li key={item.url}>
                         <NavLink className="dropdown-item" to={base + item.url}>
                             {item.icon && <i className={`fa fa-${item.icon} me-2`}></i>}
                             {item.label}
                         </NavLink>
                     </li>
-                ))}
+
+                    if (item.can === undefined) return link
+                    if (item.can === true) return link
+                    return null
+                })}
             </ul>
         </li>
     )

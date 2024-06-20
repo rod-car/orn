@@ -16,8 +16,7 @@ import logo from '@renderer/assets/logo.png'
 
 import { useApi, useAuth } from 'hooks'
 import { config, getToken } from '@renderer/config'
-import { Button } from 'ui'
-import { DropDown, ErrorComponent, Navigation } from '@renderer/components'
+import { DropDown, ErrorComponent, Navigation, UserMenu } from '@renderer/components'
 
 export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()
@@ -46,27 +45,6 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
         }
         getUser()
     }, [token])
-
-    const handleLogout = async (): Promise<void> => {
-        toast('Deconnexion en cours', {
-            type: 'info',
-            isLoading: loading,
-            position: config.toastPosition
-        })
-        const response = await logout()
-        if (response.ok) {
-            toast('Deconnecté', {
-                type: 'success',
-                position: config.toastPosition
-            })
-        } else {
-            toast(response.statusText, {
-                type: 'error',
-                position: config.toastPosition
-            })
-        }
-        navigate('/auth/login')
-    }
 
     return (
         <>
@@ -103,7 +81,8 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                                     {
                                         url: '/add',
                                         label: 'Ajouter un étudiant',
-                                        icon: 'plus'
+                                        icon: 'plus',
+                                        can: userData?.role !== 0
                                     },
                                     {
                                         url: '/list',
@@ -113,7 +92,8 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                                     {
                                         url: '/import',
                                         label: 'Importer une liste',
-                                        icon: 'file'
+                                        icon: 'file',
+                                        can: userData?.role !== 0
                                     }
                                 ]}
                             ></DropDown>
@@ -127,33 +107,36 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                                     {
                                         url: '/add',
                                         label: 'Ajouter un école',
-                                        icon: 'plus'
+                                        icon: 'plus',
+                                        can: userData?.role !== 0
                                     },
                                     {
                                         url: '/list',
                                         label: 'Liste des écoles',
                                         icon: 'list'
                                     },
-                                    { url: '/classes/list', label: 'Classe', icon: 'list' },
-                                    { url: '/levels/list', label: 'Niveau', icon: 'list' }
+                                    { url: '/classes/list', label: 'Classe', icon: 'list', can: userData?.role !== 0 },
+                                    { url: '/levels/list', label: 'Niveau', icon: 'list', can: userData?.role !== 0 }
                                 ]}
                             ></DropDown>
 
-                            <DropDown
-                                id="abaques"
-                                label="Abaques"
-                                base="/anthropo-measure/measure"
-                                icon="database"
-                                items={[
-                                    { url: '/add', label: 'Ajouter', icon: 'plus' },
-                                    { url: '/list', label: 'Liste', icon: 'list' },
-                                    {
-                                        url: '/import',
-                                        label: 'Importer une liste',
-                                        icon: 'file'
-                                    }
-                                ]}
-                            ></DropDown>
+                            {userData?.role !== 0 && 
+                                <DropDown
+                                    id="abaques"
+                                    label="Abaques"
+                                    base="/anthropo-measure/measure"
+                                    icon="database"
+                                    items={[
+                                        { url: '/add', label: 'Ajouter', icon: 'plus' },
+                                        { url: '/list', label: 'Liste', icon: 'list' },
+                                        {
+                                            url: '/import',
+                                            label: 'Importer une liste',
+                                            icon: 'file'
+                                        }
+                                    ]}
+                                ></DropDown>
+                            }
 
                             <DropDown
                                 id="anthropo-measure"
@@ -161,7 +144,7 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                                 base="/anthropo-measure/survey"
                                 icon="ruler"
                                 items={[
-                                    { url: '/add', label: 'Nouvelle mesure', icon: 'plus' },
+                                    { url: '/add', label: 'Nouvelle mesure', icon: 'plus', can: userData?.role !== 0 },
                                     {
                                         url: '/list',
                                         label: 'Liste des mesures',
@@ -170,55 +153,13 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                                     {
                                         url: '/add-student',
                                         label: 'Mesurer un étudiant',
-                                        icon: 'user-plus'
+                                        icon: 'user-plus',
+                                        can: userData?.role !== 0
                                     }
                                 ]}
                             ></DropDown>
 
-                            <li className="nav-item dropdown ms-3">
-                                <NavLink
-                                    className="nav-link dropdown-toggle"
-                                    to="/user"
-                                    id="user-dropdown"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                >
-                                    <i className="fa fa-user me-2"></i>
-                                    {userData?.name}
-                                </NavLink>
-                                <ul
-                                    className="dropdown-menu"
-                                    aria-labelledby="user-dropdown"
-                                >
-                                    <li>
-                                        <NavLink
-                                            className="dropdown-item"
-                                            to="/user/account"
-                                        >
-                                            <i className="fa fa-user me-2"></i> Mon compte
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink
-                                            className="dropdown-item"
-                                            to="/user/account"
-                                        >
-                                            <i className="fa fa-cog me-2"></i> Paramètres
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <Button
-                                            type="button"
-                                            onClick={handleLogout}
-                                            className="dropdown-item shadow-none"
-                                            icon="sign-out"
-                                        >
-                                            Se deconnecter
-                                        </Button>
-                                    </li>
-                                </ul>
-                            </li>
+                            <UserMenu />
                         </ul>
                     </div>
                 </div>

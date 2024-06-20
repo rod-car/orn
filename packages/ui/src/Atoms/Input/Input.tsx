@@ -28,7 +28,7 @@ export function Input({
     if (auto) props.disabled = true
 
     return <div className={`form-group ${className}`}>
-        {props.label && <label className="form-label" htmlFor={id}>
+        {props.label && <label className="form-label fw-semibold" htmlFor={id}>
             {props.label}
             {auto === false && <RequiredSign value={required} />}
             <AutoSign value={auto} />
@@ -40,7 +40,7 @@ export function Input({
             value={controlled ? props.value : undefined}
             onChange={controlled ? props.onChange : () => { }}
             placeholder={props.placeholder}
-            className={`form-control input-${elementSize}`}
+            className={`form-control shadow-sm input-${elementSize}`}
             {...props}
         />
         {error && error.length > 0 && <span className="text-danger d-block mt-1">{error.at(0)}</span>}

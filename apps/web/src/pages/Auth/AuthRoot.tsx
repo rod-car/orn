@@ -21,7 +21,7 @@ export function AuthRoot({ error = false }: { error?: boolean }): ReactNode {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top mb-5 p-0">
+            {/*<nav className="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top mb-5 p-0">
                 <div className="container container-fluid">
                     <NavLink className="navbar-brand fw-bold d-flex align-items-center" to="/">
                         <img className="w-15 me-3" src={logo} alt="Logo" />
@@ -57,20 +57,20 @@ export function AuthRoot({ error = false }: { error?: boolean }): ReactNode {
                                     to="/auth/register"
                                 >
                                     <i className="fa fa-right-to-bracket me-2"></i>
-                                    Inscription
+                                    Demande d'accès
                                 </NavLink>
                             </li>
                         </ul>
                     </div>
                 </div>
-            </nav>
+            </nav>*/}
 
-            <div className="container mb-5" style={{ marginTop: 130, minHeight: '90vh' }}>
+            <div>
                 <ToastContainer />
                 {error ? <ErrorComponent error={errorResponse.error} /> : <Outlet />}
             </div>
 
-            <footer className="bg-light p-4">
+            {/*<footer className="bg-light p-4">
                 <div className="d-flex justify-content-between">
                     <p className="m-0">
                         &copy; Copyleft ORN Atsinanana {new Date().toLocaleDateString()}
@@ -79,7 +79,7 @@ export function AuthRoot({ error = false }: { error?: boolean }): ReactNode {
                         Developpé par: <a target="_blank" href="http://rod-car.lovestoblog.com">Gislain Carino Rodrigue BOUDI</a>
                     </p>
                 </div>
-            </footer>
+            </footer>*/}
         </>
     )
 }

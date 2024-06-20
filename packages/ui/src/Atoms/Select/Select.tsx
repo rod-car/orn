@@ -32,12 +32,12 @@ export function Select({ label, name, value, options, defaultOption, onChange, c
     const id = useId()
 
     return <div className="form-group">
-        {label && <label className="form-label" htmlFor={id}>
+        {label && <label className="form-label fw-semibold" htmlFor={id}>
             {label}
             <RequiredSign value={required} />
         </label>}
         {loading ? <p className="form-control bg-grey">Chargement des données</p> :
-            <select value={value} defaultValue={defaultOption} onChange={controlled ? onChange : () => { }} name={name} id={id} className="form-select">
+            <select value={value} defaultValue={defaultOption} onChange={controlled ? onChange : () => { }} name={name} id={id} className="form-select shadow-sm">
                 {placeholder && <option value={0}>{placeholder}</option>}
                 {options && options.map(o => typeof o === 'object'
                     ? <option key={o[config.optionKey]} value={o[config.optionKey]}>{o[config.valueKey]}</option>

@@ -1,34 +1,14 @@
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import {
-    AddClass,
-    AddLevel,
-    AddSchool,
-    AddStudent,
-    AddSurvey,
-    AddSurveyStudent,
-    Classes,
-    DetailsSchool,
-    DetailsStudent,
-    DetailsSurvey,
-    ImportResultSurvey,
-    EditClass,
-    EditLevel,
-    EditSchool,
-    EditStudent,
-    EditSurvey,
-    ImportStudent,
-    Levels,
-    School,
-    State,
-    Student,
-    Survey
+import { AddClass, AddLevel, AddSchool, AddStudent, AddSurvey, AddSurveyStudent, Classes,
+    DetailsSchool, DetailsStudent, DetailsSurvey, ImportResultSurvey, EditClass, EditLevel,
+    EditSchool, EditStudent, EditSurvey, ImportStudent, Levels, School, State, Student, Survey
 } from '@renderer/pages'
 import { PrivateRoute } from '@renderer/components/PrivateRoute'
 import { GuestRoute } from '@renderer/components/GuestRoute'
 import { ActivityRoot, ActivityHome, ActivityAdd, ActivityList, ActivityEdit, AdminActivityList, ActivityTypeList, ActivityTypeEdit, ActivityTypeAdd, ActivityStatistics } from '@renderer/pages/Activities'
 import { MeasureRoot, ListMeasure, AddMeasure, EditMeasure, ImportMeasure, DetailsMeasure, HomeMeasure } from '@renderer/pages/Measures'
-import { Login, Register, AuthRoot } from '@renderer/pages/Auth'
+import { Login, Register, AuthRoot, AccessRequest, Users, AddUser } from '@renderer/pages/Auth'
 import { AppRoot, About, Contributors, HomePage } from '@renderer/pages/App'
 import { ArticleAdd, ArticleEdit, ArticleList, ArticleShow, PriceAdd, PriceHome, PriceList, PriceRoot, SiteAdd, SiteEdit, SiteList, UnitAdd, UnitEdit, UnitList } from '@renderer/pages/Prices'
 import { JardinAdd, JardinHome, JardinList, JardinRoot, JardinStatistics, Engrais, Semence, Materiel, Steps, StepsData, JardinEdit, JardinShow } from '@renderer/pages/Activities/JardinScolaire'
@@ -56,6 +36,18 @@ const router = createBrowserRouter([
                 element: <PrivateRoute>
                     <Contributors />
                 </PrivateRoute>
+            },
+            {
+                path: '/auth/access-request',
+                element: <PrivateRoute><AccessRequest /></PrivateRoute>
+            },
+            {
+                path: '/auth/users',
+                element: <PrivateRoute><Users /></PrivateRoute>
+            },
+            {
+                path: '/auth/add-user',
+                element: <PrivateRoute><AddUser /></PrivateRoute>
             }
         ]
     },

@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+declare module 'react-laravel-paginex'
 
 type MeasureLength = {
     id: number
@@ -89,6 +90,7 @@ type User = {
     id: number
     name: string
     email: string
+    role: number
     username: string
     password: string
     password_confirmation: string
