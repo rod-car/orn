@@ -1,7 +1,7 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Block, Button } from "ui";
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { ArticleLoading, Link } from "@renderer/components";
 import { Pagination } from 'react-laravel-paginex'
 import { confirmAlert } from "react-confirm-alert";
@@ -14,7 +14,6 @@ export function ArticleList(): ReactNode {
         RequestState
     } = useApi<Article>({
         baseUrl: config.baseUrl,
-        token: getToken(),
         url: '/prices/articles'
     })
 

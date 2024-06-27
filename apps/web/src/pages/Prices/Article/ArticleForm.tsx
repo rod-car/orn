@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react'
 import { Button, Input, Textarea } from 'ui'
 import { useApi } from 'hooks'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { toast } from 'react-toastify'
 
 type ArticleFormProps = {
@@ -23,7 +23,7 @@ export function ArticleForm({ editedArticle }: ArticleFormProps): JSX.Element {
         RequestState
     } = useApi<Article>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/articles',
         key: 'data'
     })

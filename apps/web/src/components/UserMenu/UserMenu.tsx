@@ -1,5 +1,5 @@
 import { config } from "@renderer/config";
-import { useAuth } from "hooks";
+import { useApi, useAuthStore } from "hooks";
 import { ReactNode } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -7,17 +7,16 @@ import { Button } from "ui";
 
 export function UserMenu(): ReactNode {
     const navigate = useNavigate()
-    const { user, logout, loading } = useAuth({ baseUrl: config.baseUrl })
-    const localUser = user()
-    const userData = localUser && localUser.name ? localUser : null
+    const { user, logout, isSuperuser } = useAuthStore()
+    const { Client, RequestState } = useApi<User>({ baseUrl: config.baseUrl, url: '/auth' })
 
     const handleLogout = async (): Promise<void> => {
         toast('Deconnexion en cours', {
             type: 'info',
-            isLoading: loading,
+            isLoading: RequestState.creating,
             position: config.toastPosition
         })
-        const response = await logout()
+        const response = await logout(Client)
         if (response.ok) {
             toast('Deconnecté', {
                 type: 'success',
@@ -42,7 +41,7 @@ export function UserMenu(): ReactNode {
             aria-expanded="false"
         >
             <i className="fa fa-user me-2"></i>
-            {userData?.name}
+            {user?.name}
         </NavLink>
         <ul
             className="dropdown-menu"
@@ -64,6 +63,25 @@ export function UserMenu(): ReactNode {
                     <i className="fa fa-cog me-2"></i> Paramètres
                 </NavLink>
             </li>
+            {isSuperuser && <>
+                <li>
+                    <NavLink
+                        className="dropdown-item"
+                        to="/auth/users"
+                    >
+                        <i className="fa fa-users me-2"></i> Utilisateurs
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink
+                        className="dropdown-item"
+                        to="/auth/access-request"
+                    >
+                        <i className="fa fa-comment-dots me-2"></i> Demandes d'accès
+                    </NavLink>
+                </li>
+            </>}
+
             <li>
                 <Button
                     type="button"

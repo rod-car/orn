@@ -1,45 +1,31 @@
 import { ReactNode, useEffect } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
+import { useApi, useAuthStore } from 'hooks'
+import { config } from '@renderer/config'
+import { DropDown, ErrorComponent, Navigation, ProgressBar, UserMenu, NotFound, Header, Footer } from '@renderer/components'
+import { useNotFoundRoute } from '@renderer/hooks'
 
-import 'react-toastify/dist/ReactToastify.css?asset'
-import 'bootstrap/dist/css/bootstrap.min.css?asset'
-import '@popperjs/core/dist/esm/index.js?asset'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js?asset'
-import '@fortawesome/fontawesome-free/js/all.min.js?asset'
-import 'react-confirm-alert/src/react-confirm-alert.css?asset'
-import 'react-toastify/dist/ReactToastify.css?asset'
-
-import '@renderer/assets/icons.css?asset'
-import '@renderer/assets/custom.css?asset'
-import logo from '@renderer/assets/logo.png'
-
-import { useApi, useAuth } from 'hooks'
-import { config, getToken } from '@renderer/config'
-import { DropDown, ErrorComponent, Navigation, UserMenu } from '@renderer/components'
+import '@renderer/assets'
 
 export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()
     const errorResponse = err as { error: ErrorResponse }
-    const { user, logout, loading } = useAuth({ baseUrl: config.baseUrl })
-    const token = getToken()
-
-    const localUser = user()
-    const userData = localUser && localUser.name ? localUser : null
+    const { token, user, resetUser, isAdmin } = useAuthStore()
 
     const { Client } = useApi<User>({
         baseUrl: config.baseUrl,
-        url: '/auth',
-        token: token
+        url: '/auth'
     })
 
     const navigate = useNavigate()
+    const { notFound, path } = useNotFoundRoute()
 
     useEffect(() => {
         const getUser = async (): Promise<void> => {
             const users = await Client.get({}, '/user')
             if (users.length === 0) {
-                localStorage.removeItem('user')
+                resetUser()
                 navigate('/auth/login')
             }
         }
@@ -48,12 +34,10 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
 
     return (
         <>
+            <ProgressBar />
             <nav className="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top mb-5 p-0">
                 <div className="container container-fluid">
-                    <NavLink className="navbar-brand fw-bold d-flex align-items-center" to="/">
-                        <img className="w-15 me-3" src={logo} alt="Logo" />
-                        <span style={{ color: '#071E78', fontFamily: 'arial' }}>ORN</span>
-                    </NavLink>
+                    <Header />
                     <button
                         className="navbar-toggler"
                         type="button"
@@ -82,7 +66,7 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                                         url: '/add',
                                         label: 'Ajouter un étudiant',
                                         icon: 'plus',
-                                        can: userData?.role !== 0
+                                        can: isAdmin
                                     },
                                     {
                                         url: '/list',
@@ -93,7 +77,7 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                                         url: '/import',
                                         label: 'Importer une liste',
                                         icon: 'file',
-                                        can: userData?.role !== 0
+                                        can: isAdmin
                                     }
                                 ]}
                             ></DropDown>
@@ -108,19 +92,19 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                                         url: '/add',
                                         label: 'Ajouter un école',
                                         icon: 'plus',
-                                        can: userData?.role !== 0
+                                        can: isAdmin
                                     },
                                     {
                                         url: '/list',
                                         label: 'Liste des écoles',
                                         icon: 'list'
                                     },
-                                    { url: '/classes/list', label: 'Classe', icon: 'list', can: userData?.role !== 0 },
-                                    { url: '/levels/list', label: 'Niveau', icon: 'list', can: userData?.role !== 0 }
+                                    { url: '/classes/list', label: 'Classe', icon: 'list', can: isAdmin },
+                                    { url: '/levels/list', label: 'Niveau', icon: 'list', can: isAdmin }
                                 ]}
                             ></DropDown>
 
-                            {userData?.role !== 0 && 
+                            {isAdmin && 
                                 <DropDown
                                     id="abaques"
                                     label="Abaques"
@@ -144,7 +128,7 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                                 base="/anthropo-measure/survey"
                                 icon="ruler"
                                 items={[
-                                    { url: '/add', label: 'Nouvelle mesure', icon: 'plus', can: userData?.role !== 0 },
+                                    { url: '/add', label: 'Nouvelle mesure', icon: 'plus', can: isAdmin },
                                     {
                                         url: '/list',
                                         label: 'Liste des mesures',
@@ -154,7 +138,7 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                                         url: '/add-student',
                                         label: 'Mesurer un étudiant',
                                         icon: 'user-plus',
-                                        can: userData?.role !== 0
+                                        can: isAdmin
                                     }
                                 ]}
                             ></DropDown>
@@ -167,24 +151,15 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
 
             <div className="container mb-5" style={{ marginTop: 130, minHeight: '90vh' }}>
                 <ToastContainer />
-                {userData !== null && <Navigation />}
+                {user && <Navigation />}
                 {error ? <ErrorComponent error={errorResponse.error ?? {
                     status: 500,
                     statusText: "Une erreur est survenue",
                     data: null
-                }} /> : <Outlet />}
+                }} /> : (notFound ? <NotFound path={path} /> : <Outlet />)}
             </div>
 
-            <footer className="bg-light p-4">
-                <div className="d-flex justify-content-between">
-                    <p className="m-0">
-                        &copy; Copyleft ORN Atsinanana {new Date().toLocaleDateString()}
-                    </p>
-                    <p className="m-0">
-                        Developpé par: <a href="#">Gislain Carino Rodrigue BOUDI</a>
-                    </p>
-                </div>
-            </footer>
+            <Footer />
         </>
     )
 }

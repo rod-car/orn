@@ -1,7 +1,7 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Block, Button } from "ui";
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { ActivityLoading, Link } from "@renderer/components";
 import { Pagination } from 'react-laravel-paginex'
 import { wrap } from 'functions'
@@ -15,7 +15,7 @@ export function ActivityTypeList(): ReactNode {
         RequestState
     } = useApi<Activity>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/activities'
     })
 

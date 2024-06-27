@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { Link } from '@renderer/components'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { Block, Button, Select } from 'ui'
 import { useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
@@ -19,7 +19,7 @@ export function AccessRequest(): JSX.Element {
 
     const { Client, RequestState, error, datas: users, setDatas: setUsers } = useApi<User>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/auth/users',
         key: 'data'
     })

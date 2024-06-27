@@ -1,4 +1,4 @@
-import { config, getToken } from "@renderer/config";
+import { config } from "@renderer/config";
 import { capitalize } from "functions";
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
@@ -7,7 +7,7 @@ import { Block } from "ui";
 
 export function JardinShow(): ReactNode {
     const { id } = useParams()
-    const { Client, data } = useApi<Garden>({ baseUrl: config.baseUrl, url: "/jardin-scolaires", token: getToken() })
+    const { Client, data } = useApi<Garden>({ baseUrl: config.baseUrl, url: "/jardin-scolaires" })
 
     function getData() {
         Client.find(parseInt(id as string))

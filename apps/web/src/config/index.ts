@@ -1,8 +1,8 @@
 import { ToastPosition } from 'react-toastify'
 
 export const config = {
-    baseUrl: 'https://api.clinique-hugney.mg/api',
-    // baseUrl: 'http://localhost:8000/api',
+    // baseUrl: 'https://api.clinique-hugney.mg/api',
+    baseUrl: 'http://localhost:8000/api',
     toastPosition: 'top-right' as ToastPosition
 }
 
@@ -41,8 +41,6 @@ const find = (key: string): string | null => {
     if (Object.keys(pairsKey).includes(key)) return pairsKey[key]
     return null
 }
-
-export const getToken = (): string => JSON.parse(localStorage.getItem('user') ?? '{}')?.token
 
 const defaultFields = {
     age: 0,

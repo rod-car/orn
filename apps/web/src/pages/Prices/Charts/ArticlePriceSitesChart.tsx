@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { Button, Select, Spinner } from 'ui'
 
 import {
@@ -81,14 +81,14 @@ export function ArticlePriceSitesChart(): ReactNode {
 
     const { Client: SiteClient, datas: sites } = useApi<Site>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/sites',
         key: 'data'
     })
 
     const { Client: ArticleClient, datas: articles } = useApi<Article>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/articles',
         key: 'data'
     })
@@ -99,7 +99,7 @@ export function ArticlePriceSitesChart(): ReactNode {
         RequestState
     } = useApi<{ data: ArticlePrice }>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices',
         key: 'data'
     })

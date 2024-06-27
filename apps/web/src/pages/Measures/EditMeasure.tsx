@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { config, abaque as abaqueConfig, getToken } from '@renderer/config'
+import { config, abaque as abaqueConfig } from '@renderer/config'
 import { Button, Input } from 'ui'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
@@ -11,7 +11,6 @@ export function EditMeasure(): JSX.Element {
     const { id } = useParams()
     const { Client, RequestState } = useApi<MeasureLength>({
         baseUrl: config.baseUrl,
-        token: getToken(),
         url: '/measures'
     })
 
@@ -34,7 +33,7 @@ export function EditMeasure(): JSX.Element {
 
     const save = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
-        const response = await Client.patch(id as unknown as number, abaque, {
+        const response = await Client.patch(parseInt(id as string), abaque, {
             type: type as string
         })
 

@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Block, Button, Input } from "ui";
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { useApi } from "hooks";
 import { range } from "functions";
 import Skeleton from "react-loading-skeleton";
@@ -10,7 +10,7 @@ import { confirmAlert } from "react-confirm-alert";
 export function Semence(): ReactNode {
     const { datas: semences, setDatas, Client, RequestState, error } = useApi<Semence>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/jardin-scolaires/semences'
     })
 

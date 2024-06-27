@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { scholar_years } from 'functions'
 import { StudentBySchoolZValue } from './StudentBySchoolZValue'
 import { useApi } from 'hooks'
-import { getToken } from '@renderer/config'
 import { SurveySelector } from '@renderer/components'
 
 export function State(): JSX.Element {
@@ -13,7 +12,7 @@ export function State(): JSX.Element {
     const [surveyIdZ, setSurveyIdZ] = useState<number>(0)
     const [surveyId, setSurveyId] = useState<number>(0)
 
-    const { Client, datas, RequestState } = useApi<Survey>({url: 'surveys', key: 'data', token: getToken()})
+    const { Client, datas, RequestState } = useApi<Survey>({url: 'surveys', key: 'data' })
 
     useEffect(() => {
         Client.get()

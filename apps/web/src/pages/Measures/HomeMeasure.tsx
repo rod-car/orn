@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import React, { useCallback, useEffect, useState } from 'react'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { Button, HomeCard, Spinner } from 'ui'
 import { SchoolsByClasses, SchoolsByScholarYear, ZBySchool } from '..'
 import { NavLink } from 'react-router-dom'
@@ -12,21 +12,21 @@ import './HomeMeasure.modules.scss'
 export function HomeMeasure(): React.ReactElement {
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schoolCount } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: SurveyClient, datas: surveyCount } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/surveys',
         key: 'data'
     })

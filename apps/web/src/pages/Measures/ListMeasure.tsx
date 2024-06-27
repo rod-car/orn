@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { createSearchParams } from 'react-router-dom'
-import { config, abaque, getToken } from '@renderer/config'
+import { config, abaque } from '@renderer/config'
 import { Block, Button, Select } from 'ui'
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
@@ -16,7 +16,7 @@ export function ListMeasure(): JSX.Element {
         datas: abaques
     } = useApi<MeasureLength>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/measures'
     })
 

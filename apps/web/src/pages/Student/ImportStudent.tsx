@@ -2,7 +2,7 @@ import { useApi, useExcelReader } from 'hooks'
 import { ChangeEvent } from 'react'
 import { Link } from '@renderer/components'
 import { Block, Button, Input, Spinner } from 'ui'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { toast } from 'react-toastify'
 import { isDate } from 'functions'
 
@@ -11,7 +11,7 @@ export function ImportStudent(): JSX.Element {
 
     const { Client, RequestState } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/students'
     })
 

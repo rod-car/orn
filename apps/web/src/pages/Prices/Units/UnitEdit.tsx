@@ -2,7 +2,7 @@ import { useApi } from 'hooks'
 import { ReactNode, useEffect } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block } from 'ui'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { UnitForm } from '@renderer/pages/Prices'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -10,7 +10,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 export function UnitEdit(): ReactNode {
     const { Client, data: unit } = useApi<Unit>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/units'
     })
 

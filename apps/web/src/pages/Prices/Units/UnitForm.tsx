@@ -1,7 +1,7 @@
 import { FormEvent, ReactNode, useState } from 'react'
 import { Button, Input } from 'ui'
 import { useApi } from 'hooks'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { toast } from 'react-toastify'
 
 type UnitFormProps = {
@@ -22,7 +22,7 @@ export function UnitForm({ editedUnit }: UnitFormProps): ReactNode {
         RequestState
     } = useApi<Unit>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/units',
         key: 'data'
     })

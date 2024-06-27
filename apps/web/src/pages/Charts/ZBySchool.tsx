@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { useCallback, useEffect, useState } from 'react'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { Button, Select, Spinner } from 'ui'
 import { generateColor, getPdf } from '@renderer/utils'
 
@@ -42,7 +42,7 @@ export function ZBySchool(): JSX.Element {
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/schools',
         key: 'data'
     })
@@ -53,7 +53,7 @@ export function ZBySchool(): JSX.Element {
         RequestState
     } = useApi<SurveySchoolZ>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/students'
     })
 

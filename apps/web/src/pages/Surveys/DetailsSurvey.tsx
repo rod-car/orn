@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { useParams } from 'react-router-dom'
 import { Block, Button, Input, Select } from 'ui'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { ageMonth, ageYear, number_array, range } from 'functions'
 import { ExcelExportButton, Link } from '@renderer/components'
@@ -17,19 +17,16 @@ export function DetailsSurvey(): ReactNode {
 
     const { Client, data: survey, RequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        token: getToken(),
         url: 'surveys'
     })
 
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        token: getToken(),
         url: 'surveys'
     })
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: getToken(),
         url: 'schools',
         key: 'data'
     })

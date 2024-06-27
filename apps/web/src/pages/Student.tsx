@@ -1,12 +1,11 @@
 import { useApi, useExcelReader } from 'hooks'
-import { Link } from '@renderer/components'
-import { class_categories, config, getToken } from '@renderer/config'
+import { ExcelExportButton, Link } from '@renderer/components'
+import { class_categories, config } from '@renderer/config'
 import { Block, Button, Input, Select } from 'ui'
 import { useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
 import { ageFull, format, number_array, range, scholar_years } from 'functions'
-
 import { Pagination } from 'react-laravel-paginex'
 import Skeleton from 'react-loading-skeleton'
 
@@ -24,33 +23,29 @@ export function Student(): JSX.Element {
     const [query, setQuery] = useState<string | number>('')
     const [category, setCategory] = useState<string>('')
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
-
     const { toExcel } = useExcelReader()
 
-    const {
-        Client: SClient,
-        RequestState: SRequestState,
-        error: Serror,
-        datas: students
-    } = useApi<Student>({
+    const { Client: SClient, RequestState: SRequestState, error: Serror, datas: students } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: getToken(),
         url: '/students',
         key: 'data'
     })
 
     const { Client: ScClient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: getToken(),
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClClient, datas: classes } = useApi<Classes>({
         baseUrl: config.baseUrl,
-        token: getToken(),
         url: '/classes',
         key: 'data'
+    })
+
+    const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
+        baseUrl: config.baseUrl,
+        url: 'students'
     })
 
     const requestData = {
@@ -72,6 +67,10 @@ export function Student(): JSX.Element {
         ClClient.get()
     }, [])
 
+    /**
+     * Traiter la suppréssion d'un étudiant
+     * @param id 
+     */
     const handleDelete = async (id: number): Promise<void> => {
         confirmAlert({
             title: 'Question',
@@ -110,9 +109,11 @@ export function Student(): JSX.Element {
         })
     }
 
-    const filterStudents = async (
-        target: EventTarget & (HTMLSelectElement | HTMLInputElement)
-    ): Promise<void> => {
+    /**
+     * Filtrer la liste des étudiants
+     * @param target 
+     */
+    const filterStudents = async (target: EventTarget & (HTMLSelectElement | HTMLInputElement)): Promise<void> => {
         const { value, name } = target
 
         if (name === 'scholar-year') {
@@ -143,6 +144,10 @@ export function Student(): JSX.Element {
         await SClient.get(requestData)
     }
 
+    /**
+     * Permet de traiter la recherche
+     * @param target 
+     */
     const handleSearch = async (target: EventTarget & HTMLInputElement): Promise<void> => {
         const { value } = target
 
@@ -160,82 +165,18 @@ export function Student(): JSX.Element {
         setTimeoutId(newTimeoutId)
     }
 
+    /**
+     * Changer de la page de la pagination
+     * @param data 
+     */
     const changePage = (data: { page: number }): void => {
         SClient.get({ ...requestData, page: data.page })
-    }
-
-    const printList = (): void => {
-        const headers: unknown = [
-            'N°',
-            'Nom et prénoms',
-            'Nom des parents',
-            'G',
-            'F',
-            'Date de naissance',
-            'Taille',
-            'Poids',
-            'IMC'
-        ]
-
-        const selectedSchool = school > 0 && schools.find((sc) => sc.id === school)
-        const schoolParts = ['EPP', 'ROMIALO']
-        if (selectedSchool) {
-            const parts = selectedSchool.name.split(' ')
-            schoolParts[0] = parts.at(0) as string
-            schoolParts[1] = parts.at(1) as string
-        }
-        const selectedClass = classe > 0 && classes.find((c) => c.id === classe)
-
-        const list: unknown | string[][] = [
-            ['DREN ATSINANANA', '', 'OFFICE NATIONAL DE NUTRITION'],
-            ['CISCO: TOAMASINA', '', 'OFFICE REGIONAL DE NUTRITION ATSINANANA'],
-            [
-                'ZAP: TOAMASINA',
-                '',
-                'COLLECTE DE RÉSULTAT DE TEST COGNITIF ET TEST ANTHROPOMÉTRIQUE'
-            ],
-            [`${schoolParts[0]}: ${schoolParts[1]}`, '', 'EVALUATION N°:.................'],
-            [`CLASSE: ${selectedClass && selectedClass.name} ${category}`],
-            [``],
-            [``],
-            ['', '', '', '', '', '', 'MESURE ANTHROPO'],
-            headers
-        ]
-        const fileName = `Liste des etudiants_${selectedSchool && selectedSchool.name}_${selectedClass && selectedClass.name
-            }_${category}.xlsx`
-
-        const datas = students.data as {
-            student: Student
-            school: School
-            classe: Classes
-            scholar_year: string
-        }[]
-        datas.map((data, key) => {
-            list.push([
-                key + 1,
-                data.student.firstname +
-                ' ' +
-                (data.student.lastname === null ? '' : data.student.lastname),
-                data.student.parents,
-                data.student.gender === 'Fille' ? '' : 'X',
-                data.student.gender === 'Fille' ? 'X' : '',
-                data.student.birth_date ? format(data.student.birth_date, 'dd/MM/y') : '',
-                '',
-                '',
-                ''
-            ])
-        })
-
-        list.push([''])
-        list.push(['Le responsable', '', '', '', '', '', 'Le Directeur'])
-
-        toExcel(list, fileName)
     }
 
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2 className="text-muted">Liste des etudiants</h2>
+                <h2 className="text-primary fw-semibold">Liste des etudiants {!SRequestState.loading && <span>({students?.total})</span>}</h2>
                 <div className="d-flex align-items-between">
                     <Button
                         icon="refresh"
@@ -325,55 +266,42 @@ export function Student(): JSX.Element {
                                 />
                             </td>
                             <td>
-                                <Button
-                                    icon="print"
-                                    type="button"
-                                    className="me-2"
-                                    onClick={(): void => { }}
-                                    mode="primary"
-                                >
-                                    Imprimer
-                                </Button>
-                                <Button
-                                    icon="print"
-                                    mode="warning"
-                                    type="button"
-                                    onClick={printList}
-                                >
-                                    Exporter
-                                </Button>
+                                <ExcelExportButton
+                                    ExportClient={ExportClient}
+                                    url={'/to-excel'}
+                                    loading={ExportRequestState.creating}
+                                    requestData={{...requestData, q: undefined, paginate: false}}
+                                    elements={[
+                                        { params: { type: 'csv', student_only: 0 }, label: "CSV avec les filtres (Entête)" },
+                                        { params: { type: 'xlsx', student_only: 0 }, label: "XLSX avec les filtres (Entête)" },
+                                        { params: { type: 'csv', student_only: 1 }, label: "CSV sans les filtres" },
+                                        { params: { type: 'xlsx', student_only: 1 }, label: "XLSX sans les filtres" }
+                                    ]}>Exporter la liste</ExcelExportButton>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </Block>
 
-            <Block className="mb-5 mt-3 d-flex">
-                <Input
-                    value={query}
-                    name="query"
-                    onChange={({ target }): Promise<void> => handleSearch(target)}
-                    placeholder="Rechercher un étudiant..."
-                    className="w-100 me-1"
-                />
-                <Button
-                    icon="search"
-                    loading={SRequestState.loading}
-                    type="button"
-                    mode="primary"
-                    size="sm"
-                />
-            </Block>
-
             <Block>
-                <div className="d-flex justify-content-end mb-3">
-                    <h5>Arrêté au nombre de {students.total} étudiants(s)</h5>
+                <div className="mb-5 mt-3 d-flex">
+                    <Input
+                        value={query}
+                        name="query"
+                        onChange={({ target }): Promise<void> => handleSearch(target)}
+                        placeholder="Rechercher un étudiant..."
+                        className="w-100 me-1"
+                    />
+                    <Button
+                        icon="search"
+                        loading={SRequestState.loading}
+                        type="button"
+                        mode="primary"
+                        size="sm"
+                    />
                 </div>
                 <div className="table-responsive">
-                    <table
-                        style={{ fontSize: '10pt' }}
-                        className="table table-striped table-bordered mb-5"
-                    >
+                    <table style={{ fontSize: '10pt' }} className="table table-striped table-bordered mb-5">
                         <thead>
                             <tr>
                                 <th>N°</th>

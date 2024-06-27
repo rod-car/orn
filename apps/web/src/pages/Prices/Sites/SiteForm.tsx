@@ -1,7 +1,7 @@
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { toast } from 'react-toastify'
 
 type SiteFormProps = {
@@ -22,7 +22,7 @@ export function SiteForm({ editedSite }: SiteFormProps): ReactNode {
         RequestState
     } = useApi<Site>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/sites',
         key: 'data'
     })
@@ -32,7 +32,7 @@ export function SiteForm({ editedSite }: SiteFormProps): ReactNode {
         datas: communes
     } = useApi<Commune>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/communes'
     })
 

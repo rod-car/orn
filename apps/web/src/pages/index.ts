@@ -27,3 +27,5 @@ export {
     AddSurveyStudent,
     ImportResultSurvey
 } from './Surveys'
+
+export { HomeCantine, CantineRoot, AddConso, ListConso, EditConso, ImportConso } from './Cantine'

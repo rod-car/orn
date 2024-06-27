@@ -1,24 +1,25 @@
-import { useAuth } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { FormEvent, ReactNode, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Block, Button, Checkbox, Input } from 'ui'
+import { Button, Checkbox, Input } from 'ui'
 import { config } from '@renderer/config'
 import { toast } from 'react-toastify'
+
 import './Auth.modules.scss'
 
 export function Login(): ReactNode {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const [username, setUsername] = useState('carino')
+    const [password, setPassword] = useState('Test.2024')
     const [showPassword, setShowPassword] = useState(false)
     const [errors, setErrors] = useState<{ username: string[]; password: string[] }>()
     const navigate = useNavigate()
-    const { login, loading } = useAuth<User>({
-        baseUrl: config.baseUrl
-    })
 
-    const handleSubmit = async (e: FormEvent): Promise<void> => {
+    const { login, user } = useAuthStore()
+    const { Client, RequestState } = useApi<User>({ baseUrl: config.baseUrl, url: '/auth' })
+
+    const handleLogin = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
-        const response = await login({ username: username, password: password })
+        const response = await login(Client, {username: username, password: password})
 
         if (response.ok) {
             toast('Connecté', {
@@ -44,7 +45,7 @@ export function Login(): ReactNode {
                 </div>
                 <div className="col-md-6">
                     <div className="auth-container">
-                        <form onSubmit={handleSubmit} action="" method="post">
+                        <form onSubmit={handleLogin} action="" method="post">
                             <h3 className="text-center mb-5 text-primary">Se connecter</h3>
                             <Input
                                 required={false}
@@ -79,7 +80,7 @@ export function Login(): ReactNode {
                             <div className="d-flex justify-content-between align-items-center">
                                 <Link to="/auth/register">Demander un accès</Link>
                                 <Button
-                                    loading={loading}
+                                    loading={RequestState.loading}
                                     type="submit"
                                     icon="right-to-bracket"
                                     mode="primary"

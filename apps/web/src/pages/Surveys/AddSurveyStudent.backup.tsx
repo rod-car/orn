@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { Button, Input, Select, SearchableSelect, Spinner, Block } from 'ui'
 import { toast } from 'react-toastify'
 import { isNumber } from 'functions/number'
@@ -42,14 +42,14 @@ export function AddSurveyStudent(): JSX.Element {
         RequestState: SurveyRequestState
     } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/surveys',
         key: 'data'
     })
 
     const { Client: StudentClient } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/students',
         key: 'data'
     })

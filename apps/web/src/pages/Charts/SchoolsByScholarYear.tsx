@@ -1,6 +1,6 @@
 import { useApi, usePdf } from 'hooks'
 import { ReactNode, useCallback, useEffect, useMemo, useRef } from 'react'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { Button, Spinner } from 'ui'
 
 import {
@@ -73,7 +73,7 @@ export function SchoolsByScholarYear(): ReactNode {
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/schools',
         key: 'data'
     })
@@ -84,7 +84,7 @@ export function SchoolsByScholarYear(): ReactNode {
         RequestState
     } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/students',
         key: 'data'
     })

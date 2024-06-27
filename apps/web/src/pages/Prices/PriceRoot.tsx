@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
-import { DropDown, ErrorComponent, Navigation, UserMenu } from '@renderer/components'
+import { DropDown, ErrorComponent, Navigation, ProgressBar, UserMenu } from '@renderer/components'
 
 import 'react-toastify/dist/ReactToastify.css?asset'
 import 'bootstrap/dist/css/bootstrap.min.css?asset'
@@ -11,27 +11,21 @@ import '@fortawesome/fontawesome-free/js/all.min.js?asset'
 import 'react-confirm-alert/src/react-confirm-alert.css?asset'
 import 'react-toastify/dist/ReactToastify.css?asset'
 
-import '../../assets/icons.css?asset'
-import '../../assets/custom.css?asset'
-import logo from '../../assets/logo.png'
+import '@renderer/assets/icons.css?asset'
+import '@renderer/assets/custom.css?asset'
+import logo from '@renderer/assets/logo.png'
 
-import { useApi, useAuth } from 'hooks'
-import { config, getToken } from '@renderer/config'
-import { Button } from 'ui'
+import { useApi, useAuthStore } from 'hooks'
+import { config } from '@renderer/config'
 
 export function PriceRoot({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()
     const errorResponse = err as { error: ErrorResponse }
-    const { user, logout, loading } = useAuth({ baseUrl: config.baseUrl })
-    const token = getToken()
-
-    const localUser = user()
-    const userData = localUser && localUser.name ? localUser : null
+    const { token, resetUser, user } = useAuthStore()
 
     const { Client } = useApi<User>({
         baseUrl: config.baseUrl,
-        url: '/auth',
-        token: token
+        url: '/auth'
     })
 
     const navigate = useNavigate()
@@ -40,36 +34,16 @@ export function PriceRoot({ error = false }: { error?: boolean }): ReactNode {
         const getUser = async (): Promise<void> => {
             const users = await Client.get({}, '/user')
             if (users.length === 0) {
-                localStorage.removeItem('user')
+                resetUser()
                 navigate('/auth/login')
             }
         }
         getUser()
     }, [token])
 
-    const handleLogout = async (): Promise<void> => {
-        toast('Deconnexion en cours', {
-            type: 'info',
-            isLoading: loading,
-            position: config.toastPosition
-        })
-        const response = await logout()
-        if (response.ok) {
-            toast('Deconnecté', {
-                type: 'success',
-                position: config.toastPosition
-            })
-        } else {
-            toast(response.statusText, {
-                type: 'error',
-                position: config.toastPosition
-            })
-        }
-        navigate('/auth/login')
-    }
-
     return (
         <>
+            <ProgressBar />
             <nav className="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top mb-5 p-0">
                 <div className="container container-fluid">
                     <NavLink className="navbar-brand fw-bold d-flex align-items-center" to="/">
@@ -179,7 +153,7 @@ export function PriceRoot({ error = false }: { error?: boolean }): ReactNode {
 
             <div className="container mb-5" style={{ marginTop: 130, minHeight: '90vh' }}>
                 <ToastContainer />
-                {userData !== null && <Navigation />}
+                {user && <Navigation />}
                 {error ? <ErrorComponent error={errorResponse.error} /> : <Outlet />}
             </div>
 

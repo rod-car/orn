@@ -1,4 +1,4 @@
-import { config, getToken } from "@renderer/config";
+import { config } from "@renderer/config";
 import { years } from "functions";
 import { useApi } from "hooks";
 import { FormEvent, ReactNode, useEffect, useState } from "react";
@@ -22,13 +22,13 @@ const defaultGardenSemences: GardenSemence[] = [defaultGardenSemence]
 export function StepsData(): ReactNode {
     const { datas: steps, Client, RequestState, error } = useApi<Steps>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/jardin-scolaires/steps'
     })
 
     const { datas: schools, Client: SchoolClient, RequestState: SchoolRequestState } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/schools',
         key: 'data'
     })
@@ -41,9 +41,9 @@ export function StepsData(): ReactNode {
     const [gardenSemence, setGardenSemence] = useState(defaultGardenSemences)
     const [gardenEngrais, setGardenEngrais] = useState(defaultGardenEngraiss)
 
-    const { Client: MaterielClient, datas: materiels } = useApi<Materiel>({ baseUrl: config.baseUrl, token: getToken(), url: '/jardin-scolaires/materiels' })
-    const { Client: SemenceClient, datas: semences } = useApi<Semence>({ baseUrl: config.baseUrl, token: getToken(), url: '/jardin-scolaires/semences' })
-    const { Client: EngraisClient, datas: engrais } = useApi<Engrais>({ baseUrl: config.baseUrl, token: getToken(), url: '/jardin-scolaires/engrais' })
+    const { Client: MaterielClient, datas: materiels } = useApi<Materiel>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires/materiels' })
+    const { Client: SemenceClient, datas: semences } = useApi<Semence>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires/semences' })
+    const { Client: EngraisClient, datas: engrais } = useApi<Engrais>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires/engrais' })
 
     async function getDatas() {
         await Client.get()

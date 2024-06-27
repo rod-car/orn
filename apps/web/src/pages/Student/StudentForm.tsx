@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
-import { config, getToken, class_categories } from '@renderer/config'
+import { config, class_categories } from '@renderer/config'
 import { toast } from 'react-toastify'
 import { capitalize, gender, scholar_years, ucWords } from 'functions'
 
@@ -30,20 +30,20 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
     const [student, setStudent] = useState(defaultStudent)
     const { Client: SClient, RequestState: SRequestState, error } = useApi<typeof defaultStudent>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/students'
     })
 
     const { Client: ScClient, datas: schools, RequestState: ScRequestState } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClClient, datas: ClDatas, RequestState: ClRequestState } = useApi<Classes>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/classes',
         key: 'data'
     })

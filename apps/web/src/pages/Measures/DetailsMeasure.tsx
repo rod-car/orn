@@ -1,14 +1,14 @@
 import { useApi } from 'hooks'
 import { useParams } from 'react-router-dom'
 import { ApiErrorMessage, Block } from 'ui'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { useEffect, useState } from 'react'
 import { Link } from '@renderer/components'
 
 export function DetailsMeasure(): JSX.Element {
     const { Client, error, resetError } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: 'students'
     })
 

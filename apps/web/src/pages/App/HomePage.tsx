@@ -1,37 +1,36 @@
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
-import { config, getToken } from '@renderer/config'
-import { Button, HomeCard, Spinner } from 'ui'
-import { SchoolsByClasses, SchoolsByScholarYear, ZBySchool } from '..'
+import { config } from '@renderer/config'
+import { HomeCard, Spinner } from 'ui'
+import { SchoolsByClasses } from '..'
 import { NavLink } from 'react-router-dom'
 import { Link } from '@renderer/components'
-import { getPdf } from '@renderer/utils'
 
 import './HomePage.modules.scss'
 
 export function HomePage(): ReactNode {
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schoolCount } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: SurveyClient, datas: surveyCount } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/surveys',
         key: 'data'
     })
 
-    const [loaded, setLoaded] = useState(false)
+    const [_loaded, setLoaded] = useState(false)
 
     const getCount = useCallback(async () => {
         const option = { count: 1 }

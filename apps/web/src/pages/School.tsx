@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { Link } from '@renderer/components'
-import { config, getToken } from '../config'
+import { config } from '../config'
 import { ApiErrorMessage, Block, Button } from 'ui'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
@@ -19,7 +19,7 @@ export function School(): JSX.Element {
         resetError
     } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/schools',
         key: 'data'
     })

@@ -1,4 +1,4 @@
-import { config, getToken } from "@renderer/config";
+import { config } from "@renderer/config";
 import { range } from "functions";
 import { useApi } from "hooks";
 import { ReactNode, useEffect, useState } from "react";
@@ -22,7 +22,7 @@ type Steps = {
 export function Steps(): ReactNode {
     const { datas, setDatas, Client, RequestState, error } = useApi<Steps>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/jardin-scolaires/steps'
     })
 

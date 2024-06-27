@@ -1,7 +1,7 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect, useState } from "react";
 import { Block, Button, Select } from "ui";
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { Pagination } from 'react-laravel-paginex'
 import { Link, useSearchParams } from "react-router-dom";
 import { formatPrice, range } from "functions";
@@ -12,28 +12,28 @@ export function PriceList(): ReactNode {
 
     const { Client, datas: articlePrices, RequestState } = useApi<ArticlePrice>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices',
         key: 'data'
     })
 
     const { Client: SiteClient, datas: sites, RequestState: SiteRequestState } = useApi<Site>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/sites',
         key: 'data'
     })
 
     const { Client: ArticleClient, datas: articles, RequestState: ArticleRequestState } = useApi<Site>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/articles',
         key: 'data'
     })
 
     const { Client: UnitClient, datas: units, RequestState: UnitRequestState } = useApi<Site>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/units',
         key: 'data'
     })

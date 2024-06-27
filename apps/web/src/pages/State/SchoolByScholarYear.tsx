@@ -1,5 +1,5 @@
 import { useApi } from 'hooks'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { useCallback, useEffect } from 'react'
 import { Block, Button, Spinner } from 'ui'
 import { getPdf } from '@renderer/utils'
@@ -7,7 +7,7 @@ import { getPdf } from '@renderer/utils'
 export function SchoolByScholarYear(): JSX.Element {
     const { Client, RequestState, error, datas } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/students',
         key: 'data'
     })

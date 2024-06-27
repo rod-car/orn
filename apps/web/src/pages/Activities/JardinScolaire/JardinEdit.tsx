@@ -2,14 +2,14 @@ import { useApi } from 'hooks'
 import { useEffect } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block } from 'ui'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { JardinForm } from './JardinForm'
 import Skeleton from 'react-loading-skeleton'
 
 export function JardinEdit(): JSX.Element {
     const { Client, data: garden } = useApi<Garden>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/jardin-scolaires'
     })
 

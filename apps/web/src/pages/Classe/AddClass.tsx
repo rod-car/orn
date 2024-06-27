@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Block, Button, Input, Select } from 'ui'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
@@ -9,7 +9,7 @@ export function AddClass(): JSX.Element {
     const [classes, setClasses] = useState<Classes>({ id: 0, name: '', level_id: 0, notation: '' })
     const { Client, datas } = useApi<Niveau>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/levels',
         key: 'data'
     })
@@ -20,7 +20,7 @@ export function AddClass(): JSX.Element {
         error
     } = useApi<Classes>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/classes'
     })
 

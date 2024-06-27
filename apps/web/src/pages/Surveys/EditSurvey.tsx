@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
 import { Block, Button, Input } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
 
@@ -11,7 +11,7 @@ export function EditSurvey(): JSX.Element {
     const { id } = useParams()
     const { Client, RequestState, error } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/surveys'
     })
 

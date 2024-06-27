@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { Block } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { Link, StudentFormLoading } from '@renderer/components'
 import { StudentForm } from './StudentForm'
 import Skeleton from 'react-loading-skeleton'
@@ -12,7 +12,6 @@ export function EditStudent(): JSX.Element {
 
     const { Client: StudentClient, data: student } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: getToken(),
         url: '/students'
     })
 

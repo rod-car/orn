@@ -1,4 +1,4 @@
-import { config, getToken } from "@renderer/config";
+import { config } from "@renderer/config";
 import { range } from "functions";
 import { useApi } from "hooks";
 import { ReactNode, useEffect, useState } from "react";
@@ -10,7 +10,7 @@ import { Block, Button, Input } from "ui";
 export function Engrais(): ReactNode {
     const { datas: engraisData, setDatas, Client, RequestState, error } = useApi<Engrais>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/jardin-scolaires/engrais'
     })
 

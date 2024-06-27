@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { Link } from '@renderer/components'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { Block, Button } from 'ui'
 import { useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
@@ -19,7 +19,7 @@ export function Survey(): JSX.Element {
         datas: surveys
     } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/surveys',
         key: 'data'
     })

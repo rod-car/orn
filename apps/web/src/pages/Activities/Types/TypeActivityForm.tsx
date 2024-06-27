@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react'
 import { Button, Input, Textarea } from 'ui'
 import { useApi } from 'hooks'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { toast } from 'react-toastify'
 
 type TypeActivityFormProps = {
@@ -25,7 +25,7 @@ export function TypeActivityForm({ editedActivity }: TypeActivityFormProps): JSX
         RequestState
     } = useApi<Activity>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/activities',
         key: 'data'
     })

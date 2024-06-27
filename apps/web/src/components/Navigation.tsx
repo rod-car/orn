@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const Navigation = (className: { className?: string }): ReactNode => {

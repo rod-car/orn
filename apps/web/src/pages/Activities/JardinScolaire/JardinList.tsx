@@ -1,7 +1,7 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Block, Button } from "ui";
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { Pagination } from 'react-laravel-paginex'
 import { range } from "functions";
 import Skeleton from "react-loading-skeleton";
@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 export function JardinList(): ReactNode {
     const { Client, datas: jardins, RequestState } = useApi<Garden>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/jardin-scolaires',
         key: 'data'
     })

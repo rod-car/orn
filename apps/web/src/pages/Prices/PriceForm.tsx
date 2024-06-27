@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { toast } from 'react-toastify'
 import { years, months } from 'functions'
 
@@ -36,7 +36,7 @@ export function PriceForm(): JSX.Element {
         RequestState
     } = useApi<ArticlePrice[]>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices',
         key: 'data'
     })
@@ -45,7 +45,7 @@ export function PriceForm(): JSX.Element {
         Client: SiteClient, datas: sites
     } = useApi<Site>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/sites',
         key: 'data'
     })
@@ -54,7 +54,7 @@ export function PriceForm(): JSX.Element {
         Client: ArticleClient, datas: articles
     } = useApi<Article>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/articles',
         key: 'data'
     })
@@ -63,7 +63,7 @@ export function PriceForm(): JSX.Element {
         Client: UnitClient, datas: units
     } = useApi<Unit>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/units',
         key: 'data'
     })

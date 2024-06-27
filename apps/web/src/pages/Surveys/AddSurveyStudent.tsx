@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { useEffect, useState } from 'react'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { Input, Select, Block, Spinner, Button } from 'ui'
 import { toast } from 'react-toastify'
 import { Link } from '@renderer/components'
@@ -42,35 +42,35 @@ export function AddSurveyStudent(): JSX.Element {
 
     const { Client: SurveyListClient, datas: surveysList, RequestState: SurveyListRequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/surveys',
         key: 'data'
     })
 
     const { Client: SurveyClient, RequestState: SurveyRequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/surveys',
         key: 'data'
     })
 
     const { Client: StudentClient, RequestState: StudentRequestState } = useApi<Student>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, RequestState: SchoolRS, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassClient, RequestState: ClassRS, datas: classes } = useApi<School>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/classes',
         key: 'data'
     })

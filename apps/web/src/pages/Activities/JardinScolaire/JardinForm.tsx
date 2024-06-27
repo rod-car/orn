@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select, Textarea } from 'ui'
 import { useApi } from 'hooks'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { toast } from 'react-toastify'
 import { years } from 'functions'
 
@@ -39,11 +39,11 @@ export function JardinForm({ editedGarden }: GardenFormProps): JSX.Element {
     const [gardenSemence, setGardenSemence] = useState(defaultGardenSemences)
     const [gardenEngrais, setGardenEngrais] = useState(defaultGardenEngraiss)
 
-    const { Client, error, RequestState } = useApi<Garden>({ baseUrl: config.baseUrl, token: getToken(), url: '/jardin-scolaires', key: 'data' })
-    const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({ baseUrl: config.baseUrl, token: getToken(), url: '/schools', key: 'data' })
-    const { Client: MaterielClient, datas: materiels } = useApi<Materiel>({ baseUrl: config.baseUrl, token: getToken(), url: '/jardin-scolaires/materiels' })
-    const { Client: SemenceClient, datas: semences } = useApi<Semence>({ baseUrl: config.baseUrl, token: getToken(), url: '/jardin-scolaires/semences' })
-    const { Client: EngraisClient, datas: engrais } = useApi<Engrais>({ baseUrl: config.baseUrl, token: getToken(), url: '/jardin-scolaires/engrais' })
+    const { Client, error, RequestState } = useApi<Garden>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires', key: 'data' })
+    const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({ baseUrl: config.baseUrl,  url: '/schools', key: 'data' })
+    const { Client: MaterielClient, datas: materiels } = useApi<Materiel>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires/materiels' })
+    const { Client: SemenceClient, datas: semences } = useApi<Semence>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires/semences' })
+    const { Client: EngraisClient, datas: engrais } = useApi<Engrais>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires/engrais' })
 
     useEffect(() => {
         SchoolClient.get()

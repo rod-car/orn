@@ -2,7 +2,7 @@ import { useApi, useAuth } from 'hooks'
 import { FormEvent, ReactNode, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Checkbox, Input, Select } from 'ui'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { toast } from 'react-toastify'
 
 export function RegisterForm({external = true}: {external?: boolean}): ReactNode {
@@ -17,7 +17,7 @@ export function RegisterForm({external = true}: {external?: boolean}): ReactNode
 
     const { Client, RequestState } = useApi<User>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/auth',
         key: 'data'
     })

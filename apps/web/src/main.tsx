@@ -12,6 +12,7 @@ import { Login, Register, AuthRoot, AccessRequest, Users, AddUser } from '@rende
 import { AppRoot, About, Contributors, HomePage } from '@renderer/pages/App'
 import { ArticleAdd, ArticleEdit, ArticleList, ArticleShow, PriceAdd, PriceHome, PriceList, PriceRoot, SiteAdd, SiteEdit, SiteList, UnitAdd, UnitEdit, UnitList } from '@renderer/pages/Prices'
 import { JardinAdd, JardinHome, JardinList, JardinRoot, JardinStatistics, Engrais, Semence, Materiel, Steps, StepsData, JardinEdit, JardinShow } from '@renderer/pages/Activities/JardinScolaire'
+import { HomeCantine, CantineRoot, AddConso, ListConso, EditConso, ImportConso } from '@renderer/pages'
 
 const router = createBrowserRouter([
     {
@@ -228,6 +229,49 @@ const router = createBrowserRouter([
                         element: <AddSurveyStudent />
                     }
                 ]
+            }
+        ]
+    },
+    {
+        path: '/cantine',
+        element: <CantineRoot />,
+        errorElement: <CantineRoot error={true} />,
+        children: [
+            {
+                path: '',
+                element: <PrivateRoute>
+                    <HomeCantine />
+                </PrivateRoute>
+            },
+            {
+                path: 'statistics',
+                element: <PrivateRoute>
+                    <h1>Je suis la statistique</h1>
+                </PrivateRoute>
+            },
+            {
+                path: 'add-conso',
+                element: <PrivateRoute>
+                    <AddConso />
+                </PrivateRoute>
+            },
+            {
+                path: 'edit-conso/:id',
+                element: <PrivateRoute>
+                    <EditConso />
+                </PrivateRoute>
+            },
+            {
+                path: 'list-conso',
+                element: <PrivateRoute>
+                    <ListConso />
+                </PrivateRoute>
+            },
+            {
+                path: 'import-conso',
+                element: <PrivateRoute>
+                    <ImportConso />
+                </PrivateRoute>
             }
         ]
     },

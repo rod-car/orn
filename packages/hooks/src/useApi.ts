@@ -1,12 +1,13 @@
 import { AxiosError, AxiosRequestConfig } from "axios";
 import axios from "./axios";
 import { useState } from "react"
+import { useAuthStore } from "../src/store/useAuthStore.ts";
 
 type APIProps = {
     url: string;
     key?: string;
     baseUrl?: string;
-    token?: string;
+    token?: string | null;
 };
 
 type APIError = {
@@ -37,8 +38,9 @@ const defaultRequestState = {
  * @param {string} param.url Url de la ressources en enlevant la base
  * @param {string} param.key Cle contenant le data retourne par le serveur
  */
-export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: APIProps) {
+export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
     axios.defaults.baseURL = baseUrl
+    const { token } = useAuthStore();
 
     const [data, setData] = useState<T | null>(null);
     const [datas, setDatas] = useState<T[]>([]);
@@ -66,7 +68,6 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
         resetSuccess();
         if (datas === true) setDatas([]);
     }
-
 
     /**
      * 
@@ -209,7 +210,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined, token = '' }: AP
     const post = async (
         data: Partial<T>,
         addUrl: string | undefined = undefined,
-        params?: Record<string, string | number | boolean>,
+        params?: Record<string, unknown>,
         config?: AxiosRequestConfig
     ): Promise<PostResponse> => {
         reset(false);

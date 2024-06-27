@@ -1,6 +1,6 @@
 import { useApi, usePdf } from 'hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { config, getToken } from '@renderer/config'
+import { config } from '@renderer/config'
 import { Button, Select, Spinner } from 'ui'
 import { generateColor } from '@renderer/utils'
 import { Selected } from '@renderer/pages/Prices'
@@ -43,14 +43,14 @@ export function ArticlePriceSiteChart(): JSX.Element {
 
     const { Client: SiteClient, datas: sites } = useApi<Site>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/sites',
         key: 'data'
     })
 
     const { Client: ArticleClient, datas: articles } = useApi<Article>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices/articles',
         key: 'data'
     })
@@ -61,7 +61,7 @@ export function ArticlePriceSiteChart(): JSX.Element {
         RequestState
     } = useApi<{ data: ArticlePrice }>({
         baseUrl: config.baseUrl,
-        token: getToken(),
+        
         url: '/prices',
         key: 'data'
     })
