@@ -77,7 +77,7 @@ export function UserMenu(): ReactNode {
                         className="dropdown-item"
                         to="/auth/access-request"
                     >
-                        <i className="fa fa-comment-dots me-2"></i> Demandes d'accès
+                        <i className="fa fa-comment-dots me-2"></i> Demandes
                     </NavLink>
                 </li>
             </>}
