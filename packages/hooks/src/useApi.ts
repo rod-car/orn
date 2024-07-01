@@ -74,7 +74,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
      * @param params 
      * @returns 
      */
-    const buildQuery = (params: Record<string, unknown> | undefined): string | undefined => {
+    const buildQuery = (params: Record<string, string | number | boolean> | undefined): string | undefined => {
 
         if (!params || JSON.stringify(params) === '{}') return undefined;
 
@@ -92,7 +92,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
      * 
      * @param {Record<string, any>} params
      */
-    const get = async (params?: Record<string, unknown>, addUrl?: string) => {
+    const get = async (params?: Record<string, string | number | boolean>, addUrl?: string) => {
         reset(true);
         setRequestState({ loading: true });
 

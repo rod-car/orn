@@ -1,18 +1,33 @@
 import { ReactNode, useEffect } from 'react'
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
-import { DropDown, ErrorComponent, Footer, Header, Navigation, ProgressBar, UserMenu } from '@renderer/components'
+import { DropDown, ErrorComponent, Navigation, ProgressBar, UserMenu } from '@renderer/components'
+
+import 'react-toastify/dist/ReactToastify.css?asset'
+import 'bootstrap/dist/css/bootstrap.min.css?asset'
+import '@popperjs/core/dist/esm/index.js?asset'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js?asset'
+import '@fortawesome/fontawesome-free/js/all.min.js?asset'
+import 'react-confirm-alert/src/react-confirm-alert.css?asset'
+import 'react-toastify/dist/ReactToastify.css?asset'
+
+import '@renderer/assets/icons.css?asset'
+import '@renderer/assets/custom.css?asset'
+import logo from '@renderer/assets/logo.png'
+
 import { useApi, useAuthStore } from 'hooks'
 import { config } from '@renderer/config'
-
-import '@renderer/assets'
-import logo from '@renderer/assets/logo.png'
 
 export function PriceRoot({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()
     const errorResponse = err as { error: ErrorResponse }
     const { token, resetUser, user } = useAuthStore()
-    const { Client } = useApi<User>({ baseUrl: config.baseUrl, url: '/auth' })
+
+    const { Client } = useApi<User>({
+        baseUrl: config.baseUrl,
+        url: '/auth'
+    })
+
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -31,7 +46,10 @@ export function PriceRoot({ error = false }: { error?: boolean }): ReactNode {
             <ProgressBar />
             <nav className="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top mb-5 p-0">
                 <div className="container container-fluid">
-                    <Header />
+                    <NavLink className="navbar-brand fw-bold d-flex align-items-center" to="/">
+                        <img className="w-15 me-3" src={logo} alt="Logo" />
+                        <span style={{ color: '#071E78', fontFamily: 'arial' }}>ORN</span>
+                    </NavLink>
                     <button
                         className="navbar-toggler"
                         type="button"
@@ -47,7 +65,7 @@ export function PriceRoot({ error = false }: { error?: boolean }): ReactNode {
                         <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
                                 <NavLink className={`nav-link`} aria-current="page" to="/prices">
-                                    <i className="fa fa-chart-pie me-2"></i>Tableau de bord
+                                    <i className="fa fa-chart-pie me-2"></i>Statistiques
                                 </NavLink>
                             </li>
 
@@ -126,6 +144,7 @@ export function PriceRoot({ error = false }: { error?: boolean }): ReactNode {
                                     }
                                 ]}
                             ></DropDown>
+
                             <UserMenu />
                         </ul>
                     </div>
@@ -138,7 +157,16 @@ export function PriceRoot({ error = false }: { error?: boolean }): ReactNode {
                 {error ? <ErrorComponent error={errorResponse.error} /> : <Outlet />}
             </div>
 
-            <Footer />
+            <footer className="bg-light p-4">
+                <div className="d-flex justify-content-between">
+                    <p className="m-0">
+                        &copy; Copyleft ORN Atsinanana {new Date().toLocaleDateString()}
+                    </p>
+                    <p className="m-0">
+                        Developpé par: <a target="_blank" href="http://rod-car.lovestoblog.com">Gislain Carino Rodrigue BOUDI</a>
+                    </p>
+                </div>
+            </footer>
         </>
     )
 }

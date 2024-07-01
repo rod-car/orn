@@ -8,13 +8,13 @@ import { toast } from 'react-toastify'
 import './Auth.modules.scss'
 
 export function Login(): ReactNode {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const [username, setUsername] = useState('carino')
+    const [password, setPassword] = useState('Test.2024')
     const [showPassword, setShowPassword] = useState(false)
     const [errors, setErrors] = useState<{ username: string[]; password: string[] }>()
     const navigate = useNavigate()
 
-    const { login } = useAuthStore()
+    const { login, user } = useAuthStore()
     const { Client, RequestState } = useApi<User>({ baseUrl: config.baseUrl, url: '/auth' })
 
     const handleLogin = async (e: FormEvent): Promise<void> => {

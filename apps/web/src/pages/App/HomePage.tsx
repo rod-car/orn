@@ -1,33 +1,36 @@
-import { useApi } from 'hooks';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
-import { config } from '@renderer/config';
-import { HomeCard, Spinner } from 'ui';
-import { SchoolsByClasses } from '..';
-import { NavLink } from 'react-router-dom';
-import { Link } from '@renderer/components';
+import { useApi } from 'hooks'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { config } from '@renderer/config'
+import { HomeCard, Spinner } from 'ui'
+import { SchoolsByClasses } from '..'
+import { NavLink } from 'react-router-dom'
+import { Link } from '@renderer/components'
 
-import './HomePage.modules.scss';
+import './HomePage.modules.scss'
 
 export function HomePage(): ReactNode {
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
         baseUrl: config.baseUrl,
+        
         url: '/students',
         key: 'data'
-    });
+    })
 
     const { Client: SchoolClient, datas: schoolCount } = useApi<School>({
         baseUrl: config.baseUrl,
+        
         url: '/schools',
         key: 'data'
-    });
+    })
 
     const { Client: SurveyClient, datas: surveyCount } = useApi<Survey>({
         baseUrl: config.baseUrl,
+        
         url: '/surveys',
         key: 'data'
-    });
+    })
 
-    const [_loaded, setLoaded] = useState(false);
+    const [_loaded, setLoaded] = useState(false)
 
     const getCount = useCallback(async () => {
         const option = { count: 1 }
@@ -38,7 +41,7 @@ export function HomePage(): ReactNode {
     }, [])
 
     useEffect(() => {
-        getCount();
+        getCount()
     }, [])
 
     return (
