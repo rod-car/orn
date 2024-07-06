@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { AddClass, AddLevel, AddSchool, AddStudent, AddSurvey, AddSurveyStudent, Classes,
     DetailsSchool, DetailsStudent, DetailsSurvey, ImportResultSurvey, EditClass, EditLevel,
-    EditSchool, EditStudent, EditSurvey, ImportStudent, Levels, School, State, Student, Survey
+    EditSchool, EditStudent, EditSurvey, ImportStudent, Levels, School, State, Student, Survey, StudentsClasses
 } from '@renderer/pages'
 import { PrivateRoute } from '@renderer/components/PrivateRoute'
 import { GuestRoute } from '@renderer/components/GuestRoute'
@@ -114,6 +114,10 @@ const router = createBrowserRouter([
                     {
                         path: 'details/:id',
                         element: <DetailsStudent />
+                    },
+                    {
+                        path: 'students-classes',
+                        element: <PrivateRoute><StudentsClasses /></PrivateRoute>
                     }
                 ]
             },

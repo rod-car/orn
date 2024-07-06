@@ -5,7 +5,7 @@ type AuthUser = User & {is_admin: boolean, is_super_user: boolean, is_visitor: b
 
 interface AuthStore {
     isLoggedIn: boolean;
-    user: AuthUser,
+    user: { username: string, name: string, email: string, role: string } | null,
     isAdmin: boolean;
     isSuperuser: boolean;
     isVisitor: boolean;
@@ -33,14 +33,7 @@ export const useAuthStore = create(
 
                 if (response.ok) {
                     const user: AuthUser = response.data.user
-                    set({
-                        isLoggedIn: true,
-                        user: user,
-                        isVisitor: user?.is_visitor === true,
-                        isAdmin: user?.is_admin === true,
-                        isSuperuser: user?.is_super_user === true,
-                        token: response.data.token,
-                    });
+                    if (user) set(getStoredUser(user, response.data.token))
                     return response
                 } else {
                     localStorage.removeItem('token')
@@ -64,16 +57,7 @@ export const useAuthStore = create(
                 const response = await Client.post(data, '/register')
                 if (response.ok) {
                     const user: AuthUser | undefined | null = response.data.user
-                    if (user) {
-                        set({
-                            isLoggedIn: true,
-                            user: user,
-                            isVisitor: user?.is_visitor === true,
-                            isAdmin: user?.is_admin === true,
-                            isSuperuser: user?.is_super_user === true,
-                            token: response.data.token
-                        });
-                    }
+                    if (user) set(getStoredUser(user, response.data.token))
                     return response
                 } else {
                     set(defaultState);
@@ -86,3 +70,19 @@ export const useAuthStore = create(
         }
     )
 );
+
+function getStoredUser(user: AuthUser, token: string) {
+    return {
+        isLoggedIn: true,
+        user: {
+            username: user!.username,
+            email: user!.email,
+            name: user!.name,
+            role: user?.is_super_user ? "SAdmin" : (user?.is_admin ? "Admin" : "Invité")
+        },
+        isVisitor: user?.is_visitor === true,
+        isAdmin: user?.is_admin === true,
+        isSuperuser: user?.is_super_user === true,
+        token: token,
+    }
+}

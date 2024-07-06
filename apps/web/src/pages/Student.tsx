@@ -5,7 +5,7 @@ import { Block, Button, Input, Select } from 'ui'
 import { useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
-import { ageFull, format, number_array, range, scholar_years } from 'functions'
+import { ageFull, number_array, range, scholar_years } from 'functions'
 import { Pagination } from 'react-laravel-paginex'
 import Skeleton from 'react-loading-skeleton'
 
@@ -23,7 +23,6 @@ export function Student(): JSX.Element {
     const [query, setQuery] = useState<string | number>('')
     const [category, setCategory] = useState<string>('')
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
-    const { toExcel } = useExcelReader()
 
     const { Client: SClient, RequestState: SRequestState, error: Serror, datas: students } = useApi<Student>({
         baseUrl: config.baseUrl,

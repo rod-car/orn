@@ -1,3 +1,8 @@
+export { ClassSelector } from './ClassSelector.tsx'
+export { SchoolSelector } from './SchoolSelector.tsx'
+export { ScholarYearSelector } from './ScholarYearSelector.tsx'
+export { TableLoading } from './TableLoading.tsx'
+
 export { Footer } from './Footer'
 export { Header } from './Header'
 export { ProgressBar } from './ProgressBar/ProgressBar'

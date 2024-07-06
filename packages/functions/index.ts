@@ -3,6 +3,16 @@ export { capitalize, gender, wrap, ucWords } from "./string";
 export { number_array, range, round, isNumber, formatPrice } from "./number";
 export { addDays, subDays, isDate } from 'date-fns'
 
+/**
+ * Detecte si un élémént se trouve dans un tableau
+ * @param array Le tableau
+ * @param value La valeur a rechercher
+ * @returns 
+ */
+export function in_array(array: unknown[], value: unknown): boolean {
+    return array.includes(value)
+}
+
 export async function post(data: Record<string, unknown>): Promise<any> {
     return false;
 }

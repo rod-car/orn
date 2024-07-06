@@ -10,7 +10,6 @@ import { Link } from '@renderer/components'
 export function Classes(): JSX.Element {
     const { Client, datas, RequestState, error, resetError } = useApi<Classes>({
         baseUrl: config.baseUrl,
-        
         url: '/classes',
         key: 'data'
     })

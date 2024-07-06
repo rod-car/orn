@@ -5,12 +5,13 @@ type CheckboxProps = {
     name?: string;
     checked: boolean;
     mode?: ElementMode;
+    className?: string;
     onCheck?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function Checkbox ({ label, name, onCheck, checked, mode = "default" }: CheckboxProps) {
+export function Checkbox ({ label, name, onCheck, checked, className = '', mode = "default" }: CheckboxProps) {
     const id = useId()
-    return <div className="form-group">
+    return <div className={`form-group d-inline-flex align-items-center ${className}`}>
         <input 
             id={id}
             name={name} 

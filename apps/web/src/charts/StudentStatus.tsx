@@ -2,7 +2,6 @@ import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useMemo } from 'react'
 import { config } from '@renderer/config'
 import { Spinner } from 'ui'
-
 import {
     Chart as ChartJS,
     CategoryScale,

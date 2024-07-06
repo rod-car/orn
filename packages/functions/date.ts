@@ -40,6 +40,7 @@ export const getAgeYear = (birth_date: string, date_compare: string | undefined 
     return differenceInYears(currentDate, date)
 }
 
+
 export const getAgeMonth = (birth_date: string, date_compare: string | undefined = undefined): number => {
     const date = parse(birth_date)
     const currentDate = date_compare === undefined ? new Date : parse(date_compare)

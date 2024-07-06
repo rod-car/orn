@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ReactNode, useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
 import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
@@ -77,6 +78,12 @@ export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
                                         url: '/import',
                                         label: 'Importer une liste',
                                         icon: 'file',
+                                        can: isAdmin
+                                    },
+                                    {
+                                        url: '/students-classes',
+                                        label: 'Mise à jour des classes',
+                                        icon: 'users',
                                         can: isAdmin
                                     }
                                 ]}

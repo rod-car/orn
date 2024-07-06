@@ -41,7 +41,7 @@ export function UserMenu(): ReactNode {
             aria-expanded="false"
         >
             <i className="fa fa-user me-2"></i>
-            {user?.name}
+            {user?.name} ({user?.role})
         </NavLink>
         <ul
             className="dropdown-menu"

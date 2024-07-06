@@ -1,8 +1,8 @@
 import { ToastPosition } from 'react-toastify'
 
 export const config = {
-    baseUrl: 'https://api.clinique-hugney.mg/api',
-    // baseUrl: 'http://localhost:8000/api',
+    // baseUrl: 'https://api.clinique-hugney.mg/api',
+    baseUrl: 'http://localhost:8000/api',
     toastPosition: 'top-right' as ToastPosition
 }
 
@@ -34,11 +34,11 @@ const abaqueTypes = [
 ]
 
 const find = (key: string): string | null => {
-    const pairsKey: string[] = []
+    const pairsKey: Record<string, unknown> = {}
     abaqueTypes.map((type) => {
         pairsKey[type.id] = type.label
     })
-    if (Object.keys(pairsKey).includes(key)) return pairsKey[key]
+    if (Object.keys(pairsKey).includes(key)) return pairsKey[key] as string
     return null
 }
 
