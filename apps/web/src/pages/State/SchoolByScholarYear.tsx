@@ -1,13 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { config } from '@renderer/config'
 import { useCallback, useEffect } from 'react'
-import { Block, Button, Spinner } from 'ui'
-import { getPdf } from '@renderer/utils'
+import { Block, Spinner } from 'ui'
 
 export function SchoolByScholarYear(): JSX.Element {
     const { Client, RequestState, error, datas } = useApi<Student>({
         baseUrl: config.baseUrl,
-        
         url: '/students',
         key: 'data'
     })
@@ -23,23 +22,10 @@ export function SchoolByScholarYear(): JSX.Element {
     const headers = datas.headers
     const realData = datas.data
 
-    const exportPdf = useCallback(async (className = 'custom') => {
-        const fileName = 'Etat_etudiant_ecole_annee_scolaire'
-
-        getPdf({ fileName: `${fileName}.pdf`, className: className, title: 'États des étudiants' })
-    }, [])
-
     return (
         <Block>
             <div className="d-flex align-items-center justify-content-between mb-5">
                 <h2>Étudiant par école et par année scolaire</h2>
-                <Button
-                    onClick={(): Promise<void> => exportPdf('student-sy-state')}
-                    icon="file"
-                    className="btn secondary-link"
-                >
-                    Exporter vers PDF
-                </Button>
             </div>
             {error && <div className="alert alert-danger">{error.message}</div>}
 

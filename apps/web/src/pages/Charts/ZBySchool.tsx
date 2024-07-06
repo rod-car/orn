@@ -1,8 +1,8 @@
 import { useApi } from 'hooks'
 import { useCallback, useEffect, useState } from 'react'
 import { config } from '@renderer/config'
-import { Button, Select, Spinner } from 'ui'
-import { generateColor, getPdf } from '@renderer/utils'
+import { Select, Spinner } from 'ui'
+import { generateColor } from '@renderer/utils'
 
 import {
     Chart as ChartJS,
@@ -99,22 +99,11 @@ export function ZBySchool(): JSX.Element {
         [schools, StateDatas, surveyId]
     )
 
-    const exportPdf = useCallback(() => {
-        getPdf({
-            fileName: 'Effectif_de_mal_nutrition.pdf',
-            title: 'Statistique Malnutrition',
-            className: 'm-charts'
-        })
-    }, [])
-
     return (
         <>
             <div className="shadow-lg rounded p-4">
                 <div className="mb-4 d-flex align-items-center justify-content-between">
                     <h4 className="text-muted">Statistique de malnutrition</h4>
-                    <Button onClick={exportPdf} icon="file" type="button" mode="info">
-                        Exporter vers PDF
-                    </Button>
                 </div>
 
                 <div className="row mb-4">

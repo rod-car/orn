@@ -1,7 +1,7 @@
-import { useApi, usePdf } from 'hooks'
+import { useApi } from 'hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { config } from '@renderer/config'
-import { Button, Select, Spinner } from 'ui'
+import { Select, Spinner } from 'ui'
 import { generateColor } from '@renderer/utils'
 
 import {
@@ -33,11 +33,9 @@ ChartJS.register(
 
 export function SchoolsByClasses(): JSX.Element {
     const [scholarYear, setScholarYear] = useState<string>(scholar_years().at(1) as string)
-    const { exportToPdf } = usePdf()
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/schools',
         key: 'data'
     })
@@ -130,18 +128,11 @@ export function SchoolsByClasses(): JSX.Element {
         }
     }
 
-    const exportPdf = useCallback(() => {
-        exportToPdf(chartRef, { filename: 'Effectif_par_école_par_classe_année_scolaire.pdf' })
-    }, [])
-
     return (
         <>
             <div className="shadow-lg rounded p-4">
                 <div className="mb-4 d-flex align-items-center justify-content-between">
                     <h4 className="text-muted">Effectif par école et par classe</h4>
-                    <Button onClick={exportPdf} icon="file" type="button" mode="info">
-                        Exporter vers PDF
-                    </Button>
                 </div>
                 <div className="mb-4">
                     <Select

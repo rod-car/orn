@@ -1,7 +1,7 @@
-import { useApi, usePdf } from 'hooks'
+import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useMemo, useRef } from 'react'
 import { config } from '@renderer/config'
-import { Button, Spinner } from 'ui'
+import { Spinner } from 'ui'
 
 import {
     Chart as ChartJS,
@@ -17,7 +17,7 @@ import {
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 
-export const options = {
+const options = {
     responsive: true,
     plugins: {
         legend: {
@@ -69,11 +69,8 @@ ChartJS.register(
 )
 
 export function SchoolsByScholarYear(): ReactNode {
-    const { exportToPdf } = usePdf()
-
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/schools',
         key: 'data'
     })
@@ -135,18 +132,11 @@ export function SchoolsByScholarYear(): ReactNode {
 
     const chartRef = useRef()
 
-    const exportPdf = useCallback(() => {
-        exportToPdf(chartRef, { filename: 'Effectif_par_année_scolaire.pdf' })
-    }, [])
-
     return (
         <>
             <div className="shadow-lg rounded p-4">
                 <div className="d-flex align-items-center justify-content-between">
                     <h4 className="text-muted">Effectif par année scolaire</h4>
-                    <Button onClick={exportPdf} icon="file" type="button" mode="info">
-                        Exporter vers PDF
-                    </Button>
                 </div>
                 {RequestState.loading && <Spinner className="text-center w-100" />}
                 {data && (

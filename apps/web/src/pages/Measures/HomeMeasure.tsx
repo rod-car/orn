@@ -1,52 +1,41 @@
 import { useApi } from 'hooks'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { config } from '@renderer/config'
-import { Button, HomeCard, Spinner } from 'ui'
-import { SchoolsByClasses, SchoolsByScholarYear, ZBySchool } from '..'
+import { HomeCard, Spinner } from 'ui'
+import { SchoolsByClasses, SchoolsByScholarYear } from '..'
 import { NavLink } from 'react-router-dom'
 import { Link } from '@renderer/components'
-import { getPdf } from '@renderer/utils'
 
 import './HomeMeasure.modules.scss'
 
 export function HomeMeasure(): React.ReactElement {
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
         baseUrl: config.baseUrl,
-        
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schoolCount } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: SurveyClient, datas: surveyCount } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        
         url: '/surveys',
         key: 'data'
     })
-
-    const [loaded, setLoaded] = useState(false)
 
     const getCount = useCallback(async () => {
         const option = { count: 1 }
         await StudentClient.get(option)
         await SchoolClient.get(option)
         await SurveyClient.get(option)
-        setLoaded(true)
     }, [])
 
     useEffect(() => {
         getCount()
-    }, [])
-
-    const exportPdf = useCallback(async () => {
-        getPdf({ fileName: 'Statistiques.pdf', title: 'Statistiques' })
     }, [])
 
     return (
@@ -87,10 +76,6 @@ export function HomeMeasure(): React.ReactElement {
                 </NavLink>
             </div>
 
-            <Button onClick={exportPdf} icon="file" className="btn secondary-link mb-4">
-                Exporter tous vers PDF
-            </Button>
-
             <div className="row mb-5">
                 <div className="col-12">
                     <SchoolsByClasses />
@@ -102,10 +87,6 @@ export function HomeMeasure(): React.ReactElement {
                     <SchoolsByScholarYear />
                 </div>
             </div>
-
-            {/*<div className="row mb-5">
-                <div className="col-12">{loaded ? <ZBySchool /> : <Spinner />}</div>
-            </div>*/}
         </>
     )
 }

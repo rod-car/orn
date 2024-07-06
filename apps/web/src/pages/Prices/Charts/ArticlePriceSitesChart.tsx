@@ -76,19 +76,15 @@ export function ArticlePriceSitesChart(): ReactNode {
     const [siteId, setSiteId] = useState<number>(0)
     const [params, setParams] = useState<{ year: number, article_id: number }>({ article_id: 0, year: 2024 })
     const [displayedSites, setDisplayedSites] = useState<Site[]>([])
-    // const [searchParams, setSearchParams] = useSearchParams(params as unknown as URLSearchParams)
-    // const { exportToPdf } = usePdf()
 
     const { Client: SiteClient, datas: sites } = useApi<Site>({
         baseUrl: config.baseUrl,
-        
         url: '/prices/sites',
         key: 'data'
     })
 
     const { Client: ArticleClient, datas: articles } = useApi<Article>({
         baseUrl: config.baseUrl,
-        
         url: '/prices/articles',
         key: 'data'
     })
@@ -182,10 +178,6 @@ export function ArticlePriceSitesChart(): ReactNode {
         }
     }
 
-    /*const exportPdf = useCallback(() => {
-        exportToPdf(chartRef, { filename: 'Effectif_par_école_par_classe_année_scolaire.pdf' })
-    }, [])*/
-
     const handleChange = (target: EventTarget & HTMLSelectElement) => {
         if (target.name === 'site_id') {
             const id = parseInt(target.value)
@@ -221,9 +213,6 @@ export function ArticlePriceSitesChart(): ReactNode {
             <div className="shadow-lg rounded p-4">
                 <div className="d-flex align-items-center justify-content-between mb-5">
                     <h4 className="text-muted">Prix des articles par Site dans une année</h4>
-                    <Button onClick={() => { }} icon="file" type="button" mode="info">
-                        Exporter vers PDF
-                    </Button>
                 </div>
                 <div className="row mb-5">
                     <div className="col-4">

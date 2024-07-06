@@ -13,6 +13,7 @@ import { AppRoot, About, Contributors, HomePage } from '@renderer/pages/App'
 import { ArticleAdd, ArticleEdit, ArticleList, ArticleShow, PriceAdd, PriceHome, PriceList, PriceRoot, SiteAdd, SiteEdit, SiteList, UnitAdd, UnitEdit, UnitList } from '@renderer/pages/Prices'
 import { JardinAdd, JardinHome, JardinList, JardinRoot, JardinStatistics, Engrais, Semence, Materiel, Steps, StepsData, JardinEdit, JardinShow } from '@renderer/pages/Activities/JardinScolaire'
 import { HomeCantine, CantineRoot, AddConso, ListConso, EditConso, ImportConso } from '@renderer/pages'
+import { StrictMode } from 'react'
 
 const router = createBrowserRouter([
     {
@@ -458,4 +459,6 @@ const router = createBrowserRouter([
     }
 ])
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<RouterProvider router={router} />)
+ReactDOM.createRoot(document.getElementById('root')!).render(<StrictMode>
+    <RouterProvider router={router} />
+</StrictMode>)

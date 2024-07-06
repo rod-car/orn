@@ -1,7 +1,7 @@
-import { useApi, usePdf } from 'hooks'
+import { useApi } from 'hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { config } from '@renderer/config'
-import { Button, Select, Spinner } from 'ui'
+import { Select, Spinner } from 'ui'
 import { generateColor } from '@renderer/utils'
 import { Selected } from '@renderer/pages/Prices'
 
@@ -39,18 +39,15 @@ export function ArticlePriceSiteChart(): JSX.Element {
     const [queryParams, setQueryParams] = useState<{ year: number, month: number }>({ month: 1, year: 2024 })
     const [displayedArticles, setDisplayedArticle] = useState<Article[]>([])
     const [searchParams, setSearchParams] = useSearchParams(queryParams as unknown as URLSearchParams)
-    const { exportToPdf } = usePdf()
 
     const { Client: SiteClient, datas: sites } = useApi<Site>({
         baseUrl: config.baseUrl,
-        
         url: '/prices/sites',
         key: 'data'
     })
 
     const { Client: ArticleClient, datas: articles } = useApi<Article>({
         baseUrl: config.baseUrl,
-        
         url: '/prices/articles',
         key: 'data'
     })
@@ -61,7 +58,6 @@ export function ArticlePriceSiteChart(): JSX.Element {
         RequestState
     } = useApi<{ data: ArticlePrice }>({
         baseUrl: config.baseUrl,
-        
         url: '/prices',
         key: 'data'
     })
@@ -149,10 +145,6 @@ export function ArticlePriceSiteChart(): JSX.Element {
         }
     }
 
-    const exportPdf = useCallback(() => {
-        exportToPdf(chartRef, { filename: 'Effectif_par_école_par_classe_année_scolaire.pdf' })
-    }, [])
-
     const handleChange = (target: EventTarget & HTMLSelectElement) => {
         if (target.name === 'article') {
             const id = parseInt(target.value)
@@ -189,9 +181,6 @@ export function ArticlePriceSiteChart(): JSX.Element {
             <div className="shadow-lg rounded p-4">
                 <div className="mb-4 d-flex align-items-center justify-content-between">
                     <h4 className="text-muted">Prix des articles par Site (Mois - Année)</h4>
-                    <Button onClick={exportPdf} icon="file" type="button" mode="info">
-                        Exporter vers PDF
-                    </Button>
                 </div>
                 <div className="row mb-5">
                     <div className="col-4">

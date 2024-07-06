@@ -1,7 +1,8 @@
-import { useApi, usePdf } from 'hooks'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { config } from '@renderer/config'
-import { Button, Select, Spinner } from 'ui'
+import { Select, Spinner } from 'ui'
 
 import {
     Chart as ChartJS,
@@ -22,44 +23,6 @@ import { generateColor } from '@renderer/utils'
 import { toast } from 'react-toastify'
 import { Selected } from '@renderer/pages/Prices'
 
-export const options = {
-    responsive: true,
-    plugins: {
-        legend: {
-            position: 'top' as const
-        },
-        title: {
-            display: true,
-            text: 'PRIX PAR SITE DANS UNE ANNEE',
-            font: {
-                size: 14
-            }
-        }
-    },
-    scales: {
-        y: {
-            title: {
-                display: true,
-                text: "Montant (Ar)"
-            },
-            ticks: {
-                font: {
-                    weight: 'bold',
-                    size: 13
-                }
-            }
-        },
-        x: {
-            ticks: {
-                font: {
-                    weight: 'bold',
-                    size: 13
-                }
-            }
-        }
-    }
-}
-
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -77,18 +40,15 @@ export function ArticlePriceChart(): ReactNode {
     const [params, setParams] = useState<{ year: number, site_id: number }>({ site_id: 0, year: 2024 })
     const [displayedArticles, setDisplayedArticle] = useState<Article[]>([])
     const [searchParams, setSearchParams] = useSearchParams(params as unknown as URLSearchParams)
-    const { exportToPdf } = usePdf()
 
     const { Client: SiteClient, datas: sites } = useApi<Site>({
         baseUrl: config.baseUrl,
-        
         url: '/prices/sites',
         key: 'data'
     })
 
     const { Client: ArticleClient, datas: articles } = useApi<Article>({
         baseUrl: config.baseUrl,
-        
         url: '/prices/articles',
         key: 'data'
     })
@@ -99,7 +59,6 @@ export function ArticlePriceChart(): ReactNode {
         RequestState
     } = useApi<{ data: ArticlePrice }>({
         baseUrl: config.baseUrl,
-        
         url: '/prices',
         key: 'data'
     })
@@ -129,8 +88,6 @@ export function ArticlePriceChart(): ReactNode {
         ArticleClient.get()
     }, [])
 
-    const chartRef = useRef()
-
     const data = useMemo(() => {
         const data = StateDatas.data
         const labels = months.map(month => month.label)
@@ -146,7 +103,7 @@ export function ArticlePriceChart(): ReactNode {
             labels,
             datasets
         }
-    }, [articles, sites, StateDatas, displayedArticles])
+    }, [StateDatas, displayedArticles])
 
     const options = {
         responsive: true,
@@ -192,10 +149,6 @@ export function ArticlePriceChart(): ReactNode {
         }
     }
 
-    const exportPdf = useCallback(() => {
-        exportToPdf(chartRef, { filename: 'Effectif_par_école_par_classe_année_scolaire.pdf' })
-    }, [])
-
     const handleChange = (target: EventTarget & HTMLSelectElement) => {
         if (target.name === 'article') {
             const id = parseInt(target.value)
@@ -232,9 +185,6 @@ export function ArticlePriceChart(): ReactNode {
             <div className="shadow-lg rounded p-4">
                 <div className="d-flex align-items-center justify-content-between mb-5">
                     <h4 className="text-muted">Prix des articles par Site dans une année</h4>
-                    <Button onClick={() => { }} icon="file" type="button" mode="info">
-                        Exporter vers PDF
-                    </Button>
                 </div>
                 <div className="row mb-5">
                     <div className="col-4">
