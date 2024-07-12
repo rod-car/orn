@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { Block } from 'ui'
-import { UnitForm } from '@renderer/pages/Prices'
+import { UnitForm } from '@base/pages/Prices'
 
 export function UnitAdd(): JSX.Element {
     return (

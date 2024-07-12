@@ -1,10 +1,10 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { config, abaque as abaqueConfig } from '@renderer/config'
+import { config, abaque as abaqueConfig } from '@base/config'
 import { Button, Input } from 'ui'
 import { toast } from 'react-toastify'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 
 export function EditMeasure(): JSX.Element {
     const [abaque, setAbaque] = useState<Partial<MeasureLength>>(abaqueConfig.defaultFields)

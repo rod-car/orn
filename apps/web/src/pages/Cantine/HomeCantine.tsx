@@ -1,9 +1,9 @@
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect } from 'react'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { Block, HomeCard, Spinner } from 'ui'
 import { NavLink } from 'react-router-dom'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 
 import './HomeCantine.modules.scss'
 

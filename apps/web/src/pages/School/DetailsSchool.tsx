@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block } from 'ui'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { useEffect, useState } from 'react'
 
 export function DetailsSchool(): JSX.Element {

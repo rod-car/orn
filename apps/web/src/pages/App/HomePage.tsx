@@ -1,31 +1,30 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { HomeCard, Spinner } from 'ui'
 import { SchoolsByClasses } from '..'
 import { NavLink } from 'react-router-dom'
-import { Link } from '@renderer/components'
+import { AppCard, CardState, Link } from '@base/components'
 
 import './HomePage.modules.scss'
 
 export function HomePage(): ReactNode {
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
         baseUrl: config.baseUrl,
-        
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schoolCount } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: SurveyClient, datas: surveyCount } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        
         url: '/surveys',
         key: 'data'
     })
@@ -53,33 +52,32 @@ export function HomePage(): ReactNode {
                 </Link>
             </div>
 
+            <AppCard title="Bienvenu" content="Bienvenue sur la plateforme ORN. Nous vous souhaitons une bonne navigation." actionLabel="Voir les tutoriels" actionUrl="/help" icon="question" />
+
             <div className="row mb-5">
-                <NavLink to="/anthropo-measure/student/list" className="col-4 clickable-card">
-                    <HomeCard
-                        title="Étudiant"
-                        icon="users"
-                        type="primary"
-                        value={'count' in studentCount ? studentCount.count : <Spinner />}
+                <div className="col-4">
+                    <CardState
+                        title="Etudiants"
+                        link="/anthropo-measure/student/list"
+                        value={'count' in studentCount ? studentCount.count as number : <Spinner />} 
                     />
-                </NavLink>
+                </div>
 
-                <NavLink to="/anthropo-measure/school/list" className="col-4 clickable-card">
-                    <HomeCard
+                <div className="col-4">
+                    <CardState
                         title="Écoles"
-                        icon="home"
-                        type="danger"
-                        value={'count' in schoolCount ? schoolCount.count : <Spinner />}
+                        link="/anthropo-measure/school/list"
+                        value={'count' in schoolCount ? schoolCount.count as number : <Spinner />} 
                     />
-                </NavLink>
+                </div>
 
-                <NavLink to="/anthropo-measure/survey/list" className="col-4 clickable-card">
-                    <HomeCard
+                <div className="col-4">
+                    <CardState
                         title="Mésures antrhopo"
-                        icon="bar-chart"
-                        type="success"
-                        value={'count' in surveyCount ? surveyCount.count : <Spinner />}
+                        link="/anthropo-measure/survey/list"
+                        value={'count' in surveyCount ? surveyCount.count as number : <Spinner />} 
                     />
-                </NavLink>
+                </div>
             </div>
 
             <div className="row mb-5">

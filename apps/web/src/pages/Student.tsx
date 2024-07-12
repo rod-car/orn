@@ -1,6 +1,6 @@
 import { useApi, useExcelReader } from 'hooks'
-import { ExcelExportButton, Link } from '@renderer/components'
-import { class_categories, config } from '@renderer/config'
+import { ExcelExportButton, Link } from '@base/components'
+import { class_categories, config } from '@base/config'
 import { Block, Button, Input, Select } from 'ui'
 import { useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'

@@ -1,9 +1,9 @@
 import { useApi } from 'hooks'
 import { useEffect, useState } from 'react'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { Input, Select, Block, Spinner, Button } from 'ui'
 import { toast } from 'react-toastify'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 import { scholar_years } from 'functions'
 
 type StudentData = {

@@ -2,8 +2,8 @@ import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Block, Button } from "ui";
-import { config } from '@renderer/config'
-import { ActivityLoading } from "@renderer/components";
+import { config } from '@base/config'
+import { ActivityLoading } from "@base/components";
 
 export function JardinHome(): ReactNode {
     const {

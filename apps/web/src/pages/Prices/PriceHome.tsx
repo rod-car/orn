@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArticlePriceChart, ArticlePriceSiteChart, ArticlePriceSiteYearChart, ArticlePriceSitesChart } from "@renderer/pages/Prices"
+import { ArticlePriceChart, ArticlePriceSiteChart, ArticlePriceSiteYearChart, ArticlePriceSitesChart } from "@base/pages/Prices"
 
 export function PriceHome(): ReactNode {
     return <>

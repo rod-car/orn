@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { Block } from 'ui'
-import { SiteForm } from '@renderer/pages/Prices'
+import { SiteForm } from '@base/pages/Prices'
 
 export function SiteAdd(): JSX.Element {
     return (

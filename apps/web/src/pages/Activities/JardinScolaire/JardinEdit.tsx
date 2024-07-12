@@ -2,7 +2,7 @@ import { useApi } from 'hooks'
 import { useEffect } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block } from 'ui'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { JardinForm } from './JardinForm'
 import Skeleton from 'react-loading-skeleton'
 

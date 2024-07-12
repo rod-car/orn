@@ -1,4 +1,4 @@
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 import { Block } from 'ui'
 
 export function AddConso(): JSX.Element {

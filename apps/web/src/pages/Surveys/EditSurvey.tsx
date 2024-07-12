@@ -2,9 +2,9 @@ import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
 import { Block, Button, Input } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { toast } from 'react-toastify'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 
 export function EditSurvey(): JSX.Element {
     const [survey, setSurvey] = useState<Partial<Survey>>({ id: 0, phase: 0, date: '' })

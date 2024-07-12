@@ -1,4 +1,4 @@
-import { config } from "@renderer/config";
+import { config } from "@base/config";
 import { useApi, useAuthStore } from "hooks";
 import { ReactNode } from "react";
 import { NavLink, useNavigate } from "react-router-dom";

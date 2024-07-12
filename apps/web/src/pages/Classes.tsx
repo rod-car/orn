@@ -5,7 +5,7 @@ import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { ApiErrorMessage, Block, Button } from 'ui'
 import { NavLink } from 'react-router-dom'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 
 export function Classes(): JSX.Element {
     const { Client, datas, RequestState, error, resetError } = useApi<Classes>({

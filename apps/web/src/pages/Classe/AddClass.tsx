@@ -1,9 +1,9 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Block, Button, Input, Select } from 'ui'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 
 export function AddClass(): JSX.Element {
     const [classes, setClasses] = useState<Classes>({ id: 0, name: '', level_id: 0, notation: '' })

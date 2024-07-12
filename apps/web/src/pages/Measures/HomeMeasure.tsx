@@ -1,10 +1,10 @@
 import { useApi } from 'hooks'
 import React, { useCallback, useEffect } from 'react'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { HomeCard, Spinner } from 'ui'
 import { SchoolsByClasses, SchoolsByScholarYear } from '..'
 import { NavLink } from 'react-router-dom'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 
 import './HomeMeasure.modules.scss'
 

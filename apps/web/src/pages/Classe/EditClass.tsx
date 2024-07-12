@@ -1,10 +1,10 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 
 export function EditClass(): JSX.Element {
     const [classes, setClasses] = useState<Classes>({ id: 0, name: '', level_id: 0, notation: '' })

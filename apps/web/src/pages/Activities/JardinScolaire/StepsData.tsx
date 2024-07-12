@@ -1,4 +1,4 @@
-import { config } from "@renderer/config";
+import { config } from "@base/config";
 import { years } from "functions";
 import { useApi } from "hooks";
 import { FormEvent, ReactNode, useEffect, useState } from "react";

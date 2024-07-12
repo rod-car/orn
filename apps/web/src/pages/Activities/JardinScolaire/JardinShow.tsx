@@ -1,4 +1,4 @@
-import { config } from "@renderer/config";
+import { config } from "@base/config";
 import { capitalize } from "functions";
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";

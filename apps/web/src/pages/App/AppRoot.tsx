@@ -1,24 +1,23 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { config } from '@base/config'
+import { useApi, useAuthStore } from 'hooks'
 import { ReactNode, useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
-import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
+import { ErrorComponent, Footer, Header, ProgressBar } from '@base/components'
+import { ErrorResponse, Outlet, useNavigate, useRouteError } from 'react-router-dom'
 
-import '@renderer/assets'
-
-import { useApi, useAuthStore } from 'hooks'
-import { config } from '@renderer/config'
-import { ErrorComponent, Footer, Header, Navigation, ProgressBar, UserMenu } from '@renderer/components'
+import '@base/assets'
 
 export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()
     const errorResponse = err as { error: ErrorResponse }
     const { token, resetUser } = useAuthStore()
+    const navigate = useNavigate()
 
     const { Client } = useApi<User>({
         baseUrl: config.baseUrl,
         url: '/auth'
     })
-
-    const navigate = useNavigate()
 
     useEffect(() => {
         const getUser = async (): Promise<void> => {
@@ -34,7 +33,18 @@ export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
     return (
         <>
             <ProgressBar />
-            <nav className="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top mb-5 p-0">
+            <Header />
+            <div className="app-wrapper" style={{ marginTop: 50 }}>
+                <div className="app-content pt-3 p-md-3 p-lg-4">
+                    <div className="container-xl">
+                        <ToastContainer />
+                        {/*<Navigation />*/}
+                        {error ? <ErrorComponent error={errorResponse.error} /> : <Outlet />}
+                    </div>
+                </div>
+            </div>
+            <Footer />
+            {/*<nav className="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top mb-5 p-0">
                 <div className="container container-fluid">
                     <Header />
                     <button
@@ -65,11 +75,11 @@ export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
                                     <i className="fa fa-bowl-food me-2"></i>Cantine scolaire
                                 </NavLink>
                             </li>
-                            {/*<li className="nav-item">
+                            <li className="nav-item">
                                 <NavLink className={`nav-link`} aria-current="page" to="/activities">
                                     <i className="fa fa-cog me-2"></i>Activités
                                 </NavLink>
-                            </li>*/}
+                            </li>
                             <li className="nav-item">
                                 <NavLink className={`nav-link`} aria-current="page" to="/scholar-garden">
                                     <i className="fa fa-cog me-2"></i>Activités
@@ -92,7 +102,7 @@ export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
                 {error ? <ErrorComponent error={errorResponse.error} /> : <Outlet />}
             </div>
 
-            <Footer />
+            <Footer />*/}
         </>
     )
 }

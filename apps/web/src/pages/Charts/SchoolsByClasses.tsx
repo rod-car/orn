@@ -1,8 +1,8 @@
 import { useApi } from 'hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { Select, Spinner } from 'ui'
-import { generateColor } from '@renderer/utils'
+import { generateColor } from '@base/utils'
 
 import {
     Chart as ChartJS,

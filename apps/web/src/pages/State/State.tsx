@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { scholar_years } from 'functions'
 import { StudentBySchoolZValue } from './StudentBySchoolZValue'
 import { useApi } from 'hooks'
-import { SurveySelector } from '@renderer/components'
+import { SurveySelector } from '@base/components'
 
 export function State(): JSX.Element {
     const [scholarYear, _setScholarYear] = useState<string>(scholar_years().at(1) ?? '')

@@ -1,7 +1,7 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect, useState } from "react";
 import { Block, Button, Select } from "ui";
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { Pagination } from 'react-laravel-paginex'
 import { Link, useSearchParams } from "react-router-dom";
 import { formatPrice, range } from "functions";

@@ -11,6 +11,7 @@ type InputProps = React.ComponentProps<"input"> & {
     controlled?: boolean;
     auto?: boolean;
     error?: string[];
+    srOnly?: boolean;
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -22,13 +23,14 @@ export function Input({
     className,
     auto = false,
     error = undefined,
+    srOnly = false,
     ...props
 }: InputProps) {
     const id = useId()
     if (auto) props.disabled = true
 
     return <div className={`form-group ${className}`}>
-        {props.label && <label className="form-label fw-semibold" htmlFor={id}>
+        {props.label && <label className={`form-label fw-semibold ${srOnly ? 'sr-only' : ''}`} htmlFor={id}>
             {props.label}
             {auto === false && <RequiredSign value={required} />}
             <AutoSign value={auto} />

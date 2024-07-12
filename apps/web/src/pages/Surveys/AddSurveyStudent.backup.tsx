@@ -1,11 +1,11 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { Button, Input, Select, SearchableSelect, Spinner, Block } from 'ui'
 import { toast } from 'react-toastify'
 import { isNumber } from 'functions/number'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 import Skeleton from 'react-loading-skeleton'
 
 type BaseValue = { name: string; value: number }

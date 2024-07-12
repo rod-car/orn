@@ -1,8 +1,8 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Block, Button } from "ui";
-import { config } from '@renderer/config'
-import { ActivityLoading, Link } from "@renderer/components";
+import { config } from '@base/config'
+import { ActivityLoading, Link } from "@base/components";
 import { Pagination } from 'react-laravel-paginex'
 import { wrap } from 'functions'
 import { confirmAlert } from "react-confirm-alert";

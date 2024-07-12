@@ -1,5 +1,5 @@
 import { Block } from 'ui'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 import { StudentForm } from './StudentForm'
 
 export function AddStudent(): JSX.Element {

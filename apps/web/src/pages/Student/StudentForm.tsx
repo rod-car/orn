@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
-import { config, class_categories } from '@renderer/config'
+import { config, class_categories } from '@base/config'
 import { toast } from 'react-toastify'
 import { capitalize, gender, scholar_years, ucWords } from 'functions'
 

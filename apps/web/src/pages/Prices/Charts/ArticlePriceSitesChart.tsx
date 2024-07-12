@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { Button, Select, Spinner } from 'ui'
 
 import {
@@ -18,9 +18,9 @@ import {
 import { Line } from 'react-chartjs-2'
 import { months, years } from 'functions'
 // import { useSearchParams } from 'react-router-dom'
-import { generateColor } from '@renderer/utils'
+import { generateColor } from '@base/utils'
 import { toast } from 'react-toastify'
-import { Selected } from '@renderer/pages/Prices'
+import { Selected } from '@base/pages/Prices'
 
 export const options = {
     responsive: true,

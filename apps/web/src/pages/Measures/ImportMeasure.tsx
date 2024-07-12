@@ -1,8 +1,8 @@
 import { useApi, useExcelReader } from 'hooks'
 import { ChangeEvent, useState } from 'react'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 import { Block, Button, Input, Select, Spinner } from 'ui'
-import { config, abaque } from '@renderer/config'
+import { config, abaque } from '@base/config'
 import { toast } from 'react-toastify'
 
 export function ImportMeasure(): JSX.Element {

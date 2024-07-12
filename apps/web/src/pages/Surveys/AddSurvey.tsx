@@ -1,8 +1,8 @@
 import { FormEvent, useState } from 'react'
 import { Block, Button, Input } from 'ui'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 import { useApi } from 'hooks'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { toast } from 'react-toastify'
 
 export function AddSurvey(): JSX.Element {

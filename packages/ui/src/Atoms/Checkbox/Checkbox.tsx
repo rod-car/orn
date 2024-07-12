@@ -1,7 +1,7 @@
-import { ChangeEvent, useId } from "react"
+import { ChangeEvent, ReactNode, useId } from "react"
 
 type CheckboxProps = {
-    label?: string;
+    label?: ReactNode;
     name?: string;
     checked: boolean;
     mode?: ElementMode;
@@ -11,7 +11,7 @@ type CheckboxProps = {
 
 export function Checkbox ({ label, name, onCheck, checked, className = '', mode = "default" }: CheckboxProps) {
     const id = useId()
-    return <div className={`form-group d-inline-flex align-items-center ${className}`}>
+    return <div className={`form-group form-check d-inline-flex align-items-center ${className}`}>
         <input 
             id={id}
             name={name} 

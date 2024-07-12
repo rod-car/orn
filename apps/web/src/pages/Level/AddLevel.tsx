@@ -1,9 +1,9 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Block, Button, Input } from 'ui'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { toast } from 'react-toastify'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 
 export function AddLevel(): JSX.Element {
     const [level, setLevel] = useState<Niveau>({ id: 0, label: '', description: '' })

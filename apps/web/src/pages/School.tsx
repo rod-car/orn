@@ -1,5 +1,5 @@
 import { useApi } from 'hooks'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 import { config } from '../config'
 import { ApiErrorMessage, Block, Button } from 'ui'
 import { useEffect } from 'react'

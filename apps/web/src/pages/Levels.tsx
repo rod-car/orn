@@ -4,7 +4,7 @@ import { useApi } from 'hooks'
 import { ApiErrorMessage, Block, Button } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 
 export function Levels(): JSX.Element {
     const { Client, datas, RequestState, error, resetError, success } = useApi<Niveau>({

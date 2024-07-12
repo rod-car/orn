@@ -1,11 +1,11 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { createSearchParams } from 'react-router-dom'
-import { config, abaque } from '@renderer/config'
+import { config, abaque } from '@base/config'
 import { Block, Button, Select } from 'ui'
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 
 export function ListMeasure(): JSX.Element {
     const [abaqueType, setAbaqueType] = useState(abaque.abaqueTypes[0].id)

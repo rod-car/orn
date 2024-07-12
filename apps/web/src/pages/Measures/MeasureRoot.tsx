@@ -3,11 +3,11 @@ import { ReactNode, useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
 import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
 import { useApi, useAuthStore } from 'hooks'
-import { config } from '@renderer/config'
-import { DropDown, ErrorComponent, Navigation, ProgressBar, UserMenu, NotFound, Header, Footer } from '@renderer/components'
-import { useNotFoundRoute } from '@renderer/hooks'
+import { config } from '@base/config'
+import { DropDown, ErrorComponent, Navigation, ProgressBar, UserMenu, NotFound, Header, Footer } from '@base/components'
+import { useNotFoundRoute } from '@base/hooks'
 
-import '@renderer/assets'
+import '@base/assets'
 
 export function MeasureRoot({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()

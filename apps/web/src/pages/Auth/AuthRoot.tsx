@@ -8,11 +8,13 @@ import '@popperjs/core/dist/esm/index.js?asset'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js?asset'
 import '@fortawesome/fontawesome-free/js/all.min.js?asset'
 import 'react-confirm-alert/src/react-confirm-alert.css?asset'
-import 'react-toastify/dist/ReactToastify.css?asset'
 
-import '@renderer/assets/icons.css?asset'
-import '@renderer/assets/custom.css?asset'
-import { ErrorComponent, ProgressBar } from '@renderer/components'
+import '@base/assets/icons.css?asset'
+import '@base/assets/custom.css?asset'
+import '@base/assets/scss/portal.scss'
+import './Auth.modules.scss'
+
+import { ErrorComponent, ProgressBar } from '@base/components'
 
 export function AuthRoot({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()

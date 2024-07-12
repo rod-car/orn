@@ -1,6 +1,6 @@
 import { useExcelReader } from 'hooks'
 import { ChangeEvent } from 'react'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 import { Block, Button, Input, Spinner } from 'ui'
 
 export function ImportConso(): JSX.Element {

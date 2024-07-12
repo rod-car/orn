@@ -1,9 +1,9 @@
 import { useApi } from 'hooks'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { ReactNode, useCallback, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { range } from 'functions'
-import { ExcelExportButton } from '@renderer/components/ExportExcelButton.tsx'
+import { ExcelExportButton } from '@base/components/ExportExcelButton.tsx'
 
 export function StudentBySchoolZValue({scholarYear, surveyId}: {scholarYear: string, surveyId?: number}): ReactNode {
     const { Client, RequestState, error, datas } = useApi<SurveySchoolZ>({

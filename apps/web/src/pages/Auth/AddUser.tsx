@@ -1,6 +1,6 @@
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 import { Block } from 'ui'
-import { RegisterForm } from '@renderer/pages/Auth'
+import { RegisterForm } from '@base/pages/Auth'
 
 /**
  * Page d'accueil de gestion des étudiants

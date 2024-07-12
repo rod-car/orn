@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
-import { DropDown, ErrorComponent, Navigation, UserMenu } from '@renderer/components'
+import { DropDown, ErrorComponent, Navigation, UserMenu } from '@base/components'
 
 import 'react-toastify/dist/ReactToastify.css?asset'
 import 'bootstrap/dist/css/bootstrap.min.css?asset'
@@ -11,12 +11,12 @@ import '@fortawesome/fontawesome-free/js/all.min.js?asset'
 import 'react-confirm-alert/src/react-confirm-alert.css?asset'
 import 'react-toastify/dist/ReactToastify.css?asset'
 
-import '@renderer/assets/icons.css?asset'
-import '@renderer/assets/custom.css?asset'
-import logo from '@renderer/assets/logo.png'
+import '@base/assets/icons.css?asset'
+import '@base/assets/custom.css?asset'
+import logo from '@base/assets/logo.png'
 
 import { useApi, useAuthStore } from 'hooks'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 
 export function ActivityRoot({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()

@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { Block } from 'ui'
-import { ActivityForm } from '@renderer/pages/Activities'
+import { ActivityForm } from '@base/pages/Activities'
 
 export function ActivityTypeAdd(): JSX.Element {
     return (

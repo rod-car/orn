@@ -1,9 +1,9 @@
 import { useApi } from 'hooks'
 import { useParams } from 'react-router-dom'
 import { ApiErrorMessage, Block } from 'ui'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { useEffect, useState } from 'react'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 
 export function DetailsMeasure(): JSX.Element {
     const { Client, error, resetError } = useApi<Student>({

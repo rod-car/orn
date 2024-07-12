@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { useCallback, useEffect } from 'react'
 import { Block, Button, Spinner } from 'ui'
 

@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { Block, Button, Checkbox } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
 import { format, scholar_years, in_array } from 'functions'
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
-import { ClassSelector, Link, ScholarYearSelector, SchoolSelector, TableLoading } from '@renderer/components'
+import { ClassSelector, Link, ScholarYearSelector, SchoolSelector, TableLoading } from '@base/components'
 
 export function StudentsClasses(): ReactNode {
     const [schoolId, setSchoolId] = useState(0)

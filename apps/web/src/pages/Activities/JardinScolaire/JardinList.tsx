@@ -1,7 +1,7 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Block, Button } from "ui";
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { Pagination } from 'react-laravel-paginex'
 import { range } from "functions";
 import Skeleton from "react-loading-skeleton";
