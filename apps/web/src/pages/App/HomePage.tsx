@@ -3,12 +3,12 @@
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { config } from '@base/config'
-import { HomeCard, Spinner } from 'ui'
-import { SchoolsByClasses } from '..'
-import { NavLink } from 'react-router-dom'
+import { Spinner } from 'ui'
+import { SchoolsByClassesChart, SchoolsByScholarYearChart } from '@base/charts'
 import { AppCard, CardState, Link } from '@base/components'
 
 import './HomePage.modules.scss'
+import { useConfigStore } from '@base/hooks';
 
 export function HomePage(): ReactNode {
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
@@ -30,12 +30,13 @@ export function HomePage(): ReactNode {
     })
 
     const [_loaded, setLoaded] = useState(false)
+    const { firstTime } = useConfigStore();
 
     const getCount = useCallback(async () => {
         const option = { count: 1 }
-        await StudentClient.get(option)
-        await SchoolClient.get(option)
-        await SurveyClient.get(option)
+        StudentClient.get(option)
+        SchoolClient.get(option)
+        SurveyClient.get(option)
         setLoaded(true)
     }, [])
 
@@ -47,12 +48,12 @@ export function HomePage(): ReactNode {
         <>
             <div className="mb-5 d-flex justify-content-between align-items-center">
                 <h2>Tableau de bord</h2>
-                <Link to="/anthropo-measure/statistics" className="btn primary-link">
+                <Link to="/anthropo-measure/statistics" className="btn btn-primary">
                     <i className="fa fa-list me-2"></i>Statistiques
                 </Link>
             </div>
 
-            <AppCard title="Bienvenu" content="Bienvenue sur la plateforme ORN. Nous vous souhaitons une bonne navigation." actionLabel="Voir les tutoriels" actionUrl="/help" icon="question" />
+            {firstTime && <AppCard title="Bienvenu" content="Bienvenue sur la plateforme ORN. Nous vous souhaitons une bonne navigation." actionLabel="Voir les tutoriels" actionUrl="/help" icon="question" />}
 
             <div className="row mb-5">
                 <div className="col-4">
@@ -82,7 +83,13 @@ export function HomePage(): ReactNode {
 
             <div className="row mb-5">
                 <div className="col-12">
-                    <SchoolsByClasses />
+                    <SchoolsByClassesChart />
+                </div>
+            </div>
+
+            <div className="row mb-5">
+                <div className="col-12">
+                    <SchoolsByScholarYearChart />
                 </div>
             </div>
         </>

@@ -1,17 +1,24 @@
 import { ReactNode, useId } from "react";
+import { NavLink } from '@base/components';
 import './Nav.css';
+import { useLocation } from "react-router";
 
 type DropDownProps = {
     label: string;
     icon?: string;
-    menus: {label: string, to: string}[];
+    base?: string;
+    active?: boolean;
+    menus: {label: string, to: string, can?: boolean}[];
 }
 
-export function DropDown({ label, menus, icon }: DropDownProps): ReactNode {
+export function DropDown({ label, base = '/', menus, icon, active }: DropDownProps): ReactNode {
     const id = useId()
+    const { pathname } = useLocation()
 
-    return <li className="nav-item has-submenu">
-        <a className="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target={`#${id}`} aria-expanded="false" aria-controls={id}>
+    if (active === undefined) active = pathname.includes(base);
+
+    return <li className={`nav-item has-submenu`}>
+        <a className={`nav-link submenu-toggle ${active === true ? 'active' : ''}`} href="#" data-bs-toggle="collapse" data-bs-target={`#${id}`} aria-expanded="false" aria-controls={id}>
             {icon && <span className="nav-icon">
                 <i className={`fa fa-${icon}`}></i>
             </span>}
@@ -24,7 +31,9 @@ export function DropDown({ label, menus, icon }: DropDownProps): ReactNode {
         </a>
         <div id={id} className={`collapse submenu ${id}`} data-bs-parent="#menu-accordion">
             <ul className="submenu-list list-unstyled">
-                {menus.map(menu => <li key={menu.label} className="submenu-item"><a className="submenu-link" href={menu.to}>{menu.label}</a></li>)}
+                {menus.map(menu => (menu.can === undefined || menu.can) && <li key={menu.label} className="submenu-item">
+                    <NavLink className="submenu-link" to={base + menu.to}>{menu.label}</NavLink>
+                </li>)}
             </ul>
         </div>
     </li>

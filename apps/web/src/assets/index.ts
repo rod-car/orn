@@ -6,4 +6,4 @@ import '@fortawesome/fontawesome-free/js/all.min.js?asset';
 import 'react-confirm-alert/src/react-confirm-alert.css?asset';
 import '@base/assets/icons.css?asset';
 import '@base/assets/custom.css?asset';
-import '@base/assets/js/app.js?asset';
+import '@base/assets/js/app.ts?asset';

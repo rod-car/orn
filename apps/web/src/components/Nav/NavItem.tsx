@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Link } from "@base/components"
 import './Nav.css';
 
 type NavItemProps = {
@@ -10,11 +11,11 @@ type NavItemProps = {
 
 export function NavItem({ to, label, icon, active = false }: NavItemProps): ReactNode {
     return <li className="nav-item">
-        <a className={`nav-link ${active ? 'active' : ''}`} href={to}>
+        <Link className={`nav-link ${active === true ? 'active' : ''}`} to={to}>
             {icon && <span className="nav-icon">
-                <i className={`fa fa-${icon}`}></i>
+                <i className={`fa-solid fa-${icon}`}></i>
             </span>}
             <span className="nav-link-text">{label}</span>
-        </a>
+        </Link>
     </li>
 }

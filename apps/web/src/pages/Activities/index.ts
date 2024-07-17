@@ -7,6 +7,5 @@ export { AdminActivityList } from "./AdminActivityList";
 export { ActivityList } from "./ActivityList";
 export { ActivityEdit } from "./ActivityEdit";
 export { ActivityAdd } from "./ActivityAdd";
-export { ActivityRoot } from "./ActivityRoot";
 export { ActivityHome } from "./ActivityHome"
 export { ActivityForm } from './ActivityForm'

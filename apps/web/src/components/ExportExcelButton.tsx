@@ -3,6 +3,7 @@ import { Spinner } from "ui";
 
 export function ExcelExportButton(
     {ExportClient, url, requestData, elements, loading, children}:
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     {ExportClient: any, url: string, requestData?: Record<string, unknown>, elements: {label: string, params: Record<string, unknown>}[], loading?: boolean} & PropsWithChildren
 ): ReactNode {
     async function exportExcel(params: Record<string, unknown>) {

@@ -1,14 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Block } from 'ui'
-import { SchoolBySchoolYearClass } from './SchoolBySchoolYearClass'
-import { StudentBySchoolZ } from './StudentBySchoolZ'
 import { useEffect, useState } from 'react'
 import { scholar_years } from 'functions'
-import { StudentBySchoolZValue } from './StudentBySchoolZValue'
 import { useApi } from 'hooks'
 import { SurveySelector } from '@base/components'
+import { SchoolBySchoolYearClass, StudentBySchoolZ, StudentBySchoolZValue } from '@base/pages/State'
 
 export function State(): JSX.Element {
-    const [scholarYear, _setScholarYear] = useState<string>(scholar_years().at(1) ?? '')
+    const [scholarYear] = useState<string>(scholar_years().at(1) ?? '')
     const [surveyIdZ, setSurveyIdZ] = useState<number>(0)
     const [surveyId, setSurveyId] = useState<number>(0)
 
