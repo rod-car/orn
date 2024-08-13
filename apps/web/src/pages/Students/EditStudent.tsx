@@ -1,11 +1,12 @@
 import { useCallback, useEffect } from 'react'
-import { Block } from 'ui'
+import { Block, PageTitle } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
 import { Link, StudentFormLoading } from '@base/components'
 import { StudentForm } from './StudentForm'
 import Skeleton from 'react-loading-skeleton'
+import { Flex } from '@base/components';
 
 export function EditStudent(): JSX.Element {
     const { id } = useParams()
@@ -27,12 +28,14 @@ export function EditStudent(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                {student === null ? <Skeleton style={{ height: 30 }} containerClassName='w-50' /> : <h2>{student?.fullname}</h2>}
+            {student === null ? <Flex className="mb-3" alignItems="center" justifyContent="between">
+                <Skeleton style={{ height: 30 }} containerClassName='w-50' />
+            </Flex> : 
+            <PageTitle title={student?.fullname}>
                 <Link to="/anthropo-measure/student/list" className="btn primary-link">
                     <i className="fa fa-list me-2"></i>Liste des étudiants
                 </Link>
-            </div>
+            </PageTitle>}
 
             <Block>{student ? <StudentForm editedStudent={student} /> : <StudentFormLoading />}</Block>
         </>

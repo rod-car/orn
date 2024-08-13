@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useMemo, useRef } from 'react'
 import { config } from '@base/config'
-import { Spinner } from 'ui'
+import { Block, Spinner } from 'ui'
 
 import {
     Chart as ChartJS,
@@ -133,18 +134,13 @@ export function SchoolsByScholarYearChart(): ReactNode {
     const chartRef = useRef()
 
     return (
-        <>
-            <div className="shadow-lg rounded p-4">
-                <div className="d-flex align-items-center justify-content-between">
-                    <h4 className="text-muted">Effectif par année scolaire</h4>
+        <Block>
+            {RequestState.loading && <Spinner className="text-center w-100" />}
+            {data && (
+                <div className="custom-chart" ref={chartRef}>
+                    <Line options={options} data={data} />
                 </div>
-                {RequestState.loading && <Spinner className="text-center w-100" />}
-                {data && (
-                    <div className="custom-chart" ref={chartRef}>
-                        <Line options={options} data={data} />
-                    </div>
-                )}
-            </div>
-        </>
+            )}
+        </Block>
     )
 }

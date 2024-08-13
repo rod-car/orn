@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, ReactNode, useState } from 'react'
 import { Button, Input, Textarea } from 'ui'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
@@ -17,15 +17,10 @@ const defaultActivity: Activity = {
     files: null
 }
 
-export function ActivityForm({ editedActivity }: ActivityFormProps): JSX.Element {
+export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
     const [activity, setActivity] = useState(defaultActivity)
-    const {
-        Client,
-        error,
-        RequestState
-    } = useApi<Activity>({
+    const { Client, error, RequestState } = useApi<Activity>({
         baseUrl: config.baseUrl,
-        
         url: '/activities',
         key: 'data'
     })

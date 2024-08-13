@@ -85,6 +85,9 @@ export function SidePanel(): ReactNode {
                         { to: '/steps', label: 'Etapes' },
                         { to: '/steps-data', label: 'Ajouter des données' }
                     ]}/>
+
+                    <GroupSeparator title="Divers" />
+                    <NavItem icon="file" to="/documents" label="Documents" />
                 </ul>
             </nav>
 

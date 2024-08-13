@@ -126,7 +126,7 @@ export function RegisterForm({ external = true }: { external?: boolean }): React
         </div>
 
         <div className="row">
-            <div className={`password mb-3 col-6}`}>
+            <div className="password mb-3 col-6">
                 <Input
                     value={user.password}
                     onChange={({ target }): void => {
@@ -144,7 +144,7 @@ export function RegisterForm({ external = true }: { external?: boolean }): React
                 />
             </div>
 
-            <div className={`password mb-3 col-6}`}>
+            <div className="password mb-3 col-6">
                 <Input
                     value={user.password_confirmation}
                     onChange={({ target }) => {
@@ -164,11 +164,7 @@ export function RegisterForm({ external = true }: { external?: boolean }): React
         </div>
 
         <div className="extra mb-3">
-            <Checkbox checked={showPassword} onCheck={() => setShowPassword(!showPassword)} label="Afficher les mot de passe" />
-        </div>
-
-        <div className="extra mb-3">
-            <Checkbox checked={false} onCheck={() => { }} label={<span>J'accepte <a href="#" className="app-link">Les termes et conditions</a></span>} />
+            <Checkbox checked={false} onCheck={() => {}} label={<span>J'accepte <a href="#" className="app-link">Les termes et conditions</a></span>} />
         </div>
         <div className="text-center">
             <div className="d-flex justify-content-between align-items-center">

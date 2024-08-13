@@ -3,7 +3,21 @@ import { ToastPosition } from 'react-toastify'
 export const config = {
     // baseUrl: 'https://api.clinique-hugney.mg/api',
     baseUrl: 'http://localhost:8000/api',
-    toastPosition: 'top-right' as ToastPosition
+    toastPosition: 'bottom-right' as ToastPosition,
+    pagination: {
+        containerClass: 'pagination',
+        buttonIcons: true,
+        prevButtonClass: 'page-item',
+        prevButtonIcon: 'fa fa-chevron-left',
+        nextButtonClass: 'page-item',
+        nextButtonIcon: 'fa fa-chevron-right',
+        numberButtonClass: 'page-item',
+        numberClass: 'page-link',
+        numbersCountForShow: 2,
+        activeClass: 'active',
+        prevButtonText: "Précedent",
+        nextButtonText: "Suivant"
+    }
 }
 
 const abaqueTypes = [

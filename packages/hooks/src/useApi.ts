@@ -1,7 +1,8 @@
 import { AxiosError, AxiosRequestConfig } from "axios";
 import axios from "./axios";
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { useAuthStore } from "../src/store/useAuthStore.ts";
+import { useConfigStore } from "../src/store/useConfigStore.ts";
 
 type APIProps = {
     url: string;
@@ -13,6 +14,9 @@ type APIProps = {
 type APIError = {
     message: string;
     status: number;
+    data: {
+        errors: Record<string, string[]>
+    }
 };
 
 type RequestState = {
@@ -38,9 +42,10 @@ const defaultRequestState = {
  * @param {string} param.url Url de la ressources en enlevant la base
  * @param {string} param.key Cle contenant le data retourne par le serveur
  */
-export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
-    axios.defaults.baseURL = baseUrl
+export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
     const { token } = useAuthStore();
+    const { baseUrl: endpointBase } = useConfigStore()
+    axios.defaults.baseURL = baseUrl === undefined ? endpointBase : baseUrl
 
     const [data, setData] = useState<T | null>(null);
     const [datas, setDatas] = useState<T[]>([]);
@@ -50,31 +55,31 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
 
     type PostResponse = { ok: boolean, data: T | null, message: string, status?: number }
 
-    const resetError = (key?: string) => {
+    const resetError = useCallback((key?: string) => {
         if (key === undefined) setError(null)
-    }
+    }, [])
 
-    const resetSuccess = () => {
+    const resetSuccess = useCallback(() => {
         setError(null)
-    }
+    }, [])
 
-    const resetRequestState = () => {
+    const resetRequestState = useCallback(() => {
         setRequestState(defaultRequestState);
-    }
+    }, [])
 
-    const reset = (datas?: boolean) => {
+    const reset = useCallback((datas?: boolean) => {
         resetRequestState();
         resetError();
         resetSuccess();
         if (datas === true) setDatas([]);
-    }
+    }, [])
 
     /**
      * 
      * @param params 
      * @returns 
      */
-    const buildQuery = (params: Record<string, string | number | boolean> | undefined): string | undefined => {
+    const buildQuery = useCallback((params: Record<string, string | number | boolean> | undefined): string | undefined => {
 
         if (!params || JSON.stringify(params) === '{}') return undefined;
 
@@ -84,7 +89,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
         });
 
         return "?" + queryParams.join("&").toString();
-    }
+    }, [])
 
 
     /**
@@ -92,7 +97,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
      * 
      * @param {Record<string, any>} params
      */
-    const get = async (params?: Record<string, string | number | boolean>, addUrl?: string) => {
+    const get = useCallback(async (params?: Record<string, string | number | boolean>, addUrl?: string) => {
         reset(true);
         setRequestState({ loading: true });
 
@@ -131,7 +136,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
         setDatas(datas);
         setRequestState({ loading: false });
         return datas
-    }
+    }, [])
 
 
     /**
@@ -140,7 +145,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
      * @param params 
      * @returns 
      */
-    const find = async (id: string | number, params?: Record<string, string | number | boolean>): Promise<T | null> => {
+    const find = useCallback(async (id: string | number, params?: Record<string, string | number | boolean>): Promise<T | null> => {
         reset(false);
         setRequestState({ loading: true });
         let data: T | null = null
@@ -172,56 +177,24 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
         setData(data)
         setRequestState({ loading: false });
         return data
-    }
-
-    const findOld = async (id: string | number, params?: Record<string, string | number | boolean>) => {
-        reset();
-        setRequestState({ loading: true });
-
-        const query = buildQuery(params);
-
-        try {
-            let newUrl = url + '/' + id
-            if (query) newUrl += query;
-
-            const response = await axios.get(newUrl);
-
-            if (response.status === 200) {
-                const d = response.data as T
-                setData(d);
-            }
-            else setError({
-                message: response.statusText,
-                status: response.status
-            });
-        }
-        catch (e) {
-            setError(e as APIError)
-        }
-
-        setRequestState({ loading: false });
-    }
+    }, []);
 
     /**
      * Enregistrer un nouveau enregistrement dans la base de données
      * @param {string} data
      * @async
      */
-    const post = async (
-        data: Partial<T>,
-        addUrl: string | undefined = undefined,
-        params?: Record<string, unknown>,
-        config?: AxiosRequestConfig
-    ): Promise<PostResponse> => {
+    const post = useCallback(async (data: Partial<T>, addUrl: string | undefined = undefined, params?: Record<string, unknown>, config?: AxiosRequestConfig): Promise<PostResponse> => {
         reset(false);
         setRequestState({ creating: true });
 
         let res: PostResponse = { ok: false, data: null, message: '', status: undefined }
+        let exactUrl = url
 
         try {
-            if (addUrl) url = url + addUrl
+            if (addUrl) exactUrl = exactUrl + addUrl
 
-            const response = await axios.post(url, data, {
+            const response = await axios.post(exactUrl, data, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/ld+json",
@@ -251,7 +224,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
 
         setRequestState({ creating: false });
         return res
-    }
+    }, [])
 
 
     /**
@@ -260,15 +233,17 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
      * @param {string | number} id Identifiant de l'enregistrement a modifier
      * @param {Omit<T, "id">} data Les nouvelles valeurs
      */
-    const put = async (id: string | number, data: Omit<T, "id">): Promise<PostResponse> => {
+    const put = useCallback(async (id: string | number, data: Omit<T, "id">, config?: AxiosRequestConfig): Promise<PostResponse> => {
         reset();
+        let res: PostResponse = { ok: false, data: null, message: '', status: undefined }
         setRequestState({ updating: true });
 
         try {
             const response = await axios.put(getUri(id), data, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/ld+json"
+                    "Content-Type": "application/ld+json",
+                    ...config?.headers
                 }
             });
 
@@ -290,7 +265,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
 
         setRequestState({ updating: false });
         return res
-    }
+    }, [])
 
 
     /**
@@ -299,7 +274,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
      * @param {string | number} id Identifiant de l'enregistrement a modifier
      * @param {Partial<Omit<T, "id">>} data Les nouvelles valeurs
      */
-    const patch = async (id: string | number, data: Partial<Omit<T, "id">>, params?: Record<string, string | number | boolean>): Promise<PostResponse> => {
+    const patch = useCallback(async (id: string | number, data: Partial<Omit<T, "id">>, params?: Record<string, string | number | boolean>, config?: AxiosRequestConfig): Promise<PostResponse> => {
         reset();
         setRequestState({ updating: true });
 
@@ -309,7 +284,8 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
             const response = await axios.patch(getUri(id), data, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/merge-patch+json"
+                    "Content-Type": "application/merge-patch+json",
+                    ...config?.headers
                 },
                 params: params
             });
@@ -337,14 +313,14 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
 
         setRequestState({ updating: false });
         return res
-    }
+    }, [])
 
     /**
      * Envoyer une requête de type delete
      * @param id 
      * @returns 
      */
-    const destroy = async (id: string | number, params?: Record<string, string | number | boolean>): Promise<{ ok: boolean }> => {
+    const destroy = useCallback(async (id: string | number, params?: Record<string, string | number | boolean>): Promise<{ ok: boolean }> => {
         reset();
         setRequestState({ deleting: true });
         let res: { ok: boolean } = { ok: false }
@@ -376,7 +352,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
 
         setRequestState({ deleting: false });
         return res
-    }
+    }, [])
 
     /**
      * Recuperer l'URI
@@ -384,7 +360,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
      * @param {string | number} id
      * @returns
      */
-    const getUri = (id: string | number): string => url + '/' + id;
+    const getUri = useCallback((id: string | number): string => url + '/' + id, []);
 
     return {
         resetError,
@@ -392,7 +368,7 @@ export function useApi<T>({ baseUrl = '', url, key = undefined }: APIProps) {
         RequestState,
         error, success,
         Client: {
-            get, post, put, find, findOld, patch, destroy
+            get, post, put, find, patch, destroy
         }
     }
 

@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { ExcelExportButton, Link } from '@base/components'
 import { class_categories, config } from '@base/config'
-import { Block, Button, Input, Select } from 'ui'
+import { Block, Button, Input, PageTitle, Select } from 'ui'
 import { useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
@@ -174,8 +175,7 @@ export function Student(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2 className="text-primary fw-semibold">Liste des etudiants {!SRequestState.loading && <span>({students?.total})</span>}</h2>
+            <PageTitle title={`Liste des etudiants ${!SRequestState.loading ? '(' + students?.total + ')' : ''}`}>
                 <div className="d-flex align-items-between">
                     <Button
                         icon="refresh"
@@ -194,7 +194,7 @@ export function Student(): JSX.Element {
                         <i className="fa fa-file me-2"></i>Importer une liste
                     </Link>
                 </div>
-            </div>
+            </PageTitle>
 
             {Serror && <div className="alert alert-danger">{Serror.message}</div>}
 
@@ -348,13 +348,13 @@ export function Student(): JSX.Element {
                                                 </td>
                                                 <td className="text-nowrap">
                                                     <Link
-                                                        className="btn-sm me-2 btn btn-info text-white"
+                                                        className="btn btn-sm me-2 btn-info text-white"
                                                         to={`/anthropo-measure/student/details/${student.id}`}
                                                     >
                                                         <i className="fa fa-folder"></i>
                                                     </Link>
                                                     <Link
-                                                        className="btn-sm me-2 btn btn-primary"
+                                                        className="btn btn-sm me-2 btn-primary"
                                                         to={`/anthropo-measure/student/edit/${student.id}`}
                                                     >
                                                         <i className="fa fa-edit"></i>

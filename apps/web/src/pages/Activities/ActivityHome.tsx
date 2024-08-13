@@ -12,7 +12,6 @@ export function ActivityHome(): ReactNode {
         RequestState
     } = useApi<Activity>({
         baseUrl: config.baseUrl,
-        
         url: '/activities',
         key: 'data'
     })

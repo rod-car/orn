@@ -94,7 +94,7 @@ button.close {
 	}
 }
 
-.btn {
+/*.btn {
 	font-weight: 600;
 	padding: 0.5rem 1rem;
 	font-size: 0.875rem;
@@ -110,7 +110,7 @@ button.close {
 
 .btn:focus, .btn.focus {
 	box-shadow: none !important;
-}
+}*/
 
 .app-btn-primary {
     background: $theme-color-primary;
@@ -142,9 +142,6 @@ button.close {
 		color: $theme-color-primary;
 	}
 }
-
-
-
 
 .form-control {
 	padding-top: 0.6rem;

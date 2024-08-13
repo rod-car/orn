@@ -1,3 +1,7 @@
+export { Flex } from './Bootstrap/Flex.tsx';
+
+export { Alert, AlertDanger } from './Bootstrap/Alert.tsx';
+
 export { AppCard } from './Card/AppCard.tsx';
 export { CardState } from './Card/CardStat.tsx';
 export { BasicCard } from './Card/BasicCard.tsx';

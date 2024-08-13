@@ -94,6 +94,7 @@ type User = {
     username: string
     password: string
     password_confirmation: string
+    created_at: string;
 }
 
 type Survey = {
@@ -229,4 +230,24 @@ type Steps = {
     title: string
     table: string
     columns_data?: Record<string, string>
+}
+
+type APIError = {
+    message: string;
+    status: number;
+    data: {
+        errors: Record<string, string[]>
+    }
+};
+
+type FileDocument = {
+    id: number;
+    title: string;
+    path?: string;
+    date: string;
+    type?: 'pdf' | 'excel' | 'word' | 'powerpoint';
+    abstract?: string;
+    file?: File;
+    creator?: User;
+    updator?: User;
 }

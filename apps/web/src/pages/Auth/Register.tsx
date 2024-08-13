@@ -10,7 +10,7 @@ export function Register(): ReactNode {
         <div className="row g-0 app-auth-wrapper">
             <div className="col-12 col-md-7 col-lg-6 auth-main-col text-center p-5">
                 <div className="d-flex flex-column align-content-end">
-                    <div className="app-auth-body mx-auto">	
+                    <div className="app-auth-body mx-auto" style={{ width: 425 }}>	
                         <div className="app-auth-branding mb-4">
                             <Link className="app-logo" to="/">
                                 <img className="logo-icon me-2" src={logo} alt="logo" />

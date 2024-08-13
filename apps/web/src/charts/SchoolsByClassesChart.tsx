@@ -1,7 +1,7 @@
 import { useApi } from 'hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { config } from '@base/config'
-import { Select, Spinner } from 'ui'
+import { Block, Select, Spinner } from 'ui'
 import { generateColor } from '@base/utils'
 
 import {
@@ -129,27 +129,22 @@ export function SchoolsByClassesChart(): JSX.Element {
     }
 
     return (
-        <>
-            <div className="shadow-lg rounded p-4">
-                <div className="mb-4 d-flex align-items-center justify-content-between">
-                    <h4 className="text-muted">Effectif par école et par classe</h4>
-                </div>
-                <div className="mb-4">
-                    <Select
-                        controlled
-                        label="Année scolaire"
-                        value={scholarYear}
-                        options={scholar_years()}
-                        onChange={({ target }): void => setScholarYear(target.value)}
-                    />
-                </div>
-                {RequestState.loading && <Spinner className="text-center w-100" />}
-                {data && (
-                    <div className="custom-chart" ref={chartRef}>
-                        <Bar options={options} data={data} />
-                    </div>
-                )}
+        <Block>
+            <div className="mb-4">
+                <Select
+                    controlled
+                    label="Année scolaire"
+                    value={scholarYear}
+                    options={scholar_years()}
+                    onChange={({ target }): void => setScholarYear(target.value)}
+                />
             </div>
-        </>
+            {RequestState.loading && <Spinner className="text-center w-100" />}
+            {data && (
+                <div className="custom-chart" ref={chartRef}>
+                    <Bar options={options} data={data} />
+                </div>
+            )}
+        </Block>
     )
 }

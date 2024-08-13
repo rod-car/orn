@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
@@ -30,20 +31,17 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
     const [student, setStudent] = useState(defaultStudent)
     const { Client: SClient, RequestState: SRequestState, error } = useApi<typeof defaultStudent>({
         baseUrl: config.baseUrl,
-        
         url: '/students'
     })
 
     const { Client: ScClient, datas: schools, RequestState: ScRequestState } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClClient, datas: ClDatas, RequestState: ClRequestState } = useApi<Classes>({
         baseUrl: config.baseUrl,
-        
         url: '/classes',
         key: 'data'
     })
@@ -115,7 +113,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
     }, [])
 
     return (
-        <form action="" onSubmit={handleSubmit} method="post" className="mb-5">
+        <form action="" onSubmit={handleSubmit} method="post">
             <div className="row mb-3">
                 <div className="col-xl-1">
                     <Input
@@ -175,21 +173,11 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                         value={student.parents}
                         onChange={({ target }): void => handleChange(target)}
                         required={false}
-                        label="Parents"
+                        label="Nom des parents"
                         name="parents"
                         error={error?.data?.errors?.parents}
                     />
                 </div>
-                {/*<div className="col-xl-6">
-                    <Input
-                        value={student.birth_place}
-                        onChange={({ target }): void => handleChange(target)}
-                        label="Lieu de naissance"
-                        name="birth_place"
-                        error={error?.data?.errors?.birth_place}
-                        required={false}
-                    />
-                </div>*/}
             </div>
 
             <div className="row mb-4">

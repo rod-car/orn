@@ -5,7 +5,6 @@ import { Button, Checkbox, Input } from 'ui'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
 import { Footer, Link } from '@base/components'
-
 import logo from '@base/assets/images/logo.png'
 
 export function Login(): ReactNode {
@@ -16,12 +15,12 @@ export function Login(): ReactNode {
     const navigate = useNavigate()
 
     const { login } = useAuthStore()
-    const { Client, RequestState } = useApi<User>({ baseUrl: config.baseUrl, url: '/auth' })
+    const { Client, RequestState } = useApi<User>({ url: '/auth' })
 
     const handleLogin = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
         const response = await login(Client, {username: username, password: password})
-        
+
         if (response === undefined) {
             toast("Impossible de contacter le serveur", {
                 position: config.toastPosition,
@@ -98,7 +97,7 @@ export function Login(): ReactNode {
                                         </div>
                                         <div className="col-6">
                                             <div className="forgot-password text-end">
-                                                <Link to="/reset-password">Mot de passe oublié?</Link>
+                                                <Link to="/auth/forgot-password">Mot de passe oublié?</Link>
                                             </div>
                                         </div>
                                     </div>

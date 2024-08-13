@@ -3,13 +3,19 @@
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { config } from '@base/config'
-import { Spinner } from 'ui'
+import { PageTitle, Spinner } from 'ui'
 import { SchoolsByClassesChart, SchoolsByScholarYearChart } from '@base/charts'
 import { AppCard, CardState, Link } from '@base/components'
 
 import './HomePage.modules.scss'
 import { useConfigStore } from '@base/hooks';
 
+/**
+ * Description placeholder
+ *
+ * @export
+ * @returns {ReactNode}
+ */
 export function HomePage(): ReactNode {
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
         baseUrl: config.baseUrl,
@@ -46,12 +52,11 @@ export function HomePage(): ReactNode {
 
     return (
         <>
-            <div className="mb-5 d-flex justify-content-between align-items-center">
-                <h2>Tableau de bord</h2>
+            <PageTitle title="Tableau de bord">
                 <Link to="/anthropo-measure/statistics" className="btn btn-primary">
                     <i className="fa fa-list me-2"></i>Statistiques
                 </Link>
-            </div>
+            </PageTitle>
 
             {firstTime && <AppCard title="Bienvenu" content="Bienvenue sur la plateforme ORN. Nous vous souhaitons une bonne navigation." actionLabel="Voir les tutoriels" actionUrl="/help" icon="question" />}
 

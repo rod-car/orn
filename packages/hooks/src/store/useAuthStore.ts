@@ -9,11 +9,13 @@ interface AuthStore {
     isAdmin: boolean;
     isSuperuser: boolean;
     isVisitor: boolean;
+    lastLogin?: string;
     token: string | null | undefined;
     login: (Client: unknown, data: Record<string, unknown>) => Promise<any>;
     register: (Client: unknown, data: Record<string, unknown>) => Promise<any>;
     logout: (Client: unknown) => Promise<any>;
     resetUser: () => void;
+    updateUser: (data: { username: string, name: string, email: string, role: string }) => void;
 }
 
 const defaultState = { isLoggedIn: false, user: null, token: null, isAdmin: false, isSuperuser: false, isVisitor: false }
@@ -27,6 +29,7 @@ export const useAuthStore = create(
             isAdmin: false,
             isSuperuser: false,
             isVisitor: false,
+            lastLogin: undefined,
             login: async (Client, data) => {
                 await Client.get({ prefix: false, replace: 'api' }, '/sanctum/csrf-cookie')
                 const response = await Client.post(data, '/login')
@@ -42,6 +45,7 @@ export const useAuthStore = create(
                 }
             },
             resetUser: () => { set(defaultState); },
+            updateUser: (data) => { set({user: data}) },
             logout: async (Client) => {
                 const response = await Client.post({}, '/logout')
 
@@ -84,5 +88,6 @@ function getStoredUser(user: AuthUser, token: string) {
         isAdmin: user?.is_admin === true,
         isSuperuser: user?.is_super_user === true,
         token: token,
+        lastLogin: new Date().toDateString()
     }
 }

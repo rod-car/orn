@@ -39,14 +39,15 @@ export const Button = ({
     type = "button",
     ...props
 }: ButtonProps): React.ReactNode => {
-    const id = props.id ? props.id : useId()
+    let id = useId();
+    if (props.id) id = props.id;
     return (
         <button
             id={id}
             disabled={props.disabled || props.loading}
             onClick={props.onClick}
             type={type}
-            style={props.style}
+            style={{...props.style, fontSize: 'small'}}
             className={`btn btn-${mode} btn-${size} shadow ${props.className}`}
         >
             {props.loading

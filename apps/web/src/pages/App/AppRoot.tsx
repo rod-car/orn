@@ -1,25 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { config } from '@base/config'
-import { useApi, useAuthStore } from 'hooks'
-import { ReactNode, useEffect } from 'react'
-import { ToastContainer } from 'react-toastify'
-import { ErrorComponent, Footer, Header, ProgressBar } from '@base/components'
-import { ErrorResponse, Outlet, useNavigate, useRouteError } from 'react-router-dom'
-import { NotFound } from '@base/pages/Errors'
-import { useNotFoundRoute } from '@base/hooks'
+import { useApi, useAuthStore } from 'hooks';
+import { ReactNode, useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { ErrorComponent, Footer, Header, ProgressBar } from '@base/components';
+import { ErrorResponse, Outlet, useNavigate, useRouteError } from 'react-router-dom';
+import { NotFound } from '@base/pages/Errors';
+import { useNotFoundRoute } from '@base/hooks';
 
-import '@base/assets'
+import '@base/assets';
 
 export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()
     const errorResponse = err as { error: ErrorResponse, status: number }
     const { token, resetUser } = useAuthStore()
     const navigate = useNavigate()
-
-    const { Client } = useApi<User>({
-        baseUrl: config.baseUrl,
-        url: '/auth'
-    })
+    const { Client } = useApi<User>({ url: '/auth' })
 
     useEffect(() => {
         const getUser = async (): Promise<void> => {

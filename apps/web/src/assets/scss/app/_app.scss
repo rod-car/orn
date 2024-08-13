@@ -7,6 +7,10 @@
     overflow-x: hidden;
 }
 
+.text-sm {
+	font-size: small;
+}
+
 .app-footer {
 	.copyright {
 		font-size: 0.8125rem;
@@ -220,10 +224,7 @@
         text-align: center;
         position: relative;
         height: 112px;
-        
-       
-        
-        
+
         .app-card-thumb {
 	        overflow: hidden;
 	        position: absolute;
@@ -331,15 +332,12 @@
 			display: block;
 			color: $theme-text-color-light;
 			font-size: 0.75rem;
-			
 		}
 	}
-	
 	.btn-sm {
-		padding: 0.125rem 0.5rem;
-		font-size: 0.75rem;
+		padding: 0.125rem 0.5rem!important;
+		font-size: 0.75rem!important;
 	}
-	
 	.truncate {
 		max-width: 250px;
 		display: inline-block;
@@ -347,7 +345,6 @@
 	    text-overflow: ellipsis;
 	    white-space: nowrap;
 	}
-
 }
 
 

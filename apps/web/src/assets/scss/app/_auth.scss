@@ -1,5 +1,4 @@
 .app-login {
-	
 	.auth-background-holder {
 		background: url("../images/background/background-login.jpg") no-repeat center center;
 		@include background-size(cover);
@@ -20,7 +19,7 @@
 
 .app-reset-password {
 	.auth-background-holder {
-		background: url("../images/background/background-reset-password.jpg") no-repeat center center;
+		background: url("../images/background/background-register.jpg") no-repeat center center;
 		@include background-size(cover);
 		height: 100vh;
 		min-height: 100%;
@@ -82,8 +81,7 @@
 	.app-auth-body {
 		width: 360px;
 	}
-	
-	
+
 	.app-logo{
 		.logo-icon {
 			width: 60px;

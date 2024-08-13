@@ -2,7 +2,7 @@
 import { useApi } from 'hooks'
 import { useCallback, useEffect, useState } from 'react'
 import { config } from '@base/config'
-import { Select, Spinner } from 'ui'
+import { Block, Select, Spinner } from 'ui'
 import { generateColor } from '@base/utils'
 
 import {
@@ -99,78 +99,72 @@ export function ZBySchoolChart(): JSX.Element {
     )
 
     return (
-        <>
-            <div className="shadow-lg rounded p-4">
-                <div className="mb-4 d-flex align-items-center justify-content-between">
-                    <h4 className="text-muted">Statistique de malnutrition</h4>
+        <Block>
+            <div className="row mb-4">
+                <div className="col-12">
+                    <Select
+                        controlled
+                        placeholder={null}
+                        label="Phase d'enquête"
+                        value={surveyId}
+                        options={[1, 2, 3]}
+                        onChange={({ target }): void => setSurveyId(parseInt(target.value))}
+                    />
                 </div>
+            </div>
 
-                <div className="row mb-4">
-                    <div className="col-12">
-                        <Select
-                            controlled
-                            placeholder={null}
-                            label="Phase d'enquête"
-                            value={surveyId}
-                            options={[1, 2, 3]}
-                            onChange={({ target }): void => setSurveyId(parseInt(target.value))}
-                        />
-                    </div>
-                </div>
+            {RequestState.loading && <Spinner className="text-center w-100" />}
 
-                {RequestState.loading && <Spinner className="text-center w-100" />}
-
-                {Object.keys(types).map((type) => {
-                    const options = {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top' as const
-                            },
+            {Object.keys(types).map((type) => {
+                const options = {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top' as const
+                        },
+                        title: {
+                            display: true,
+                            text: `${types[type]} (PHASE ${surveyId})`,
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
                             title: {
                                 display: true,
-                                text: `${types[type]} (PHASE ${surveyId})`,
-                                font: {
-                                    size: 14
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: "Nombre d'étudiants"
-                                },
-                                ticks: {
-                                    font: {
-                                        weight: 'bold',
-                                        size: 13
-                                    }
-                                },
-                                suggestedMax: 5
+                                text: "Nombre d'étudiants"
                             },
-                            x: {
-                                ticks: {
-                                    font: {
-                                        weight: 'bold',
-                                        size: 13
-                                    }
+                            ticks: {
+                                font: {
+                                    weight: 'bold',
+                                    size: 13
+                                }
+                            },
+                            suggestedMax: 5
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    weight: 'bold',
+                                    size: 13
                                 }
                             }
                         }
                     }
-                    const datas = data(type)
-                    return (
-                        datas &&
-                        datas.labels &&
-                        datas.labels.length > 0 && (
-                            <div key={type} className="custom-chart m-charts mb-5">
-                                <Bar options={options} data={datas} />
-                            </div>
-                        )
+                }
+                const datas = data(type)
+                return (
+                    datas &&
+                    datas.labels &&
+                    datas.labels.length > 0 && (
+                        <div key={type} className="custom-chart m-charts mb-5">
+                            <Bar options={options} data={datas} />
+                        </div>
                     )
-                })}
-            </div>
-        </>
+                )
+            })}
+        </Block>
     )
 }

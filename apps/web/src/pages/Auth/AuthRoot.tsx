@@ -21,10 +21,10 @@ export function AuthRoot({ error = false }: { error?: boolean }): ReactNode {
     const errorResponse = err as { error: ErrorResponse }
 
     return (
-        <div>
+        <>
             <ToastContainer />
             <ProgressBar />
             {error ? <ErrorComponent error={errorResponse.error} /> : <Outlet />}
-        </div>
+        </>
     )
 }

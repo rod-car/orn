@@ -15,7 +15,6 @@ export function SiteList(): ReactNode {
         error
     } = useApi<Site>({
         baseUrl: config.baseUrl,
-        
         url: '/prices/sites'
     })
 

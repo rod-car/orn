@@ -7,7 +7,7 @@ TopBarProgress.config({
         "0": "#002496",
         "1.0": "#0d3edf"
     },
-    barThickness: 5,
+    barThickness: 2,
     shadowBlur: 2
 });
 

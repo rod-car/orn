@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
 
-export function PageTitle ({title, children} : { title: string, children: ReactNode }) {
+export function PageTitle ({title, children} : { title: ReactNode, children: ReactNode }) {
     return <>
         <div className="d-flex justify-content-between align-items-center">
-            <h2 className="h3 mb-0 text-gray-800">{title}</h2>
+            <h4 className="mb-0 text-primary">{title}</h4>
             {children}
         </div>
-        <hr className="mb-5" />
+        <hr className="mb-4 text-primary" />
     </>
 }
