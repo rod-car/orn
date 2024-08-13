@@ -2,7 +2,7 @@ import { useApi } from "hooks";
 import { ReactNode, useEffect, useState } from "react";
 import { Block, Button, Select } from "ui";
 import { config } from '@base/config'
-import { Pagination } from 'react-laravel-paginex'
+import { Pagination } from '@base/components'
 import { Link, useSearchParams } from "react-router-dom";
 import { formatPrice, range } from "functions";
 import Skeleton from "react-loading-skeleton";

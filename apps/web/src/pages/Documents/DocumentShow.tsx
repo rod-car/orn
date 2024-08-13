@@ -10,6 +10,10 @@ import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 import { Block, Button, PageTitle, Spinner } from "ui";
 
+function download(path: string) {
+    return window.open(path, 'blank')
+}
+
 export function DocumentShow(): ReactNode {
     const { Client, data: document, RequestState } = useApi<FileDocument>({
         baseUrl: config.baseUrl,
@@ -59,11 +63,18 @@ export function DocumentShow(): ReactNode {
                 }
             ]
         })
-    }, [])
+    }, [id])
 
     useEffect(() => {
         getDatas()
     }, [])
+
+    const downloadFile = useCallback(() => {
+        if (document) {
+            const path = document.path
+            download(path as string)
+        }
+    }, [document?.path])
 
     return <>
         <PageTitle title={document ? document.title : "Détails du document"}>
@@ -74,10 +85,13 @@ export function DocumentShow(): ReactNode {
         {document && <>
             <Block className="mb-3">
                 <div className="d-flex justify-content-between">
-                    <h5 className="m-0">Par: {document.creator?.name} <span className="badge bg-primary p-1 ms-3">{document.type?.toUpperCase()}</span></h5>
-                    <form onSubmit={deleteDocument} method="post">
-                        <Button loading={RequestState.deleting} icon="trash" type="submit" mode="danger">Supprimer</Button>
-                    </form>
+                    <h5 className="m-0">Par: {document.creator?.name} <span className="badge text-sm bg-primary p-1 ms-3">{document.type?.toUpperCase()}</span></h5>
+                    <div className="d-flex">
+                        <Button onClick={downloadFile} mode="info" className="me-2 text-white" icon="download">Télécharger</Button>
+                        <form onSubmit={deleteDocument} method="post">
+                            <Button loading={RequestState.deleting} icon="trash" type="submit" mode="danger">Supprimer</Button>
+                        </form>
+                    </div>
                 </div>
                 <span className="text-primary fst-italic">Le {format(document.date, 'd/MM/y')}</span>
                 <hr />

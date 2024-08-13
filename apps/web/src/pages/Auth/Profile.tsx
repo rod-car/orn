@@ -103,7 +103,6 @@ export function ProfileLoading(): ReactNode {
 
 export function UnprocessableEntityError({error}: {error: APIError | null}) {
     return <>
-        {JSON.stringify(error?.data?.errors?.length)}
         {error?.data?.errors && <AlertDanger>
             <ul className="mb-0 pb-0">
                 {Object.keys(error.data.errors).map(key => {

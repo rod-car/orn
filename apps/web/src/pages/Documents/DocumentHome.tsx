@@ -6,7 +6,7 @@ import { Button, Input, PageTitle } from "ui";
 import icons from "@base/assets/icons";
 import { useApi, useAuthStore } from "hooks";
 import { config } from "@base/config";
-import { Pagination } from 'react-laravel-paginex';
+import { Pagination } from '@base/components';
 import { range } from "functions";
 import Skeleton from "react-loading-skeleton";
 
@@ -84,7 +84,7 @@ export function DocumentHome(): ReactNode {
             </Col>)}
         </Row>}
 
-        {documents?.meta?.total > 0 && documents?.meta?.last_page > 1 && <Pagination changePage={changePage} data={documents} options={config.pagination} />}
+        {documents?.meta?.total > 0 && documents?.meta?.last_page > 1 && <Pagination changePage={changePage} data={documents} />}
     </>
 }
 

@@ -1,3 +1,5 @@
+export { Pagination } from './Pagination.tsx';
+
 export { Flex } from './Bootstrap/Flex.tsx';
 
 export { Alert, AlertDanger } from './Bootstrap/Alert.tsx';

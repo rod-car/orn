@@ -5,15 +5,15 @@ export const config = {
     baseUrl: 'http://localhost:8000/api',
     toastPosition: 'bottom-right' as ToastPosition,
     pagination: {
-        containerClass: 'pagination',
-        buttonIcons: true,
+        containerClass: 'pagination justify-content-center pagination-sm',
+        buttonIcons: false,
         prevButtonClass: 'page-item',
         prevButtonIcon: 'bi bi-chevron-left',
         nextButtonClass: 'page-item',
         nextButtonIcon: 'bi bi-chevron-right',
         numberButtonClass: 'page-item',
         numberClass: 'page-link',
-        numbersCountForShow: 2,
+        numbersCountForShow: 3,
         activeClass: 'active',
         prevButtonText: "Précedent",
         nextButtonText: "Suivant"

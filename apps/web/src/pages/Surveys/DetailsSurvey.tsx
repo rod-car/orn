@@ -5,7 +5,7 @@ import { config } from '@base/config'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { ageMonth, ageYear, number_array, range } from 'functions'
 import { ExcelExportButton, Link } from '@base/components'
-import { Pagination } from 'react-laravel-paginex'
+import { Pagination } from '@base/components'
 import Skeleton from 'react-loading-skeleton'
 
 export function DetailsSurvey(): ReactNode {

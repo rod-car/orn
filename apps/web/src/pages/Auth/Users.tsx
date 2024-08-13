@@ -7,7 +7,7 @@ import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
 import { format, number_array, range } from 'functions'
 
-import { Pagination } from 'react-laravel-paginex'
+import { Pagination } from '@base/components'
 import Skeleton from 'react-loading-skeleton'
 
 /**

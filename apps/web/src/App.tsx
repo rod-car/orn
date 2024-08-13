@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { State } from '@base/pages/State';
+import { Statistics } from '@base/pages/Statistics';
 import { AuthRoot } from '@base/pages/Auth';
 import { priceRoute } from '@base/routes/prices';
 import { cantineRoute } from '@base/routes/cantine';
@@ -46,7 +46,7 @@ const router = createBrowserRouter([
                     {
                         path: 'statistics',
                         element: <PrivateRoute>
-                            <State />
+                            <Statistics />
                         </PrivateRoute>
                     },
                     {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { config } from '@base/config'
 import { ReactNode, useCallback, useEffect } from 'react'
@@ -8,13 +9,11 @@ import { ExcelExportButton } from '@base/components/index.ts'
 export function StudentBySchoolZ({ scholarYear, surveyId }: { scholarYear: string, surveyId?: number }): ReactNode {
     const { Client, RequestState, error, datas } = useApi<SurveySchoolZ>({
         baseUrl: config.baseUrl,
-        
         url: '/students'
     })
 
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        
         url: '/surveys'
     })
 
@@ -45,9 +44,9 @@ export function StudentBySchoolZ({ scholarYear, surveyId }: { scholarYear: strin
                 Object.keys(realData).map((survey_id) => {
                     const data = realData[survey_id]
                     return (
-                        <div key={survey_id} className="mb-5">
+                        <div key={survey_id} className="mb-3">
                             <div className="d-flex align-items-center justify-content-between mb-4">
-                                <h4 className="text-primary fw-bold m-0">Phase: {survey_id}</h4>
+                                <h6 className="text-primary fw-bold m-0">Phase: {survey_id}</h6>
                                 <ExcelExportButton
                                     ExportClient={ExportClient}
                                     loading={ExportRequestState.creating}
@@ -58,93 +57,87 @@ export function StudentBySchoolZ({ scholarYear, surveyId }: { scholarYear: strin
                                     ]}
                                 >Exporter ces résultats</ExcelExportButton>
                             </div>
-                            <div
-                                className={`table-responsive`}
-                                style={{ border: '1px solid silver', fontSize: '10pt' }}
-                            >
-                                <div className={`state-phase-${survey_id} malnutrition-state global-state`}>
-                                    <p className="d-none mb-4 h4">Mésure phase N°: {survey_id}</p>
-                                    <table className="table table-striped table-bordered">
-                                        <thead>
-                                            <tr className="text-nowrap">
-                                                <th></th>
-                                                {headers &&
-                                                    headers.map((header: string) => (
-                                                        <th key={header}>
-                                                            <span className="vertical-text">
-                                                                {header}
-                                                            </span>
-                                                        </th>
-                                                    ))}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td className="text-nowrap">Nombre d'élève</td>
-                                                <Td headers={headers} keyOne="T" schoolZ={data} />
-                                            </tr>
-                                            <tr>
-                                                <td
-                                                    className="text-uppercase fw-bold"
-                                                    colSpan={headers.length + 1}
-                                                >
-                                                    Mal nutrition aigüe
+                            <div className="table-responsive" style={{ border: '1px solid silver' }}>
+                                <table className="table table-striped table-bordered text-sm">
+                                    <thead>
+                                        <tr className="text-nowrap">
+                                            <th></th>
+                                            {headers &&
+                                                headers.map((header: string) => (
+                                                    <th key={header}>
+                                                        <span className="vertical-text">
+                                                            {header}
+                                                        </span>
+                                                    </th>
+                                                ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className="text-nowrap">Nombre d'élève</td>
+                                            <Td headers={headers} keyOne="T" schoolZ={data} />
+                                        </tr>
+                                        <tr>
+                                            <td
+                                                className="text-uppercase fw-bold"
+                                                colSpan={headers.length + 1}
+                                            >
+                                                Mal nutrition aigüe
+                                            </td>
+                                        </tr>
+                                        {types.map((type) => (
+                                            <tr key={type}>
+                                                <td className="text-nowrap text-uppercase">
+                                                    {type} {type === 'Global' ? '(M + S)' : ''}
                                                 </td>
+                                                <Td
+                                                    headers={headers}
+                                                    keyOne="MA"
+                                                    keyTwo={type}
+                                                    schoolZ={data}
+                                                />
                                             </tr>
-                                            {types.map((type) => (
-                                                <tr key={type}>
-                                                    <td className="text-nowrap text-uppercase">
-                                                        {type} {type === 'Global' ? '(M + S)' : ''}
-                                                    </td>
-                                                    <Td
-                                                        headers={headers}
-                                                        keyOne="MA"
-                                                        keyTwo={type}
-                                                        schoolZ={data}
-                                                    />
-                                                </tr>
-                                            ))}
+                                        ))}
 
-                                            <tr>
-                                                <td className="text-uppercase fw-bold" colSpan={headers.length + 1}>
-                                                    Insuffisance pondérale
+                                        <tr>
+                                            <td className="text-uppercase fw-bold" colSpan={headers.length + 1}>
+                                                Insuffisance pondérale
+                                            </td>
+                                        </tr>
+                                        {types.map((type) => (
+                                            <tr key={type}>
+                                                <td className="text-nowrap text-uppercase">
+                                                    {type} {type === 'Global' ? '(M + S)' : ''}
                                                 </td>
+                                                <Td
+                                                    headers={headers}
+                                                    keyOne="IP"
+                                                    keyTwo={type}
+                                                    schoolZ={data}
+                                                />
                                             </tr>
-                                            {types.map((type) => (
-                                                <tr key={type}>
-                                                    <td className="text-nowrap text-uppercase">
-                                                        {type} {type === 'Global' ? '(M + S)' : ''}
-                                                    </td>
-                                                    <Td
-                                                        headers={headers}
-                                                        keyOne="IP"
-                                                        keyTwo={type}
-                                                        schoolZ={data}
-                                                    />
-                                                </tr>
-                                            ))}
+                                        ))}
 
-                                            <tr>
-                                                <td className="text-uppercase fw-bold" colSpan={headers.length + 1}>
-                                                    Malnutrition Chronique
+                                        <tr>
+                                            <td className="text-uppercase fw-bold" colSpan={headers.length + 1}>
+                                                Malnutrition Chronique
+                                            </td>
+                                        </tr>
+                                        {types.map((type) => (
+                                            <tr key={type}>
+                                                <td className="text-nowrap text-uppercase">
+                                                    {type} {type === 'Global' ? '(M + S)' : ''}
                                                 </td>
+                                                <Td
+                                                    headers={headers}
+                                                    keyOne="CH"
+                                                    keyTwo={type}
+                                                    schoolZ={data}
+                                                />
                                             </tr>
-                                            {types.map((type) => (
-                                                <tr key={type}>
-                                                    <td className="text-nowrap text-uppercase">
-                                                        {type} {type === 'Global' ? '(M + S)' : ''}
-                                                    </td>
-                                                    <Td
-                                                        headers={headers}
-                                                        keyOne="CH"
-                                                        keyTwo={type}
-                                                        schoolZ={data}
-                                                    />
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     )

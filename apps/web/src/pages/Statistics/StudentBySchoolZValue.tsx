@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { config } from '@base/config'
 import { ReactNode, useCallback, useEffect } from 'react'
@@ -8,13 +9,11 @@ import { ExcelExportButton } from '@base/components/ExportExcelButton.tsx'
 export function StudentBySchoolZValue({scholarYear, surveyId}: {scholarYear: string, surveyId?: number}): ReactNode {
     const { Client, RequestState, error, datas } = useApi<SurveySchoolZ>({
         baseUrl: config.baseUrl,
-        
         url: '/students'
     })
 
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        
         url: '/surveys'
     })
 
@@ -46,7 +45,7 @@ export function StudentBySchoolZValue({scholarYear, surveyId}: {scholarYear: str
 
                 return <div key={survey_id} className="mb-5">
                     <div className="d-flex align-items-center justify-content-between mb-4">
-                        <h4 className="text-primary fw-bold m-0">Phase: {survey_id}</h4>
+                        <h6 className="text-primary fw-bold m-0">Phase: {survey_id}</h6>
                         <ExcelExportButton
                             ExportClient={ExportClient}
                             loading={ExportRequestState.creating}
@@ -64,9 +63,9 @@ export function StudentBySchoolZValue({scholarYear, surveyId}: {scholarYear: str
                             const datas = data[abaqueName]
                             const headers = Object.keys(datas).sort((a, b) => parseFloat(a) - parseFloat(b))
 
-                            return <div key={abaqueName} className='mb-5'>
-                                <h5 className="mb-4 fw-bold">{abaqueName}</h5>
-                                <table className="table table-striped table-bordered">
+                            return <div key={abaqueName} className='mb-3'>
+                                <h6 className="mb-3 fw-bold">{abaqueName}</h6>
+                                <table className="table table-striped table-bordered text-sm">
                                     <thead>
                                         <tr className="text-nowrap">
                                             <th></th>

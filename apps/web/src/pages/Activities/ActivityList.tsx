@@ -3,7 +3,7 @@ import { ReactNode, useEffect } from "react";
 import { Block, Button } from "ui";
 import { config } from '@base/config'
 import { ActivityLoading } from "@base/components";
-import { Pagination } from 'react-laravel-paginex'
+import { Pagination } from '@base/components'
 
 export function ActivityList(): ReactNode {
     const {

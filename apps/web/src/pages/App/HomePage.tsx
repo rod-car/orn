@@ -58,8 +58,6 @@ export function HomePage(): ReactNode {
                 </Link>
             </PageTitle>
 
-            {firstTime && <AppCard title="Bienvenu" content="Bienvenue sur la plateforme ORN. Nous vous souhaitons une bonne navigation." actionLabel="Voir les tutoriels" actionUrl="/help" icon="question" />}
-
             <div className="row mb-5">
                 <div className="col-4">
                     <CardState

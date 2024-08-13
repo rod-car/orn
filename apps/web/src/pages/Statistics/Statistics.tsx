@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Block } from 'ui'
-import { useEffect, useState } from 'react'
+import { Block, PageTitle } from 'ui'
+import { ReactNode, useEffect, useState } from 'react'
 import { scholar_years } from 'functions'
 import { useApi } from 'hooks'
 import { SurveySelector } from '@base/components'
-import { SchoolBySchoolYearClass, StudentBySchoolZ, StudentBySchoolZValue } from '@base/pages/State'
+import { SchoolBySchoolYearClass, StudentBySchoolZ, StudentBySchoolZValue } from '@base/pages/Statistics'
 
-export function State(): JSX.Element {
+export function Statistics(): ReactNode {
     const [scholarYear] = useState<string>(scholar_years().at(1) ?? '')
     const [surveyIdZ, setSurveyIdZ] = useState<number>(0)
     const [surveyId, setSurveyId] = useState<number>(0)
@@ -19,20 +19,15 @@ export function State(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex align-items-center justify-content-between mb-5">
-                <h2>Statistiques</h2>
-            </div>
+            <PageTitle title="Statistiques" />
 
             <div className="mb-5">
                 <SchoolBySchoolYearClass />
             </div>
 
-            <Block className="mb-5">
-                <div className="mb-5">
-                    <h2 className="text-primary fw-semibold">Valeur de Z par type de métriques</h2>
-                </div>
-
-                <div className="mb-5">
+            <Block className="mb-3">
+                <h5 className="text-primary fw-semibold">Valeur de Z par métrique</h5>
+                <div className="mb-4">
                     <SurveySelector
                         setSurveyId={setSurveyIdZ}
                         datas={datas}
@@ -44,12 +39,10 @@ export function State(): JSX.Element {
                     scholarYear={scholarYear} />
             </Block>
 
-            <Block className="mb-5">
-                <div className="mb-5">
-                    <h2 className="text-primary fw-semibold">Statistique de la mal nutrition</h2>
-                </div>
+            <Block className="mb-4">
+                <h5 className="text-primary fw-semibold">Statistique global</h5>
 
-                <div className="mb-5">
+                <div className="mb-4">
                     <SurveySelector
                         setSurveyId={setSurveyId}
                         datas={datas}

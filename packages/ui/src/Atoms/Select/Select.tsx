@@ -36,7 +36,7 @@ export function Select({ label, name, value, options, defaultOption, onChange, c
             {label}
             <RequiredSign value={required} />
         </label>}
-        {loading ? <p style={styles.small} className="form-control bg-grey p-0">Chargement des données</p> :
+        {loading ? <p style={styles.small} className="form-select bg-grey m-0">Chargement des données</p> :
             <select style={styles.small} value={value} defaultValue={defaultOption} onChange={controlled ? onChange : () => { }} name={name} id={id} className="form-select shadow-sm">
                 {placeholder && <option value={0}>{placeholder}</option>}
                 {options && options.map(o => typeof o === 'object'

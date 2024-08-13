@@ -82,7 +82,6 @@ export function DocumentForm({ editedDocument }: { editedDocument?: FileDocument
     };
 
     return <Block>
-        {JSON.stringify(document)}
         <form onSubmit={handleSubmit} method="post" encType="multipart/form-data">
             <div className="row mb-3">
                 <div className="col-xl-12">

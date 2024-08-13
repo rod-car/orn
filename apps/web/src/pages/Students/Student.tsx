@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
 import { ageFull, number_array, range, scholar_years } from 'functions'
-import { Pagination } from 'react-laravel-paginex'
+import { Pagination } from '@base/components'
 import Skeleton from 'react-loading-skeleton'
 
 const defaultScholarYear = scholar_years().at(1)
