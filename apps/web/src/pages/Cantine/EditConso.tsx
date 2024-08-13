@@ -16,7 +16,7 @@ export function EditConso(): JSX.Element {
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2 className="m-0">Modifier les consommation</h2>
                 <Link to="/cantine/list-conso" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Liste des conso
+                    <i className="bi bi-list me-2"></i>Liste des conso
                 </Link>
             </div>
 

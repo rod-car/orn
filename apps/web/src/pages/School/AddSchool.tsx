@@ -8,7 +8,7 @@ export function AddSchool(): JSX.Element {
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Ajouter un établissement</h2>
                 <NavLink to="/anthropo-measure/school/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Liste des établissements
+                    <i className="bi bi-list me-2"></i>Liste des établissements
                 </NavLink>
             </div>
 

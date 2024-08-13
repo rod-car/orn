@@ -76,7 +76,7 @@ export function ListAbaque(): JSX.Element {
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2 className="m-0">Liste des abaques</h2>
                 <Link to="/anthropo-measure/abaques/add" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Ajouter un abaque
+                    <i className="bi bi-list me-2"></i>Ajouter un abaque
                 </Link>
             </div>
 
@@ -153,7 +153,7 @@ export function ListAbaque(): JSX.Element {
                                                         })}`
                                                     }}
                                                 >
-                                                    <i className="fa fa-edit"></i>
+                                                    <i className="bi bi-pencil-square"></i>
                                                 </Link>
 
                                                 <Button
@@ -216,7 +216,7 @@ export function ListAbaque(): JSX.Element {
                                                     })}`
                                                 }}
                                             >
-                                                <i className="fa fa-edit"></i>
+                                                <i className="bi bi-pencil-square"></i>
                                             </Link>
 
                                             <Button
@@ -281,7 +281,7 @@ export function ListAbaque(): JSX.Element {
                                                     })}`
                                                 }}
                                             >
-                                                <i className="fa fa-edit"></i>
+                                                <i className="bi bi-pencil-square"></i>
                                             </Link>
 
                                             <Button

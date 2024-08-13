@@ -76,7 +76,7 @@ export function Survey(): JSX.Element {
                 <h2>Liste des mésures</h2>
                 <div className="d-flex align-items-between">
                     <Button
-                        icon="refresh"
+                        icon="arrow-clockwise"
                         mode="secondary"
                         type="button"
                         className="me-2"
@@ -86,10 +86,10 @@ export function Survey(): JSX.Element {
                         Recharger
                     </Button>
                     <Link to="/anthropo-measure/survey/add" className="btn secondary-link me-2">
-                        <i className="fa fa-plus me-2"></i>Nouvelle mésure
+                        <i className="bi bi-plus-lg me-2"></i>Nouvelle mésure
                     </Link>
                     <Link to="/anthropo-measure/survey/add-student" className="btn primary-link">
-                        <i className="fa fa-plus me-2"></i>Formulaire de mesure
+                        <i className="bi bi-plus-lg me-2"></i>Formulaire de mesure
                     </Link>
                 </div>
             </div>
@@ -125,13 +125,13 @@ export function Survey(): JSX.Element {
                                             className="btn-sm me-2 btn btn-info text-white"
                                             to={`/anthropo-measure/survey/details/${survey.id}`}
                                         >
-                                            <i className="fa fa-folder"></i>
+                                            <i className="bi bi-folder"></i>
                                         </Link>
                                         <Link
                                             className="btn-sm me-2 btn btn-primary"
                                             to={`/anthropo-measure/survey/edit/${survey.id}`}
                                         >
-                                            <i className="fa fa-edit"></i>
+                                            <i className="bi bi-pencil-square"></i>
                                         </Link>
                                         <Button
                                             type="button"

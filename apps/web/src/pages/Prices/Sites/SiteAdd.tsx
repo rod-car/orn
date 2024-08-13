@@ -8,7 +8,7 @@ export function SiteAdd(): JSX.Element {
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Ajouter un site</h2>
                 <NavLink to="/prices/sites/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Liste des sites
+                    <i className="bi bi-list me-2"></i>Liste des sites
                 </NavLink>
             </div>
 

@@ -1,41 +1,80 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { BasicCard, Link } from "@base/components";
 import { Col, Row } from "@base/components/Bootstrap";
-import { ReactNode, useEffect } from "react";
-import { PageTitle } from "ui";
-import pdf from "@base/assets/icons/pdf.png";
-import excel from "@base/assets/icons/excel.png";
-import word from "@base/assets/icons/word.png";
-import ppt from "@base/assets/icons/pptx.png";
+import { ChangeEvent, ReactNode, useEffect, useState } from "react";
+import { Button, Input, PageTitle } from "ui";
+import icons from "@base/assets/icons";
 import { useApi, useAuthStore } from "hooks";
 import { config } from "@base/config";
 import { Pagination } from 'react-laravel-paginex';
 import { range } from "functions";
 import Skeleton from "react-loading-skeleton";
 
+/**
+ * Lister tous les documents par date de création
+ *
+ * @export
+ * @returns {ReactNode}
+ */
 export function DocumentHome(): ReactNode {
     const { Client, datas: documents, RequestState } = useApi<FileDocument>({
         baseUrl: config.baseUrl,
         url: '/documents'
     })
 
-    const requestParams = { paginate: true, perPage: 12, page: 1 }
-    const getDatas = () => {
-        Client.get(requestParams)
-    }
+    const requestParams = { paginate: true, perPage: 12, page: 1, q: '' }
 
     useEffect(() => {
-        getDatas()
+        filter()
     }, [])
 
     const changePage = (data: { page: number }) => {
         Client.get({...requestParams, page: data.page})
     }
 
+    const [query, setQuery] = useState(requestParams.q)
+    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>()
+
+    const filter = async () => {
+        await Client.get(requestParams)
+    }
+
+    const handleSearch = async (event: ChangeEvent) => {
+        const { value } = event.target as HTMLInputElement
+
+        setQuery(value)
+        requestParams['q'] = value
+
+        if (timeoutId) clearTimeout(timeoutId)
+
+        const newTimeoutId = setTimeout(() => {
+            filter()
+        }, 500)
+
+        setTimeoutId(newTimeoutId)
+    }
+
     return <>
         <PageTitle title="Les derniers documents">
-            <Link className="btn btn-primary" to="/documents/add"><i className="fa fa-plus me-2"></i>Ajouter</Link>
+            <Link className="btn btn-primary" to="/documents/add"><i className="bi bi-plus-lg me-2"></i>Ajouter</Link>
         </PageTitle>
+
+        <div className="mb-5 mt-3 d-flex">
+            <Input
+                value={query}
+                name="query"
+                onChange={handleSearch}
+                placeholder="Rechercher un (des) document(s)..."
+                className="w-100 me-1"
+            />
+            <Button
+                icon="search"
+                loading={RequestState.loading}
+                type="button"
+                mode="primary"
+                size="sm"
+            />
+        </div>
 
         {RequestState.loading && <DocumentsLoading />}
 
@@ -49,6 +88,11 @@ export function DocumentHome(): ReactNode {
     </>
 }
 
+/**
+ * Placeholder pour le chargement
+ *
+ * @returns {ReactNode}
+ */
 function DocumentsLoading(): ReactNode {
     return <Row className="mb-3">
         {range(12).map(index => <Col key={index} className="mb-3" xl={3}>
@@ -57,6 +101,11 @@ function DocumentsLoading(): ReactNode {
     </Row>
 }
 
+/**
+ * Placeholder pour le chargement de la Card
+ *
+ * @returns {ReactNode}
+ */
 function DocumentCardLoading(): ReactNode {
     return <>
         <BasicCard title={<Skeleton height={30} style={{ width: 125 }} />} actionLabel={<Skeleton height={40} style={{ width: 100 }} />}>
@@ -70,11 +119,18 @@ function DocumentCardLoading(): ReactNode {
     </>
 }
 
+/**
+ * Card pour representer le document
+ *
+ * @param {{document: FileDocument}} param0
+ * @param {FileDocument} param0.document
+ * @returns {ReactNode}
+ */
 function DocumentCard({document}: {document: FileDocument}): ReactNode {
-    let icon = pdf;
-    if (document.type === "excel") icon = excel;
-    if (document.type === "word") icon = word;
-    if (document.type === "powerpoint") icon = ppt;
+    let icon = icons.pdf;
+    if (document.type === "excel") icon = icons.excel;
+    if (document.type === "word") icon = icons.word;
+    if (document.type === "powerpoint") icon = icons.pptx;
 
     const { isAdmin } = useAuthStore()
 

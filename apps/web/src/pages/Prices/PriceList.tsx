@@ -86,9 +86,9 @@ export function PriceList(): ReactNode {
         <div className="mb-5 d-flex justify-content-between align-items-center">
             <h2 className="mb-0">Les prix des articles</h2>
             <div className="d-flex justify-content-between">
-                <Button onClick={() => getArticlePrices()} icon="refresh" type="button" mode="secondary" className="me-2">Recharger</Button>
+                <Button onClick={() => getArticlePrices()} icon="arrow-clockwise" type="button" mode="secondary" className="me-2">Recharger</Button>
                 <Link to="/prices/add" className="btn btn-primary">
-                    <i className="fa fa-plus me-2"></i>Ajouter un prix d'articles
+                    <i className="bi bi-plus-lg me-2"></i>Ajouter un prix d'articles
                 </Link>
             </div>
         </div>
@@ -132,7 +132,7 @@ export function PriceList(): ReactNode {
                         <td>{articlePrice.article?.designation}</td>
                         <td>{articlePrice.unit?.name}</td>
                         <td>{formatPrice(articlePrice.price)}</td>
-                        <td><Link to="" className="btn btn-primary btn-sm"><i className="fa fa-folder"></i></Link></td>
+                        <td><Link to="" className="btn btn-primary btn-sm"><i className="bi bi-folder"></i></Link></td>
                     </tr>)}
                 </tbody>
             </table>

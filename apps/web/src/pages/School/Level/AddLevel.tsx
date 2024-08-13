@@ -48,7 +48,7 @@ export function AddLevel(): JSX.Element {
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Ajouter un niveau</h2>
                 <Link to="/anthropo-measure/school/levels/list" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Liste des niveaux
+                    <i className="bi bi-list me-2"></i>Liste des niveaux
                 </Link>
             </div>
 

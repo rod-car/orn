@@ -43,7 +43,7 @@ export function JardinList(): ReactNode {
         <div className="mb-5 d-flex justify-content-between align-items-center">
             <h3>Jardin scolaires (Distribution)</h3>
             <Link to="/scholar-garden/add" className="btn btn-primary">
-                <i className="fa fa-plus me-2"></i>Nouveau jardin
+                <i className="bi bi-plus-lg me-2"></i>Nouveau jardin
             </Link>
         </div>
 
@@ -83,8 +83,8 @@ export function JardinList(): ReactNode {
                         <td><ul>{jardin.semences?.map((semence: Semence) => <li key={semence.id}>{semence.name}: {semence.pivot.quantity} {semence.unit}</li>)}</ul></td>
                         <td>{Object.keys(jardin.steps ?? {}).length}</td>
                         <td>
-                            <Link to={`/scholar-garden/show/${jardin.id}`} className="btn btn-info btn-sm me-2"><i className="fa fa-folder"></i></Link>
-                            <Link to={`/scholar-garden/edit/${jardin.id}`} className="btn btn-primary btn-sm me-2"><i className="fa fa-edit"></i></Link>
+                            <Link to={`/scholar-garden/show/${jardin.id}`} className="btn btn-info btn-sm me-2"><i className="bi bi-folder"></i></Link>
+                            <Link to={`/scholar-garden/edit/${jardin.id}`} className="btn btn-primary btn-sm me-2"><i className="bi bi-pencil-square"></i></Link>
                             <Button icon="trash" mode="danger" size="sm" onClick={() => handleDelete(jardin.id)} />
                         </td>
                     </tr>)}

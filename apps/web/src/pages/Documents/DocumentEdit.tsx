@@ -25,7 +25,7 @@ export function DocumentEdit(): ReactNode {
     return <>
         <PageTitle title="Editer un document">
             <Link className="btn btn-primary" to="/documents">
-                <i className="fa fa-list me-2"></i>
+                <i className="bi bi-list me-2"></i>
                 Les derniers documents
             </Link>
         </PageTitle>

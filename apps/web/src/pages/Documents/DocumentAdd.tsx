@@ -7,7 +7,7 @@ import { DocumentForm } from "@base/pages/Documents";
 export function DocumentAdd(): ReactNode {
     return <>
         <PageTitle title="Ajouter un document">
-            <Link className="btn btn-primary" to="/documents"><i className="fa fa-list me-2"></i>Les derniers documents</Link>
+            <Link className="btn btn-primary" to="/documents"><i className="bi bi-list me-2"></i>Les derniers documents</Link>
         </PageTitle>
         <DocumentForm />
     </>

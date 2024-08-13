@@ -178,7 +178,7 @@ export function Student(): JSX.Element {
             <PageTitle title={`Liste des etudiants ${!SRequestState.loading ? '(' + students?.total + ')' : ''}`}>
                 <div className="d-flex align-items-between">
                     <Button
-                        icon="refresh"
+                        icon="arrow-clockwise"
                         mode="secondary"
                         type="button"
                         className="me-2"
@@ -188,10 +188,10 @@ export function Student(): JSX.Element {
                         Recharger
                     </Button>
                     <Link to="/anthropo-measure/student/add" className="btn secondary-link me-2">
-                        <i className="fa fa-plus me-2"></i>Nouveau
+                        <i className="bi bi-plus-lg me-2"></i>Nouveau
                     </Link>
                     <Link to="/anthropo-measure/student/import" className="btn primary-link">
-                        <i className="fa fa-file me-2"></i>Importer une liste
+                        <i className="bi bi-file-earmark-text me-2"></i>Importer une liste
                     </Link>
                 </div>
             </PageTitle>
@@ -351,13 +351,13 @@ export function Student(): JSX.Element {
                                                         className="btn btn-sm me-2 btn-info text-white"
                                                         to={`/anthropo-measure/student/details/${student.id}`}
                                                     >
-                                                        <i className="fa fa-folder"></i>
+                                                        <i className="bi bi-folder"></i>
                                                     </Link>
                                                     <Link
                                                         className="btn btn-sm me-2 btn-primary"
                                                         to={`/anthropo-measure/student/edit/${student.id}`}
                                                     >
-                                                        <i className="fa fa-edit"></i>
+                                                        <i className="bi bi-pencil-square"></i>
                                                     </Link>
                                                     <Button
                                                         type="button"

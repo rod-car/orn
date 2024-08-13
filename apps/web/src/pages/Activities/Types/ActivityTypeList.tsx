@@ -82,7 +82,7 @@ export function ActivityTypeList(): ReactNode {
         <div className="mb-5 d-flex justify-content-between align-items-center">
             <h2>Types d'activités</h2>
             <Link to="/activities/types/add" className="btn secondary-link me-2">
-                <i className="fa fa-plus me-2"></i>Nouveau
+                <i className="bi bi-plus-lg me-2"></i>Nouveau
             </Link>
         </div>
 

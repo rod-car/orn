@@ -33,7 +33,7 @@ export function ArticleEdit(): JSX.Element {
                     <Skeleton count={1} style={{ height: 40 }} containerClassName="w-50" />
                 )}
                 <NavLink to="/prices/articles/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Liste des articles
+                    <i className="bi bi-list me-2"></i>Liste des articles
                 </NavLink>
             </div>
 

@@ -33,7 +33,7 @@ export function SiteEdit(): ReactNode {
                     <Skeleton count={1} style={{ height: 40 }} containerClassName="w-50" />
                 )}
                 <NavLink to="/prices/sites/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Liste des sites
+                    <i className="bi bi-list me-2"></i>Liste des sites
                 </NavLink>
             </div>
 

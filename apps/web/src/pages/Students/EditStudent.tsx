@@ -33,7 +33,7 @@ export function EditStudent(): JSX.Element {
             </Flex> : 
             <PageTitle title={student?.fullname}>
                 <Link to="/anthropo-measure/student/list" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Liste des étudiants
+                    <i className="bi bi-list me-2"></i>Liste des étudiants
                 </Link>
             </PageTitle>}
 

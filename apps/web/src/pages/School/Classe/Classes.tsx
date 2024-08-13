@@ -70,7 +70,7 @@ export function Classes(): JSX.Element {
                 <div className="d-flex justify-content-between align-items-center">
                     <Button
                         onClick={getData}
-                        icon="refresh"
+                        icon="arrow-clockwise"
                         type="button"
                         mode="secondary"
                         className="me-2"
@@ -79,7 +79,7 @@ export function Classes(): JSX.Element {
                         Recharger
                     </Button>
                     <Link to="/anthropo-measure/school/classes/add" className="btn primary-link">
-                        <i className="fa fa-plus me-2"></i>Nouvelle classe
+                        <i className="bi bi-plus-lg me-2"></i>Nouvelle classe
                     </Link>
                 </div>
             </div>
@@ -127,7 +127,7 @@ export function Classes(): JSX.Element {
                                             className="btn-sm me-2 btn btn-primary"
                                             to={`/anthropo-measure/school/classes/edit/${classes.id}`}
                                         >
-                                            <i className="fa fa-edit"></i>
+                                            <i className="bi bi-pencil-square"></i>
                                         </NavLink>
                                         <form
                                             className="d-inline"

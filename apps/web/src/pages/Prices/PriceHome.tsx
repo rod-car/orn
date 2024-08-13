@@ -7,7 +7,7 @@ export function PriceHome(): ReactNode {
         <div className="mb-5 d-flex justify-content-between align-items-center">
             <h2>Statistique des prix</h2>
             <Link to="/prices/list" className="btn primary-link">
-                <i className="fa fa-list me-2"></i>Tous les prix d'articles
+                <i className="bi bi-list me-2"></i>Tous les prix d'articles
             </Link>
         </div>
         <div className="mb-5">

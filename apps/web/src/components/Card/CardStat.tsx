@@ -16,7 +16,7 @@ export function CardState({ title, value, link = "#", evolution }: CardStateProp
             <h4 className="stats-type mb-1">{title}</h4>
             <div className="stats-figure">{value}</div>
             {evolution?.value && <div className="stats-meta text-success">
-                <i className="fa fa-arrow-up me-1"></i>
+                <i className="bi bi-arrow-up me-1"></i>
                 {evolution?.value}
             </div>}
         </div>

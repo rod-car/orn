@@ -63,7 +63,7 @@ export function Levels(): JSX.Element {
                 <div className="d-flex justify-content-between align-items-center">
                     <Button
                         onClick={getData}
-                        icon="refresh"
+                        icon="arrow-clockwise"
                         type="button"
                         mode="secondary"
                         className="me-2"
@@ -72,7 +72,7 @@ export function Levels(): JSX.Element {
                         Recharger
                     </Button>
                     <Link to="/anthropo-measure/school/levels/add" className="btn primary-link">
-                        <i className="fa fa-plus me-2"></i>Nouveau niveau
+                        <i className="bi bi-plus-lg me-2"></i>Nouveau niveau
                     </Link>
                 </div>
             </div>
@@ -116,7 +116,7 @@ export function Levels(): JSX.Element {
                                             className="btn-sm me-2 btn btn-primary"
                                             to={`/anthropo-measure/school/levels/edit/${level.id}`}
                                         >
-                                            <i className="fa fa-edit"></i>
+                                            <i className="bi bi-pencil-square"></i>
                                         </Link>
                                         <form
                                             className="d-inline"

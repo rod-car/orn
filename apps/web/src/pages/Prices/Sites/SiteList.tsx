@@ -80,7 +80,7 @@ export function SiteList(): ReactNode {
         <div className="mb-5 d-flex justify-content-between align-items-center">
             <h2>Liste des sites</h2>
             <Link to="/prices/sites/add" className="btn secondary-link me-2">
-                <i className="fa fa-plus me-2"></i>Ajouter un site
+                <i className="bi bi-plus-lg me-2"></i>Ajouter un site
             </Link>
         </div>
 
@@ -109,7 +109,7 @@ export function SiteList(): ReactNode {
                                 className="btn-sm me-2 btn btn-primary"
                                 to={`/prices/sites/edit/${site.id}`}
                             >
-                                <i className="fa fa-edit"></i>
+                                <i className="bi bi-pencil-square"></i>
                             </Link>
                             <Button
                                 type="button"

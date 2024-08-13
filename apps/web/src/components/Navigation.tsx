@@ -19,14 +19,14 @@ export const Navigation = (className: { className?: string }): ReactNode => {
                 className="btn shadow btn-primary btn-sm"
                 onClick={(): void => navigate(-1)}
             >
-                <i className="fa fa-chevron-left"></i>
+                <i className="bi bi-chevron-left"></i>
             </button>
             <button
                 style={{ borderRadius: '0px 50% 50% 0px' }}
                 className="btn shadow btn-success btn-sm"
                 onClick={(): void => navigate(-1)}
             >
-                <i className="fa fa-chevron-right"></i>
+                <i className="bi bi-chevron-right"></i>
             </button>
         </div>
     )

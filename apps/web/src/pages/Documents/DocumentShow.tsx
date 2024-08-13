@@ -67,7 +67,7 @@ export function DocumentShow(): ReactNode {
 
     return <>
         <PageTitle title={document ? document.title : "Détails du document"}>
-            <Link className="btn btn-primary" to="/documents"><i className="fa fa-list me-2"></i>Les derniers documents</Link>
+            <Link className="btn btn-primary" to="/documents"><i className="bi bi-list me-2"></i>Les derniers documents</Link>
         </PageTitle>
 
         {RequestState.loading && <Spinner isBorder className="text-center" />}

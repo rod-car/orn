@@ -80,13 +80,13 @@ export function School(): JSX.Element {
                         className="me-2"
                         type="button"
                         mode="secondary"
-                        icon="refresh"
+                        icon="arrow-clockwise"
                         loading={RequestState.loading}
                     >
                         Rechargher
                     </Button>
                     <Link to="/anthropo-measure/school/add" className="btn primary-link">
-                        <i className="fa fa-plus me-2"></i>Nouveau
+                        <i className="bi bi-plus-lg me-2"></i>Nouveau
                     </Link>
                 </div>
             </div>
@@ -138,13 +138,13 @@ export function School(): JSX.Element {
                                             className="btn-sm me-2 btn btn-info text-white"
                                             to={`/anthropo-measure/school/details/${school.id}`}
                                         >
-                                            <i className="fa fa-folder"></i>
+                                            <i className="bi bi-folder"></i>
                                         </Link>
                                         <Link
                                             className="btn-sm me-2 btn btn-primary"
                                             to={`/anthropo-measure/school/edit/${school.id}`}
                                         >
-                                            <i className="fa fa-edit"></i>
+                                            <i className="bi bi-pencil-square"></i>
                                         </Link>
                                         <Button
                                             type="button"

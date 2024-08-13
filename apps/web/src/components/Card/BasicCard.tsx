@@ -15,7 +15,7 @@ export function BasicCard({title, body, icon, actionLabel = "Click me", actionLi
             <div className="row align-items-center gx-2">
                 <div className="col-auto">
                     {icon && <div className="app-icon-holder">
-                        <i className={`fa fa-${icon}`}></i>
+                        <i className={`bi bi-${icon}`}></i>
                     </div>}
                 </div>
                 <div className="col-auto">

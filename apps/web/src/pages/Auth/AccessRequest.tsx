@@ -128,7 +128,7 @@ export function AccessRequest(): JSX.Element {
                 <h2 className="text-muted">Liste des demande d'accès</h2>
                 <div className="d-flex align-items-between">
                     <Button
-                        icon="refresh"
+                        icon="arrow-clockwise"
                         mode="secondary"
                         type="button"
                         className="me-2"
@@ -138,10 +138,10 @@ export function AccessRequest(): JSX.Element {
                         Recharger
                     </Button>
                     <Link to="/auth/add-user" className="btn secondary-link me-2">
-                        <i className="fa fa-plus me-2"></i>Nouveau utilisateur
+                        <i className="bi bi-plus-lg me-2"></i>Nouveau utilisateur
                     </Link>
                     <Link to="/auth/users" className="btn primary-link">
-                        <i className="fa fa-file me-2"></i>Liste des utilisateurs
+                        <i className="bi bi-file-earmark-text me-2"></i>Liste des utilisateurs
                     </Link>
                 </div>
             </div>

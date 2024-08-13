@@ -32,7 +32,7 @@ export function ActivityStatistics(): ReactNode {
         <div className="mb-5 d-flex justify-content-between align-items-center">
             <h2>Nos dernières activités</h2>
             <Link to="/activities/list" className="btn primary-link">
-                <i className="fa fa-list me-2"></i>Tous nos activités
+                <i className="bi bi-list me-2"></i>Tous nos activités
             </Link>
         </div>
 

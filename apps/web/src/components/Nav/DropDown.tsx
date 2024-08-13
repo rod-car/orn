@@ -19,8 +19,8 @@ export function DropDown({ label, base = '/', menus, icon, active }: DropDownPro
 
     return <li className={`nav-item has-submenu`}>
         <a className={`nav-link submenu-toggle ${active === true ? 'active' : ''}`} href="#" data-bs-toggle="collapse" data-bs-target={`#${id}`} aria-expanded="false" aria-controls={id}>
-            {icon && <span className="nav-icon">
-                <i className={`fa-solid fa-${icon}`}></i>
+            {icon && <span className="h6 nav-icon">
+                <i className={`bi bi-${icon}`}></i>
             </span>}
             <span className="nav-link-text">{label}</span>
             <span className="submenu-arrow">

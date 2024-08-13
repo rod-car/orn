@@ -25,7 +25,7 @@ export function ExcelExportButton(
         >
             {loading
                 ? <Spinner className="d-inline me-2" size="sm" isBorder={true} />
-                : <div className="d-inline me-2"><i className="fa fa-print"></i></div>}
+                : <div className="d-inline me-2"><i className="bi bi-printer-fill"></i></div>}
             {children}
         </button>
         <ul style={{ fontSize: 'small' }} className="dropdown-menu" aria-labelledby="printDropdown">

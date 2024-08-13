@@ -56,7 +56,7 @@ export function ImportAbaque(): ReactNode {
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Importer une liste d'abaque</h2>
                 <Link to="/anthropo-measure/abaques/list" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Liste des abaques
+                    <i className="bi bi-list me-2"></i>Liste des abaques
                 </Link>
             </div>
 

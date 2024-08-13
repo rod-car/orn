@@ -101,10 +101,10 @@ export function DetailsSurvey(): ReactNode {
                 <h5 className="m-0 text-primary fw-bold">Mésure phase: {survey && survey.phase} ({survey?.date}) - {survey?.students?.total} étudiant(s)</h5>
                 <div className="d-flex">
                     <Link to="/anthropo-measure/survey/list" className="btn secondary-link me-2">
-                        <i className="fa fa-list me-2"></i>Liste des mésures
+                        <i className="bi bi-list me-2"></i>Liste des mésures
                     </Link>
                     <Link to={`/anthropo-measure/survey/${id}/import-result`} className="btn primary-link">
-                        <i className="fa fa-file me-2"></i>Importer des résultat
+                        <i className="bi bi-file-earmark-text me-2"></i>Importer des résultat
                     </Link>
                 </div>
             </div>
@@ -157,7 +157,7 @@ export function DetailsSurvey(): ReactNode {
                                 <Button
                                     loading={RequestState.loading}
                                     onClick={refresh}
-                                    icon="refresh"
+                                    icon="arrow-clockwise"
                                     type="button"
                                     mode="secondary"
                                 >Recharger</Button>
@@ -267,7 +267,7 @@ export function DetailsSurvey(): ReactNode {
                                                 style={{ fontSize: '9pt' }}
                                                 className="btn btn-info btn-sm me-1"
                                             >
-                                                <i className="fa fa-folder"></i>
+                                                <i className="bi bi-folder"></i>
                                             </Link>
                                         </td>
                                     </tr>

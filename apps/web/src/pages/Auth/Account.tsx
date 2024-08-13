@@ -210,7 +210,7 @@ function CardAccount(props: CardAccountProps): ReactNode {
 			<div className="row align-items-center gx-3">
 				<div className="col-auto">
 					<div className="app-icon-holder" style={styles}>
-						<i className={`fa fa-${props.icon}`}></i>
+						<i className={`bi bi-${props.icon}`}></i>
 					</div>
 				</div>
 				<div className="col-auto">

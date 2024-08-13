@@ -32,7 +32,7 @@ export function JardinEdit(): JSX.Element {
                     <Skeleton style={{ height: 40 }} containerClassName="w-50" />
                 )}
                 <NavLink to="/scholar-garden/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Les jardins
+                    <i className="bi bi-list me-2"></i>Les jardins
                 </NavLink>
             </div>
 

@@ -81,7 +81,7 @@ export function UnitList(): ReactNode {
         <div className="mb-5 d-flex justify-content-between align-items-center">
             <h2>Liste des unités</h2>
             <Link to="/prices/units/add" className="btn secondary-link me-2">
-                <i className="fa fa-plus me-2"></i>Ajouter une unité
+                <i className="bi bi-plus-lg me-2"></i>Ajouter une unité
             </Link>
         </div>
 
@@ -110,7 +110,7 @@ export function UnitList(): ReactNode {
                                 className="btn-sm me-2 btn btn-primary"
                                 to={`/prices/units/edit/${unit.id}`}
                             >
-                                <i className="fa fa-edit"></i>
+                                <i className="bi bi-pencil-square"></i>
                             </Link>
                             <Button
                                 type="button"

@@ -52,7 +52,7 @@ export const Button = ({
         >
             {props.loading
                 ? <Spinner className={`d-inline ${props.children ? 'me-2' : ''}`} />
-                : props.icon && <div className={`d-inline ${props.children ? 'me-2' : ''}`}><i className={`fa fa-${props.icon}`}></i></div>
+                : props.icon && <div className={`d-inline ${props.children ? 'me-2' : ''}`}><i className={`bi bi-${props.icon}`}></i></div>
             }
 
             {props.children}

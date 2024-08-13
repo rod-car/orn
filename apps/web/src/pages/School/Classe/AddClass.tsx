@@ -68,7 +68,7 @@ export function AddClass(): JSX.Element {
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Ajouter une classe</h2>
                 <Link to="/anthropo-measure/school/classes/list" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Liste des classes
+                    <i className="bi bi-list me-2"></i>Liste des classes
                 </Link>
             </div>
 

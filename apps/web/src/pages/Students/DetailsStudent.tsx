@@ -31,7 +31,7 @@ export function DetailsStudent(): JSX.Element {
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>{student && student.fullname}</h2>
                 <Link to="/anthropo-measure/student/list" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Liste des étudiants
+                    <i className="bi bi-list me-2"></i>Liste des étudiants
                 </Link>
             </div>
 

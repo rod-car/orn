@@ -19,7 +19,7 @@ export function AppCard({title, content, icon, actionLabel, actionUrl}: AppCardP
                     </div>
                     <div className="col-12 col-lg-3">
                         {(actionLabel || icon) && <a className="btn app-btn-primary" href={actionUrl}>
-                            {icon && <i className={`fa fa-${icon} me-2`}></i>}
+                            {icon && <i className={`bi bi-${icon} me-2`}></i>}
                             {actionLabel}
                         </a>}
                     </div>
