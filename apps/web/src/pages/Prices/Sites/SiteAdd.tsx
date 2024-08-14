@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { Block } from 'ui'
 import { SiteForm } from '@base/pages/Prices'
 
-export function SiteAdd(): JSX.Element {
+export function SiteAdd(): ReactNode {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">

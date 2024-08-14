@@ -1,8 +1,9 @@
 import { Block, PageTitle } from 'ui'
 import { Link } from '@base/components'
 import { StudentForm } from './StudentForm'
+import { ReactNode } from 'react'
 
-export function AddStudent(): JSX.Element {
+export function AddStudent(): ReactNode {
     return (
         <>
             <PageTitle title="Ajouter un étudiant">

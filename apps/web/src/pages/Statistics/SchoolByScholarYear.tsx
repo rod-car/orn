@@ -4,7 +4,7 @@ import { config } from '@base/config'
 import { useCallback, useEffect } from 'react'
 import { Block, Spinner } from 'ui'
 
-export function SchoolByScholarYear(): JSX.Element {
+export function SchoolByScholarYear(): ReactNode {
     const { Client, RequestState, error, datas } = useApi<Student>({
         baseUrl: config.baseUrl,
         url: '/students',

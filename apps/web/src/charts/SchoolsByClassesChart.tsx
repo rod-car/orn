@@ -31,7 +31,7 @@ ChartJS.register(
     ArcElement
 )
 
-export function SchoolsByClassesChart(): JSX.Element {
+export function SchoolsByClassesChart(): ReactNode {
     const [scholarYear, setScholarYear] = useState<string>(scholar_years().at(1) as string)
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({

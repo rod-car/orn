@@ -4,7 +4,7 @@ import { Block } from 'ui'
 import { config } from '@base/config'
 import { useEffect, useState } from 'react'
 
-export function DetailsSchool(): JSX.Element {
+export function DetailsSchool(): ReactNode {
     const { Client, error, resetError } = useApi<School>({
         baseUrl: config.baseUrl,
         

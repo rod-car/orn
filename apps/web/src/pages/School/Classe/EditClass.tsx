@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import { Link } from '@base/components'
 
-export function EditClass(): JSX.Element {
+export function EditClass(): ReactNode {
     const [classes, setClasses] = useState<Classes>({ id: 0, name: '', level_id: 0, notation: '' })
     const { id } = useParams()
     const { Client, datas } = useApi<Niveau>({

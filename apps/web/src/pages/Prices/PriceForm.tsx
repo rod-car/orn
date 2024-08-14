@@ -27,7 +27,7 @@ const d: ArticlePrice = {
 
 const defaultArticlePrice: ArticlePrice[] = [d]
 
-export function PriceForm(): JSX.Element {
+export function PriceForm(): ReactNode {
     const [articlePrice, setArticlePrice] = useState(defaultArticlePrice)
     const [addInfo, setAddInfo] = useState(defaultAddInfo)
     const {

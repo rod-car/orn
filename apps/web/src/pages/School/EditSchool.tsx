@@ -1,16 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { useEffect } from 'react'
-import { NavLink, useParams } from 'react-router-dom'
-import { Block, Spinner } from 'ui'
+import { useParams } from 'react-router-dom'
+import { Block, PageTitle,  } from 'ui'
 import { config } from '@base/config'
 import { SchoolForm } from './SchoolForm'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { PrimaryLink } from '@base/components'
 
-export function EditSchool(): JSX.Element {
+export function EditSchool(): ReactNode {
     const { Client, data: school } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/schools'
     })
 
@@ -26,23 +27,12 @@ export function EditSchool(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                {school ? (
-                    <h3 className="m-0">{school.name}</h3>
-                ) : (
-                    <Skeleton count={1} style={{ height: 40 }} containerClassName="w-50" />
-                )}
-                <NavLink to="/anthropo-measure/school/list" className="btn btn-primary">
-                    <i className="bi bi-list me-2"></i>Liste des établissements
-                </NavLink>
-            </div>
+            <PageTitle title="Editer un école">
+                <PrimaryLink icon="list" to="/anthropo-measure/school/list">Liste des établissements</PrimaryLink>
+            </PageTitle>
 
             <Block className="mb-5">
-                {school ? (
-                    <SchoolForm editedSchool={school} />
-                ) : (
-                    <Skeleton style={{ height: 40 }} count={4} />
-                )}
+                {school ? <SchoolForm editedSchool={school} /> : <Skeleton style={{ height: 40 }} count={4} />}
             </Block>
         </>
     )

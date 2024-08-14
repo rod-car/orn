@@ -1,15 +1,14 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { Block, Button, Input } from 'ui'
+import { Block, PrimaryButton, Input, PageTitle } from 'ui'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
-import { Link } from '@base/components'
+import { PrimaryLink } from '@base/components'
 
-export function AddLevel(): JSX.Element {
+export function AddLevel(): ReactNode {
     const [level, setLevel] = useState<Niveau>({ id: 0, label: '', description: '' })
     const { Client, RequestState, error } = useApi<Niveau>({
         baseUrl: config.baseUrl,
-        
         url: '/levels'
     })
 
@@ -45,12 +44,11 @@ export function AddLevel(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Ajouter un niveau</h2>
-                <Link to="/anthropo-measure/school/levels/list" className="btn primary-link">
-                    <i className="bi bi-list me-2"></i>Liste des niveaux
-                </Link>
-            </div>
+            <PageTitle title="Ajouter un niveau">
+                <PrimaryLink to="/anthropo-measure/school/levels/list" icon="list">
+                    Liste des niveaux
+                </PrimaryLink>
+            </PageTitle>
 
             <Block>
                 <form action="" onSubmit={handleSubmit} method="post">
@@ -73,14 +71,11 @@ export function AddLevel(): JSX.Element {
                             />
                         </div>
                     </div>
-                    <Button
+                    <PrimaryButton
                         loading={RequestState.creating}
                         type="submit"
-                        mode="primary"
                         icon="save"
-                    >
-                        Valider
-                    </Button>
+                    >Valider</PrimaryButton>
                 </form>
             </Block>
         </>

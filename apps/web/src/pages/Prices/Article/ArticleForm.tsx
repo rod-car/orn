@@ -15,7 +15,7 @@ const defaultArticle: Article = {
     code: ''
 }
 
-export function ArticleForm({ editedArticle }: ArticleFormProps): JSX.Element {
+export function ArticleForm({ editedArticle }: ArticleFormProps): ReactNode {
     const [article, setArticle] = useState(defaultArticle)
     const {
         Client,

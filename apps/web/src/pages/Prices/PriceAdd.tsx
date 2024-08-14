@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Block } from 'ui'
 import { PriceForm } from './PriceForm'
 
-export function PriceAdd(): JSX.Element {
+export function PriceAdd(): ReactNode {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">

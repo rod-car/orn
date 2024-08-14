@@ -2,7 +2,7 @@
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { config } from '@base/config'
-import { Block, Button, Checkbox } from 'ui'
+import { Block, Button, Checkbox, PageTitle } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
 import { format, scholar_years, in_array } from 'functions'
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
@@ -154,12 +154,11 @@ export function StudentsClasses(): ReactNode {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2 className="text-primary fw-semibold">Ajouter un étudiant</h2>
+            <PageTitle title="Mise à jour des classes des étudiants">
                 <Link to="/anthropo-measure/student/list" className="btn primary-link">
                     <i className="bi bi-list me-2"></i>Liste des étudiants
                 </Link>
-            </div>
+            </PageTitle>
 
             <Block>
                 <form onSubmit={handleSubmit} action="" method="post">
@@ -188,7 +187,7 @@ export function StudentsClasses(): ReactNode {
                                 setClassId={setNextClassId}/>
                         </div>
                     </div>
-                    <div className="row mb-5">
+                    <div className="row mb-4">
                         <div className="col-6">
                             <ScholarYearSelector
                                 label="Année scolaire actuel"
@@ -203,16 +202,17 @@ export function StudentsClasses(): ReactNode {
                         </div>
                     </div>
 
-                    <div className="mb-5">
-                        <h4 className='fw-bold mb-5'>Liste des étudiants</h4>
-                        <table className='table table-bordered'>
+                    <hr />
+                    <div className="mb-3">
+                        <h6 className='fw-bold mb-3 text-primary'>Liste des étudiants dans cette classe</h6>
+                        <table className='table table-bordered text-sm'>
                             <thead>
                                 <tr>
                                     <th>N°</th>
                                     <th>Nom et prénoms</th>
                                     <th>Date de naissance</th>
                                     <th>Sexe</th>
-                                    <th>Admis</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -224,7 +224,7 @@ export function StudentsClasses(): ReactNode {
                                     <td>{studentClass.student.gender}</td>
                                     <td className="d-flex">
                                         {canDisplayCheckbox() && <Checkbox
-                                            className="me-2"
+                                            className="me-3 border-1"
                                             mode="primary"
                                             checked={in_array(studentsClasses, studentClass.student_id)}
                                             onCheck={() => handleStudentCheck(studentClass.student_id)}

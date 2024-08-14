@@ -7,7 +7,7 @@ import { ArticleForm } from '@base/pages/Prices'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-export function ArticleEdit(): JSX.Element {
+export function ArticleEdit(): ReactNode {
     const { Client, data: article } = useApi<Article>({
         baseUrl: config.baseUrl,
         

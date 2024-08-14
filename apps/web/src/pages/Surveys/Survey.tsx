@@ -1,25 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { Link } from '@base/components'
+import { Link, PrimaryLink, InfoLink, DetailLink, EditLink } from '@base/components'
 import { config } from '@base/config'
-import { Block, Button } from 'ui'
-import { useEffect } from 'react'
+import { Block, Button, DangerButton, PageTitle, SecondaryButton } from 'ui'
+import { ReactNode, useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
 import { format } from 'functions'
 
-/**
- * Page d'accueil de gestion des étudiants
- * @returns JSX.Element
- */
-export function Survey(): JSX.Element {
-    const {
-        Client,
-        RequestState,
-        error,
-        datas: surveys
-    } = useApi<Survey>({
+export function Survey(): ReactNode {
+    const { Client, RequestState, error, datas: surveys } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        
         url: '/surveys',
         key: 'data'
     })
@@ -72,37 +63,32 @@ export function Survey(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Liste des mésures</h2>
+            <PageTitle title="Liste des mésures">
                 <div className="d-flex align-items-between">
-                    <Button
+                    <SecondaryButton
                         icon="arrow-clockwise"
-                        mode="secondary"
-                        type="button"
                         className="me-2"
                         onClick={getDatas}
                         loading={RequestState.loading}
-                    >
-                        Recharger
-                    </Button>
-                    <Link to="/anthropo-measure/survey/add" className="btn secondary-link me-2">
-                        <i className="bi bi-plus-lg me-2"></i>Nouvelle mésure
-                    </Link>
-                    <Link to="/anthropo-measure/survey/add-student" className="btn primary-link">
-                        <i className="bi bi-plus-lg me-2"></i>Formulaire de mesure
-                    </Link>
+                    >Recharger</SecondaryButton>
+                    <PrimaryLink icon="plus-lg" to="/anthropo-measure/survey/add" className="me-2">
+                        Nouvelle mésure
+                    </PrimaryLink>
+                    <InfoLink icon="plus-lg" to="/anthropo-measure/survey/add-student">
+                        Formulaire de mesure
+                    </InfoLink>
                 </div>
-            </div>
+            </PageTitle>
 
             <Block className="mb-5">
                 {error && <div className="alert alert-danger">{error.message}</div>}
 
-                <table className="table table-striped">
+                <table className="table table-striped table-bordered text-sm">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>#</th>
                             <th>Phase d'enquête</th>
-                            <th>Date</th>
+                            <th>Date de début</th>
                             <th className="w-15">Actions</th>
                         </tr>
                     </thead>
@@ -117,31 +103,13 @@ export function Survey(): JSX.Element {
                         {surveys &&
                             surveys.map((survey) => (
                                 <tr key={survey.id}>
-                                    <td>{survey.id}</td>
+                                    <td className="fw-bold">{survey.id}</td>
                                     <td>{survey.phase}</td>
                                     <td>{format(survey.date, 'dd MMMM y')}</td>
                                     <td>
-                                        <Link
-                                            className="btn-sm me-2 btn btn-info text-white"
-                                            to={`/anthropo-measure/survey/details/${survey.id}`}
-                                        >
-                                            <i className="bi bi-folder"></i>
-                                        </Link>
-                                        <Link
-                                            className="btn-sm me-2 btn btn-primary"
-                                            to={`/anthropo-measure/survey/edit/${survey.id}`}
-                                        >
-                                            <i className="bi bi-pencil-square"></i>
-                                        </Link>
-                                        <Button
-                                            type="button"
-                                            mode="danger"
-                                            icon="trash"
-                                            size="sm"
-                                            onClick={(): void => {
-                                                handleDelete(survey.id)
-                                            }}
-                                        />
+                                        <DetailLink to={`/anthropo-measure/survey/details/${survey.id}`} />
+                                        <EditLink to={`/anthropo-measure/survey/edit/${survey.id}`} />
+                                        <DangerButton icon="trash" size="sm" onClick={() => handleDelete(survey.id) }/>
                                     </td>
                                 </tr>
                             ))}

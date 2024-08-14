@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FormEvent, useEffect } from 'react'
+import { useEffect } from 'react'
 import { config } from '@base/config'
 import { useApi } from 'hooks'
-import { ApiErrorMessage, Block, Button } from 'ui'
+import { ApiErrorMessage, Block, Button, PageTitle, SecondaryButton } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
-import { Link } from '@base/components'
+import { EditLink, PrimaryLink } from '@base/components'
 
-export function Levels(): JSX.Element {
+export function Levels(): ReactNode {
     const { Client, datas, RequestState, error, resetError, success } = useApi<Niveau>({
         baseUrl: config.baseUrl,
         url: '/levels',
@@ -22,10 +22,7 @@ export function Levels(): JSX.Element {
         getData()
     }, [])
 
-    const handleSubmit = (e: FormEvent): void => {
-        e.preventDefault()
-        const data = new FormData(e.target as HTMLFormElement)
-        const id = data.get('id')?.toString()
+    const handleDelete = (id: number): void => {
         confirmAlert({
             title: 'Question',
             message: 'Voulez-vous supprimer ?',
@@ -58,39 +55,33 @@ export function Levels(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Liste des niveaux</h2>
+            <PageTitle title="Liste des niveaux">
                 <div className="d-flex justify-content-between align-items-center">
-                    <Button
+                    <SecondaryButton
                         onClick={getData}
                         icon="arrow-clockwise"
-                        type="button"
-                        mode="secondary"
                         className="me-2"
                         loading={RequestState.loading}
-                    >
-                        Recharger
-                    </Button>
-                    <Link to="/anthropo-measure/school/levels/add" className="btn primary-link">
-                        <i className="bi bi-plus-lg me-2"></i>Nouveau niveau
-                    </Link>
+                    >Recharger</SecondaryButton>
+                    <PrimaryLink icon="plus-lg" to="/anthropo-measure/school/levels/add">
+                        Ajouter un niveau
+                    </PrimaryLink>
                 </div>
-            </div>
+            </PageTitle>
 
             <Block>
                 {error && (
                     <ApiErrorMessage
                         className="mb-3"
                         message={error.message}
-                        onClose={(): void => {
-                            resetError()
-                        }}
+                        onClose={() => resetError()}
                     />
                 )}
 
-                <table className="table table-striped mb-5">
+                <table className="table table-striped text-sm">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>ID</th>
                             <th>Label</th>
                             <th>Description</th>
@@ -100,44 +91,32 @@ export function Levels(): JSX.Element {
                     <tbody>
                         {RequestState.loading && (
                             <tr>
-                                <td colSpan={4} className="text-center">
+                                <td colSpan={5} className="text-center">
                                     Chargement...
                                 </td>
                             </tr>
                         )}
                         {datas.length > 0 &&
-                            datas.map((level) => (
+                            datas.map((level, index) => (
                                 <tr key={level.id}>
+                                    <td className="fw-bold">{index + 1}</td>
                                     <td>{level.id}</td>
                                     <td>{level.label}</td>
                                     <td>{level.description ?? 'N/A'}</td>
                                     <td>
-                                        <Link
-                                            className="btn-sm me-2 btn btn-primary"
-                                            to={`/anthropo-measure/school/levels/edit/${level.id}`}
-                                        >
-                                            <i className="bi bi-pencil-square"></i>
-                                        </Link>
-                                        <form
-                                            className="d-inline"
-                                            action=""
-                                            method="post"
-                                            onSubmit={handleSubmit}
-                                        >
-                                            <input type="hidden" name="id" value={level.id} />
-                                            <Button
-                                                type="submit"
-                                                mode="danger"
-                                                icon="trash"
-                                                size="sm"
-                                            />
-                                        </form>
+                                        <EditLink to={`/anthropo-measure/school/levels/edit/${level.id}`} />
+                                        <Button
+                                            mode="danger"
+                                            icon="trash"
+                                            size="sm"
+                                            onClick={() => handleDelete(level.id as number)}
+                                        />
                                     </td>
                                 </tr>
                             ))}
                         {!RequestState.loading && datas.length <= 0 && (
                             <tr>
-                                <td colSpan={4} className="text-center">
+                                <td colSpan={5} className="text-center">
                                     Aucune données
                                 </td>
                             </tr>

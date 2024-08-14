@@ -1,17 +1,17 @@
 import { useApi } from 'hooks'
-import { ChangeEvent, FormEvent, useState } from 'react'
-import { Link } from '@base/components'
+import { ChangeEvent, FormEvent, ReactNode, useState } from 'react'
+import { Link, PrimaryLink } from '@base/components'
 import { config, abaque } from '@base/config'
-import { Block, Button, Input, Select } from 'ui'
+import { Block, Button, DangerButton, Input, PageTitle, PrimaryButton, Select } from 'ui'
 import { toast } from 'react-toastify'
 
-export function AddAbaque(): JSX.Element {
+export function AddAbaque(): ReactNode {
     const [abaqueType, setAbaqueType] = useState(abaque.abaqueTypes[0].id)
     const [abaqueFields, setAbaqueFields] = useState<Array<Partial<typeof abaque.defaultFields>>>([
         { ...abaque.defaultFields }
     ])
 
-    const { Client, RequestState } = useApi<MeasureLengthAge>({
+    const { Client, RequestState } = useApi<MeasureLength>({
         baseUrl: config.baseUrl,
         url: '/measures'
     })
@@ -60,16 +60,15 @@ export function AddAbaque(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2 className="m-0">Ajouter un abaque</h2>
-                <Link to="/anthropo-measure/abaques/list" className="btn primary-link">
-                    <i className="bi bi-list me-2"></i>Liste des abaques
-                </Link>
-            </div>
+            <PageTitle title="Ajouter un abaque">
+                <PrimaryLink icon="list" to="/anthropo-measure/abaques/list">
+                    Liste des abaques
+                </PrimaryLink>
+            </PageTitle>
 
             <Block>
                 <form action="" onSubmit={save}>
-                    <div className="mb-5">
+                    <div className="mb-4">
                         <Select
                             label="Type d'abaque"
                             options={abaque.abaqueTypes}
@@ -86,7 +85,7 @@ export function AddAbaque(): JSX.Element {
                         'length-age-male',
                         'length-age-female'
                     ].includes(abaqueType) && (
-                            <table className="table table-striped">
+                            <table className="table table-bordered text-sm table-striped">
                                 <thead>
                                     <tr>
                                         <th>Age</th>
@@ -206,20 +205,10 @@ export function AddAbaque(): JSX.Element {
                                                     type="number"
                                                 />
                                             </td>
-                                            <td>
-                                                {key > 0 ? (
-                                                    <Button
-                                                        icon="minus"
-                                                        onClick={(): void => remove(key)}
-                                                        mode="danger"
-                                                    ></Button>
-                                                ) : (
-                                                    <Button
-                                                        icon="plus"
-                                                        onClick={add}
-                                                        mode="primary"
-                                                    ></Button>
-                                                )}
+                                            <td className="align-middle">
+                                                {key > 0
+                                                    ? <DangerButton icon="dash" onClick={() => remove(key)}/>
+                                                    : <PrimaryButton icon="plus-lg" onClick={add}></PrimaryButton>}
                                             </td>
                                         </tr>
                                     ))}
@@ -228,7 +217,7 @@ export function AddAbaque(): JSX.Element {
                         )}
 
                     {abaqueType === 'imc-age' && (
-                        <table className="table table-striped">
+                        <table className="table table-bordered text-sm table-striped">
                             <thead>
                                 <tr>
                                     <th>Age</th>
@@ -320,20 +309,10 @@ export function AddAbaque(): JSX.Element {
                                                 type="number"
                                             />
                                         </td>
-                                        <td>
-                                            {key > 0 ? (
-                                                <Button
-                                                    icon="minus"
-                                                    onClick={(): void => remove(key)}
-                                                    mode="danger"
-                                                ></Button>
-                                            ) : (
-                                                <Button
-                                                    icon="plus"
-                                                    onClick={add}
-                                                    mode="primary"
-                                                ></Button>
-                                            )}
+                                        <td className="align-middle">
+                                            {key > 0
+                                                ? <DangerButton icon="dash" onClick={() => remove(key)}/>
+                                                : <PrimaryButton icon="plus-lg" onClick={add}></PrimaryButton>}
                                         </td>
                                     </tr>
                                 ))}
@@ -342,7 +321,7 @@ export function AddAbaque(): JSX.Element {
                     )}
 
                     {abaqueType === 'length-weight' && (
-                        <table className="table table-striped">
+                        <table className="table table-bordered text-sm table-striped">
                             <thead>
                                 <tr>
                                     <th>Taille</th>
@@ -448,20 +427,10 @@ export function AddAbaque(): JSX.Element {
                                                 type="number"
                                             />
                                         </td>
-                                        <td>
-                                            {key > 0 ? (
-                                                <Button
-                                                    icon="minus"
-                                                    onClick={(): void => remove(key)}
-                                                    mode="danger"
-                                                ></Button>
-                                            ) : (
-                                                <Button
-                                                    icon="plus"
-                                                    onClick={add}
-                                                    mode="primary"
-                                                ></Button>
-                                            )}
+                                        <td className="align-middle">
+                                            {key > 0
+                                                ? <DangerButton icon="dash" onClick={() => remove(key)}/>
+                                                : <PrimaryButton icon="plus-lg" onClick={add}></PrimaryButton>}
                                         </td>
                                     </tr>
                                 ))}

@@ -14,9 +14,9 @@ const defaultScholarYear = scholar_years().at(1)
 
 /**
  * Page d'accueil de gestion des étudiants
- * @returns JSX.Element
+ * @returns ReactNode
  */
-export function Student(): JSX.Element {
+export function StudentList(): ReactNode {
     const [school, setSchool] = useState(0)
     const [classe, setClasse] = useState(0)
     const [perPage, setPerPage] = useState(30)

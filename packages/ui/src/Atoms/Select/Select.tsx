@@ -32,24 +32,29 @@ export function Select({ label, name, value, options, defaultOption, onChange, c
     const id = useId()
 
     return <div className="form-group">
-        {label && <label style={styles.small} className="form-label fw-semibold" htmlFor={id}>
+        {label && <label className="form-label fw-semibold text-sm" htmlFor={id}>
             {label}
             <RequiredSign value={required} />
         </label>}
-        {loading ? <p style={styles.small} className="form-select bg-grey m-0">Chargement des données</p> :
-            <select style={styles.small} value={value} defaultValue={defaultOption} onChange={controlled ? onChange : () => { }} name={name} id={id} className="form-select shadow-sm">
+        {loading ? <p style={styles.placeholder} className="form-select bg-grey m-0 text-sm">Chargement des données</p> :
+            <select style={styles.select} value={value} defaultValue={defaultOption} onChange={controlled ? onChange : () => { }} name={name} id={id} className="form-select shadow-sm text-sm">
                 {placeholder && <option value={0}>{placeholder}</option>}
                 {options && options.map(o => typeof o === 'object'
                     ? <option key={o[config.optionKey]} value={o[config.optionKey]}>{o[config.valueKey]}</option>
                     : <option key={o} value={o}>{o}</option>
                 )}
             </select>}
-        {error && error.length > 0 && <span style={styles.small} className="text-danger d-block mt-1">{error.at(0)}</span>}
+        {error && error.length > 0 && <span className="text-danger d-block mt-1 text-sm">{error.at(0)}</span>}
     </div>
 }
 
 const styles: Record<string, CSSProperties> = {
-    small: {
-        fontSize: 'small'
+    select: {
+        height: "2.5rem"
+    },
+    placeholder: {
+        display: 'flex',
+        alignItems: 'center',
+        height: '2.5rem'
     }
 }

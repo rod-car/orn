@@ -3,7 +3,7 @@ import { Block, PageTitle } from 'ui'
 import { ReactNode, useEffect, useState } from 'react'
 import { scholar_years } from 'functions'
 import { useApi } from 'hooks'
-import { SurveySelector } from '@base/components'
+import { Link, SurveySelector } from '@base/components'
 import { SchoolBySchoolYearClass, StudentBySchoolZ, StudentBySchoolZValue } from '@base/pages/Statistics'
 
 export function Statistics(): ReactNode {
@@ -19,7 +19,9 @@ export function Statistics(): ReactNode {
 
     return (
         <>
-            <PageTitle title="Statistiques" />
+            <PageTitle title="Statistiques">
+                <Link to="/" className='btn btn-primary'><i className="bi bi-speedometer me-2"></i>Tableau de bord</Link>
+            </PageTitle>
 
             <div className="mb-5">
                 <SchoolBySchoolYearClass />

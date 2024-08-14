@@ -34,7 +34,7 @@ ChartJS.register(
     ArcElement
 )
 
-export function ArticlePriceSiteChart(): JSX.Element {
+export function ArticlePriceSiteChart(): ReactNode {
     const [article, setArticle] = useState<number>(0)
     const [queryParams, setQueryParams] = useState<{ year: number, month: number }>({ month: 1, year: 2024 })
     const [displayedArticles, setDisplayedArticle] = useState<Article[]>([])

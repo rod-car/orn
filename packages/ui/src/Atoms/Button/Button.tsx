@@ -1,4 +1,4 @@
-import { PropsWithChildren, useId } from 'react';
+import { PropsWithChildren, ReactNode, useId } from 'react';
 import './Button.modules.scss';
 
 type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
@@ -34,11 +34,8 @@ type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
  * Composant bouton
  */
 export const Button = ({
-    mode = "default",
-    size = 'md',
-    type = "button",
-    ...props
-}: ButtonProps): React.ReactNode => {
+    mode = "default", size = 'md', type = "button", ...props
+}: ButtonProps): ReactNode => {
     let id = useId();
     if (props.id) id = props.id;
     return (
@@ -60,6 +57,17 @@ export const Button = ({
     );
 };
 
+export const PrimaryButton = (props: ButtonProps): ReactNode => {
+    return <Button {...props} mode='primary'></Button>
+}
+
+export const DangerButton = (props: ButtonProps): ReactNode => {
+    return <Button {...props} mode='danger'></Button>
+}
+
+export const SecondaryButton = (props: ButtonProps): ReactNode => {
+    return <Button {...props} mode='secondary'></Button>
+}
 
 function Spinner({ className }: { className?: string }) {
     return <div className={className}>

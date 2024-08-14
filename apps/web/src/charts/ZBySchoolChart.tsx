@@ -38,7 +38,7 @@ ChartJS.register(
     ArcElement
 )
 
-export function ZBySchoolChart(): JSX.Element {
+export function ZBySchoolChart(): ReactNode {
     const [surveyId, setSurveyId] = useState(1)
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({

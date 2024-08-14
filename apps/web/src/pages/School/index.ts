@@ -1,5 +1,5 @@
 export { Levels } from './Level/Levels.tsx'
-export { School } from './School.tsx'
+export { SchoolList } from './SchoolList.tsx'
 export { AddClass } from './Classe/AddClass.tsx'
 export { Classes } from './Classe/Classes.tsx'
 export { EditClass } from './Classe/EditClass.tsx'

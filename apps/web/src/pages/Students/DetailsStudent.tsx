@@ -1,15 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { useParams } from 'react-router-dom'
 import { ApiErrorMessage, Block } from 'ui'
 import { config } from '@base/config'
-import { useEffect, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { StudentEvolution, StudentStatus } from '@base/charts'
 import { Link } from '@base/components'
 
-export function DetailsStudent(): JSX.Element {
+export function DetailsStudent(): ReactNode {
     const { Client, error, resetError } = useApi<Student>({
         baseUrl: config.baseUrl,
-        
         url: 'students'
     })
 
@@ -17,14 +17,14 @@ export function DetailsStudent(): JSX.Element {
 
     const { id } = useParams()
 
-    const getStudent = async (id: number): Promise<void> => {
+    const getStudent = useCallback(async (id: number) => {
         const student = await Client.find(id, { student_only: 1 })
         if (student) setStudent(student)
-    }
+    }, [id])
 
     useEffect(() => {
         getStudent(id as unknown as number)
-    }, [])
+    }, [id])
 
     return (
         <>

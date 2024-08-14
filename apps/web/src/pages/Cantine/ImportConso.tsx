@@ -3,7 +3,7 @@ import { ChangeEvent } from 'react'
 import { Link } from '@base/components'
 import { Block, Button, Input, Spinner } from 'ui'
 
-export function ImportConso(): JSX.Element {
+export function ImportConso(): ReactNode {
     const { json, importing, toJSON } = useExcelReader()
 
     function handleFileChange(e: ChangeEvent<HTMLInputElement>) {

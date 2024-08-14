@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { Block } from 'ui'
 import { UnitForm } from '@base/pages/Prices'
 
-export function UnitAdd(): JSX.Element {
+export function UnitAdd(): ReactNode {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">

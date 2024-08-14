@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Block } from 'ui'
 import { JardinForm } from './JardinForm'
 
-export function JardinAdd(): JSX.Element {
+export function JardinAdd(): ReactNode {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">

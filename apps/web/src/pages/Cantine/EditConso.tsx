@@ -6,7 +6,7 @@ import { Button, Input } from 'ui'
 import { toast } from 'react-toastify'
 import { Link } from '@base/components'
 
-export function EditConso(): JSX.Element {
+export function EditConso(): ReactNode {
     async function save() {
 
     }

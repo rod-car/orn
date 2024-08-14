@@ -1,12 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import { Block, Button, Input } from 'ui'
+import { Block, Button, Input, PageTitle } from 'ui'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
-import { Link } from '@base/components'
+import { Link, PrimaryLink } from '@base/components'
 
-export function EditLevel(): JSX.Element {
+export function EditLevel(): ReactNode {
     const [level, setLevel] = useState<Niveau>({ id: 0, label: '', description: '' })
     const { Client, RequestState, error } = useApi<Niveau>({
         baseUrl: config.baseUrl,
@@ -45,12 +46,11 @@ export function EditLevel(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Éditer: {level?.label}</h2>
-                <Link to="/anthropo-measure/school/levels/list" className="btn primary-link">
-                    <i className="bi bi-list me-2"></i>Liste des niveaux
-                </Link>
-            </div>
+            <PageTitle title={`Éditer un niveau: ${level?.label}`}>
+                <PrimaryLink to="/anthropo-measure/school/levels/list" icon="list">
+                    Liste des niveaux
+                </PrimaryLink>
+            </PageTitle>
 
             <Block className="mb-5">
                 <form action="" onSubmit={handleSubmit} method="post">

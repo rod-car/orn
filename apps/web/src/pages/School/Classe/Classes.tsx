@@ -1,13 +1,13 @@
-import { FormEvent, useEffect } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { config } from '@base/config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
-import { ApiErrorMessage, Block, Button } from 'ui'
-import { NavLink } from 'react-router-dom'
-import { Link } from '@base/components'
+import { ApiErrorMessage, Block, Button, PageTitle, SecondaryButton } from 'ui'
+import { EditLink, PrimaryLink } from '@base/components'
 
-export function Classes(): JSX.Element {
+export function Classes(): ReactNode {
     const { Client, datas, RequestState, error, resetError } = useApi<Classes>({
         baseUrl: config.baseUrl,
         url: '/classes',
@@ -18,10 +18,7 @@ export function Classes(): JSX.Element {
         await Client.get()
     }
 
-    const handleSubmit = (e: FormEvent): void => {
-        e.preventDefault()
-        const data = new FormData(e.target as HTMLFormElement)
-        const id = data.get('id')?.toString()
+    const handleDelete = (id: number): void => {
         confirmAlert({
             title: 'Question',
             message: 'Voulez-vous supprimer ?',
@@ -65,43 +62,25 @@ export function Classes(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Liste des classes</h2>
+            <PageTitle title={`Liste des classes ${datas.length > 0 ? '(' + datas.length + ')' : ''}`}>
                 <div className="d-flex justify-content-between align-items-center">
-                    <Button
+                    <SecondaryButton
                         onClick={getData}
                         icon="arrow-clockwise"
-                        type="button"
-                        mode="secondary"
                         className="me-2"
                         loading={RequestState.loading}
-                    >
-                        Recharger
-                    </Button>
-                    <Link to="/anthropo-measure/school/classes/add" className="btn primary-link">
-                        <i className="bi bi-plus-lg me-2"></i>Nouvelle classe
-                    </Link>
+                    >Recharger</SecondaryButton>
+                    <PrimaryLink to="/anthropo-measure/school/classes/add" icon="plus-lg">Nouvelle classe</PrimaryLink>
                 </div>
-            </div>
+            </PageTitle>
 
             <Block>
-                {error && (
-                    <ApiErrorMessage
-                        className="mb-3"
-                        message={error.message}
-                        onClose={(): void => {
-                            resetError()
-                        }}
-                    />
-                )}
+                {error && <ApiErrorMessage className="mb-3" message={error.message} onClose={() => resetError()} />}
 
-                <div className="d-flex justify-content-end mb-3">
-                    <h5 className="text-primary">Arrêté au nombre de {datas.length} classe(s)</h5>
-                </div>
-
-                <table className="table table-striped mb-5 table-bordered">
+                <table className="table table-striped table-bordered text-sm">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Nom</th>
                             <th>Niveau</th>
                             <th>Notation</th>
@@ -111,44 +90,32 @@ export function Classes(): JSX.Element {
                     <tbody>
                         {RequestState.loading && (
                             <tr>
-                                <td colSpan={4} className="text-center">
+                                <td colSpan={5} className="text-center">
                                     Chargement...
                                 </td>
                             </tr>
                         )}
                         {datas.length > 0 &&
-                            datas.map((classes) => (
+                            datas.map((classes, index) => (
                                 <tr key={classes.id}>
+                                    <th className="fw-bold">{index + 1}</th>
                                     <td>{classes.name}</td>
                                     <td>{classes.level?.label ?? 'N/A'}</td>
                                     <td>{classes.notation}</td>
                                     <td>
-                                        <NavLink
-                                            className="btn-sm me-2 btn btn-primary"
-                                            to={`/anthropo-measure/school/classes/edit/${classes.id}`}
-                                        >
-                                            <i className="bi bi-pencil-square"></i>
-                                        </NavLink>
-                                        <form
-                                            className="d-inline"
-                                            action=""
-                                            method="post"
-                                            onSubmit={handleSubmit}
-                                        >
-                                            <input type="hidden" name="id" value={classes.id} />
-                                            <Button
-                                                type="submit"
-                                                mode="danger"
-                                                icon="trash"
-                                                size="sm"
-                                            />
-                                        </form>
+                                        <EditLink to={`/anthropo-measure/school/classes/edit/${classes.id}`} />
+                                        <Button
+                                            mode="danger"
+                                            icon="trash"
+                                            size="sm"
+                                            onClick={() => handleDelete(classes.id as number)}
+                                        />
                                     </td>
                                 </tr>
                             ))}
                         {!RequestState.loading && datas.length <= 0 && (
                             <tr>
-                                <td colSpan={4} className="text-center">
+                                <td colSpan={5} className="text-center">
                                     Aucune données
                                 </td>
                             </tr>

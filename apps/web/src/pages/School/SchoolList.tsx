@@ -1,41 +1,32 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { Link } from '@base/components'
+import { DetailLink, EditLink, Link } from '@base/components'
 import { config } from '@base/config'
-import { ApiErrorMessage, Block, Button } from 'ui'
-import { useEffect } from 'react'
+import { ApiErrorMessage, Block, Button, PageTitle, SecondaryButton } from 'ui'
+import { ReactNode, useCallback, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
 
-/**
- * Page d'accueil de gestion des étudiants
- * @returns JSX.Element
- */
-export function School(): JSX.Element {
-    const {
-        Client,
-        datas: schools,
-        RequestState,
-        error,
-        resetError
-    } = useApi<School>({
+export function SchoolList(): ReactNode {
+    const { Client, datas: schools, RequestState, error, resetError } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/schools',
         key: 'data'
     })
 
-    const getSchools = async (): Promise<void> => {
+    const getSchools = async () => {
         await Client.get()
     }
 
-    const handleDelete = async (id: number): Promise<void> => {
+    const handleDelete = useCallback(async (id: number) => {
         confirmAlert({
             title: 'Question',
             message: 'Voulez-vous supprimer ?',
             buttons: [
                 {
                     label: 'Oui',
-                    onClick: async (): Promise<void> => {
+                    className: 'btn btn-danger',
+                    onClick: async () => {
                         const response = await Client.destroy(id)
                         if (response.ok) {
                             toast('Enregistré', {
@@ -55,16 +46,18 @@ export function School(): JSX.Element {
                 },
                 {
                     label: 'Non',
-                    onClick: () =>
+                    className: 'btn btn-primary',
+                    onClick: () => {
                         toast('Annulé', {
                             closeButton: true,
                             type: 'error',
                             position: config.toastPosition
                         })
+                    }
                 }
             ]
         })
-    }
+    }, [])
 
     useEffect(() => {
         getSchools()
@@ -72,24 +65,14 @@ export function School(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Liste des établissement</h2>
-                <div className="d-flex align-items-between">
-                    <Button
-                        onClick={getSchools}
-                        className="me-2"
-                        type="button"
-                        mode="secondary"
-                        icon="arrow-clockwise"
-                        loading={RequestState.loading}
-                    >
-                        Rechargher
-                    </Button>
+            <PageTitle title={`Liste des établissement ${schools.length > 0 ? '('+ schools.length +' école(s))' : ''}`}>
+                <div className="d-flex">
+                    <SecondaryButton onClick={getSchools} className="me-2" icon="arrow-clockwise" loading={RequestState.loading}>Rechargher</SecondaryButton>
                     <Link to="/anthropo-measure/school/add" className="btn primary-link">
                         <i className="bi bi-plus-lg me-2"></i>Nouveau
                     </Link>
                 </div>
-            </div>
+            </PageTitle>
 
             <Block>
                 {error && (
@@ -102,13 +85,10 @@ export function School(): JSX.Element {
                     />
                 )}
 
-                <div className="d-flex justify-content-end mb-3">
-                    <h4>Arrêté au nombre de {schools.length} école(s)</h4>
-                </div>
-
-                <table className="table table-striped table-bordered mb-5">
+                <table className="table table-striped table-bordered text-sm">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Nom</th>
                             <th>Commune</th>
                             <th>District</th>
@@ -120,47 +100,35 @@ export function School(): JSX.Element {
                     <tbody>
                         {RequestState.loading && (
                             <tr>
-                                <td colSpan={7} className="text-center">
+                                <td colSpan={8} className="text-center">
                                     Chargement...
                                 </td>
                             </tr>
                         )}
                         {schools.length > 0 &&
-                            schools.map((school) => (
+                            schools.map((school, index) => (
                                 <tr key={school.id}>
+                                    <td className="fw-bold">{index + 1}</td>
                                     <td>{school.name}</td>
                                     <td>{school?.commune?.name}</td>
                                     <td>{school?.commune?.district.name}</td>
                                     <td>{school.localisation}</td>
                                     <td>{school.responsable}</td>
                                     <td>
-                                        <Link
-                                            className="btn-sm me-2 btn btn-info text-white"
-                                            to={`/anthropo-measure/school/details/${school.id}`}
-                                        >
-                                            <i className="bi bi-folder"></i>
-                                        </Link>
-                                        <Link
-                                            className="btn-sm me-2 btn btn-primary"
-                                            to={`/anthropo-measure/school/edit/${school.id}`}
-                                        >
-                                            <i className="bi bi-pencil-square"></i>
-                                        </Link>
+                                        <DetailLink to={`/anthropo-measure/school/details/${school.id}`} />
+                                        <EditLink to={`/anthropo-measure/school/edit/${school.id}`} />
                                         <Button
-                                            type="button"
                                             mode="danger"
                                             icon="trash"
                                             size="sm"
-                                            onClick={(): void => {
-                                                handleDelete(school.id)
-                                            }}
+                                            onClick={() => handleDelete(school.id)}
                                         />
                                     </td>
                                 </tr>
                             ))}
                         {!RequestState.loading && schools.length <= 0 && (
                             <tr>
-                                <td colSpan={7} className="text-center">
+                                <td colSpan={8} className="text-center">
                                     Aucune données
                                 </td>
                             </tr>

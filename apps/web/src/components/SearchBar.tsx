@@ -72,30 +72,29 @@ export function SearchBar(): ReactNode {
         <div className="app-search-box col">
             <form className="app-search-form">
                 <input onKeyUp={handleKey} onBlur={handleBlur} onFocus={handleFocus} onChange={handleSearch} value={search} placeholder="Rechercher..." className="form-control search-input" />
-                <button type="submit" className="btn search-btn btn-primary" value="Search">
+                <div className="btn search-btn btn-primary">
                     <i className="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </form>
-            <div className="app-notifications-dropdown dropdown">
-                <div className={`${showSuggestion && 'show'} dropdown-menu p-0 mt-3`}>
-                    <div className="dropdown-menu-header p-3">
-                        <h5 className="dropdown-menu-title mb-0">Liens qui correspond</h5>
-                    </div>
-                    <div className="dropdown-menu-content" style={{ maxHeight: 300, overflowY: 'auto', overflowX: 'hidden' }}>
-                        {Object.keys(similarSearch).length <= 0 && <div className="itep p-3">
-                            <div className="info text-sm text-center">
-                                <div className="desc">Aucune correspondance</div>
-                            </div>
-                        </div>}
-                        {Object.keys(similarSearch).map((label, index) => {
-                            const link = similarSearch[label]
-                            return <SuggestionItem onClick={resetSearch} key={index} label={label} link={link} />
-                        })}
+                </div>
+                <div className="app-notifications-dropdown dropdown">
+                    <div className={`${showSuggestion ? 'show' : ''} dropdown-menu p-0 mt-3 w-100`}>
+                        <div className="dropdown-menu-header p-3">
+                            <h5 className="dropdown-menu-title mb-0">Liens qui correspond</h5>
+                        </div>
+                        <div className="dropdown-menu-content" style={{ maxHeight: 300, overflowY: 'auto', overflowX: 'hidden' }}>
+                            {Object.keys(similarSearch).length <= 0 && <div className="itep p-3">
+                                <div className="info text-sm text-center">
+                                    <div className="desc text-primary">Aucune correspondance</div>
+                                </div>
+                            </div>}
+                            {Object.keys(similarSearch).map((label, index) => {
+                                const link = similarSearch[label]
+                                return <SuggestionItem onClick={resetSearch} key={index} label={label} link={link} />
+                            })}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
-
     </>
 }
 

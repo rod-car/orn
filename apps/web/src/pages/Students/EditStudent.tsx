@@ -1,4 +1,5 @@
-import { useCallback, useEffect } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { ReactNode, useCallback, useEffect } from 'react'
 import { Block, PageTitle } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
@@ -8,7 +9,7 @@ import { StudentForm } from './StudentForm'
 import Skeleton from 'react-loading-skeleton'
 import { Flex } from '@base/components';
 
-export function EditStudent(): JSX.Element {
+export function EditStudent(): ReactNode {
     const { id } = useParams()
 
     const { Client: StudentClient, data: student } = useApi<Student>({

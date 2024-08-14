@@ -1,7 +1,6 @@
 export { Pagination } from './Pagination.tsx';
 
 export { Flex } from './Bootstrap/Flex.tsx';
-
 export { Alert, AlertDanger } from './Bootstrap/Alert.tsx';
 
 export { AppCard } from './Card/AppCard.tsx';
@@ -16,7 +15,7 @@ export { SidePanel } from './SidePanel.tsx'
 export { NavItem } from './Nav/NavItem.tsx'
 export { DropDown } from './Nav/DropDown.tsx'
 
-export { Link } from './Router/Link.tsx'
+export { Link, EditLink, DetailLink, PrimaryLink, InfoLink } from './Router/Link.tsx'
 export { NavLink } from './Router/NavLink.tsx'
 
 export { UserMenu } from './Menus/UserMenu.tsx'

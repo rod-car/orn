@@ -27,7 +27,7 @@ const defaultStudent = {
     scholar_year: ''
 }
 
-export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
+export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
     const [student, setStudent] = useState(defaultStudent)
     const { Client: SClient, RequestState: SRequestState, error } = useApi<typeof defaultStudent>({
         baseUrl: config.baseUrl,
@@ -149,7 +149,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                 <div className="col-xl-3">
                     <Select
                         value={student.gender}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={({ target }) => handleChange(target)}
                         label="Sexe"
                         name="gender"
                         placeholder={null}

@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import { Link } from '@base/components'
 import { isDate } from 'functions'
 
-export function ImportResultSurvey(): JSX.Element {
+export function ImportResultSurvey(): ReactNode {
     const { json, importing, toJSON, resetJSON } = useExcelReader()
     const { Client, RequestState, error, resetError } = useApi<Survey>({
         baseUrl: config.baseUrl,

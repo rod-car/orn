@@ -17,7 +17,7 @@ const defaultActivity: Activity = {
     files: null
 }
 
-export function TypeActivityForm({ editedActivity }: TypeActivityFormProps): JSX.Element {
+export function TypeActivityForm({ editedActivity }: TypeActivityFormProps): ReactNode {
     const [activity, setActivity] = useState(defaultActivity)
     const {
         Client,

@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { Block } from 'ui'
 import { ActivityForm } from '@base/pages/Activities'
 
-export function ActivityTypeAdd(): JSX.Element {
+export function ActivityTypeAdd(): ReactNode {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">

@@ -1,20 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { ChangeEvent, ReactNode, useCallback, useEffect, useState } from 'react'
 import { createSearchParams } from 'react-router-dom'
 import { config, abaque } from '@base/config'
-import { Block, Button, Select } from 'ui'
+import { Block, Button, PageTitle, Select } from 'ui'
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
-import { Link } from '@base/components'
+import { Link, PrimaryLink } from '@base/components'
 
-export function ListAbaque(): JSX.Element {
+export function ListAbaque(): ReactNode {
     const [abaqueType, setAbaqueType] = useState(abaque.abaqueTypes[0].id)
-
-    const {
-        Client,
-        RequestState,
-        datas: abaques
-    } = useApi<MeasureLength>({
+    const { Client, RequestState, datas: abaques } = useApi<MeasureLength>({
         baseUrl: config.baseUrl,
         url: '/measures'
     })
@@ -73,15 +69,14 @@ export function ListAbaque(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2 className="m-0">Liste des abaques</h2>
-                <Link to="/anthropo-measure/abaques/add" className="btn primary-link">
-                    <i className="bi bi-list me-2"></i>Ajouter un abaque
-                </Link>
-            </div>
+            <PageTitle title="Liste des abaques">
+                <PrimaryLink icon="plus-lg" to="/anthropo-measure/abaques/add">
+                    Ajouter un abaque
+                </PrimaryLink>
+            </PageTitle>
 
-            <Block className="mb-5">
-                <table className="table table-striped">
+            <Block className="mb-3">
+                <table className="text-sm table table-bordered table-striped m-0">
                     <thead>
                         <tr>
                             <th>Type d'abaque</th>
@@ -104,14 +99,14 @@ export function ListAbaque(): JSX.Element {
             </Block>
 
             <Block className="mb-5">
-                <div className="table-responsive border">
+                <div className="text-sm table-responsive border">
                     {[
                         'weight-age-male',
                         'weight-age-female',
                         'length-age-male',
                         'length-age-female'
                     ].includes(abaqueType) && (
-                            <table className="table table-striped">
+                            <table className="text-sm table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>Age</th>
@@ -178,7 +173,7 @@ export function ListAbaque(): JSX.Element {
                         )}
 
                     {abaqueType === 'imc-age' && (
-                        <table className="table table-striped">
+                        <table className="text-sm table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Age</th>
@@ -241,7 +236,7 @@ export function ListAbaque(): JSX.Element {
                     )}
 
                     {abaqueType === 'length-weight' && (
-                        <table className="table table-striped">
+                        <table className="text-sm table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Taille</th>

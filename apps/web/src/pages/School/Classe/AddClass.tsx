@@ -1,26 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FormEvent, useEffect, useState } from 'react'
-import { Block, Button, Input, Select } from 'ui'
+import { Block, Input, PageTitle, PrimaryButton, Select } from 'ui'
 import { config } from '@base/config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
-import { Link } from '@base/components'
+import { PrimaryLink } from '@base/components'
 
-export function AddClass(): JSX.Element {
+export function AddClass(): ReactNode {
     const [classes, setClasses] = useState<Classes>({ id: 0, name: '', level_id: 0, notation: '' })
     const { Client, datas } = useApi<Niveau>({
         baseUrl: config.baseUrl,
-        
         url: '/levels',
         key: 'data'
     })
 
-    const {
-        Client: ClassClient,
-        RequestState,
-        error
-    } = useApi<Classes>({
+    const { Client: ClassClient, RequestState, error } = useApi<Classes>({
         baseUrl: config.baseUrl,
-        
         url: '/classes'
     })
 
@@ -65,12 +60,11 @@ export function AddClass(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Ajouter une classe</h2>
-                <Link to="/anthropo-measure/school/classes/list" className="btn primary-link">
-                    <i className="bi bi-list me-2"></i>Liste des classes
-                </Link>
-            </div>
+            <PageTitle title="Ajouter une classe">
+                <PrimaryLink icon="list" to="/anthropo-measure/school/classes/list">
+                    Liste des classes
+                </PrimaryLink>
+            </PageTitle>
 
             <Block className="mb-5">
                 <form action="" onSubmit={handleSubmit} method="post">
@@ -108,14 +102,11 @@ export function AddClass(): JSX.Element {
                         />
                     </div>
 
-                    <Button
+                    <PrimaryButton
                         loading={RequestState.creating}
                         icon="save"
-                        mode="primary"
                         type="submit"
-                    >
-                        Enregistrer
-                    </Button>
+                    >Enregistrer</PrimaryButton>
                 </form>
             </Block>
         </>

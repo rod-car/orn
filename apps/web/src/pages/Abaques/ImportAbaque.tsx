@@ -1,7 +1,7 @@
 import { useApi, useExcelReader } from 'hooks'
 import { ChangeEvent, ReactNode, useState } from 'react'
-import { Link } from '@base/components'
-import { Block, Button, Input, Select, Spinner } from 'ui'
+import { Link, PrimaryLink } from '@base/components'
+import { Block, Button, Input, PageTitle, PrimaryButton, Select, Spinner } from 'ui'
 import { config, abaque } from '@base/config'
 import { toast } from 'react-toastify'
 
@@ -53,14 +53,13 @@ export function ImportAbaque(): ReactNode {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Importer une liste d'abaque</h2>
-                <Link to="/anthropo-measure/abaques/list" className="btn primary-link">
-                    <i className="bi bi-list me-2"></i>Liste des abaques
-                </Link>
-            </div>
+            <PageTitle title="Importer une liste d'abaque">
+                <PrimaryLink icon="list" to="/anthropo-measure/abaques/list">
+                    Liste des abaques
+                </PrimaryLink>
+            </PageTitle>
 
-            <Block className="mb-5">
+            <Block className="mb-3">
                 <form action="" encType="multipart/form-data">
                     <div className="row">
                         <div className="col-6">
@@ -86,33 +85,31 @@ export function ImportAbaque(): ReactNode {
                 </form>
             </Block>
 
-            <Block className="mb-5">
-                <div className="d-flex justify-content-between align-items-center mb-5">
-                    <h4 className="text-primary">
+            <Block>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h6 className="text-primary">
                         Affichage temporaire des données{' '}
                         {json.length > 0 && `(${json.length} Enregistrement(s))`}
-                    </h4>
+                    </h6>
                     {json.length > 0 && (
-                        <Button
+                        <PrimaryButton
                             loading={RequestState.creating}
                             icon="save"
-                            type="button"
-                            mode="primary"
                             onClick={save}
                         >
                             Enregistrer
-                        </Button>
+                        </PrimaryButton>
                     )}
                 </div>
                 <hr />
-                <div className="table-responsive border mb-5">
+                <div className="table-responsive border">
                     {[
                         'weight-age-male',
                         'weight-age-female',
                         'length-age-male',
                         'length-age-female'
                     ].includes(abaqueType) && (
-                            <table className="table table-striped">
+                            <table className="table-bordered text-sm table table-striped">
                                 <thead>
                                     <tr>
                                         <th>Age</th>
@@ -150,7 +147,7 @@ export function ImportAbaque(): ReactNode {
                         )}
 
                     {abaqueType === 'imc-age' && (
-                        <table className="table table-striped">
+                        <table className="table-bordered text-sm table table-striped">
                             <thead>
                                 <tr>
                                     <th>Age</th>
@@ -184,7 +181,7 @@ export function ImportAbaque(): ReactNode {
                     )}
 
                     {abaqueType === 'length-weight' && (
-                        <table className="table table-striped">
+                        <table className="table-bordered text-sm table table-striped">
                             <thead>
                                 <tr>
                                     <th>Taille</th>
@@ -229,7 +226,7 @@ export function ImportAbaque(): ReactNode {
                         type="button"
                         mode="primary"
                         onClick={save}
-                        className="mb-5"
+                        className="mt-3"
                     >
                         Enregistrer
                     </Button>

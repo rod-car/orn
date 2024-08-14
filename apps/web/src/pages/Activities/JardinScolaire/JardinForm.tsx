@@ -33,7 +33,7 @@ type GardenSemence = { semence_id: number, quantity: number }
 const defaultGardenSemence = { semence_id: 0, quantity: 0 }
 const defaultGardenSemences: GardenSemence[] = [defaultGardenSemence]
 
-export function JardinForm({ editedGarden }: GardenFormProps): JSX.Element {
+export function JardinForm({ editedGarden }: GardenFormProps): ReactNode {
     const [garden, setGarden] = useState(defaultGarden)
     const [gardenMaterials, setGardenMaterials] = useState(defaultGardenMaterials)
     const [gardenSemence, setGardenSemence] = useState(defaultGardenSemences)

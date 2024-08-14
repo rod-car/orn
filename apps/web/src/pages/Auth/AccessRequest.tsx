@@ -12,9 +12,9 @@ import Skeleton from 'react-loading-skeleton'
 
 /**
  * Page d'accueil de gestion des étudiants
- * @returns JSX.Element
+ * @returns ReactNode
  */
-export function AccessRequest(): JSX.Element {
+export function AccessRequest(): ReactNode {
     const [perPage, setPerPage] = useState(30)
 
     const { Client, RequestState, error, datas: users, setDatas: setUsers } = useApi<User>({

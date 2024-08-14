@@ -1,7 +1,7 @@
 import { Link } from '@base/components'
 import { Block } from 'ui'
 
-export function AddConso(): JSX.Element {
+export function AddConso(): ReactNode {
     async function save() {
 
     }

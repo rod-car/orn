@@ -1,7 +1,7 @@
 import { Block } from 'ui'
 import { Link } from '@base/components'
 
-export function ListConso(): JSX.Element {
+export function ListConso(): ReactNode {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">

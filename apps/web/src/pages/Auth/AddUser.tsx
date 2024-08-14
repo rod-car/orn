@@ -4,9 +4,9 @@ import { RegisterForm } from '@base/pages/Auth'
 
 /**
  * Page d'accueil de gestion des étudiants
- * @returns JSX.Element
+ * @returns ReactNode
  */
-export function AddUser(): JSX.Element {
+export function AddUser(): ReactNode {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
