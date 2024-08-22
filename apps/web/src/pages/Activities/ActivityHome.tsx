@@ -2,8 +2,8 @@ import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Block, Button } from "ui";
-import { config } from '@renderer/config'
-import { ActivityLoading } from "@renderer/components";
+import { config } from '@base/config'
+import { ActivityLoading } from "@base/components";
 
 export function ActivityHome(): ReactNode {
     const {
@@ -12,7 +12,6 @@ export function ActivityHome(): ReactNode {
         RequestState
     } = useApi<Activity>({
         baseUrl: config.baseUrl,
-        
         url: '/activities',
         key: 'data'
     })
@@ -32,7 +31,7 @@ export function ActivityHome(): ReactNode {
         <div className="mb-5 d-flex justify-content-between align-items-center">
             <h2>Nos dernières activités</h2>
             <Link to="/activities/list" className="btn primary-link">
-                <i className="fa fa-list me-2"></i>Tous nos activités
+                <i className="bi bi-list me-2"></i>Tous nos activités
             </Link>
         </div>
 

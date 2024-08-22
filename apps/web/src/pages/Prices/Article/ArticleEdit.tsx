@@ -2,12 +2,12 @@ import { useApi } from 'hooks'
 import { useEffect } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block } from 'ui'
-import { config } from '@renderer/config'
-import { ArticleForm } from '@renderer/pages/Prices'
+import { config } from '@base/config'
+import { ArticleForm } from '@base/pages/Prices'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-export function ArticleEdit(): JSX.Element {
+export function ArticleEdit(): ReactNode {
     const { Client, data: article } = useApi<Article>({
         baseUrl: config.baseUrl,
         
@@ -33,7 +33,7 @@ export function ArticleEdit(): JSX.Element {
                     <Skeleton count={1} style={{ height: 40 }} containerClassName="w-50" />
                 )}
                 <NavLink to="/prices/articles/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Liste des articles
+                    <i className="bi bi-list me-2"></i>Liste des articles
                 </NavLink>
             </div>
 

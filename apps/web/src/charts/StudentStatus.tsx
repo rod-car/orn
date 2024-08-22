@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useMemo } from 'react'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { Spinner } from 'ui'
 import {
     Chart as ChartJS,
@@ -15,7 +15,7 @@ import {
     ArcElement
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
-import { generateColor } from '@renderer/utils'
+import { generateColor } from '@base/utils'
 
 export const options = {
     responsive: true,

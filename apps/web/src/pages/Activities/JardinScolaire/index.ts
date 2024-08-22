@@ -2,7 +2,6 @@ export { JardinShow } from "./JardinShow";
 export { JardinForm } from "./JardinForm";
 export { JardinAdd } from "./JardinAdd";
 export { JardinEdit } from "./JardinEdit";
-export { JardinRoot } from "./JardinRoot";
 export { JardinHome } from "./JardinHome";
 export { JardinList } from "./JardinList";
 export { JardinStatistics } from "./JardinStatistics";

@@ -1,14 +1,14 @@
 import { NavLink } from 'react-router-dom'
 import { Block } from 'ui'
-import { ArticleForm } from '@renderer/pages/Prices'
+import { ArticleForm } from '@base/pages/Prices'
 
-export function ArticleAdd(): JSX.Element {
+export function ArticleAdd(): ReactNode {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Ajouter un article</h2>
                 <NavLink to="/prices/articles/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Liste des articles
+                    <i className="bi bi-list me-2"></i>Liste des articles
                 </NavLink>
             </div>
 

@@ -1,4 +1,4 @@
-import { config } from "@renderer/config";
+import { config } from "@base/config";
 import { capitalize } from "functions";
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
@@ -21,7 +21,7 @@ export function JardinShow(): ReactNode {
         <div className="d-flex justify-content-between align-items-center mb-5">
             <h3>Détails: {data?.school?.name} - {data?.year}</h3>
             <Link to="/scholar-garden/list" className="btn btn-primary">
-                <i className="fa fa-list me-2"></i>Liste des jardins
+                <i className="bi bi-list me-2"></i>Liste des jardins
             </Link>
         </div>
 

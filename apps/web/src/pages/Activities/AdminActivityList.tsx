@@ -1,9 +1,9 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Block, Button } from "ui";
-import { config } from '@renderer/config'
-import { ActivityLoading, Link } from "@renderer/components";
-import { Pagination } from 'react-laravel-paginex'
+import { config } from '@base/config'
+import { ActivityLoading, Link } from "@base/components";
+import { Pagination } from '@base/components'
 import { wrap } from 'functions'
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
@@ -82,7 +82,7 @@ export function AdminActivityList(): ReactNode {
         <div className="mb-5 d-flex justify-content-between align-items-center">
             <h2>Liste des activités</h2>
             <Link to="/activities/add" className="btn secondary-link me-2">
-                <i className="fa fa-plus me-2"></i>Nouveau
+                <i className="bi bi-plus-lg me-2"></i>Nouveau
             </Link>
         </div>
 
@@ -110,7 +110,7 @@ export function AdminActivityList(): ReactNode {
                                 className="btn-sm me-2 btn btn-primary"
                                 to={`/activities/types/edit/${1}`}
                             >
-                                <i className="fa fa-edit"></i>
+                                <i className="bi bi-pencil-square"></i>
                             </Link>
                             <Button
                                 type="button"

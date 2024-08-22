@@ -2,12 +2,12 @@ import { useApi } from 'hooks'
 import { useEffect } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block } from 'ui'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { ActivityForm } from './ActivityForm'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-export function ActivityEdit(): JSX.Element {
+export function ActivityEdit(): ReactNode {
     const { Client, data: activity } = useApi<Activity>({
         baseUrl: config.baseUrl,
         
@@ -33,7 +33,7 @@ export function ActivityEdit(): JSX.Element {
                     <Skeleton count={1} style={{ height: 40 }} containerClassName="w-50" />
                 )}
                 <NavLink to="/activities/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Liste des activités
+                    <i className="bi bi-list me-2"></i>Liste des activités
                 </NavLink>
             </div>
 

@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react'
 import { Button, Input, Textarea } from 'ui'
 import { useApi } from 'hooks'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { toast } from 'react-toastify'
 
 type ArticleFormProps = {
@@ -15,7 +15,7 @@ const defaultArticle: Article = {
     code: ''
 }
 
-export function ArticleForm({ editedArticle }: ArticleFormProps): JSX.Element {
+export function ArticleForm({ editedArticle }: ArticleFormProps): ReactNode {
     const [article, setArticle] = useState(defaultArticle)
     const {
         Client,

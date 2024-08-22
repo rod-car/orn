@@ -1,6 +1,6 @@
 export { Table } from "./Moleculs/Table/Table"
 export { Spinner } from "./Atoms/Spinner/Spinner"
-export { Button } from "./Atoms/Button/Button"
+export { Button, PrimaryButton, SecondaryButton, DangerButton } from "./Atoms/Button/Button"
 export { Input } from "./Atoms/Input/Input"
 export { Checkbox } from "./Atoms/Checkbox/Checkbox"
 export { Select } from './Atoms/Select/Select'

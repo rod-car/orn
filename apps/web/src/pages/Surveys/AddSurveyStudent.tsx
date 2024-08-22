@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { useEffect, useState } from 'react'
-import { config } from '@renderer/config'
-import { Input, Select, Block, Spinner, Button } from 'ui'
+import { ReactNode, useEffect, useState } from 'react'
+import { config } from '@base/config'
+import { Input, Select, Block, Spinner, Button, PageTitle } from 'ui'
 import { toast } from 'react-toastify'
-import { Link } from '@renderer/components'
+import { Link, PrimaryLink } from '@base/components'
 import { scholar_years } from 'functions'
 
 type StudentData = {
@@ -35,42 +36,37 @@ const defaultFormData: FormData = {
     students: []
 }
 
-export function AddSurveyStudent(): JSX.Element {
+export function AddSurveyStudent(): ReactNode {
     const [formData, setFormData] = useState<FormData>(defaultFormData)
     const [precedentPhase, setPrecedentPhase] = useState<number | null | undefined>(null)
     // const [loadings, setLoadings] = useState<boolean[]>([])
 
     const { Client: SurveyListClient, datas: surveysList, RequestState: SurveyListRequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        
         url: '/surveys',
         key: 'data'
     })
 
     const { Client: SurveyClient, RequestState: SurveyRequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        
         url: '/surveys',
         key: 'data'
     })
 
     const { Client: StudentClient, RequestState: StudentRequestState } = useApi<Student>({
         baseUrl: config.baseUrl,
-        
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, RequestState: SchoolRS, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassClient, RequestState: ClassRS, datas: classes } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/classes',
         key: 'data'
     })
@@ -84,7 +80,6 @@ export function AddSurveyStudent(): JSX.Element {
     function handleChange(target: EventTarget & (HTMLInputElement | HTMLSelectElement), index?: number) {
         if (target.name.includes('students') && index !== undefined) {
             const nameParts = target.name.split('.')
-            
             formData.students[index][nameParts[1]] = target.value
             setFormData({...formData})
 
@@ -127,7 +122,7 @@ export function AddSurveyStudent(): JSX.Element {
         const selectedStudent = formData.students[index]
         const height = selectedStudent.height
         const weight = selectedStudent.weight
-        
+
         if (height > 0 && weight > 0) {
             if ((selectedStudent.precedentHeight && selectedStudent.precedentHeight > height)) {
                 toast("La taille de l'étudiant ne doit pas être inférieur a la taille précedente", {
@@ -286,14 +281,13 @@ export function AddSurveyStudent(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Formulaire de mesure</h2>
-                <Link to="/anthropo-measure/survey/list" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Liste des mésures
-                </Link>
-            </div>
+            <PageTitle title="Formulaire de mésure">
+                <PrimaryLink icon="list" to="/anthropo-measure/survey/list">
+                    Liste des mésures
+                </PrimaryLink>
+            </PageTitle>
 
-            <Block className="mb-5">
+            <Block>
                 <form action="" method="post">
                     <div className="row mb-4">
                         <div className="col-6 mb-3">
@@ -354,50 +348,52 @@ export function AddSurveyStudent(): JSX.Element {
 
                     <div className="d-flex justify-content-between">
                         <Button loading={SurveyRequestState.loading || StudentRequestState.loading} icon="check" mode="primary" onClick={getStudents}>Valider</Button>
-                        {SurveyRequestState.loading && <Spinner className="text-center" isBorder />}
+                        {/*SurveyRequestState.loading && <Spinner className="text-center" isBorder />*/}
                     </div>
                 </form>
             </Block>
 
-            {canDisplayTable() && <Block><table className='table table-striped table-bordered mb-5'>
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th className='text-nowrap'>Nom et prénoms</th>
-                        <th className='text-nowrap'>Date de naissance</th>
-                        <th className='text-nowrap'>Taille Pr {precedentPhase !== null ? `(${precedentPhase})` : ''}</th>
-                        <th className='text-nowrap'>Poids Pr {precedentPhase !== null ? `(${precedentPhase})` : ''}</th>
-                        <th>Taille</th>
-                        <th>Poids</th>
-                        <th>Actions</th>
-                        <th>Etat</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {(SurveyRequestState.loading || StudentRequestState.loading) && <tr><td className="text-center" colSpan={9}>Chargement</td></tr>}
-                    {formData.students && formData.students.map((student, index) => <tr key={student.student_id} className='align-middle'>
-                        <td>{student.student_id}</td>
-                        <td>{student.fullname}</td>
-                        <td>{student.birth_date}</td>
-                        <td>{student.precedentHeight}</td>
-                        <td>{student.precedentWeight}</td>
-                        <td>
-                            <Input onChange={({target}) => handleChange(target, index)} name="students.height" type='number' placeholder='Taille' value={student.height} />
-                        </td>
-                        <td>
-                            <Input onChange={({target}) => handleChange(target, index)} name="students.weight" type='number' placeholder='Poids' value={student.weight} />
-                        </td>
-                        <td className="d-flex justify-content-center align-items-center h-full">
-                            <Button onClick={() => saveData(index)} icon="save" mode="primary" size="sm" className="me-2" />
-                            <Button onClick={() => removeData(index)} icon="trash" mode="danger" size="sm" />
-                        </td>
-                        <td className="text-center">
-                            {student.saved ? <span className="fw-bold text-success">OK</span> : <span className="fw-bold text-danger">X</span>}
-                        </td>
-                    </tr>)}
-                    {!SurveyRequestState.loading && !StudentRequestState.loading && formData.students.length <= 0 && <tr><td className="text-center" colSpan={9}>Aucune données</td></tr>}
-                </tbody>
-            </table></Block>}
+            {canDisplayTable() && <Block>
+                <table className='table table-striped table-bordered text-sm'>
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th className='text-nowrap'>Nom et prénoms</th>
+                            <th className='text-nowrap'>Date de naissance</th>
+                            <th className='text-nowrap'>Taille Prec {precedentPhase !== null ? `(${precedentPhase})` : ''}</th>
+                            <th className='text-nowrap'>Poids Prec {precedentPhase !== null ? `(${precedentPhase})` : ''}</th>
+                            <th>Taille</th>
+                            <th>Poids</th>
+                            <th>Actions</th>
+                            <th>Etat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {(SurveyRequestState.loading || StudentRequestState.loading) && <tr><td className="text-center" colSpan={9}>Chargement</td></tr>}
+                        {formData.students && formData.students.map((student, index) => <tr key={student.student_id} className='align-middle'>
+                            <td>{student.student_id}</td>
+                            <td>{student.fullname}</td>
+                            <td>{student.birth_date}</td>
+                            <td>{student.precedentHeight} Cm</td>
+                            <td>{student.precedentWeight} Kg</td>
+                            <td>
+                                <Input onChange={({target}) => handleChange(target, index)} name="students.height" type='number' placeholder='Taille' value={student.height} />
+                            </td>
+                            <td>
+                                <Input onChange={({target}) => handleChange(target, index)} name="students.weight" type='number' placeholder='Poids' value={student.weight} />
+                            </td>
+                            <td className="d-flex justify-content-center align-items-center h-full">
+                                <Button onClick={() => saveData(index)} icon="save" mode="primary" size="sm" className="me-2" />
+                                <Button onClick={() => removeData(index)} icon="trash" mode="danger" size="sm" />
+                            </td>
+                            <td className="text-center">
+                                {student.saved ? <span className="fw-bold text-success"><i className="bi bi-check2-all"></i></span> : <span className="fw-bold text-danger"><i className="bi bi-x-lg"></i></span>}
+                            </td>
+                        </tr>)}
+                        {!SurveyRequestState.loading && !StudentRequestState.loading && formData.students.length <= 0 && <tr><td className="text-center" colSpan={9}>Aucune données</td></tr>}
+                    </tbody>
+                </table>
+            </Block>}
         </>
     )
 }

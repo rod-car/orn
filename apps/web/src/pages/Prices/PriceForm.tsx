@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { toast } from 'react-toastify'
 import { years, months } from 'functions'
 
@@ -27,7 +27,7 @@ const d: ArticlePrice = {
 
 const defaultArticlePrice: ArticlePrice[] = [d]
 
-export function PriceForm(): JSX.Element {
+export function PriceForm(): ReactNode {
     const [articlePrice, setArticlePrice] = useState(defaultArticlePrice)
     const [addInfo, setAddInfo] = useState(defaultAddInfo)
     const {

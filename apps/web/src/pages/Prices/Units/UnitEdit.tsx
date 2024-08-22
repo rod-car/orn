@@ -2,8 +2,8 @@ import { useApi } from 'hooks'
 import { ReactNode, useEffect } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block } from 'ui'
-import { config } from '@renderer/config'
-import { UnitForm } from '@renderer/pages/Prices'
+import { config } from '@base/config'
+import { UnitForm } from '@base/pages/Prices'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
@@ -33,7 +33,7 @@ export function UnitEdit(): ReactNode {
                     <Skeleton count={1} style={{ height: 40 }} containerClassName="w-50" />
                 )}
                 <NavLink to="/prices/units/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Liste des unités
+                    <i className="bi bi-list me-2"></i>Liste des unités
                 </NavLink>
             </div>
 

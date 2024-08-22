@@ -1,24 +1,20 @@
-import { ReactNode, useEffect } from 'react'
-import { ToastContainer } from 'react-toastify'
-import { ErrorResponse, NavLink, Outlet, useNavigate, useRouteError } from 'react-router-dom'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useApi, useAuthStore } from 'hooks';
+import { ReactNode, useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { ErrorComponent, Footer, Header, ProgressBar } from '@base/components';
+import { ErrorResponse, Outlet, useNavigate, useRouteError } from 'react-router-dom';
+import { NotFound } from '@base/pages/Errors';
+import { useNotFoundRoute } from '@base/hooks';
 
-import '@renderer/assets'
-
-import { useApi, useAuthStore } from 'hooks'
-import { config } from '@renderer/config'
-import { ErrorComponent, Footer, Header, Navigation, ProgressBar, UserMenu } from '@renderer/components'
+import '@base/assets';
 
 export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
     const err = useRouteError()
-    const errorResponse = err as { error: ErrorResponse }
+    const errorResponse = err as { error: ErrorResponse, status: number }
     const { token, resetUser } = useAuthStore()
-
-    const { Client } = useApi<User>({
-        baseUrl: config.baseUrl,
-        url: '/auth'
-    })
-
     const navigate = useNavigate()
+    const { Client } = useApi<User>({ url: '/auth' })
 
     useEffect(() => {
         const getUser = async (): Promise<void> => {
@@ -31,68 +27,34 @@ export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
         getUser()
     }, [token])
 
-    return (
-        <>
-            <ProgressBar />
-            <nav className="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top mb-5 p-0">
-                <div className="container container-fluid">
-                    <Header />
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav"
-                        aria-controls="navbarNav"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                    >
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav ms-auto">
-                            <li className="nav-item">
-                                <NavLink className={`nav-link`} aria-current="page" to="/">
-                                    <i className="fa fa-home me-2"></i>Accueil
-                                </NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink className={`nav-link`} aria-current="page" to="/anthropo-measure">
-                                    <i className="fa fa-ruler me-2"></i>Mésure anthropo
-                                </NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink className={`nav-link`} aria-current="page" to="/cantine">
-                                    <i className="fa fa-bowl-food me-2"></i>Cantine scolaire
-                                </NavLink>
-                            </li>
-                            {/*<li className="nav-item">
-                                <NavLink className={`nav-link`} aria-current="page" to="/activities">
-                                    <i className="fa fa-cog me-2"></i>Activités
-                                </NavLink>
-                            </li>*/}
-                            <li className="nav-item">
-                                <NavLink className={`nav-link`} aria-current="page" to="/scholar-garden">
-                                    <i className="fa fa-cog me-2"></i>Activités
-                                </NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink className={`nav-link`} aria-current="page" to="/prices">
-                                    <i className="fa fa-money-bill me-2"></i>Prix sur le marché
-                                </NavLink>
-                            </li>
-                            <UserMenu />
-                        </ul>
-                    </div>
+    const { notFound, path } = useNotFoundRoute()
+
+    return <>{(notFound || errorResponse?.status === 404) ? <NotFound path={path} /> : <>
+        <ProgressBar />
+        <Header />
+        <div className="app-wrapper" style={{ marginTop: 50 }}>
+            <div className="app-content pt-3 p-md-3 p-lg-4">
+                <div className="container-xl">
+                    <ToastContainer />
+                    {/*<Navigation />*/}
+                    {error ? <ErrorComponent error={errorResponse.error ?? {
+                        status: 500,
+                        statusText: "Une erreur est survenue",
+                        data: null
+                    }} /> : <Outlet />}
                 </div>
-            </nav>
-
-            <div className="container mb-5" style={{ marginTop: 130, minHeight: '90vh' }}>
-                <ToastContainer />
-                <Navigation />
-                {error ? <ErrorComponent error={errorResponse.error} /> : <Outlet />}
             </div>
-
-            <Footer />
-        </>
-    )
+        </div>
+        <Footer />
+    </>}</>
 }
+
+/*function BreadCrumb(): ReactNode {
+    return <nav aria-label="breadcrumb">
+        <ol className="breadcrumb">
+            <li className="breadcrumb-item"><a href="#">Home</a></li>
+            <li className="breadcrumb-item"><a href="#">Library</a></li>
+            <li className="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+    </nav>
+}*/

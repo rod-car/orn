@@ -1,9 +1,9 @@
 import { useApi } from 'hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { Select, Spinner } from 'ui'
-import { generateColor } from '@renderer/utils'
-import { Selected } from '@renderer/pages/Prices'
+import { generateColor } from '@base/utils'
+import { Selected } from '@base/pages/Prices'
 
 import {
     Chart as ChartJS,
@@ -34,7 +34,7 @@ ChartJS.register(
     ArcElement
 )
 
-export function ArticlePriceSiteChart(): JSX.Element {
+export function ArticlePriceSiteChart(): ReactNode {
     const [article, setArticle] = useState<number>(0)
     const [queryParams, setQueryParams] = useState<{ year: number, month: number }>({ month: 1, year: 2024 })
     const [displayedArticles, setDisplayedArticle] = useState<Article[]>([])

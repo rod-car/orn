@@ -1,17 +1,17 @@
-import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
-import { Block, Button, Input } from 'ui'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { ChangeEvent, FormEvent, ReactNode, useCallback, useEffect, useState } from 'react'
+import { Block, Input, PageTitle, PrimaryButton } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { toast } from 'react-toastify'
-import { Link } from '@renderer/components'
+import { PrimaryLink } from '@base/components'
 
-export function EditSurvey(): JSX.Element {
+export function EditSurvey(): ReactNode {
     const [survey, setSurvey] = useState<Partial<Survey>>({ id: 0, phase: 0, date: '' })
     const { id } = useParams()
     const { Client, RequestState, error } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        
         url: '/surveys'
     })
 
@@ -63,14 +63,13 @@ export function EditSurvey(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Modifier la mésure phase: {survey.phase}</h2>
-                <Link to="/anthropo-measure/survey/list" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Liste des mésures
-                </Link>
-            </div>
+            <PageTitle title="Modifier la mésure">
+                <PrimaryLink icon="list" to="/anthropo-measure/survey/list">
+                    Liste des mésures
+                </PrimaryLink>
+            </PageTitle>
 
-            <Block className="mb-5">
+            <Block>
                 <form action="" onSubmit={handleSubmit} method="post">
                     <div className="row mb-4">
                         <div className="col-xl-6">
@@ -94,14 +93,13 @@ export function EditSurvey(): JSX.Element {
                         </div>
                     </div>
 
-                    <Button
+                    <PrimaryButton
                         loading={RequestState.creating}
                         icon="save"
                         type="submit"
-                        mode="primary"
                     >
                         Enregistrer
-                    </Button>
+                    </PrimaryButton>
                 </form>
             </Block>
         </>

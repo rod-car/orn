@@ -1,11 +1,11 @@
 import { useApi, useAuthStore } from 'hooks'
 import { FormEvent, ReactNode, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button, Checkbox, Input } from 'ui'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { toast } from 'react-toastify'
-
-import './Auth.modules.scss'
+import { Footer, Link } from '@base/components'
+import logo from '@base/assets/images/logo.png'
 
 export function Login(): ReactNode {
     const [username, setUsername] = useState('')
@@ -15,11 +15,19 @@ export function Login(): ReactNode {
     const navigate = useNavigate()
 
     const { login } = useAuthStore()
-    const { Client, RequestState } = useApi<User>({ baseUrl: config.baseUrl, url: '/auth' })
+    const { Client, RequestState } = useApi<User>({ url: '/auth' })
 
     const handleLogin = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
         const response = await login(Client, {username: username, password: password})
+
+        if (response === undefined) {
+            toast("Impossible de contacter le serveur", {
+                position: config.toastPosition,
+                type: 'error'
+            })
+            return
+        }
 
         if (response.ok) {
             toast('Connecté', {
@@ -29,7 +37,6 @@ export function Login(): ReactNode {
             navigate('/')
         } else {
             setErrors(response.data.errors)
-            
             toast("Données du formulaire invalide", {
                 type: 'error',
                 position: config.toastPosition
@@ -38,62 +45,83 @@ export function Login(): ReactNode {
         }
     }
 
-    return (
-        <div className="container-fluid">
-            <div className="row">
-                <div className="col-md-6 p-0">
-                    <div className="login-image d-flex align-items-center justify-content-center h-100">
-                    </div>
-                </div>
-                <div className="col-md-6">
-                    <div className="auth-container">
-                        <form onSubmit={handleLogin} action="" method="post">
-                            <h3 className="text-center mb-5 text-primary">Se connecter</h3>
-                            <Input
-                                required={false}
-                                placeholder="test@example.com / orn-atsinanana"
-                                onChange={({ target }): void => {
-                                    setUsername(target.value)
-                                    if (target.value.length > 0 && errors)
-                                        setErrors({ ...errors, username: [] })
-                                }}
-                                value={username}
-                                label="Adresse email ou nom d'utilisateur"
-                                className="mb-3"
-                                error={errors?.username}
-                            />
-                            <Input
-                                required={false}
-                                onChange={({ target }): void => {
-                                    setPassword(target.value)
-                                    if (target.value.length > 0 && errors)
-                                        setErrors({ ...errors, password: [] })
-                                }}
-                                value={password}
-                                type={showPassword ? "text" : "password"}
-                                label="Mot de passe"
-                                className="mb-4"
-                                error={errors?.password}
-                            />
-                            <div className="mb-5">
-                                <Checkbox checked={showPassword} onCheck={() => setShowPassword(!showPassword)} label="Afficher le mot de passe" />
-                            </div>
+    return <div className="app-login p-0">
+        <div className="row g-0 app-auth-wrapper">
+            <div className="col-12 col-md-7 col-lg-6 auth-main-col text-center p-5">
+                <div className="d-flex flex-column align-content-end">
+                    <div className="app-auth-body mx-auto">
+                        <div className="app-auth-branding mb-4">
+                            <Link className="app-logo" to="/register">
+                                <img className="logo-icon me-2" src={logo} alt="logo" />
+                            </Link>
+                        </div>
+                        <h2 className="auth-heading text-center mb-5">Se connecter</h2>
+                        <div className="auth-form-container text-start">
+                            <form onSubmit={handleLogin} action="" method="post" className="auth-form login-form">
+                                <div className="email mb-3">
+                                    <Input
+                                        required={false}
+                                        placeholder="Adresse e-mail ou nom d'utilisateur"
+                                        onChange={({ target }): void => {
+                                            setUsername(target.value)
+                                            if (target.value.length > 0 && errors)
+                                                setErrors({ ...errors, username: [] })
+                                        }}
+                                        value={username}
+                                        label="Adresse email ou nom d'utilisateur"
+                                        srOnly={true}
+                                        className="signin-email"
+                                        error={errors?.username}
+                                    />
+                                </div>
+                                <div className="password mb-3">
+                                    <Input
+                                        required={false}
+                                        onChange={({ target }): void => {
+                                            setPassword(target.value)
+                                            if (target.value.length > 0 && errors)
+                                                setErrors({ ...errors, password: [] })
+                                        }}
+                                        value={password}
+                                        type={showPassword ? "text" : "password"}
+                                        label="Mot de passe"
+                                        placeholder="Mot de passe"
+                                        className="signin-password"
+                                        srOnly
+                                        error={errors?.password}
+                                    />
 
-                            <div className="d-flex justify-content-between align-items-center">
-                                <Link to="/auth/register">Demander un accès</Link>
-                                <Button
-                                    loading={RequestState.loading}
-                                    type="submit"
-                                    icon="right-to-bracket"
-                                    mode="primary"
-                                >
-                                    Se connecter
-                                </Button>
-                            </div>
-                        </form>
+                                    <div className="extra mt-3 row justify-content-between">
+                                        <div className="col-6">
+                                            <Checkbox checked={showPassword} onCheck={() => setShowPassword(!showPassword)} label="Afficher le mot de passe" />
+                                        </div>
+                                        <div className="col-6">
+                                            <div className="forgot-password text-end">
+                                                <Link to="/auth/forgot-password">Mot de passe oublié?</Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <Button
+                                        loading={RequestState.loading}
+                                        type="submit"
+                                        mode="primary"
+                                        className="app-btn-primary w-100 theme-btn mx-auto">
+                                        Se connecter
+                                    </Button>
+                                </div>
+                            </form>
+                            <div className="auth-option text-center pt-5">Pas de compte? Demander un accès <Link className="text-link" to="/auth/register">ici</Link>.</div>
+                        </div>
                     </div>
+                    <Footer className="app-auth-footer" />
                 </div>
             </div>
+            <div className="col-12 col-md-5 col-lg-6 h-100 auth-background-col">
+                <div className="auth-background-holder"></div>
+                <div className="auth-background-mask"></div>
+            </div>
         </div>
-    )
+    </div>
 }

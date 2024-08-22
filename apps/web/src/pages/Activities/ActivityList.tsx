@@ -1,9 +1,9 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Block, Button } from "ui";
-import { config } from '@renderer/config'
-import { ActivityLoading } from "@renderer/components";
-import { Pagination } from 'react-laravel-paginex'
+import { config } from '@base/config'
+import { ActivityLoading } from "@base/components";
+import { Pagination } from '@base/components'
 
 export function ActivityList(): ReactNode {
     const {

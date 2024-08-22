@@ -1,18 +1,17 @@
-import { FormEvent, useState } from 'react'
-import { Block, Button, Input } from 'ui'
-import { Link } from '@renderer/components'
+import { FormEvent, ReactNode, useState } from 'react'
+import { Block, Input, PageTitle, PrimaryButton } from 'ui'
+import { PrimaryLink } from '@base/components'
 import { useApi } from 'hooks'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { toast } from 'react-toastify'
 
-export function AddSurvey(): JSX.Element {
+export function AddSurvey(): ReactNode {
     const [survey, setSurvey] = useState<{ phase: string; date: string }>({
         phase: '',
         date: ''
     })
     const { Client, RequestState, error } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        
         url: '/surveys'
     })
 
@@ -41,14 +40,13 @@ export function AddSurvey(): JSX.Element {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Nouvelle mésure</h2>
-                <Link to="/anthropo-measure/survey/list" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Liste des mésures
-                </Link>
-            </div>
+            <PageTitle title="Nouvelle mésure">
+                <PrimaryLink icon="list" to="/anthropo-measure/survey/list">
+                    Liste des mésures
+                </PrimaryLink>
+            </PageTitle>
 
-            <Block className="mb-5">
+            <Block>
                 <form action="" onSubmit={handleSubmit} method="post">
                     <div className="row mb-4">
                         <div className="col-xl-6">
@@ -85,14 +83,11 @@ export function AddSurvey(): JSX.Element {
                         </div>
                     </div>
 
-                    <Button
+                    <PrimaryButton
                         loading={RequestState.creating}
                         icon="save"
                         type="submit"
-                        mode="primary"
-                    >
-                        Enregistrer
-                    </Button>
+                    >Enregistrer</PrimaryButton>
                 </form>
             </Block>
         </>

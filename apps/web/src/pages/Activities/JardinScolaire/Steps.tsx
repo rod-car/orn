@@ -1,4 +1,4 @@
-import { config } from "@renderer/config";
+import { config } from "@base/config";
 import { range } from "functions";
 import { useApi } from "hooks";
 import { ReactNode, useEffect, useState } from "react";

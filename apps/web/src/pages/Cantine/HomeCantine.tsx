@@ -1,9 +1,9 @@
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect } from 'react'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { Block, HomeCard, Spinner } from 'ui'
 import { NavLink } from 'react-router-dom'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 
 import './HomeCantine.modules.scss'
 
@@ -42,7 +42,7 @@ export function HomeCantine(): ReactNode {
             <div className="mb-5 d-flex justify-content-between align-items-center">
                 <h2>Tableau de bord</h2>
                 <Link to="/cantine/statistics" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Statistiques
+                    <i className="bi bi-list me-2"></i>Statistiques
                 </Link>
             </div>
 

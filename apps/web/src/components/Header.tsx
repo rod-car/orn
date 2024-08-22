@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
-import logo from '@renderer/assets/logo.png'
+import logo from '@base/assets/logo.png'
 
 export function Header(): ReactNode {
     return <NavLink className="navbar-brand fw-bold d-flex align-items-center" to="/">

@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FormEvent, useEffect, useState } from 'react'
-import { Button, Input, Select } from 'ui'
+import { Button, Input, PrimaryButton, Select } from 'ui'
 import { useApi } from 'hooks'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { toast } from 'react-toastify'
 
 type SchoolFormProps = {
@@ -16,22 +17,16 @@ const defaultSchool: School = {
     responsable: ''
 }
 
-export function SchoolForm({ editedSchool }: SchoolFormProps): JSX.Element {
+export function SchoolForm({ editedSchool }: SchoolFormProps): ReactNode {
     const [school, setSchool] = useState(defaultSchool)
-    const {
-        Client: SchoolClient,
-        error,
-        RequestState
-    } = useApi<School>({
+    const { Client: SchoolClient, error, RequestState } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: CommuneClient, datas: communes } = useApi<Commune>({
         baseUrl: config.baseUrl,
-        
         url: '/communes'
     })
 
@@ -127,14 +122,11 @@ export function SchoolForm({ editedSchool }: SchoolFormProps): JSX.Element {
                 </div>
             </div>
 
-            <Button
+            <PrimaryButton
                 loading={RequestState.creating || RequestState.updating}
                 icon="save"
                 type="submit"
-                mode="primary"
-            >
-                Enregistrer
-            </Button>
+            >Enregistrer</PrimaryButton>
         </form>
     )
 }

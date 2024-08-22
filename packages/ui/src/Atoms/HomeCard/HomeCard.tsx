@@ -20,7 +20,7 @@ export function HomeCard({
                     </div>
                     <div className="col-auto">
                         <div className={`icon icon-shape bg-${type} text-white rounded-circle shadow`}>
-                            <i className={`fa fa-${icon}`}></i>
+                            <i className={`bi bi-${icon}`}></i>
                         </div>
                     </div>
                 </div>

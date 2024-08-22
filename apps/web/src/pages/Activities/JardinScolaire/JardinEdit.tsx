@@ -2,11 +2,11 @@ import { useApi } from 'hooks'
 import { useEffect } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block } from 'ui'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { JardinForm } from './JardinForm'
 import Skeleton from 'react-loading-skeleton'
 
-export function JardinEdit(): JSX.Element {
+export function JardinEdit(): ReactNode {
     const { Client, data: garden } = useApi<Garden>({
         baseUrl: config.baseUrl,
         
@@ -32,7 +32,7 @@ export function JardinEdit(): JSX.Element {
                     <Skeleton style={{ height: 40 }} containerClassName="w-50" />
                 )}
                 <NavLink to="/scholar-garden/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Les jardins
+                    <i className="bi bi-list me-2"></i>Les jardins
                 </NavLink>
             </div>
 

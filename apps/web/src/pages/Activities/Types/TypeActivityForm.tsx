@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react'
 import { Button, Input, Textarea } from 'ui'
 import { useApi } from 'hooks'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { toast } from 'react-toastify'
 
 type TypeActivityFormProps = {
@@ -17,7 +17,7 @@ const defaultActivity: Activity = {
     files: null
 }
 
-export function TypeActivityForm({ editedActivity }: TypeActivityFormProps): JSX.Element {
+export function TypeActivityForm({ editedActivity }: TypeActivityFormProps): ReactNode {
     const [activity, setActivity] = useState(defaultActivity)
     const {
         Client,
