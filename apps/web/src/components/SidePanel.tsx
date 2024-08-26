@@ -87,7 +87,7 @@ export function SidePanel(): ReactNode {
                     ]}/>
 
                     <GroupSeparator title="Divers" />
-                    <NavItem icon="file-earmark-text-fill" to="/documents" label="Documents" />
+                    <NavItem icon="file-earmark-text-fill" active={pathname === "/documents"} to="/documents" label="Documents" />
                 </ul>
             </nav>
 
