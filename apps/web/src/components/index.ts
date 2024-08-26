@@ -25,7 +25,7 @@ export { NotificationsMenu } from './Menus/NotificationsMenu.tsx'
 export { TableLoading } from './TableLoading.tsx'
 export { ClassSelector } from './Selectors/ClassSelector.tsx'
 export { SchoolSelector } from './Selectors/SchoolSelector.tsx'
-export { ScholarYearSelector } from './Selectors/ScholarYearSelector.tsx'
+export { ScholarYearSelector, ScholarYearSelectorServer } from './Selectors/ScholarYearSelector.tsx'
 
 export { Footer } from './Includes/Footer'
 export { Header } from './Includes/Header'

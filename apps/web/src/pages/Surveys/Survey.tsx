@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { Link, PrimaryLink, InfoLink, DetailLink, EditLink } from '@base/components'
+import { PrimaryLink, InfoLink, DetailLink, EditLink } from '@base/components'
 import { config } from '@base/config'
-import { Block, Button, DangerButton, PageTitle, SecondaryButton } from 'ui'
-import { ReactNode, useEffect } from 'react'
+import { Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
+import { ReactNode, useCallback, useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
 import { format } from 'functions'
@@ -15,7 +15,7 @@ export function Survey(): ReactNode {
         key: 'data'
     })
 
-    const getDatas = async (): Promise<void> => {
+    const getDatas = async () => {
         await Client.get()
     }
 
@@ -23,14 +23,14 @@ export function Survey(): ReactNode {
         getDatas()
     }, [])
 
-    const handleDelete = async (id: number): Promise<void> => {
+    const handleDelete = useCallback(async (id: number) => {
         confirmAlert({
             title: 'Question',
             message: 'Voulez-vous supprimer ?',
             buttons: [
                 {
                     label: 'Oui',
-                    onClick: async (): Promise<void> => {
+                    onClick: async () => {
                         const response = await Client.destroy(id)
                         if (response.ok) {
                             toast('Enregistré', {
@@ -59,7 +59,7 @@ export function Survey(): ReactNode {
                 }
             ]
         })
-    }
+    }, [])
 
     return (
         <>
@@ -86,9 +86,9 @@ export function Survey(): ReactNode {
                 <table className="table table-striped table-bordered text-sm">
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Phase d'enquête</th>
                             <th>Date de début</th>
+                            <th>Année scolaire</th>
                             <th className="w-15">Actions</th>
                         </tr>
                     </thead>
@@ -103,9 +103,9 @@ export function Survey(): ReactNode {
                         {surveys &&
                             surveys.map((survey) => (
                                 <tr key={survey.id}>
-                                    <td className="fw-bold">{survey.id}</td>
-                                    <td>{survey.phase}</td>
+                                    <td className="fw-bold">{survey.phase}</td>
                                     <td>{format(survey.date, 'dd MMMM y')}</td>
+                                    <td>{survey.scholar_year}</td>
                                     <td>
                                         <DetailLink to={`/anthropo-measure/survey/details/${survey.id}`} />
                                         <EditLink to={`/anthropo-measure/survey/edit/${survey.id}`} />

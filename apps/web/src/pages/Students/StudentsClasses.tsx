@@ -2,18 +2,18 @@
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { config } from '@base/config'
-import { Block, Button, Checkbox, PageTitle } from 'ui'
+import { Block, Button, Checkbox, DangerButton, PageTitle } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
-import { format, scholar_years, in_array } from 'functions'
-import { FormEvent, ReactNode, useEffect, useState } from 'react'
-import { ClassSelector, Link, ScholarYearSelector, SchoolSelector, TableLoading } from '@base/components'
+import { format, in_array } from 'functions'
+import { FormEvent, ReactNode, useCallback, useEffect, useState } from 'react'
+import { ClassSelector, PrimaryLink, ScholarYearSelectorServer, SchoolSelector, TableLoading } from '@base/components'
 
 export function StudentsClasses(): ReactNode {
     const [schoolId, setSchoolId] = useState(0)
     const [actualClassId, setActualClassId] = useState(0)
     const [nextClassId, setNextClassId] = useState(0)
-    const [actualScholarYear, setActualScholarYear] = useState(scholar_years().at(1) as string)
-    const [nextScholarYear, setNextScholarYear] = useState(scholar_years().at(0) as string)
+    const [actualScholarYear, setActualScholarYear] = useState<string | number>(0)
+    const [nextScholarYear, setNextScholarYear] = useState<string | number>(0)
     const [studentsClasses, setStudentsClasses] = useState<number[]>([])
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
@@ -34,14 +34,20 @@ export function StudentsClasses(): ReactNode {
         key: 'data'
     })
 
+    const { Client: NextStudentClient, datas: nextStudents, RequestState: NextStudentRequestState } = useApi<Student>({
+        baseUrl: config.baseUrl,
+        url: '/students',
+        key: 'data'
+    })
+
     useEffect(() => {
         SchoolClient.get()
         ClassesClient.get()
     }, [])
 
-    useEffect(() => {
-        if (schoolId !== 0 && actualScholarYear !== "" && actualClassId !== 0) {
-            StudentClient.get({
+    const getActualStudentClasses = useCallback(async () => {
+        if (schoolId !== 0 && actualScholarYear !== 0 && actualClassId !== 0) {
+            await StudentClient.get({
                 paginate: false,
                 school_id: schoolId,
                 classe_id: actualClassId,
@@ -49,6 +55,30 @@ export function StudentsClasses(): ReactNode {
             })
         }
     }, [schoolId, actualScholarYear, actualClassId])
+
+    const getNextStudentClasses = useCallback(async () => {
+        if (schoolId !== 0 && nextScholarYear !== 0 && nextClassId !== 0) {
+            const response = await NextStudentClient.get({
+                paginate: false,
+                school_id: schoolId,
+                classe_id: nextClassId,
+                scholar_year: nextScholarYear
+            })
+
+            if (response.length) {
+                const studentIds = response.map((student: Student) => student.student_id)
+                setStudentsClasses(studentIds)
+            }
+        }
+    }, [schoolId, nextScholarYear, nextClassId])
+
+    useEffect(() => {
+        getActualStudentClasses()
+    }, [schoolId, actualScholarYear, actualClassId])
+
+    useEffect(() => {
+        getNextStudentClasses()
+    }, [schoolId, nextScholarYear, nextClassId])
 
     /**
      * Traiter si un étudiant est selectionné
@@ -149,15 +179,15 @@ export function StudentsClasses(): ReactNode {
      * @returns 
      */
     function canDisplayCheckbox(): boolean {
-        return (nextClassId !== 0 && nextClassId !== actualClassId) && (nextScholarYear !== '' && nextScholarYear !== actualScholarYear)
+        return (nextClassId !== 0 && nextClassId !== actualClassId) && (nextScholarYear !== 0 && nextScholarYear !== actualScholarYear)
     }
 
     return (
         <>
             <PageTitle title="Mise à jour des classes des étudiants">
-                <Link to="/anthropo-measure/student/list" className="btn primary-link">
-                    <i className="bi bi-list me-2"></i>Liste des étudiants
-                </Link>
+                <PrimaryLink to="/anthropo-measure/student/list" icon="list">
+                    Liste des étudiants
+                </PrimaryLink>
             </PageTitle>
 
             <Block>
@@ -168,7 +198,8 @@ export function StudentsClasses(): ReactNode {
                                 datas={schools}
                                 schoolId={schoolId}
                                 loading={SchoolRequestState.loading}
-                                setSchoolId={setSchoolId}/>
+                                setSchoolId={setSchoolId}
+                            />
                         </div>
                         <div className="col-3">
                             <ClassSelector
@@ -189,22 +220,24 @@ export function StudentsClasses(): ReactNode {
                     </div>
                     <div className="row mb-4">
                         <div className="col-6">
-                            <ScholarYearSelector
+                            <ScholarYearSelectorServer
                                 label="Année scolaire actuel"
                                 scholarYear={actualScholarYear}
-                                setScholarYear={setActualScholarYear} />
+                                setScholarYear={setActualScholarYear}
+                            />
                         </div>
                         <div className="col-6">
-                            <ScholarYearSelector
+                            <ScholarYearSelectorServer
                                 label="Année scolaire suivant"
                                 scholarYear={nextScholarYear}
-                                setScholarYear={setNextScholarYear} />
+                                setScholarYear={setNextScholarYear}
+                            />
                         </div>
                     </div>
-
                     <hr />
                     <div className="mb-3">
                         <h6 className='fw-bold mb-3 text-primary'>Liste des étudiants dans cette classe</h6>
+                        <hr />
                         <table className='table table-bordered text-sm'>
                             <thead>
                                 <tr>
@@ -212,7 +245,7 @@ export function StudentsClasses(): ReactNode {
                                     <th>Nom et prénoms</th>
                                     <th>Date de naissance</th>
                                     <th>Sexe</th>
-                                    <th>Actions</th>
+                                    <th className="w-15">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -229,10 +262,8 @@ export function StudentsClasses(): ReactNode {
                                             checked={in_array(studentsClasses, studentClass.student_id)}
                                             onCheck={() => handleStudentCheck(studentClass.student_id)}
                                             label="Admis" />}
-                                        <Button
-                                            type="button"
+                                        <DangerButton
                                             icon="trash"
-                                            mode="danger"
                                             size="sm"
                                             onClick={() => removeStudent(studentClass.student_id)}
                                         />
@@ -250,7 +281,7 @@ export function StudentsClasses(): ReactNode {
                         </table>
                     </div>
 
-                    {studentsClasses.length > 0 && <Button
+                    {studentsClasses.length > 0 && canDisplayCheckbox() && <Button
                         type="submit"
                         mode="primary"
                         icon="check"

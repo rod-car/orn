@@ -1,6 +1,6 @@
 import { AxiosError, AxiosRequestConfig } from "axios";
 import axios from "./axios";
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useAuthStore } from "../src/store/useAuthStore.ts";
 import { useConfigStore } from "../src/store/useConfigStore.ts";
 
@@ -367,9 +367,6 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
         datas, setDatas, data,
         RequestState,
         error, success,
-        Client: {
-            get, post, put, find, patch, destroy
-        }
+        Client: { get, post, put, find, patch, destroy }
     }
-
 }

@@ -96,7 +96,7 @@ export function SidePanel(): ReactNode {
                     <ul className="app-menu footer-menu list-unstyled">
                         <NavItem to="/about" active={pathname === "/about"} icon="info-circle" label="A propos" />
                         <NavItem to="/contributors" active={pathname === "/contributors"} icon="people" label="Contributeurs" />
-                        <NavItem to="/settings" active={pathname === "/settings"} icon="gear" label="Paramètres" />
+                        <NavItem to="/settings" active={pathname === "/settings"} icon="file" label="Documentations" />
                     </ul>
                 </nav>
             </div>

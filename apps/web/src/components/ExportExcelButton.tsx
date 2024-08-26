@@ -1,10 +1,16 @@
 import { PropsWithChildren, ReactNode } from "react";
 import { Spinner } from "ui";
 
+type ExcelExportButtonProps = PropsWithChildren & {
+    ExportClient: any;
+    url: string;
+    requestData?: Record<string, unknown>;
+    elements: {label: string, params: Record<string, unknown>}[];
+    loading?: boolean;
+}
+
 export function ExcelExportButton(
-    {ExportClient, url, requestData, elements, loading, children}:
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    {ExportClient: any, url: string, requestData?: Record<string, unknown>, elements: {label: string, params: Record<string, unknown>}[], loading?: boolean} & PropsWithChildren
+    {ExportClient, url, requestData, elements, loading, children}: ExcelExportButtonProps
 ): ReactNode {
     async function exportExcel(params: Record<string, unknown>) {
         const response = await ExportClient.post({...requestData, ...params}, url)
@@ -13,11 +19,12 @@ export function ExcelExportButton(
             window.open(filePath as unknown as string, '_blank')
         }
     }
+
     return <div className="dropdown me-2">
         <button
             style={{ fontSize: 'small' }}
             disabled={loading}
-            className="btn btn-warning dropdown-toggle d-flex align-items-center"
+            className="btn btn-warning dropdown-toggle d-flex align-items-center shadow"
             type="button"
             id="printDropdown"
             data-bs-toggle="dropdown"

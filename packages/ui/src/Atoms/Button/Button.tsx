@@ -22,6 +22,9 @@ type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
      */
     disabled?: boolean;
 
+    /**
+     * Si l'état du bouton est loading
+     */
     loading?: boolean;
 
     /**
@@ -69,6 +72,11 @@ export const SecondaryButton = (props: ButtonProps): ReactNode => {
     return <Button {...props} mode='secondary'></Button>
 }
 
+/**
+ * Chargement pour les boutons
+ * @param param0 
+ * @returns 
+ */
 function Spinner({ className }: { className?: string }) {
     return <div className={className}>
         <div className="spinner-border" style={{

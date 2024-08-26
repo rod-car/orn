@@ -4,7 +4,7 @@ import { Block, PageTitle } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
-import { Link, StudentFormLoading } from '@base/components'
+import { Link, PrimaryLink, StudentFormLoading } from '@base/components'
 import { StudentForm } from './StudentForm'
 import Skeleton from 'react-loading-skeleton'
 import { Flex } from '@base/components';
@@ -33,9 +33,9 @@ export function EditStudent(): ReactNode {
                 <Skeleton style={{ height: 30 }} containerClassName='w-50' />
             </Flex> : 
             <PageTitle title={student?.fullname}>
-                <Link to="/anthropo-measure/student/list" className="btn primary-link">
-                    <i className="bi bi-list me-2"></i>Liste des étudiants
-                </Link>
+                <PrimaryLink to="/anthropo-measure/student/list" icon="list">
+                    Liste des étudiants
+                </PrimaryLink>
             </PageTitle>}
 
             <Block>{student ? <StudentForm editedStudent={student} /> : <StudentFormLoading />}</Block>

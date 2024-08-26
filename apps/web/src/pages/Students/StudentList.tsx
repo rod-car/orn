@@ -1,16 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { ExcelExportButton, Link } from '@base/components'
+import { DetailLink, EditLink, ExcelExportButton, InfoLink, Link, PrimaryLink } from '@base/components'
 import { class_categories, config } from '@base/config'
-import { Block, Button, Input, PageTitle, Select } from 'ui'
-import { useEffect, useState } from 'react'
+import { Block, Button, DangerButton, Input, PageTitle, PrimaryButton, SecondaryButton, Select } from 'ui'
+import { ChangeEvent, Key, memo, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
-import { ageFull, number_array, range, scholar_years } from 'functions'
+import { ageFull, number_array, range } from 'functions'
 import { Pagination } from '@base/components'
 import Skeleton from 'react-loading-skeleton'
 
-const defaultScholarYear = scholar_years().at(1)
+type StudentClass = {
+    student: Student;
+    classe: Classes;
+    school: School;
+    id: Key | null | undefined;
+}
 
 /**
  * Page d'accueil de gestion des étudiants
@@ -20,24 +25,24 @@ export function StudentList(): ReactNode {
     const [school, setSchool] = useState(0)
     const [classe, setClasse] = useState(0)
     const [perPage, setPerPage] = useState(30)
-    const [scholarYear, setScholarYear] = useState(defaultScholarYear ?? '2023-2024')
+    const [scholarYear, setScholarYear] = useState<string | number>(2)
     const [query, setQuery] = useState<string | number>('')
     const [category, setCategory] = useState<string>('')
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
 
-    const { Client: SClient, RequestState: SRequestState, error: Serror, datas: students } = useApi<Student>({
+    const { Client: StudentClient, RequestState: SRequestState, error: Serror, datas: students } = useApi<Student>({
         baseUrl: config.baseUrl,
         url: '/students',
         key: 'data'
     })
 
-    const { Client: ScClient, datas: schools } = useApi<School>({
+    const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
         baseUrl: config.baseUrl,
         url: '/schools',
         key: 'data'
     })
 
-    const { Client: ClClient, datas: classes } = useApi<Classes>({
+    const { Client: ClassClient, datas: classes, RequestState: ClassRequestState } = useApi<Classes>({
         baseUrl: config.baseUrl,
         url: '/classes',
         key: 'data'
@@ -48,38 +53,46 @@ export function StudentList(): ReactNode {
         url: 'students'
     })
 
-    const requestData = {
-        school_id: school,
-        scholar_year: scholarYear,
-        classe_id: classe,
-        per_page: perPage,
-        q: query,
-        category: category
-    }
+    const { Client: ScholarYearClient, datas: scholarYears, RequestState: ScholarYearRequestState } = useApi<Survey>({
+        baseUrl: config.baseUrl,
+        url: 'scholar-years'
+    })
 
-    const getDatas = (): void => {
-        SClient.get(requestData)
-    }
+    const requestData = useMemo(() => {
+        return {
+            school_id: school,
+            scholar_year: scholarYear,
+            classe_id: classe,
+            per_page: perPage,
+            q: query,
+            category: category
+        }
+    }, [school, scholarYear, classe, perPage, query, category])
+
+    const getDatas = useCallback(() => {
+        StudentClient.get(requestData)
+    }, [requestData])
 
     useEffect(() => {
         getDatas()
-        ScClient.get()
-        ClClient.get()
+        SchoolClient.get()
+        ClassClient.get()
+        ScholarYearClient.get()
     }, [])
 
     /**
      * Traiter la suppréssion d'un étudiant
      * @param id 
      */
-    const handleDelete = async (id: number): Promise<void> => {
+    const handleDelete = useCallback(async (id: number) => {
         confirmAlert({
             title: 'Question',
             message: 'Voulez-vous supprimer ?',
             buttons: [
                 {
                     label: 'Oui',
-                    onClick: async (): Promise<void> => {
-                        const response = await SClient.destroy(id)
+                    onClick: async () => {
+                        const response = await StudentClient.destroy(id)
                         if (response.ok) {
                             toast('Enregistré', {
                                 closeButton: true,
@@ -107,13 +120,13 @@ export function StudentList(): ReactNode {
                 }
             ]
         })
-    }
+    }, [])
 
     /**
      * Filtrer la liste des étudiants
      * @param target 
      */
-    const filterStudents = async (target: EventTarget & (HTMLSelectElement | HTMLInputElement)): Promise<void> => {
+    const filterStudents = async ({target}: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { value, name } = target
 
         if (name === 'scholar-year') {
@@ -141,15 +154,15 @@ export function StudentList(): ReactNode {
             requestData['category'] = value
         }
 
-        await SClient.get(requestData)
+        await StudentClient.get(requestData)
     }
 
     /**
      * Permet de traiter la recherche
      * @param target 
      */
-    const handleSearch = async (target: EventTarget & HTMLInputElement): Promise<void> => {
-        const { value } = target
+    const handleSearch = useCallback(async (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { value } = event.target
 
         setQuery(value)
         requestData['q'] = value
@@ -159,47 +172,39 @@ export function StudentList(): ReactNode {
         }
 
         const newTimeoutId = setTimeout(() => {
-            filterStudents(target)
+            filterStudents(event)
         }, 500)
 
         setTimeoutId(newTimeoutId)
-    }
+    }, [setQuery, setTimeoutId, filterStudents])
 
     /**
      * Changer de la page de la pagination
      * @param data 
      */
-    const changePage = (data: { page: number }): void => {
-        SClient.get({ ...requestData, page: data.page })
-    }
+    const changePage = useCallback((data: { page: number }) => {
+        StudentClient.get({ ...requestData, page: data.page })
+    }, [requestData])
 
     return (
         <>
             <PageTitle title={`Liste des etudiants ${!SRequestState.loading ? '(' + students?.total + ')' : ''}`}>
                 <div className="d-flex align-items-between">
-                    <Button
+                    <SecondaryButton
                         icon="arrow-clockwise"
-                        mode="secondary"
-                        type="button"
                         className="me-2"
                         onClick={getDatas}
                         loading={SRequestState.loading}
-                    >
-                        Recharger
-                    </Button>
-                    <Link to="/anthropo-measure/student/add" className="btn secondary-link me-2">
-                        <i className="bi bi-plus-lg me-2"></i>Nouveau
-                    </Link>
-                    <Link to="/anthropo-measure/student/import" className="btn primary-link">
-                        <i className="bi bi-file-earmark-text me-2"></i>Importer une liste
-                    </Link>
+                    >Recharger</SecondaryButton>
+                    <PrimaryLink to="/anthropo-measure/student/add" icon="plus" className="me-2">Nouveau</PrimaryLink>
+                    <InfoLink to="/anthropo-measure/student/import" icon="file-earmark-text">Importer une liste</InfoLink>
                 </div>
             </PageTitle>
 
             {Serror && <div className="alert alert-danger">{Serror.message}</div>}
 
             <Block className="mb-5 mt-3">
-                <table className="table table-striped">
+                <table className="table table-striped m-0 table-bordered">
                     <thead>
                         <tr>
                             <th>Etablissement</th>
@@ -207,7 +212,7 @@ export function StudentList(): ReactNode {
                             <th>Classe</th>
                             <th>Catégorie</th>
                             <th>Elements</th>
-                            <th className="w-25">Actions</th>
+                            <th className="w-15">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -219,7 +224,8 @@ export function StudentList(): ReactNode {
                                     options={schools}
                                     value={school}
                                     name="school"
-                                    onChange={({ target }): Promise<void> => filterStudents(target)}
+                                    onChange={filterStudents}
+                                    loading={SchoolRequestState.loading}
                                     controlled
                                 />
                             </td>
@@ -227,9 +233,10 @@ export function StudentList(): ReactNode {
                                 <Select
                                     placeholder={null}
                                     value={scholarYear}
-                                    options={scholar_years()}
+                                    options={scholarYears}
                                     name="scholar-year"
-                                    onChange={({ target }): Promise<void> => filterStudents(target)}
+                                    onChange={filterStudents}
+                                    loading={ScholarYearRequestState.loading}
                                     controlled
                                 />
                             </td>
@@ -240,7 +247,8 @@ export function StudentList(): ReactNode {
                                     value={classe}
                                     options={classes}
                                     name="classe"
-                                    onChange={({ target }): Promise<void> => filterStudents(target)}
+                                    onChange={filterStudents}
+                                    loading={ClassRequestState.loading}
                                     controlled
                                 />
                             </td>
@@ -250,7 +258,7 @@ export function StudentList(): ReactNode {
                                     value={category}
                                     options={['Tous', ...class_categories]}
                                     name="category"
-                                    onChange={({ target }): Promise<void> => filterStudents(target)}
+                                    onChange={filterStudents}
                                     controlled
                                 />
                             </td>
@@ -260,7 +268,7 @@ export function StudentList(): ReactNode {
                                     value={perPage}
                                     options={number_array(100, 10)}
                                     name="per-page"
-                                    onChange={({ target }): Promise<void> => filterStudents(target)}
+                                    onChange={filterStudents}
                                     controlled
                                 />
                             </td>
@@ -287,92 +295,58 @@ export function StudentList(): ReactNode {
                     <Input
                         value={query}
                         name="query"
-                        onChange={({ target }): Promise<void> => handleSearch(target)}
+                        onChange={handleSearch}
                         placeholder="Rechercher un étudiant..."
                         className="w-100 me-1"
                     />
-                    <Button
-                        icon="search"
-                        loading={SRequestState.loading}
-                        type="button"
-                        mode="primary"
-                        size="sm"
-                    />
+                    <PrimaryButton icon="search" loading={SRequestState.loading} size="sm" />
                 </div>
                 <div className="table-responsive">
-                    <table style={{ fontSize: '10pt' }} className="table table-striped table-bordered mb-5">
+                    <table className="table table-striped table-bordered text-sm">
                         <thead>
                             <tr>
                                 <th>N°</th>
                                 <th>Nom</th>
                                 <th>Prenoms</th>
                                 <th className="text-nowrap">Date de naissance</th>
-                                <th>Age</th>
+                                <th>Âge</th>
                                 <th>Parents</th>
                                 <th>Classes</th>
-                                <th style={{ width: '15%' }}>Actions</th>
+                                <th className="w-15">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {SRequestState.loading &&
-                                range(10).map((number) => (
-                                    <tr key={number}>
-                                        {range(8).map((key) => (
-                                            <td key={key} className="text-center">
-                                                <Skeleton count={1} style={{ height: 30 }} />
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))}
+                            {SRequestState.loading && <ListLoading />}
                             {students.data?.length > 0 &&
-                                students.data.map(
-                                    (studentClass: {
-                                        student: Student
-                                        classe: Classes
-                                        id: Key | null | undefined
-                                    }) => {
-                                        const student = studentClass.student
-                                        const classe = studentClass.classe
-                                        return (
-                                            <tr key={studentClass.id}>
-                                                <td className="fw-bold">{student.number}</td>
-                                                <td>{student.firstname}</td>
-                                                <td>{student.lastname}</td>
-                                                <td>{student.birth_date}</td>
-                                                <td className="text-nowrap">
-                                                    {ageFull(student.birth_date)}
-                                                </td>
-                                                <td>{student.parents}</td>
-                                                <td className="text-nowrap">
-                                                    {classe.name} - {studentClass.school.name}
-                                                </td>
-                                                <td className="text-nowrap">
-                                                    <Link
-                                                        className="btn btn-sm me-2 btn-info text-white"
-                                                        to={`/anthropo-measure/student/details/${student.id}`}
-                                                    >
-                                                        <i className="bi bi-folder"></i>
-                                                    </Link>
-                                                    <Link
-                                                        className="btn btn-sm me-2 btn-primary"
-                                                        to={`/anthropo-measure/student/edit/${student.id}`}
-                                                    >
-                                                        <i className="bi bi-pencil-square"></i>
-                                                    </Link>
-                                                    <Button
-                                                        type="button"
-                                                        mode="danger"
-                                                        icon="trash"
-                                                        size="sm"
-                                                        onClick={(): void => {
-                                                            handleDelete(student.id)
-                                                        }}
-                                                    />
-                                                </td>
-                                            </tr>
-                                        )
-                                    }
-                                )}
+                                students.data.map((studentClass: StudentClass) => {
+                                    const student = studentClass.student
+                                    const classe = studentClass.classe
+                                    return (
+                                        <tr key={studentClass.id}>
+                                            <td className="fw-bold">{student.number}</td>
+                                            <td>{student.firstname}</td>
+                                            <td>{student.lastname}</td>
+                                            <td>{student.birth_date}</td>
+                                            <td className="text-nowrap">
+                                                {ageFull(student.birth_date)}
+                                            </td>
+                                            <td>{student.parents}</td>
+                                            <td className="text-nowrap">
+                                                {classe.name} - {studentClass.school.name}
+                                            </td>
+                                            <td className="text-nowrap">
+                                                <DetailLink className="me-2" to={`/anthropo-measure/student/details/${student.id}`} />
+                                                <EditLink className="me-2" to={`/anthropo-measure/student/edit/${student.id}`} />
+                                                <DangerButton icon="trash" size="sm"
+                                                    onClick={() => {
+                                                        handleDelete(student.id)
+                                                    }}
+                                                />
+                                            </td>
+                                        </tr>
+                                    )
+                                }
+                            )}
                             {!SRequestState.loading && students.total === 0 && (
                                 <tr>
                                     <td colSpan={8} className="text-center">
@@ -390,3 +364,15 @@ export function StudentList(): ReactNode {
         </>
     )
 }
+
+const ListLoading = memo(function() {
+    return range(10).map((number) => (
+        <tr key={number}>
+            {range(8).map((key) => (
+                <td key={key} className="text-center">
+                    <Skeleton count={1} style={{ height: 30 }} />
+                </td>
+            ))}
+        </tr>
+    ))
+})

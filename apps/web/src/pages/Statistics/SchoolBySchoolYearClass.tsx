@@ -29,7 +29,7 @@ export function SchoolBySchoolYearClass(): ReactNode {
             </div>
             {error && <div className="alert alert-danger">{error.message}</div>}
 
-            {RequestState.loading && <Spinner />}
+            {RequestState.loading && <Spinner isBorder size="sm" />}
 
             {realData &&
                 Object.keys(realData).map((scholar_year) => {

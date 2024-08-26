@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { useParams } from 'react-router-dom'
-import { Block, Button, Input, Select } from 'ui'
+import { Block, Button, Input, PageTitle, SecondaryButton, Select } from 'ui'
 import { config } from '@base/config'
-import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { ageMonth, ageYear, number_array, range } from 'functions'
-import { ExcelExportButton, Link } from '@base/components'
+import { DetailLink, ExcelExportButton, InfoLink, Link, PrimaryLink } from '@base/components'
 import { Pagination } from '@base/components'
 import Skeleton from 'react-loading-skeleton'
 
@@ -80,7 +81,7 @@ export function DetailsSurvey(): ReactNode {
      * Traiter la recherche d'un étudiant
      * @param target 
      */
-    const handleSearch = async (target: EventTarget & HTMLInputElement): Promise<void> => {
+    const handleSearch = async (target: EventTarget & HTMLInputElement) => {
         const { value } = target
 
         setQuery(value)
@@ -95,22 +96,26 @@ export function DetailsSurvey(): ReactNode {
         setTimeoutId(newTimeoutId)
     }
 
+    const surveyDetails = useMemo(() => {
+        if (survey && survey.phase) return `(${survey.phase} / ${survey.scholar_year}) - ${survey?.students?.total} étudiant(s)`;
+        return "";
+    }, [survey])
+
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h5 className="m-0 text-primary fw-bold">Mésure phase: {survey && survey.phase} ({survey?.date}) - {survey?.students?.total} étudiant(s)</h5>
+            <PageTitle title={`Détails de la mésure ${surveyDetails}`}>
                 <div className="d-flex">
-                    <Link to="/anthropo-measure/survey/list" className="btn secondary-link me-2">
-                        <i className="bi bi-list me-2"></i>Liste des mésures
-                    </Link>
-                    <Link to={`/anthropo-measure/survey/${id}/import-result`} className="btn primary-link">
-                        <i className="bi bi-file-earmark-text me-2"></i>Importer des résultat
-                    </Link>
+                    <PrimaryLink to="/anthropo-measure/survey/list" icon="list" className="me-2">
+                        Liste des mésures
+                    </PrimaryLink>
+                    <InfoLink to={`/anthropo-measure/survey/${id}/import-result`} icon="file-earmark-text">
+                        Importer des résultat
+                    </InfoLink>
                 </div>
-            </div>
+            </PageTitle>
 
-            <Block className="mb-5 mt-3 p-1">
-                <table className="table table-striped">
+            <Block className="mb-5 mt-3">
+                <table className="table table-striped table-bordered m-0">
                     <thead>
                         <tr>
                             <th>Nombre d'étudiants</th>
@@ -142,7 +147,7 @@ export function DetailsSurvey(): ReactNode {
                                     controlled
                                 />
                             </td>
-                            <td className="d-flex">
+                            <td className="d-flex align-items-center">
                                 <ExcelExportButton
                                     ExportClient={ExportClient}
                                     url={'/' + survey?.id + '/to-excel'}
@@ -154,13 +159,11 @@ export function DetailsSurvey(): ReactNode {
                                         { params: { type: 'csv', result: true }, label: "Excel avec résultats CSV" },
                                         { params: { type: 'xlsx', result: true }, label: "Excel avec résultats XLSX" }
                                     ]}>Exporter les résultats</ExcelExportButton>
-                                <Button
+                                <SecondaryButton
                                     loading={RequestState.loading}
                                     onClick={refresh}
                                     icon="arrow-clockwise"
-                                    type="button"
-                                    mode="secondary"
-                                >Recharger</Button>
+                                >Recharger</SecondaryButton>
                             </td>
                         </tr>
                     </tbody>
@@ -262,13 +265,7 @@ export function DetailsSurvey(): ReactNode {
                                             {student.gender !== 'Fille' ? student.pivot.z_height_age : '-'}
                                         </td>
                                         <td className="text-center text-nowrap">
-                                            <Link
-                                                to={`/anthropo-measure/student/details/${student.id}`}
-                                                style={{ fontSize: '9pt' }}
-                                                className="btn btn-info btn-sm me-1"
-                                            >
-                                                <i className="bi bi-folder"></i>
-                                            </Link>
+                                            <DetailLink to={`/anthropo-measure/student/details/${student.id}`} />
                                         </td>
                                     </tr>
                                 ))}
