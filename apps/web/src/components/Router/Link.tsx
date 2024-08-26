@@ -14,15 +14,15 @@ export function Link(props: LinkProps): ReactNode {
 }
 
 export function PrimaryLink(props: LinkProps): ReactNode {
-    return <Link {...props} className={`btn btn-primary ${props.className}`} />
+    return <Link {...props} className={`btn btn-primary shadow ${props.className}`} />
 }
 
 export function InfoLink(props: LinkProps): ReactNode {
-    return <Link {...props} className={`btn btn-info text-white ${props.className}`} />
+    return <Link {...props} className={`btn btn-info shadow text-white ${props.className}`} />
 }
 
 export function EditLink(props: LinkProps): ReactNode {
-    return <Link {...props} className="btn-sm me-2 btn btn-primary">
+    return <Link {...props} className="btn-sm me-2 btn btn-primary shadow">
         <i className="bi bi-pencil-square"></i>
     </Link>
 }

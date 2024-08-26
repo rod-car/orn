@@ -6,7 +6,7 @@ import Skeleton from 'react-loading-skeleton'
 import { range } from 'functions'
 import { ExcelExportButton } from '@base/components/ExportExcelButton.tsx'
 
-export function StudentBySchoolZValue({scholarYear, surveyId}: {scholarYear: string, surveyId?: number}): ReactNode {
+export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNode {
     const { Client, RequestState, error, datas } = useApi<SurveySchoolZ>({
         baseUrl: config.baseUrl,
         url: '/students'
@@ -22,7 +22,6 @@ export function StudentBySchoolZValue({scholarYear, surveyId}: {scholarYear: str
         if (surveyId !== undefined) url += '/' + surveyId.toString()
 
         await Client.get({
-            scholar_year: scholarYear,
             regenerate: true
         }, url)
     }, [surveyId])
@@ -31,7 +30,7 @@ export function StudentBySchoolZValue({scholarYear, surveyId}: {scholarYear: str
         getData()
     }, [surveyId])
 
-    const schoolsName = datas.headers
+    const schoolsName = datas.headers as Record<string, string>
     const realData = datas.datas as SurveySchoolZ[]
 
     return <>
@@ -40,16 +39,17 @@ export function StudentBySchoolZValue({scholarYear, surveyId}: {scholarYear: str
         {RequestState.loading && <LoadingComponent />}
 
         {realData &&
-            Object.keys(realData).map(survey_id => {
-                const data = realData[survey_id]
+            Object.keys(realData).map((surveyDetails: string) => {
+                const data = realData[surveyDetails]
+                const parts = surveyDetails.split("/") as [string, string, string]
 
-                return <div key={survey_id} className="mb-5">
+                return <div key={parts[0]}>
                     <div className="d-flex align-items-center justify-content-between mb-4">
-                        <h6 className="text-primary fw-bold m-0">Phase: {survey_id}</h6>
+                        <h6 className="text-primary fw-bold m-0">Phase {parts[1]} pour l'année {parts[2]}</h6>
                         <ExcelExportButton
                             ExportClient={ExportClient}
                             loading={ExportRequestState.creating}
-                            url={`/${survey_id}/metrics-to-excel`}
+                            url={`/${parts[0]}/metrics-to-excel`}
                             elements={[
                                 {label: "Excel CSV", params: {type: 'csv'}},
                                 {label: "Excel XLSX", params: {type: 'xlsx'}}
@@ -59,41 +59,49 @@ export function StudentBySchoolZValue({scholarYear, surveyId}: {scholarYear: str
                     <hr />
 
                     <div className="table-responsive">
-                        {Object.keys(data).map(abaqueName => {
+                        {Object.keys(data).map((abaqueName, index) => {
                             const datas = data[abaqueName]
                             const headers = Object.keys(datas).sort((a, b) => parseFloat(a) - parseFloat(b))
 
-                            return <div key={abaqueName} className='mb-3'>
+                            return <div key={index} className='mb-3'>
                                 <h6 className="mb-3 fw-bold">{abaqueName}</h6>
                                 <table className="table table-striped table-bordered text-sm">
                                     <thead>
                                         <tr className="text-nowrap">
                                             <th></th>
-                                            {headers.map(header => <th key={header}>{header}</th>)}
+                                            {headers.map((header, index) => <th key={index}>{header}</th>)}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {schoolsName && schoolsName.map(schoolName => <tr key={schoolName}>
+                                        {schoolsName && Object.values(schoolsName).map((schoolName: string) => <tr key={schoolName}>
                                             <td>{schoolName}</td>
-                                            {headers.map(header => <td key={header} className={header === 'TOTAL' ? 'fw-bold' : ''}>
-                                                {datas[header][schoolName]}
+                                            {headers.map((header, index) => <td key={index} className={header === 'TOTAL' ? 'fw-bold' : ''}>
+                                                {JSON.stringify(datas[header][schoolName])}
                                             </td>)}
                                         </tr>)}
                                         <tr>
                                             <td>TAUX</td>
-                                            {headers.map(header => <td key={header}>{datas[header]['TAUX GENERALE']} %</td>)}
+                                            {headers.map((header, index) => <td key={index}>{datas[header]['TAUX GENERALE']} %</td>)}
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>})}
+                                <hr />
+                            </div>
+                        })}
                     </div>
                 </div>
         })}
     </>
 }
 
+
+/**
+ * Composant de chargement
+ * 
+ * @returns
+ */
 function LoadingComponent(): ReactNode {
-    const headers = [1, 2, 3, 4, 5, 6, 2, 3]
+    const headers = [1, 2, 3, 4, 5, 6, 7, 8]
     const schools = range(10)
     return <div className="mb-5">
         <div className="d-flex align-items-center justify-content-between mb-4">

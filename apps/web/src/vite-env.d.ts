@@ -101,6 +101,8 @@ type Survey = {
     id: number
     date: string
     phase: number
+    scholar_year_id: number | string;
+    scholar_year: string
     students: Student[]
 }
 
@@ -250,4 +252,8 @@ type FileDocument = {
     file?: File;
     creator?: User;
     updator?: User;
+}
+
+type StudentImport = Student & {
+    scholar_year: number | string;
 }

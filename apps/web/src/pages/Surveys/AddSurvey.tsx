@@ -1,25 +1,39 @@
-import { FormEvent, ReactNode, useState } from 'react'
-import { Block, Input, PageTitle, PrimaryButton } from 'ui'
-import { PrimaryLink } from '@base/components'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { ChangeEvent, Dispatch, FormEvent, ReactNode, SetStateAction, useCallback, useEffect, useState } from 'react'
+import { Block, Input, PageTitle, PrimaryButton, Select } from 'ui'
+import { PrimaryLink, ScholarYearSelectorServer } from '@base/components'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
 
+type SurveyFormState = {
+    phase: string;
+    date: string;
+}
+
 export function AddSurvey(): ReactNode {
-    const [survey, setSurvey] = useState<{ phase: string; date: string }>({
-        phase: '',
-        date: ''
-    })
+    const [survey, setSurvey] = useState<SurveyFormState>({ phase: '', date: '' })
+    const [scholarYear, setScholarYear] = useState<string | number>(0);
+
     const { Client, RequestState, error } = useApi<Survey>({
         baseUrl: config.baseUrl,
         url: '/surveys'
     })
 
-    const handleSubmit = async (e: FormEvent): Promise<void> => {
+    const handleInputChange = useCallback(({ target: { name, value } }: ChangeEvent<HTMLInputElement>) => {
+        setSurvey(prevState => ({
+            ...prevState,
+            [name]: value
+        }))
+    }, [])
+
+    const handleSubmit = useCallback(async (e: FormEvent) => {
         e.preventDefault()
+
         const response = await Client.post({
-            phase: parseInt(survey.phase),
-            date: survey.date
+            phase: parseInt(survey.phase, 10),
+            date: survey.date,
+            scholar_year_id: scholarYear
         })
 
         if (response.ok) {
@@ -36,7 +50,7 @@ export function AddSurvey(): ReactNode {
                 position: config.toastPosition
             })
         }
-    }
+    }, [Client, survey])
 
     return (
         <>
@@ -47,17 +61,11 @@ export function AddSurvey(): ReactNode {
             </PageTitle>
 
             <Block>
-                <form action="" onSubmit={handleSubmit} method="post">
+                <form onSubmit={handleSubmit} method="post">
                     <div className="row mb-4">
-                        <div className="col-xl-6">
+                        <div className="col-xl-4">
                             <Input
-                                onChange={({ target }): void => {
-                                    const phase = target.value
-                                    setSurvey({ ...survey, phase: phase })
-                                    if (phase.length > 0 && error?.data.errors.phase) {
-                                        error.data.errors.phase = null
-                                    }
-                                }}
+                                onChange={handleInputChange}
                                 value={survey.phase}
                                 error={error?.data?.errors?.phase}
                                 label="Phase"
@@ -65,21 +73,18 @@ export function AddSurvey(): ReactNode {
                                 type="number"
                             />
                         </div>
-                        <div className="col-xl-6">
+                        <div className="col-xl-4">
                             <Input
-                                onChange={({ target }): void => {
-                                    const date = target.value
-                                    setSurvey({ ...survey, date: date })
-                                    if (date.length > 0 && error?.data.errors.date) {
-                                        error.data.errors.date = null
-                                    }
-                                }}
+                                onChange={handleInputChange}
                                 value={survey.date}
                                 error={error?.data?.errors?.date}
-                                label="Date"
-                                type="date"
+                                label="Date de début"
                                 name="date"
+                                type="date"
                             />
+                        </div>
+                        <div className="col-xl-4">
+                            <ScholarYearSelectorServer scholarYear={scholarYear} setScholarYear={setScholarYear} />
                         </div>
                     </div>
 
@@ -87,7 +92,9 @@ export function AddSurvey(): ReactNode {
                         loading={RequestState.creating}
                         icon="save"
                         type="submit"
-                    >Enregistrer</PrimaryButton>
+                    >
+                        Enregistrer
+                    </PrimaryButton>
                 </form>
             </Block>
         </>

@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import * as xlsx from 'xlsx'
 
 export function useExcelReader() {
-    const [json, setJson] = useState<Object[]>([])
+    const [json, setJson] = useState<Record<string, string>[]>([])
     const [importing, setImporting] = useState<boolean>(false)
     const [exporting, setExporting] = useState<boolean>(false)
 
-    const toJSON = (target: HTMLInputElement) => {
+    const toJSON = useCallback((target: HTMLInputElement) => {
         setImporting(true)
 
         if (target.files) {
@@ -17,12 +17,12 @@ export function useExcelReader() {
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
                 const json = xlsx.utils.sheet_to_json(worksheet);
-                setJson(json as Object[])
+                setJson(json as Record<string, string>[])
                 setImporting(false)
             };
             reader.readAsArrayBuffer(target.files[0]);
         }
-    }
+    }, [])
 
     const toExcel = (data: unknown[][], fileName: string = "File.xlsx") => {
         setExporting(true)

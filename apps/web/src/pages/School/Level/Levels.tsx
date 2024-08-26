@@ -78,11 +78,10 @@ export function Levels(): ReactNode {
                     />
                 )}
 
-                <table className="table table-striped text-sm">
+                <table className="table table-striped text-sm table-bordered m-0">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>ID</th>
                             <th>Label</th>
                             <th>Description</th>
                             <th style={{ width: '15%' }}>Actions</th>
@@ -91,7 +90,7 @@ export function Levels(): ReactNode {
                     <tbody>
                         {RequestState.loading && (
                             <tr>
-                                <td colSpan={5} className="text-center">
+                                <td colSpan={4} className="text-center">
                                     Chargement...
                                 </td>
                             </tr>
@@ -100,7 +99,6 @@ export function Levels(): ReactNode {
                             datas.map((level, index) => (
                                 <tr key={level.id}>
                                     <td className="fw-bold">{index + 1}</td>
-                                    <td>{level.id}</td>
                                     <td>{level.label}</td>
                                     <td>{level.description ?? 'N/A'}</td>
                                     <td>

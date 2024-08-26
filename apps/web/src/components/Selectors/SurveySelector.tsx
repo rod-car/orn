@@ -1,13 +1,20 @@
 import { Dispatch, SetStateAction, ReactNode } from "react";
 import { Select } from "ui";
 
-export function SurveySelector({datas, surveyId, setSurveyId, loading}: {datas: Survey[], surveyId: number, setSurveyId: Dispatch<SetStateAction<number>>, loading?: boolean}): ReactNode {
+type SurveySelectorProps = {
+    datas: Survey[];
+    surveyId: number;
+    setSurveyId: Dispatch<SetStateAction<number>>;
+    loading?: boolean;
+}
+
+export function SurveySelector({datas, surveyId, setSurveyId, loading}: SurveySelectorProps): ReactNode {
     return <Select
         options={datas}
-        config={{optionKey: 'id', valueKey: 'phase'}}
+        config={{optionKey: 'id', valueKey: 'label'}}
         value={surveyId}
         onChange={({target}) => setSurveyId(parseInt(target.value))}
-        label="Phase d'enquête"
+        label="Phase de la mésure"
         placeholder="Tous"
         loading={loading}
         controlled

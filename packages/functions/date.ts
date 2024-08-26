@@ -31,9 +31,20 @@ export const ageLong = (birth_date: string | null): string => {
     const normalMonths = ageYear * 12;
     const leftMonths = ageMonth - normalMonths
 
-    return ageYear.toString() + " ans " + leftMonths.toString() + " mois"
+    const age = (ageYear > 0 ? ageYear.toString() + " ans " : "") + (leftMonths > 0 ? (leftMonths.toString() + " mois") : "")
+
+    if (age.trim() === "") return "Moins d'un mois"
+    return age
 }
 
+
+/**
+ * Permet de calculer l'age en année
+ * 
+ * @param birth_date 
+ * @param date_compare 
+ * @returns number
+ */
 export const getAgeYear = (birth_date: string, date_compare: string | undefined = undefined): number => {
     const date = parse(birth_date)
     const currentDate = date_compare === undefined ? new Date : parse(date_compare)
@@ -41,13 +52,28 @@ export const getAgeYear = (birth_date: string, date_compare: string | undefined 
 }
 
 
+/**
+ * Permet de calculer l'age en mois
+ * 
+ * @param birth_date 
+ * @param date_compare 
+ * @returns number
+ */
 export const getAgeMonth = (birth_date: string, date_compare: string | undefined = undefined): number => {
     const date = parse(birth_date)
     const currentDate = date_compare === undefined ? new Date : parse(date_compare)
     return differenceInMonths(currentDate, date)
 }
 
-const parse = (_date: string, _format: string = "yyyy-MM-dd", _delimiter: string = "-") => {
+
+/**
+ * Permet de parser une date donnée
+ * @param _date 
+ * @param _format 
+ * @param _delimiter 
+ * @returns Date
+ */
+const parse = (_date: string, _format: string = "yyyy-MM-dd", _delimiter: string = "-"): Date => {
     let formatLowerCase = _format.toLowerCase();
     let formatItems = formatLowerCase.split(_delimiter);
     let dateItems = _date.split(_delimiter);
@@ -57,7 +83,7 @@ const parse = (_date: string, _format: string = "yyyy-MM-dd", _delimiter: string
     let month = parseInt(dateItems[monthIndex]);
     month -= 1;
 
-    let formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
+    let formatedDate = new Date(parseInt(dateItems[yearIndex]), month, parseInt(dateItems[dayIndex]));
     return formatedDate;
 }
 

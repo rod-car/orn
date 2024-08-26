@@ -1,26 +1,34 @@
-import { Block, Button, Input, PageTitle, Spinner } from 'ui'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Block, Input, PageTitle, PrimaryButton, Spinner } from 'ui'
 import { useApi, useExcelReader } from 'hooks'
-import { ChangeEvent, useState } from 'react'
-import { Link } from '@base/components'
+import { ChangeEvent, ReactNode, useCallback, useState } from 'react'
+import { PrimaryLink, ScholarYearSelectorServer } from '@base/components'
 import { config } from '@base/config'
 import { isDate } from 'functions'
 import { toast } from 'react-toastify'
-import { Modal } from '@base/components/Bootstrap';
+import { Col, Modal, Row } from '@base/components/Bootstrap';
 
 export function ImportStudent(): ReactNode {
     const [isOpen, setIsOpen] = useState(false)
+    const [scholarYear, setScholarYear] = useState<string|number>(0)
+
     const { json, importing, toJSON, resetJSON } = useExcelReader()
-    const { Client, RequestState } = useApi<Student>({
+    const { Client, RequestState } = useApi<StudentImport>({
         baseUrl: config.baseUrl,
         url: '/students'
     })
 
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        e.preventDefault()
-        toJSON(e.target)
-    }
+    const handleFileChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault()
+        toJSON(event.target)
 
-    const save = async (): Promise<void> => {
+        toast('Affichage des données en cours', {
+            type: 'info',
+            position: config.toastPosition
+        })
+    }, [toJSON])
+
+    const save = useCallback(async () => {
         toast('Importation en cours', {
             type: 'info',
             closeButton: false,
@@ -28,7 +36,7 @@ export function ImportStudent(): ReactNode {
             position: config.toastPosition
         })
 
-        const response = await Client.post(json as unknown as Student, '/import')
+        const response = await Client.post({...json as unknown as Student, scholar_year: scholarYear}, '/import')
 
         if (response.ok) {
             toast(response.message, {
@@ -44,14 +52,14 @@ export function ImportStudent(): ReactNode {
                 position: config.toastPosition
             })
         }
-    }
+    }, [json])
 
     return (
         <>
             <PageTitle title="Importer une liste des étudiants">
-                <Link to="/anthropo-measure/student/list" className="btn primary-link">
-                    <i className="bi bi-list me-2"></i>Liste des étudiants
-                </Link>
+                <PrimaryLink to="/anthropo-measure/student/list" icon="list">
+                    Liste des étudiants
+                </PrimaryLink>
             </PageTitle>
 
             <Block className="mb-5">
@@ -71,15 +79,26 @@ export function ImportStudent(): ReactNode {
 
                     <p className='text-justify'><b><u>NB:</u></b> A bien respecter ces nomenclatures (les accents a respecter ainsi que les majuscules et miniscules) afin d'éviter des problèmes de fonctionnement de l'importation.</p>
                 </Modal>
-                <form action="" encType="multipart/form-data">
-                    <Input
-                        type="file"
-                        required={true}
-                        label="Selectionner un fichier"
-                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                        onChange={handleFileChange}
-                    />
-                    <i style={{ cursor: 'pointer', position: 'absolute', right: 35, top: 63 }} onClick={() => setIsOpen(true)} className="bi bi-info-circle"></i>
+                <form>
+                    <Row>
+                        <Col n={6}>
+                            <ScholarYearSelectorServer
+                                label="Année scolaire"
+                                scholarYear={scholarYear}
+                                setScholarYear={setScholarYear}
+                            />
+                        </Col>
+                        <Col n={6}>
+                            <Input
+                                type="file"
+                                required={true}
+                                label="Selectionner un fichier"
+                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                onChange={handleFileChange}
+                            />
+                            <i style={{ cursor: 'pointer', position: 'absolute', right: 35, top: 63 }} onClick={() => setIsOpen(true)} className="bi bi-info-circle"></i>
+                        </Col>
+                    </Row>
                 </form>
 
                 <hr />
@@ -88,15 +107,11 @@ export function ImportStudent(): ReactNode {
                         Affichage temporaire des données{' '}
                         {json.length > 0 && `(${json.length} Etudiant(s))`}
                     </h6>
-                    {json.length > 0 && (
-                        <Button
-                            loading={RequestState.creating}
-                            icon="save"
-                            type="button"
-                            mode="primary"
-                            onClick={save}
-                        >Enregistrer</Button>
-                    )}
+                    {json.length > 0 && scholarYear as number > 0 && <PrimaryButton
+                        loading={RequestState.creating}
+                        icon="save"
+                        onClick={save}
+                    >Enregistrer</PrimaryButton>}
                 </div>
 
                 <div className="table-responsive border">
@@ -110,19 +125,18 @@ export function ImportStudent(): ReactNode {
                                 <th>Parents</th>
                                 <th>Classe</th>
                                 <th>Etablissement</th>
-                                <th className="text-nowrap">Annee scolaire</th>
                             </tr>
                         </thead>
                         <tbody>
                             {json.length <= 0 && (
                                 <tr>
-                                    <td className="text-center" colSpan={9}>
+                                    <td className="text-center" colSpan={8}>
                                         Aucun données
                                     </td>
                                 </tr>
                             )}
-                            {json.map((json) => (
-                                <tr key={json['numero']}>
+                            {json.map((json, index) => (
+                                <tr key={index}>
                                     <td>{json['numero']}</td>
                                     <td>{json['noms']}</td>
                                     <td>
@@ -134,27 +148,19 @@ export function ImportStudent(): ReactNode {
                                     <td>{json['parents']}</td>
                                     <td>{json['classe']}</td>
                                     <td>{json['etablissement']}</td>
-                                    <td>{json['annee_scolaire']}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
 
-                {importing && <Spinner />}
+                {importing && <Spinner className="mt-4 text-center" isBorder />}
 
-                {json.length > 0 && (
-                    <Button
-                        loading={RequestState.creating}
-                        icon="save"
-                        type="button"
-                        mode="primary"
-                        onClick={save}
-                        className="mb-5"
-                    >
-                        Enregistrer
-                    </Button>
-                )}
+                {json.length > 0 && scholarYear as number > 0 && <PrimaryButton
+                    loading={RequestState.creating}
+                    icon="save"
+                    onClick={save}
+                >Enregistrer</PrimaryButton>}
             </Block>
         </>
     )

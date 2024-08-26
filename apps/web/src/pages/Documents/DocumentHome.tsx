@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { BasicCard, Link } from "@base/components";
 import { Col, Row } from "@base/components/Bootstrap";
-import { ChangeEvent, ReactNode, useEffect, useState } from "react";
-import { Button, Input, PageTitle } from "ui";
+import { ChangeEvent, memo, ReactNode, useEffect, useState } from "react";
+import { Input, PageTitle, PrimaryButton } from "ui";
 import icons from "@base/assets/icons";
 import { useApi, useAuthStore } from "hooks";
 import { config } from "@base/config";
@@ -67,11 +67,9 @@ export function DocumentHome(): ReactNode {
                 placeholder="Rechercher un (des) document(s)..."
                 className="w-100 me-1"
             />
-            <Button
+            <PrimaryButton
                 icon="search"
                 loading={RequestState.loading}
-                type="button"
-                mode="primary"
                 size="sm"
             />
         </div>
@@ -93,20 +91,20 @@ export function DocumentHome(): ReactNode {
  *
  * @returns {ReactNode}
  */
-function DocumentsLoading(): ReactNode {
+const DocumentsLoading = memo(function(): ReactNode {
     return <Row className="mb-3">
         {range(12).map(index => <Col key={index} className="mb-3" xl={3}>
             <DocumentCardLoading />
         </Col>)}
     </Row>
-}
+})
 
 /**
  * Placeholder pour le chargement de la Card
  *
  * @returns {ReactNode}
  */
-function DocumentCardLoading(): ReactNode {
+const DocumentCardLoading = memo(function(): ReactNode {
     return <>
         <BasicCard title={<Skeleton height={30} style={{ width: 125 }} />} actionLabel={<Skeleton height={40} style={{ width: 100 }} />}>
             <div className="text-center">
@@ -117,7 +115,7 @@ function DocumentCardLoading(): ReactNode {
             </p>
         </BasicCard>
     </>
-}
+})
 
 /**
  * Card pour representer le document
