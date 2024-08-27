@@ -1,5 +1,8 @@
-export { Pagination } from './Pagination.tsx';
+export { Loading, ActivityBlock } from './Activities.tsx';
 
+export { RichTextEditor } from './RichTextEditor.tsx';
+
+export { Pagination } from './Pagination.tsx';
 export { Flex } from './Bootstrap/Flex.tsx';
 export { Alert, AlertDanger } from './Bootstrap/Alert.tsx';
 

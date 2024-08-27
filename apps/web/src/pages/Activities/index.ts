@@ -1,3 +1,4 @@
+export { ActivityShow } from "./ActivityShow.tsx";
 export { ActivityStatistics } from "./ActivityStatistics";
 export { TypeActivityForm } from "./Types/TypeActivityForm";
 export { ActivityTypeAdd } from "./Types/ActivityTypeAdd";

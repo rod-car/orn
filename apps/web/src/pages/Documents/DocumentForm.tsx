@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from "hooks";
 import { config } from "@base/config";
-import { FormEvent, ReactNode, useEffect, useId, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, ReactNode, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Block, Button, Input } from "ui";
 import 'react-quill/dist/quill.snow.css';
-import ReactQuill from 'react-quill';
 import { format } from "functions";
+import { RichTextEditor } from "@base/components/index.ts";
 
 export function DocumentForm({ editedDocument }: { editedDocument?: FileDocument }): ReactNode {
     const defaultDocument: FileDocument = {
@@ -74,7 +74,7 @@ export function DocumentForm({ editedDocument }: { editedDocument?: FileDocument
         }
     }
 
-    const handleChange = (target: EventTarget & (HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement)) => {
+    const handleChange = ({target}: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
         setDocument({ ...document, [target.name]: (target.name === 'file' && 'files' in target) ? target.files?.item(0) : target.value })
         if (target.value.length > 0 && error?.data?.errors && error?.data?.errors[target.name]) {
             error.data.errors[target.name] = []
@@ -90,7 +90,7 @@ export function DocumentForm({ editedDocument }: { editedDocument?: FileDocument
                         placeholder="Ex: Rapport mensuel Janvier 2024"
                         value={document.title}
                         error={error?.data?.errors?.title}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         name="title"
                     />
                 </div>
@@ -102,7 +102,7 @@ export function DocumentForm({ editedDocument }: { editedDocument?: FileDocument
                         label="Date"
                         value={document.date}
                         error={error?.data?.errors?.date}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         type="date"
                         name="date"
                     />
@@ -113,7 +113,7 @@ export function DocumentForm({ editedDocument }: { editedDocument?: FileDocument
                         type='file'
                         accept='application/msword, .docx, application/vnd.ms-excel, .xlsx, application/vnd.openxmlformats-officedocument.presentationml.presentation, .ppt, .pptx, application/pdf'
                         error={error?.data?.errors?.file}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         name="file"
                         required={false}
                         ref={fileRef}
@@ -132,13 +132,4 @@ export function DocumentForm({ editedDocument }: { editedDocument?: FileDocument
             </Button>
         </form>
     </Block>
-}
-
-type RTEProps = {label?: string, theme: string, value: string, onChange: (value: string) => void}
-function RichTextEditor({label, theme, value, onChange}: RTEProps): ReactNode {
-    const id = useId()
-    return <div className="form-group">
-        {label && <label style={{ fontSize: 'small' }} className="form-label fw-semibold" htmlFor={id}>{label}</label>}
-        <ReactQuill id={id} theme={theme} value={value} onChange={onChange} />
-    </div>
 }

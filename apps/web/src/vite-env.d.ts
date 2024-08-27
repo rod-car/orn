@@ -112,6 +112,7 @@ type Activity = {
     date: string
     place: string
     details: string
+    images?: {path: string, id: number}[]
     files: File[] | null
 }
 

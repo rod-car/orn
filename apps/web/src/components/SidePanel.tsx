@@ -54,6 +54,13 @@ export function SidePanel(): ReactNode {
                         { to: '/import-conso', label: 'Statistique des consommations', can: isAdmin }
                     ]}/>
 
+                    <GroupSeparator title="Activités" />
+                    <NavItem icon="activity" active={pathname === "/activities" || pathname.includes("/activities/show")} to="/activities" label="Les dernières activités" />
+                    <DropDown label="Gestion des activités" base="/activities/admin" icon="gear" menus={[
+                        { to: '/add', label: 'Ajouter un activité', can: isAdmin },
+                        { to: '/list', label: 'Liste des activités' }
+                    ]}/>
+
                     <GroupSeparator title="Gestion des prix" />
                     <DropDown label="Articles" base="/prices/articles" icon="list" menus={[
                         { to: '/add', label: 'Ajouter un article', can: isAdmin },
@@ -75,19 +82,21 @@ export function SidePanel(): ReactNode {
                         { to: '/list', label: 'Liste des sites' }
                     ]}/>
 
-                    <GroupSeparator title="Jardin scolaire" />
-                    <NavItem icon="box" to="/scholar-garden/engrais" label="Engrais" />
-                    <NavItem icon="flower1" to="/scholar-garden/semences" label="Sémences" />
-                    <NavItem icon="tools" to="/scholar-garden/semences" label="Matériels" />
-                    <DropDown label="Gérer les jardins" base="/scholar-garden" icon="gear" menus={[
-                        { to: '/add', label: 'Nouveau jardin' },
-                        { to: '/list', label: 'Liste des jardins' },
-                        { to: '/steps', label: 'Etapes' },
-                        { to: '/steps-data', label: 'Ajouter des données' }
-                    ]}/>
+                    {/*
+                        <GroupSeparator title="Jardin scolaire" />
+                        <NavItem icon="box" to="/scholar-garden/engrais" label="Engrais" />
+                        <NavItem icon="flower1" to="/scholar-garden/semences" label="Sémences" />
+                        <NavItem icon="tools" to="/scholar-garden/semences" label="Matériels" />
+                        <DropDown label="Gérer les jardins" base="/scholar-garden" icon="gear" menus={[
+                            { to: '/add', label: 'Nouveau jardin' },
+                            { to: '/list', label: 'Liste des jardins' },
+                            { to: '/steps', label: 'Etapes' },
+                            { to: '/steps-data', label: 'Ajouter des données' }
+                        ]}/>
+                    */}
 
                     <GroupSeparator title="Divers" />
-                    <NavItem icon="file-earmark-text-fill" active={pathname === "/documents"} to="/documents" label="Documents" />
+                    <NavItem icon="file-earmark-text-fill" active={pathname.includes("/documents")} to="/documents" label="Documents" />
                 </ul>
             </nav>
 

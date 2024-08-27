@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link } from "@base/components";
+import { InfoLink, Link } from "@base/components";
 import { config } from "@base/config";
 import { format } from "functions";
 import { useApi } from "hooks";
@@ -69,13 +69,6 @@ export function DocumentShow(): ReactNode {
         getDatas()
     }, [])
 
-    const downloadFile = useCallback(() => {
-        if (document) {
-            const path = document.path
-            download(path as string)
-        }
-    }, [document?.path])
-
     return <>
         <PageTitle title={document ? document.title : "Détails du document"}>
             <Link className="btn btn-primary" to="/documents"><i className="bi bi-list me-2"></i>Les derniers documents</Link>
@@ -87,7 +80,7 @@ export function DocumentShow(): ReactNode {
                 <div className="d-flex justify-content-between">
                     <h5 className="m-0">Par: {document.creator?.name} <span className="badge text-sm bg-primary p-1 ms-3">{document.type?.toUpperCase()}</span></h5>
                     <div className="d-flex">
-                        <Button onClick={downloadFile} mode="info" className="me-2 text-white" icon="download">Télécharger</Button>
+                        <InfoLink className="me-2" target="_blank" rel="noreferrer noopener" icon="download" to={document.path as string}>Télécharger</InfoLink>
                         <form onSubmit={deleteDocument} method="post">
                             <Button loading={RequestState.deleting} icon="trash" type="submit" mode="danger">Supprimer</Button>
                         </form>

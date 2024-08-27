@@ -4,7 +4,7 @@ import { AuthRoot } from '@base/pages/Auth';
 import { priceRoute } from '@base/routes/prices';
 import { cantineRoute } from '@base/routes/cantine';
 import { PrivateRoute } from '@base/components/Auth';
-import { activityRoute } from '@base/routes/activities';
+import { activityRoute } from '@base/routes/activities/activities';
 import { authRoute, userRoute } from '@base/routes/auth';
 import { scholarGardenRoute } from '@base/routes/scholar-garden/';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';

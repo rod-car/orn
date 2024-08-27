@@ -1,5 +1,5 @@
 import { PrivateRoute } from "@base/components/Auth";
-import { ActivityAdd, ActivityEdit, ActivityHome, ActivityList, ActivityStatistics, ActivityTypeAdd, ActivityTypeEdit, ActivityTypeList, AdminActivityList } from "@base/pages/Activities";
+import { ActivityAdd, ActivityEdit, ActivityHome, ActivityList, ActivityShow, ActivityStatistics, AdminActivityList } from "@base/pages/Activities";
 import { RouteObject } from "react-router";
 
 export const activityRoute: RouteObject[] = [
@@ -10,7 +10,7 @@ export const activityRoute: RouteObject[] = [
         </PrivateRoute>
     },
     {
-        path: 'add',
+        path: 'admin/add',
         element: <PrivateRoute>
             <ActivityAdd />
         </PrivateRoute>
@@ -28,30 +28,7 @@ export const activityRoute: RouteObject[] = [
         </PrivateRoute>
     },
     {
-        path: 'types',
-        children: [
-            {
-                path: '',
-                element: <PrivateRoute>
-                    <ActivityTypeList />
-                </PrivateRoute>
-            },
-            {
-                path: 'add',
-                element: <PrivateRoute>
-                    <ActivityTypeAdd />
-                </PrivateRoute>
-            },
-            {
-                path: 'edit/:id',
-                element: <PrivateRoute>
-                    <ActivityTypeEdit />
-                </PrivateRoute>
-            },
-        ],
-    },
-    {
-        path: 'manage/list',
+        path: 'admin/list',
         element: <PrivateRoute>
             <AdminActivityList />
         </PrivateRoute>
@@ -59,11 +36,11 @@ export const activityRoute: RouteObject[] = [
     {
         path: 'show/:id',
         element: <PrivateRoute>
-            <h1>Modifier un activité</h1>
+            <ActivityShow />
         </PrivateRoute>
     },
     {
-        path: 'edit/:id',
+        path: 'admin/edit/:id',
         element: <PrivateRoute>
             <ActivityEdit />
         </PrivateRoute>
