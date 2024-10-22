@@ -5,10 +5,9 @@ import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { config } from '@base/config'
 import { PageTitle, Spinner } from 'ui'
 import { SchoolsByClassesChart, SchoolsByScholarYearChart } from '@base/charts'
-import { AppCard, CardState, Link } from '@base/components'
+import { CardState, Link } from '@base/components'
 
 import './HomePage.modules.scss'
-import { useConfigStore } from '@base/hooks';
 
 /**
  * Description placeholder
@@ -36,7 +35,6 @@ export function HomePage(): ReactNode {
     })
 
     const [_loaded, setLoaded] = useState(false)
-    const { firstTime } = useConfigStore();
 
     const getCount = useCallback(async () => {
         const option = { count: 1 }
@@ -61,7 +59,7 @@ export function HomePage(): ReactNode {
             <div className="row mb-5">
                 <div className="col-4">
                     <CardState
-                        title="Etudiants"
+                        title="Étudiants"
                         link="/anthropo-measure/student/list"
                         value={'count' in studentCount ? studentCount.count as number : <Spinner />} 
                     />
@@ -77,7 +75,7 @@ export function HomePage(): ReactNode {
 
                 <div className="col-4">
                     <CardState
-                        title="Mésures antrhopo"
+                        title="Mesures anthropométrique"
                         link="/anthropo-measure/survey/list"
                         value={'count' in surveyCount ? surveyCount.count as number : <Spinner />} 
                     />

@@ -207,12 +207,14 @@ const Td = ({ headers, keyOne, keyTwo, schoolZ }: TdProps): ReactNode => {
     return (
         <>
             {headers.map((school: string) => {
-                const schoolTab = schoolZ[school][keyOne]
+                const schoolZSchool = schoolZ[school]
+                const schoolTab = schoolZSchool ? schoolZSchool[keyOne] : null
+
                 return (
                     <td key={school}>
-                        {typeof schoolTab === 'object' ? (
+                        {schoolTab !== null && typeof schoolTab === 'object' ? (
                             <span className={school === 'TOTAL' ? 'fw-bold' : 'fw-bold'}>
-                                {schoolTab[keyTwo]['value']} {keyTwo === 'Global' ? '/' + schoolZ[school]['T'] : ''} {' '}
+                                {schoolTab[keyTwo]['value']} {keyTwo === 'Global' ? '/' + schoolZSchool['T'] : ''} {' '}
                                 {schoolTab[keyTwo]['value'] > 0 && school !== 'TOTAL' && (
                                     <span className="text-primary fw-normal">
                                         <br />
@@ -221,14 +223,14 @@ const Td = ({ headers, keyOne, keyTwo, schoolZ }: TdProps): ReactNode => {
                                 )}
                                 {keyTwo === 'Global' && school === 'TOTAL' && <span className="text-primary fw-normal">
                                     <br />
-                                    ({round(schoolTab[keyTwo]['value'] / schoolZ[school]['T'] * 100, 2)}%)
+                                    ({round(schoolTab[keyTwo]['value'] / schoolZSchool['T'] * 100, 2)}%)
                                 </span>}
                             </span>
-                        ) : school === 'TOTAL' ? (
+                        ) : (school === 'TOTAL' ? (
                             <span className="fw-bold">{schoolTab}</span>
                         ) : (
-                            schoolTab
-                        )}
+                            schoolTab ?? "-"
+                        ))}
                     </td>
                 )
             })}

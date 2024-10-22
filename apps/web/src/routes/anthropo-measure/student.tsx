@@ -1,5 +1,5 @@
 import { PrivateRoute } from "@base/components/Auth";
-import { AddStudent, DetailsStudent, EditStudent, ImportStudent, StudentList, StudentsClasses } from "@base/pages/Students";
+import { AddStudent, DetailsStudent, EditStudent, ImportStudent, ImportStudentClass, StudentList, StudentsClasses } from "@base/pages/Students";
 import { RouteObject } from "react-router";
 
 export const studentRoute: RouteObject[] = [
@@ -25,6 +25,12 @@ export const studentRoute: RouteObject[] = [
         path: 'import',
         element: <PrivateRoute>
             <ImportStudent />
+        </PrivateRoute>
+    },
+    {
+        path: 'import-class',
+        element: <PrivateRoute>
+            <ImportStudentClass />
         </PrivateRoute>
     },
     {

@@ -51,13 +51,15 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
 
-        setStudent({...student, scholar_year: scholarYear as number})
+        const data = {...student, scholar_year: scholarYear as number}
+
+        setStudent(data)
 
         const response = editedStudent
-            ? await SClient.patch(editedStudent.id, student)
-            : await SClient.post(student)
+            ? await SClient.patch(editedStudent.id, data)
+            : await SClient.post(data)
 
-        const message = editedStudent ? 'Mis à jour' : 'Enregistré'
+        const message = editedStudent ? 'Mis à jour' : 'Enregistré - Code: ' + data.number
 
         if (response.ok) {
             toast(message, {
@@ -65,7 +67,16 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
                 type: 'success',
                 position: config.toastPosition
             })
-            editedStudent === undefined && setStudent(defaultStudent)
+            if (editedStudent === undefined) {
+                setStudent({
+                    ...defaultStudent,
+                    scholar_year: data.scholar_year,
+                    school: data.school,
+                    classes: data.classes,
+                    category: data.category
+                })
+                //setScholarYear(0)
+            }
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
@@ -220,6 +231,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
                         controlled
                     />
                 </div>
+
                 <div className="col-xl-3">
                     <ScholarYearSelectorServer
                         label="Année scolaire"

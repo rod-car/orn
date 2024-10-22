@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 import { useAuthStore } from "hooks";
+import { useLocation } from "react-router";
 import logo from '@base/assets/images/logo.png';
 import { AppTitle, DropDown, NavItem } from "@base/components";
-import { useLocation } from "react-router";
 
 export function SidePanel(): ReactNode {
     const { isAdmin } = useAuthStore()
@@ -20,8 +20,9 @@ export function SidePanel(): ReactNode {
                     <DropDown icon="people" base="/anthropo-measure/student" label="Etudiants" menus={[
                         { label: "Liste des étudiants", to: "/list" },
                         { label: "Ajouter un étudiant", to: "/add", can: isAdmin },
-                        { label: "Importer une liste", to: "/import", can: isAdmin },
-                        { label: "Mise a jour des classes", to: "/students-classes", can: isAdmin }
+                        { label: "Importer une liste globale", to: "/import", can: isAdmin },
+                        { label: "Mise a jour des classes", to: "/students-classes", can: isAdmin },
+                        { label: "Importer une liste par classe", to: "/import-class", can: isAdmin }
                     ]} />
                     <DropDown base="/anthropo-measure/school" icon="houses" label="Ecoles" menus={[
                         { label: "Liste des écoles", to: "/list" },
@@ -43,15 +44,15 @@ export function SidePanel(): ReactNode {
                     ]} />
 
                     <GroupSeparator title="Cantine scolaire" />
-                    <DropDown label="Aliments" base="/cantine" icon="cookie" menus={[
-                        { to: '/add-conso', label: 'Ajouter', can: isAdmin },
-                        { to: '/list-conso', label: 'Liste des aliments' }
+                    <DropDown label="Aliments" base="/cantine/foods" icon="cookie" menus={[
+                        { to: '/add', label: 'Ajouter', can: isAdmin },
+                        { to: '/list', label: 'Liste des aliments' }
                     ]}/>
-                    <DropDown label="Consommations" base="/cantine" icon="basket3" menus={[
-                        { to: '/add-conso', label: 'Ajouter un consommation', can: isAdmin },
-                        { to: '/list-conso', label: 'Liste des consommations' },
-                        { to: '/import-conso', label: 'Importer des consommations', can: isAdmin },
-                        { to: '/import-conso', label: 'Statistique des consommations', can: isAdmin }
+                    <DropDown label="Consommations" base="/cantine/consommation" icon="basket3" menus={[
+                        { to: '/add', label: 'Ajouter', can: isAdmin },
+                        { to: '/list', label: 'Historiques' },
+                        { to: '/import', label: 'Importer', can: isAdmin },
+                        { to: '/statistics', label: 'Recapitulatifs', can: isAdmin }
                     ]}/>
 
                     <GroupSeparator title="Activités" />

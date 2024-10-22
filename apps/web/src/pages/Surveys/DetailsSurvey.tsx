@@ -5,7 +5,7 @@ import { Block, Button, Input, PageTitle, SecondaryButton, Select } from 'ui'
 import { config } from '@base/config'
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { ageMonth, ageYear, number_array, range } from 'functions'
-import { DetailLink, ExcelExportButton, InfoLink, Link, PrimaryLink } from '@base/components'
+import { DetailLink, ExcelExportButton, InfoLink, PrimaryLink } from '@base/components'
 import { Pagination } from '@base/components'
 import Skeleton from 'react-loading-skeleton'
 
@@ -36,7 +36,7 @@ export function DetailsSurvey(): ReactNode {
         per_page: perPage,
         q: query,
         school: school,
-        regenerate: false
+        regenerate: true
     }
 
     const getSurvey = async (id: number): Promise<void> => {
@@ -54,7 +54,7 @@ export function DetailsSurvey(): ReactNode {
     }, [])
 
     const changePage = (data: { page: number }): void => {
-        Client.find(parseInt(id as string), { ...requestData, page: data.page })
+        Client.find(parseInt(id as string), { ...requestData, page: data.page, regenerate: true })
     }
 
     /**
@@ -192,20 +192,20 @@ export function DetailsSurvey(): ReactNode {
                     <table style={{ fontSize: '9pt' }} className="table table-striped table-bordered">
                         <thead>
                             <tr className="bg-danger">
-                                <th className="text-nowrap">N°</th>
-                                <th className="text-nowrap">Nom et prénoms</th>
-                                <th className="text-nowrap">Date de pésée</th>
-                                <th className="text-nowrap">Taille (cm)</th>
-                                <th className="text-nowrap">Poids (Kg)</th>
-                                <th className="text-nowrap">Age (mois)</th>
-                                <th className="text-nowrap">IMC (kg/m²)</th>
-                                <th className="text-nowrap">Z IMC/A</th>
-                                <th className="text-nowrap">Z T/P</th>
-                                <th className="text-nowrap">Z P/A F</th>
-                                <th className="text-nowrap">Z P/A G</th>
-                                <th className="text-nowrap">Z T/A F</th>
-                                <th className="text-nowrap">Z T/A G</th>
-                                <th>Actions</th>
+                                <th className="text-nowrap text-white bg-primary">N°</th>
+                                <th className="text-nowrap text-white bg-primary">Nom et prénoms</th>
+                                <th className="text-nowrap text-white bg-primary">Date de pesée</th>
+                                <th className="text-nowrap text-white bg-primary">Taille (cm)</th>
+                                <th className="text-nowrap text-white bg-primary">Poids (Kg)</th>
+                                <th className="text-nowrap text-white bg-primary">Age (mois)</th>
+                                <th className="text-nowrap text-white bg-primary">IMC (kg/m²)</th>
+                                <th className="text-nowrap text-white bg-primary">Z IMC/A</th>
+                                <th className="text-nowrap text-white bg-primary">Z T/P</th>
+                                <th className="text-nowrap text-white bg-primary">Z P/A F</th>
+                                <th className="text-nowrap text-white bg-primary">Z P/A G</th>
+                                <th className="text-nowrap text-white bg-primary">Z T/A F</th>
+                                <th className="text-nowrap text-white bg-primary">Z T/A G</th>
+                                <th className="text-white bg-primary">Actions</th>
                             </tr>
                         </thead>
                         <tbody>

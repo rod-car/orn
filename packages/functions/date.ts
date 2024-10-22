@@ -87,8 +87,12 @@ const parse = (_date: string, _format: string = "yyyy-MM-dd", _delimiter: string
     return formatedDate;
 }
 
-export const format = (date: string, format: string): string => {
-    return dateFnsFormat(date, format, { locale: fr })
+export const format = (date: string, format: string = "dd/MM/y"): string => {
+    try {
+        return dateFnsFormat(date, format, { locale: fr })
+    } catch (error) {
+        return ''
+    }
 }
 
 function getYears(depth: number = 5): number[] {
