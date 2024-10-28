@@ -6,7 +6,7 @@ import { Block, Button, DangerButton, Input, PageTitle, PrimaryButton, Secondary
 import { ChangeEvent, Key, memo, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
-import { ageFull, number_array, range } from 'functions'
+import { ageFull, format, number_array, range } from 'functions'
 import { Pagination } from '@base/components'
 import Skeleton from 'react-loading-skeleton'
 
@@ -25,7 +25,7 @@ export function StudentList(): ReactNode {
     const [school, setSchool] = useState(0)
     const [classe, setClasse] = useState(0)
     const [perPage, setPerPage] = useState(30)
-    const [scholarYear, setScholarYear] = useState<string | number>(2)
+    const [scholarYear, setScholarYear] = useState<string | number>(4)
     const [query, setQuery] = useState<string | number>('')
     const [category, setCategory] = useState<string>('')
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
@@ -207,8 +207,8 @@ export function StudentList(): ReactNode {
                 <table className="table table-striped m-0 table-bordered">
                     <thead>
                         <tr>
-                            <th>Etablissement</th>
-                            <th>Annee scolaire</th>
+                            <th>Établissement</th>
+                            <th>Année scolaire</th>
                             <th>Classe</th>
                             <th>Catégorie</th>
                             <th>Elements</th>
@@ -301,13 +301,14 @@ export function StudentList(): ReactNode {
                     />
                     <PrimaryButton icon="search" loading={SRequestState.loading} size="sm" />
                 </div>
-                <div className="table-responsive">
+                <div className="table-responsive mb-4">
                     <table className="table table-striped table-bordered text-sm">
                         <thead>
                             <tr>
-                                <th>N°</th>
+                                <th>Code</th>
                                 <th>Nom</th>
-                                <th>Prenoms</th>
+                                <th>Prénoms</th>
+                                <th>Sexe</th>
                                 <th className="text-nowrap">Date de naissance</th>
                                 <th>Âge</th>
                                 <th>Parents</th>
@@ -320,13 +321,15 @@ export function StudentList(): ReactNode {
                             {students.data?.length > 0 &&
                                 students.data.map((studentClass: StudentClass) => {
                                     const student = studentClass.student
+                                    if (student === null) debugger
                                     const classe = studentClass.classe
                                     return (
                                         <tr key={studentClass.id}>
                                             <td className="fw-bold">{student.number}</td>
                                             <td>{student.firstname}</td>
                                             <td>{student.lastname}</td>
-                                            <td>{student.birth_date}</td>
+                                            <td>{student.gender}</td>
+                                            <td>{format(student.birth_date, "dd/MM/y")}</td>
                                             <td className="text-nowrap">
                                                 {ageFull(student.birth_date)}
                                             </td>
@@ -349,7 +352,7 @@ export function StudentList(): ReactNode {
                             )}
                             {!SRequestState.loading && students.total === 0 && (
                                 <tr>
-                                    <td colSpan={8} className="text-center">
+                                    <td colSpan={9} className="text-center">
                                         Aucune données
                                     </td>
                                 </tr>
@@ -368,7 +371,7 @@ export function StudentList(): ReactNode {
 const ListLoading = memo(function() {
     return range(10).map((number) => (
         <tr key={number}>
-            {range(8).map((key) => (
+            {range(9).map((key) => (
                 <td key={key} className="text-center">
                     <Skeleton count={1} style={{ height: 30 }} />
                 </td>

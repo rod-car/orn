@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { ReactNode, useEffect, useState } from 'react'
-import { config } from '@base/config'
-import { Input, Select, Block, Spinner, Button, PageTitle } from 'ui'
+import { class_categories, config } from '@base/config'
+import { Input, Select, Block, Button, PageTitle } from 'ui'
 import { toast } from 'react-toastify'
-import { Link, PrimaryLink, ScholarYearSelectorServer, SurveySelector } from '@base/components'
-import { scholar_years } from 'functions'
+import { PrimaryLink, SurveySelector } from '@base/components'
 
 type StudentData = {
     student_id: number
@@ -21,6 +20,7 @@ type StudentData = {
 type FormData = {
     school_id: number
     class_id: number
+    category: string
     survey_id: number
     date: string
     scholar_year: string
@@ -30,6 +30,7 @@ type FormData = {
 const defaultFormData: FormData = {
     school_id: 0,
     class_id: 0,
+    category: '',
     survey_id: 0,
     date: '',
     scholar_year: '',
@@ -105,7 +106,8 @@ export function AddSurveyStudent(): ReactNode {
                 position: config.toastPosition,
                 type: "info"
             })
-            const formDatas = {
+
+            const datas = {
                 student_id: selectedStudent.student_id,
                 date: formData.date,
                 school_id: formData.school_id,
@@ -113,7 +115,8 @@ export function AddSurveyStudent(): ReactNode {
                 weight: selectedStudent.weight,
                 length: selectedStudent.height
             }
-            const response = await SurveyClient.post(formDatas, `/${formData.survey_id}/add-student`)
+
+            const response = await SurveyClient.post(datas, `/${surveyId}/add-student`)
             if (response.ok) {
                 toast("Enregistré", {
                     position: config.toastPosition,
@@ -121,6 +124,11 @@ export function AddSurveyStudent(): ReactNode {
                 })
                 formData.students[index].saved = true
                 setFormData({...formData})
+            } else {
+                toast("Erreur d'enregistrement", {
+                    position: config.toastPosition,
+                    type: "error"
+                })
             }
         } else {
             toast("La taille ou le poids ne doit pas être zero", {
@@ -154,7 +162,7 @@ export function AddSurveyStudent(): ReactNode {
             school_id: formData.school_id,
             scholar_year: formData.scholar_year
         }
-        const response = await SurveyClient.post(formDatas, `/${formData.survey_id}/remove-student`)
+        const response = await SurveyClient.post(formDatas, `/${surveyId}/remove-student`)
         if (response.ok) {
             toast("Supprimé", {
                 position: config.toastPosition,
@@ -168,7 +176,7 @@ export function AddSurveyStudent(): ReactNode {
     }
 
     function canDisplayTable(): boolean {
-        return formData.school_id !== 0 && formData.class_id !== 0 && formData.date !== '' && surveyId > 0
+        return formData.school_id !== 0 && formData.class_id !== 0 && formData.date !== '' && formData.date !== undefined && surveyId > 0
     }
 
     function isValid(formData: FormData) {
@@ -194,7 +202,7 @@ export function AddSurveyStudent(): ReactNode {
                     paginate_student: 0
                 })
 
-                if (precedentSurvey !== undefined) {
+                if (precedentSurvey !== undefined && precedentSurvey !== null) {
                     precedentMeasuredStudents = precedentSurvey?.students as Student[]
                     break
                 }
@@ -203,12 +211,13 @@ export function AddSurveyStudent(): ReactNode {
 
             if (selectedSurvey) {
                 measuredStudents = selectedSurvey.students;
-                formData.date = measuredStudents?.at(0)?.pivot?.date
+                formData.date = measuredStudents?.at(0)?.pivot?.date ?? formData.date
 
                 const students = await StudentClient.get({
                     paginate: false,
                     school_id: formData.school_id,
                     classe_id: formData.class_id,
+                    category: formData.category,
                     scholar_year: selectedSurvey.scholar_year
                 })
 
@@ -218,17 +227,15 @@ export function AddSurveyStudent(): ReactNode {
                     students.map((studentClass) => {
                         const foundStudent = measuredStudents.find(student => student.id === studentClass.student.id)
                         const precedentStudent = precedentMeasuredStudents.find(student => student.id === studentClass.student.id)
-    
+
                         const firstName = studentClass.student.firstname
                         const lastName = studentClass.student.lastname
                         const fullName = firstName + " " + (lastName === null ? '' : lastName)
                         const precedentHeight = precedentStudent ? precedentStudent.pivot.length : null
                         const precedentWeight = precedentStudent ? precedentStudent.pivot.weight : null
-    
+
                         precedentStudent ?? setPrecedentPhase(precedentSurveyId)
-    
-                        // loadings.push(false)
-    
+
                         studentDatas.push({
                             fullname: fullName,
                             birth_date: studentClass.student.birth_date,
@@ -240,9 +247,9 @@ export function AddSurveyStudent(): ReactNode {
                             saved: foundStudent ? true : false
                         })
                     })
-                    setFormData({...formData, students: studentDatas})
+                    setFormData({...formData, scholar_year: selectedSurvey.scholar_year, students: studentDatas})
                 } else {
-                    setFormData({...formData, students: []})
+                    setFormData({...formData, scholar_year: selectedSurvey.scholar_year, students: []})
                 }
             } else {
                 toast("Une erreur s'est produite", {
@@ -282,7 +289,7 @@ export function AddSurveyStudent(): ReactNode {
                                 value={formData.school_id}
                                 controlled />
                         </div>
-                        <div className="col-6 mb-3">
+                        <div className="col-3 mb-3">
                             <Select
                                 label='Classe'
                                 options={classes}
@@ -294,6 +301,18 @@ export function AddSurveyStudent(): ReactNode {
                                 value={formData.class_id}
                                 controlled />
                         </div>
+                        <div className="col-3 mb-3">
+                            <Select
+                                label="Catégorie"
+                                name="category"
+                                value={formData.category}
+                                options={class_categories}
+                                onChange={({target}) => handleChange(target)}
+                                required={false}
+                                controlled
+                            />
+                        </div>
+
                         <div className="col-6 mb-3">
                             <SurveySelector
                                 datas={surveysList}
@@ -335,7 +354,7 @@ export function AddSurveyStudent(): ReactNode {
                     </thead>
                     <tbody>
                         {(SurveyRequestState.loading || StudentRequestState.loading) && <tr><td className="text-center" colSpan={9}>Chargement</td></tr>}
-                        {formData.students && formData.students.map((student, index) => <tr key={student.student_id} className='align-middle'>
+                        {formData.students && formData.students.map((student, index) => <tr key={index} className='align-middle'>
                             <td>{student.student_id}</td>
                             <td>{student.fullname}</td>
                             <td>{student.birth_date}</td>

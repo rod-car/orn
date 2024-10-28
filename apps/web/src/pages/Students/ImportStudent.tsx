@@ -105,7 +105,7 @@ export function ImportStudent(): ReactNode {
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <h6 className='text-secondary'>
                         Affichage temporaire des données{' '}
-                        {json.length > 0 && `(${json.length} Etudiant(s))`}
+                        {json.length > 0 && `(${json.length} Étudiant(s))`}
                     </h6>
                     {json.length > 0 && scholarYear as number > 0 && <PrimaryButton
                         loading={RequestState.creating}
@@ -124,7 +124,7 @@ export function ImportStudent(): ReactNode {
                                 <th>Sexe</th>
                                 <th>Parents</th>
                                 <th>Classe</th>
-                                <th>Etablissement</th>
+                                <th>Établissement</th>
                             </tr>
                         </thead>
                         <tbody>

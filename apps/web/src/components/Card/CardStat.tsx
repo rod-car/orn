@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Link } from '@base/components'
 
 type CardStateProps = {
     title: string;
@@ -20,6 +21,6 @@ export function CardState({ title, value, link = "#", evolution }: CardStateProp
                 {evolution?.value}
             </div>}
         </div>
-        <a className="app-card-link-mask" href={link}></a>
+        <Link className="app-card-link-mask" to={link}></Link>
     </div>
 }

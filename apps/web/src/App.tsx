@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { Statistics } from '@base/pages/Statistics';
 import { AuthRoot } from '@base/pages/Auth';
 import { priceRoute } from '@base/routes/prices';
-import { cantineRoute } from '@base/routes/cantine';
+import { cantineRoute } from '@base/routes/cantine/cantine';
 import { PrivateRoute } from '@base/components/Auth';
 import { activityRoute } from '@base/routes/activities/activities';
 import { authRoute, userRoute } from '@base/routes/auth';
