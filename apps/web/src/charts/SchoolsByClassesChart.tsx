@@ -1,5 +1,5 @@
 import { useApi } from 'hooks'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { config } from '@base/config'
 import { Block, Select, Spinner } from 'ui'
 import { generateColor } from '@base/utils'
