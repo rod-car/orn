@@ -321,6 +321,7 @@ export function StudentList(): ReactNode {
                             {students.data?.length > 0 &&
                                 students.data.map((studentClass: StudentClass) => {
                                     const student = studentClass.student
+                                    if (student === null) debugger
                                     const classe = studentClass.classe
                                     return (
                                         <tr key={studentClass.id}>
@@ -328,7 +329,7 @@ export function StudentList(): ReactNode {
                                             <td>{student.firstname}</td>
                                             <td>{student.lastname}</td>
                                             <td>{student.gender}</td>
-                                            <td>{format(student.birth_date, "dd/MM/Y")}</td>
+                                            <td>{format(student.birth_date, "dd/MM/y")}</td>
                                             <td className="text-nowrap">
                                                 {ageFull(student.birth_date)}
                                             </td>
