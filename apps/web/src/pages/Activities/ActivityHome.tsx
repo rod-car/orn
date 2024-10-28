@@ -1,18 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Block, Button } from "ui";
-import { config } from '@renderer/config'
-import { ActivityLoading } from "@renderer/components";
+import { Block, PageTitle } from "ui";
+import { config } from '@base/config'
+import { PrimaryLink } from "@base/components";
+import { Loading, ActivityBlock } from "@base/components";
 
 export function ActivityHome(): ReactNode {
-    const {
-        Client,
-        datas: activities,
-        RequestState
-    } = useApi<Activity>({
+    const { Client, datas: activities, RequestState } = useApi<Activity>({
         baseUrl: config.baseUrl,
-        
         url: '/activities',
         key: 'data'
     })
@@ -29,39 +25,18 @@ export function ActivityHome(): ReactNode {
     }, [])
 
     return <>
-        <div className="mb-5 d-flex justify-content-between align-items-center">
-            <h2>Nos dernières activités</h2>
-            <Link to="/activities/list" className="btn primary-link">
-                <i className="fa fa-list me-2"></i>Tous nos activités
-            </Link>
-        </div>
+        <PageTitle title="Nos dernières activités">
+            <PrimaryLink to="/activities/list" icon="list">
+                Tous nos activités
+            </PrimaryLink>
+        </PageTitle>
 
-        {RequestState.loading && <>
-            <div className="mb-4"><ActivityLoading /></div>
-            <div className="mb-4"><ActivityLoading reverse /></div>
-            <div className="mb-4"><ActivityLoading /></div>
-            <div className="mb-4"><ActivityLoading reverse /></div>
-        </>}
+        {RequestState.loading && <Loading />}
+
+        {activities && activities.length === 0 && <Block><h6 className="text-center m-0">Aucun activités récentes</h6></Block>}
 
         {activities && activities.map((activity, index) => {
-            return <Block className="mb-5" key={activity.id}>
-                <div className={`d-flex justify-content-between ${index % 2 !== 0 ? 'flex-row-reverse' : ''}`}>
-                    <div className={`w-50 ${index % 2 !== 0 ? '' : 'me-4'}`}>
-                        <h3 className="text-primary">{activity.title}</h3>
-                        <h5 className="mb-4">{activity.place} - <i>{activity.date}</i></h5>
-                        <hr />
-
-                        <p>{activity.details}</p>
-
-                        <Button icon="eye" mode="primary" className="mt-5">Plus de détails</Button>
-                    </div>
-                    <div className={`w-50 ${index % 2 !== 0 ? 'me-4' : ''}`}>
-                        <div className="row">
-                            {activity.images.map(image => <img className="col-6 mb-4" src={image.path} alt="" />)}
-                        </div>
-                    </div>
-                </div>
-            </Block>
+            return <ActivityBlock activity={activity} index={index} />
         })}
     </>
 }

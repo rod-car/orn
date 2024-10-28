@@ -1,9 +1,9 @@
 import { useExcelReader } from 'hooks'
 import { ChangeEvent } from 'react'
-import { Link } from '@renderer/components'
+import { Link } from '@base/components'
 import { Block, Button, Input, Spinner } from 'ui'
 
-export function ImportConso(): JSX.Element {
+export function ImportConso(): ReactNode {
     const { json, importing, toJSON } = useExcelReader()
 
     function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
@@ -20,7 +20,7 @@ export function ImportConso(): JSX.Element {
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Importer une consommation</h2>
                 <Link to="/cantine/list-conso" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Liste des consommation
+                    <i className="bi bi-list me-2"></i>Liste des consommation
                 </Link>
             </div>
 

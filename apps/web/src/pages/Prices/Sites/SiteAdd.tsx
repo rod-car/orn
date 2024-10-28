@@ -1,14 +1,14 @@
 import { NavLink } from 'react-router-dom'
 import { Block } from 'ui'
-import { SiteForm } from '@renderer/pages/Prices'
+import { SiteForm } from '@base/pages/Prices'
 
-export function SiteAdd(): JSX.Element {
+export function SiteAdd(): ReactNode {
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h2>Ajouter un site</h2>
                 <NavLink to="/prices/sites/list" className="btn btn-primary">
-                    <i className="fa fa-list me-2"></i>Liste des sites
+                    <i className="bi bi-list me-2"></i>Liste des sites
                 </NavLink>
             </div>
 

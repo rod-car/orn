@@ -1,30 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { Link } from '@renderer/components'
-import { config } from '@renderer/config'
-import { Block, Button } from 'ui'
-import { useEffect } from 'react'
+import { PrimaryLink, InfoLink, DetailLink, EditLink } from '@base/components'
+import { config } from '@base/config'
+import { Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
+import { ReactNode, useCallback, useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
 import { format } from 'functions'
 
-/**
- * Page d'accueil de gestion des étudiants
- * @returns JSX.Element
- */
-export function Survey(): JSX.Element {
-    const {
-        Client,
-        RequestState,
-        error,
-        datas: surveys
-    } = useApi<Survey>({
+export function Survey(): ReactNode {
+    const { Client, RequestState, error, datas: surveys } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        
         url: '/surveys',
         key: 'data'
     })
 
-    const getDatas = async (): Promise<void> => {
+    const getDatas = async () => {
         await Client.get()
     }
 
@@ -32,14 +23,14 @@ export function Survey(): JSX.Element {
         getDatas()
     }, [])
 
-    const handleDelete = async (id: number): Promise<void> => {
+    const handleDelete = useCallback(async (id: number) => {
         confirmAlert({
             title: 'Question',
             message: 'Voulez-vous supprimer ?',
             buttons: [
                 {
                     label: 'Oui',
-                    onClick: async (): Promise<void> => {
+                    onClick: async () => {
                         const response = await Client.destroy(id)
                         if (response.ok) {
                             toast('Enregistré', {
@@ -68,41 +59,36 @@ export function Survey(): JSX.Element {
                 }
             ]
         })
-    }
+    }, [])
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Liste des mésures</h2>
+            <PageTitle title="Liste des mésures">
                 <div className="d-flex align-items-between">
-                    <Button
-                        icon="refresh"
-                        mode="secondary"
-                        type="button"
+                    <SecondaryButton
+                        icon="arrow-clockwise"
                         className="me-2"
                         onClick={getDatas}
                         loading={RequestState.loading}
-                    >
-                        Recharger
-                    </Button>
-                    <Link to="/anthropo-measure/survey/add" className="btn secondary-link me-2">
-                        <i className="fa fa-plus me-2"></i>Nouvelle mésure
-                    </Link>
-                    <Link to="/anthropo-measure/survey/add-student" className="btn primary-link">
-                        <i className="fa fa-plus me-2"></i>Formulaire de mesure
-                    </Link>
+                    >Recharger</SecondaryButton>
+                    <PrimaryLink icon="plus-lg" to="/anthropo-measure/survey/add" className="me-2">
+                        Nouvelle mésure
+                    </PrimaryLink>
+                    <InfoLink icon="plus-lg" to="/anthropo-measure/survey/add-student">
+                        Formulaire de mesure
+                    </InfoLink>
                 </div>
-            </div>
+            </PageTitle>
 
             <Block className="mb-5">
                 {error && <div className="alert alert-danger">{error.message}</div>}
 
-                <table className="table table-striped">
+                <table className="table table-striped table-bordered text-sm">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Phase d'enquête</th>
-                            <th>Date</th>
+                            <th>Date de début</th>
+                            <th>Année scolaire</th>
                             <th className="w-15">Actions</th>
                         </tr>
                     </thead>
@@ -117,31 +103,13 @@ export function Survey(): JSX.Element {
                         {surveys &&
                             surveys.map((survey) => (
                                 <tr key={survey.id}>
-                                    <td>{survey.id}</td>
-                                    <td>{survey.phase}</td>
+                                    <td className="fw-bold">{survey.phase}</td>
                                     <td>{format(survey.date, 'dd MMMM y')}</td>
+                                    <td>{survey.scholar_year}</td>
                                     <td>
-                                        <Link
-                                            className="btn-sm me-2 btn btn-info text-white"
-                                            to={`/anthropo-measure/survey/details/${survey.id}`}
-                                        >
-                                            <i className="fa fa-folder"></i>
-                                        </Link>
-                                        <Link
-                                            className="btn-sm me-2 btn btn-primary"
-                                            to={`/anthropo-measure/survey/edit/${survey.id}`}
-                                        >
-                                            <i className="fa fa-edit"></i>
-                                        </Link>
-                                        <Button
-                                            type="button"
-                                            mode="danger"
-                                            icon="trash"
-                                            size="sm"
-                                            onClick={(): void => {
-                                                handleDelete(survey.id)
-                                            }}
-                                        />
+                                        <DetailLink to={`/anthropo-measure/survey/details/${survey.id}`} />
+                                        <EditLink to={`/anthropo-measure/survey/edit/${survey.id}`} />
+                                        <DangerButton icon="trash" size="sm" onClick={() => handleDelete(survey.id) }/>
                                     </td>
                                 </tr>
                             ))}

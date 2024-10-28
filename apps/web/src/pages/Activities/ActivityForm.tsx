@@ -1,8 +1,9 @@
-import { FormEvent, useState } from 'react'
-import { Button, Input, Textarea } from 'ui'
+import { ChangeEvent, FormEvent, ReactNode, useState } from 'react'
+import { DangerButton, Input, PrimaryButton } from 'ui'
 import { useApi } from 'hooks'
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { toast } from 'react-toastify'
+import { RichTextEditor } from '@base/components'
 
 type ActivityFormProps = {
     editedActivity?: Activity
@@ -17,29 +18,27 @@ const defaultActivity: Activity = {
     files: null
 }
 
-export function ActivityForm({ editedActivity }: ActivityFormProps): JSX.Element {
+export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
     const [activity, setActivity] = useState(defaultActivity)
-    const {
-        Client,
-        error,
-        RequestState
-    } = useApi<Activity>({
+    const [details, setDetails] = useState("")
+    const { Client, error, RequestState } = useApi<Activity>({
         baseUrl: config.baseUrl,
-        
         url: '/activities',
         key: 'data'
     })
 
-    const handleSubmit = async (e: FormEvent): Promise<void> => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
+        const headers = {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        }
+
         const response = editedActivity
-            ? await Client.patch(editedActivity.id, activity)
-            : await Client.post(activity, '', {}, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            })
+            ? await Client.post({...activity, details: details}, `/${activity.id}`, {_method: 'PATCH'}, headers)
+            : await Client.post({...activity, details: details}, '', {}, headers)
 
         if (response.ok) {
             const message = editedActivity ? 'Mis à jour' : 'Enregistré'
@@ -48,7 +47,10 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): JSX.Element
                 type: 'success',
                 position: config.toastPosition
             })
-            editedActivity === undefined && setActivity(defaultActivity)
+            if (editedActivity === undefined) {
+                setActivity(defaultActivity)
+                setDetails("")
+            }
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
@@ -58,42 +60,49 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): JSX.Element
         }
     }
 
-    if (editedActivity !== undefined && activity.id === 0)
-        setActivity({
-            ...editedActivity,
-        })
+    if (editedActivity !== undefined && activity.id === 0) {
+        setActivity({...editedActivity})
+        setDetails(editedActivity.details)
+    }
 
-    const handleChange = (target: EventTarget & (HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement)): void => {
-        setActivity({ ...activity, [target.name]: target.name === 'files' ? Array.from(target.files) : target.value })
+    const handleChange = ({target}: ChangeEvent<HTMLSelectElement | HTMLInputElement>): void => {
+        setActivity({ ...activity, [target.name]: (target.name === 'files' && "files" in target) ? Array.from(target.files as FileList) : target.value })
         if (target.value.length > 0 && error?.data.errors[target.name]) {
-            error.data.errors[target.name] = null
+            error.data.errors[target.name] = []
         }
     }
 
-    const removeFile = (index: number): void => {
+    const removeFile = (index: number) => {
         activity.files?.splice(index, 1)
         const a = { ...activity }
         setActivity(a)
     }
 
+    const removeImage = (id: number) => {
+        const imgs = activity.images?.filter(image => image.id !== id)
+        setActivity({...activity, images: imgs})
+    }
+
     return (
-        <form action="#" onSubmit={handleSubmit} method="post" encType="multipart/form-data">
+        <form onSubmit={handleSubmit} method="post">
             <div className="row mb-3">
                 <div className="col-xl-6">
                     <Input
                         label="Titre de l'activité"
+                        placeholder="Ex: Mesure anthropo"
                         value={activity.title}
                         error={error?.data?.errors?.title}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         name="title"
                     />
                 </div>
                 <div className="col-xl-6">
                     <Input
                         label="Lieu"
+                        placeholder="Ex: EPP Romialo"
                         value={activity.place}
                         error={error?.data?.errors?.place}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         name="place"
                     />
                 </div>
@@ -105,7 +114,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): JSX.Element
                         label="Date"
                         value={activity.date}
                         error={error?.data?.errors?.date}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         type="date"
                         name="date"
                     />
@@ -117,40 +126,40 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): JSX.Element
                         multiple
                         accept='image/*, video/*'
                         error={error?.data?.errors?.files}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         name="files"
                         required={false}
                     />
                 </div>
-                {activity.files && activity.files.length > 0 && <div className="row">{activity.files.map((file, index) => {
-                    const url = URL.createObjectURL(file)
-                    return <div key={index} className="col-3 mb-3" style={{ position: 'relative' }}>
-                        <Button onClick={() => removeFile(index)} style={{ position: 'absolute', top: 10, right: 20 }} icon="close" size="sm" mode="danger" />
-                        <img className="w-100" src={url} />
-                    </div>
-                })}</div>}
+                <div className="row">
+                    {activity.images && activity.images.length > 0 && activity.images.map(image => {
+                        return <div key={image.id} className="col-3 mt-3" style={{ position: 'relative' }}>
+                            <DangerButton onClick={() => removeImage(image.id)} style={{ position: 'absolute', top: 10, right: 20 }} icon="x" size="sm" />
+                            <img className="w-100" src={image.path} />
+                        </div>
+                    })}
+
+                    {activity.files && activity.files.length > 0 && activity.files.map((file, index) => {
+                        const url = URL.createObjectURL(file)
+                        return <div key={index} className="col-3 mt-3" style={{ position: 'relative' }}>
+                            <DangerButton onClick={() => removeFile(index)} style={{ position: 'absolute', top: 10, right: 20 }} icon="x" size="sm" />
+                            <img className="w-100" src={url} />
+                        </div>
+                    })}
+                </div>
             </div>
 
             <div className="row mb-4">
                 <div className="col-xl-12">
-                    <Textarea
-                        label="Compte rendu"
-                        value={activity.details}
-                        error={error?.data?.errors?.details}
-                        onChange={({ target }): void => handleChange(target)}
-                        name="details"
-                    />
+                    <RichTextEditor label="Compte rendu" theme="snow" value={details} onChange={setDetails} />
                 </div>
             </div>
 
-            <Button
+            <PrimaryButton
                 loading={RequestState.creating || RequestState.updating}
                 icon="save"
                 type="submit"
-                mode="primary"
-            >
-                Enregistrer
-            </Button>
+            >Enregistrer</PrimaryButton>
         </form>
     )
 }

@@ -1,9 +1,11 @@
-import { FormEvent, useEffect, useState } from 'react'
-import { Button, Input, Select } from 'ui'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { ChangeEvent, FormEvent, ReactNode, useCallback, useEffect, useState } from 'react'
+import { Input, PrimaryButton, Select } from 'ui'
 import { useApi } from 'hooks'
-import { config, class_categories } from '@renderer/config'
+import { config, class_categories } from '@base/config'
 import { toast } from 'react-toastify'
-import { capitalize, gender, scholar_years, ucWords } from 'functions'
+import { gender, ucWords } from 'functions'
+import { ScholarYearSelectorServer } from '@base/components/index.ts'
 
 type StudentFormProps = {
     editedStudent?: Student
@@ -16,34 +18,32 @@ const defaultStudent = {
     lastname: '',
     gender: 'Garçon',
     birth_date: '',
-    birth_place: '',
     father: '',
     mother: '',
     parents: '',
     school: '',
     classes: '',
     category: '',
-    scholar_year: ''
+    scholar_year: 0
 }
 
-export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
-    const [student, setStudent] = useState(defaultStudent)
+export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
+    const [student, setStudent] = useState<Partial<typeof defaultStudent>>(defaultStudent)
+    const [scholarYear, setScholarYear] = useState<string|number>(defaultStudent.scholar_year)
+
     const { Client: SClient, RequestState: SRequestState, error } = useApi<typeof defaultStudent>({
         baseUrl: config.baseUrl,
-        
         url: '/students'
     })
 
     const { Client: ScClient, datas: schools, RequestState: ScRequestState } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClClient, datas: ClDatas, RequestState: ClRequestState } = useApi<Classes>({
         baseUrl: config.baseUrl,
-        
         url: '/classes',
         key: 'data'
     })
@@ -51,11 +51,15 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
 
-        const response = editedStudent
-            ? await SClient.patch(editedStudent.id, student)
-            : await SClient.post(student)
+        const data = {...student, scholar_year: scholarYear as number}
 
-        const message = editedStudent ? 'Mis à jour' : 'Enregistré'
+        setStudent(data)
+
+        const response = editedStudent
+            ? await SClient.patch(editedStudent.id, data)
+            : await SClient.post(data)
+
+        const message = editedStudent ? 'Mis à jour' : 'Enregistré - Code: ' + data.number
 
         if (response.ok) {
             toast(message, {
@@ -63,7 +67,16 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                 type: 'success',
                 position: config.toastPosition
             })
-            editedStudent === undefined && setStudent(defaultStudent)
+            if (editedStudent === undefined) {
+                setStudent({
+                    ...defaultStudent,
+                    scholar_year: data.scholar_year,
+                    school: data.school,
+                    classes: data.classes,
+                    category: data.category
+                })
+                //setScholarYear(0)
+            }
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
@@ -80,7 +93,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
         setStudent({ ...student, number: number as unknown as number })
     }
 
-    if (editedStudent !== undefined && student.id === 0)
+    if (editedStudent !== undefined && student.id === 0) {
         setStudent({
             id: editedStudent.id,
             number: editedStudent.number,
@@ -88,25 +101,28 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
             lastname: editedStudent.lastname ?? '',
             gender: editedStudent.gender,
             birth_date: editedStudent.birth_date ?? '',
-            birth_place: editedStudent.birth_place ?? '',
             father: editedStudent.father ?? '',
             mother: editedStudent.mother ?? '',
             parents: editedStudent.parents ?? '',
-            school: editedStudent?.schools?.at(0)?.id ?? '',
+            /*school: editedStudent?.schools?.at(0)?.id ?? '',
             classes: editedStudent?.classes?.at(0)?.id ?? '',
             scholar_year: editedStudent?.classes?.at(0)?.pivot?.scholar_year ?? '',
-            category: editedStudent?.classes?.at(0)?.pivot?.category ?? ''
+            category: editedStudent?.classes?.at(0)?.pivot?.category ?? ''*/
         })
+    }
 
-    const handleChange = (target: EventTarget & (HTMLSelectElement | HTMLInputElement)): void => {
+    /**
+     * Permet de mettre a jour les champs
+     */
+    const handleChange = useCallback(({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         let value = target.name === 'firstname' ? target.value.toUpperCase() : target.value
         value = target.name === 'lastname' ? ucWords(value) : value
 
         setStudent({ ...student, [target.name]: value })
         if (target.value.length > 0 && error?.data.errors[target.name]) {
-            error.data.errors[target.name] = null
+            error.data.errors[target.name] = []
         }
-    }
+    }, [setStudent, student, error])
 
     useEffect(() => {
         getClasses()
@@ -115,32 +131,25 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
     }, [])
 
     return (
-        <form action="" onSubmit={handleSubmit} method="post" className="mb-5">
+        <form onSubmit={handleSubmit} method="post">
             <div className="row mb-3">
-                <div className="col-xl-1">
-                    <Input
-                        value={editedStudent ? student.number : "Auto"}
-                        onChange={({ target }): void => handleChange(target)}
-                        auto
-                        label="Numéro"
-                        error={error?.data?.errors?.number}
-                    />
-                </div>
-                <div className="col-xl-5">
+                <div className="col-xl-6">
                     <Input
                         value={student.firstname}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         label="Nom"
                         name="firstname"
+                        placeholder="Nom de l'étudiant"
                         error={error?.data?.errors?.firstname}
                     />
                 </div>
                 <div className="col-xl-6">
                     <Input
                         value={student.lastname}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         label="Prénoms"
                         name="lastname"
+                        placeholder="Prénoms de l'étudiant (Fac)"
                         error={error?.data?.errors?.lastname}
                         required={false}
                     />
@@ -151,7 +160,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                 <div className="col-xl-3">
                     <Select
                         value={student.gender}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         label="Sexe"
                         name="gender"
                         placeholder={null}
@@ -163,7 +172,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                 <div className="col-xl-3">
                     <Input
                         value={student.birth_date}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         type="date"
                         label="Date de naissance"
                         name="birth_date"
@@ -173,30 +182,21 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                 <div className="col-xl-6">
                     <Input
                         value={student.parents}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         required={false}
-                        label="Parents"
+                        label="Nom des parents"
                         name="parents"
+                        placeholder="Nom du Père & Nom de la mère"
                         error={error?.data?.errors?.parents}
                     />
                 </div>
-                {/*<div className="col-xl-6">
-                    <Input
-                        value={student.birth_place}
-                        onChange={({ target }): void => handleChange(target)}
-                        label="Lieu de naissance"
-                        name="birth_place"
-                        error={error?.data?.errors?.birth_place}
-                        required={false}
-                    />
-                </div>*/}
             </div>
 
-            <div className="row mb-4">
+            {editedStudent === undefined && <div className="row mb-4">
                 <div className="col-xl-3">
                     <Select
                         value={student.school}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         label="Etablissement"
                         options={schools}
                         config={{ optionKey: 'id', valueKey: 'name' }}
@@ -209,7 +209,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                 <div className="col-xl-3">
                     <Select
                         value={student.classes}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         label="Classe"
                         options={ClDatas}
                         config={{ optionKey: 'id', valueKey: 'name' }}
@@ -222,7 +222,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                 <div className="col-xl-3">
                     <Select
                         value={student.category}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={handleChange}
                         label="Categorie"
                         options={class_categories}
                         name="category"
@@ -231,27 +231,21 @@ export function StudentForm({ editedStudent }: StudentFormProps): JSX.Element {
                         controlled
                     />
                 </div>
+
                 <div className="col-xl-3">
-                    <Select
-                        value={student.scholar_year}
-                        onChange={({ target }): void => handleChange(target)}
-                        name="scholar_year"
-                        options={scholar_years()}
+                    <ScholarYearSelectorServer
                         label="Année scolaire"
-                        error={error?.data?.errors?.scholar_year}
-                        controlled
+                        scholarYear={scholarYear}
+                        setScholarYear={setScholarYear}
                     />
                 </div>
-            </div>
+            </div>}
 
-            <Button
+            <PrimaryButton
                 loading={SRequestState.creating || SRequestState.updating}
                 icon="save"
                 type="submit"
-                mode="primary"
-            >
-                Enregistrer
-            </Button>
+            >Enregistrer</PrimaryButton>
         </form>
     )
 }

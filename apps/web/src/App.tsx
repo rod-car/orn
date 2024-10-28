@@ -1,35 +1,102 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { ReactNode } from 'react';
+import { Statistics } from '@base/pages/Statistics';
+import { AuthRoot } from '@base/pages/Auth';
+import { priceRoute } from '@base/routes/prices';
+import { cantineRoute } from '@base/routes/cantine/cantine';
+import { PrivateRoute } from '@base/components/Auth';
+import { activityRoute } from '@base/routes/activities/activities';
+import { authRoute, userRoute } from '@base/routes/auth';
+import { scholarGardenRoute } from '@base/routes/scholar-garden/';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { AppRoot, About, Contributors, HomePage } from '@base/pages/App';
+import { studentRoute, abaqueRoute, schoolRoute, surveyRoute } from '@base/routes/anthropo-measure';
+import { documentRoute } from '@base/routes/document/documents';
 
-function App() {
-  const [count, setCount] = useState(0)
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <AppRoot />,
+        errorElement: <AppRoot error={true} />,
+        children: [
+            {
+                path: '',
+                element: <PrivateRoute>
+                    <HomePage />
+                </PrivateRoute>
+            },
+            {
+                path: 'about',
+                element: <PrivateRoute>
+                    <About />
+                </PrivateRoute>
+            },
+            {
+                path: 'contributors',
+                element: <PrivateRoute>
+                    <Contributors />
+                </PrivateRoute>
+            },
+            {
+                path: '/auth',
+                children: authRoute
+            },
+            {
+                path: '/anthropo-measure',
+                children: [
+                    {
+                        path: 'statistics',
+                        element: <PrivateRoute>
+                            <Statistics />
+                        </PrivateRoute>
+                    },
+                    {
+                        path: 'student/',
+                        children: studentRoute
+                    },
+                    {
+                        path: 'abaques/',
+                        children: abaqueRoute
+                    },
+                    {
+                        path: 'school',
+                        children: schoolRoute
+                    },
+                    {
+                        path: 'survey/',
+                        children: surveyRoute
+                    }
+                ]
+            },
+            {
+                path: '/cantine',
+                children: cantineRoute
+            },
+            {
+                path: '/activities',
+                children: activityRoute
+            },
+            {
+                path: '/scholar-garden',
+                children: scholarGardenRoute
+            },
+            {
+                path: '/prices',
+                children: priceRoute
+            },
+            {
+                path: '/documents',
+                children: documentRoute
+            }
+        ]
+    },
+    {
+        path: '/auth',
+        element: <AuthRoot />,
+        errorElement: <AuthRoot error={true} />,
+        children: userRoute
+    }
+])
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+export function App(): ReactNode {
+    return <RouterProvider router={router} />
 }
-
-export default App

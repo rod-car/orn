@@ -1,10 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { useEffect, useState } from 'react'
-import { config } from '@renderer/config'
-import { Input, Select, Block, Spinner, Button } from 'ui'
+import { ReactNode, useEffect, useState } from 'react'
+import { class_categories, config } from '@base/config'
+import { Input, Select, Block, Button, PageTitle } from 'ui'
 import { toast } from 'react-toastify'
-import { Link } from '@renderer/components'
-import { scholar_years } from 'functions'
+import { PrimaryLink, SurveySelector } from '@base/components'
 
 type StudentData = {
     student_id: number
@@ -20,6 +20,7 @@ type StudentData = {
 type FormData = {
     school_id: number
     class_id: number
+    category: string
     survey_id: number
     date: string
     scholar_year: string
@@ -29,105 +30,69 @@ type FormData = {
 const defaultFormData: FormData = {
     school_id: 0,
     class_id: 0,
+    category: '',
     survey_id: 0,
     date: '',
     scholar_year: '',
     students: []
 }
 
-export function AddSurveyStudent(): JSX.Element {
+export function AddSurveyStudent(): ReactNode {
     const [formData, setFormData] = useState<FormData>(defaultFormData)
+    const [surveyId, setSurveyId] = useState(0);
     const [precedentPhase, setPrecedentPhase] = useState<number | null | undefined>(null)
-    // const [loadings, setLoadings] = useState<boolean[]>([])
 
     const { Client: SurveyListClient, datas: surveysList, RequestState: SurveyListRequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        
         url: '/surveys',
         key: 'data'
     })
 
     const { Client: SurveyClient, RequestState: SurveyRequestState } = useApi<Survey>({
         baseUrl: config.baseUrl,
-        
         url: '/surveys',
         key: 'data'
     })
 
     const { Client: StudentClient, RequestState: StudentRequestState } = useApi<Student>({
         baseUrl: config.baseUrl,
-        
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, RequestState: SchoolRS, datas: schools } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassClient, RequestState: ClassRS, datas: classes } = useApi<School>({
         baseUrl: config.baseUrl,
-        
         url: '/classes',
         key: 'data'
     })
 
     useEffect(() => {
         SurveyListClient.get()
-        ClassClient.get()
+        ClassClient.get({need_student: false})
         SchoolClient.get()
     }, [])
 
     function handleChange(target: EventTarget & (HTMLInputElement | HTMLSelectElement), index?: number) {
         if (target.name.includes('students') && index !== undefined) {
             const nameParts = target.name.split('.')
-            
             formData.students[index][nameParts[1]] = target.value
             setFormData({...formData})
-
-            /*setTimeout(async function() {
-                // Check if can update in the database
-                const selectedStudent = formData.students[index]
-                const height = selectedStudent.height
-                const weight = selectedStudent.weight
-
-                if (height > 0 && weight > 0) {
-                    if ((selectedStudent.precedentHeight && selectedStudent.precedentHeight > height)) {
-                        toast("La taille de l'étudiant ne doit pas être inférieur a la taille précedente", {
-                            position: config.toastPosition,
-                            type: "error"
-                        })
-                        return
-                    }
-                    const formDatas = {
-                        student_id: selectedStudent.student_id,
-                        date: formData.date,
-                        school_id: formData.school_id,
-                        scholar_year: formData.scholar_year,
-                        weight: selectedStudent.weight,
-                        length: selectedStudent.height
-                    }
-                    const response = await SurveyClient.post(formDatas, `/${formData.survey_id}/add-student`)
-                    if (response.ok) {
-                        formData.students[index].saved = true
-                        setFormData({...formData})
-                    }
-                }
-            }, 1000)*/
         } else {
             setFormData({...formData, [target.name]: target.value})
         }
     }
 
     async function saveData(index: number) {
-        // Check if can update in the database
         const selectedStudent = formData.students[index]
         const height = selectedStudent.height
         const weight = selectedStudent.weight
-        
+
         if (height > 0 && weight > 0) {
             if ((selectedStudent.precedentHeight && selectedStudent.precedentHeight > height)) {
                 toast("La taille de l'étudiant ne doit pas être inférieur a la taille précedente", {
@@ -137,12 +102,12 @@ export function AddSurveyStudent(): JSX.Element {
                 return
             }
 
-            // setLoadings([...loadings.map((loading, k) => k === index ? true : loading)])
             toast("Enregistrement en cours", {
                 position: config.toastPosition,
                 type: "info"
             })
-            const formDatas = {
+
+            const datas = {
                 student_id: selectedStudent.student_id,
                 date: formData.date,
                 school_id: formData.school_id,
@@ -150,7 +115,8 @@ export function AddSurveyStudent(): JSX.Element {
                 weight: selectedStudent.weight,
                 length: selectedStudent.height
             }
-            const response = await SurveyClient.post(formDatas, `/${formData.survey_id}/add-student`)
+
+            const response = await SurveyClient.post(datas, `/${surveyId}/add-student`)
             if (response.ok) {
                 toast("Enregistré", {
                     position: config.toastPosition,
@@ -158,6 +124,11 @@ export function AddSurveyStudent(): JSX.Element {
                 })
                 formData.students[index].saved = true
                 setFormData({...formData})
+            } else {
+                toast("Erreur d'enregistrement", {
+                    position: config.toastPosition,
+                    type: "error"
+                })
             }
         } else {
             toast("La taille ou le poids ne doit pas être zero", {
@@ -165,7 +136,6 @@ export function AddSurveyStudent(): JSX.Element {
                 type: "error"
             })
         }
-        // setLoadings([...loadings.map((loading, k) => k === index ? false : loading)])
     }
 
     async function removeData(index: number) {
@@ -173,7 +143,7 @@ export function AddSurveyStudent(): JSX.Element {
         const selectedStudent = formData.students[index]
         const height = selectedStudent.height
         const weight = selectedStudent.weight
-        
+
         if (height <= 0 && weight <= 0) {
             toast("Non enregistré", {
                 position: config.toastPosition,
@@ -186,13 +156,13 @@ export function AddSurveyStudent(): JSX.Element {
             position: config.toastPosition,
             type: "info"
         })
-        
+
         const formDatas = {
             student_id: selectedStudent.student_id,
             school_id: formData.school_id,
             scholar_year: formData.scholar_year
         }
-        const response = await SurveyClient.post(formDatas, `/${formData.survey_id}/remove-student`)
+        const response = await SurveyClient.post(formDatas, `/${surveyId}/remove-student`)
         if (response.ok) {
             toast("Supprimé", {
                 position: config.toastPosition,
@@ -206,94 +176,105 @@ export function AddSurveyStudent(): JSX.Element {
     }
 
     function canDisplayTable(): boolean {
-        return formData.school_id !== 0 && formData.class_id !== 0 && formData.scholar_year !== '' && formData.date !== '' && formData.survey_id !== 0
+        return formData.school_id !== 0 && formData.class_id !== 0 && formData.date !== '' && formData.date !== undefined && surveyId > 0
+    }
+
+    function isValid(formData: FormData) {
+        return surveyId > 0 && formData.school_id && formData.class_id
     }
 
     async function getStudents() {
-        if (formData.school_id && formData.class_id && formData.scholar_year && formData.survey_id) {
-            // Get list of the students concerned by the criteria
+        if (isValid(formData))
+        {
             let measuredStudents: Student[] = []
             let precedentMeasuredStudents: Student[] = []
 
-            const selectedSurvey = await SurveyClient.find(formData.survey_id, {
-                paginate_student: 0
+            const selectedSurvey = await SurveyClient.find(surveyId, {
+                paginate_student: 0,
             })
 
             let precedentSurveyId: number | null = null;
-            
-            for (let index = formData.survey_id; index > 1; index--) {
+
+            for (let index = surveyId; index > 1; index--) {
                 precedentSurveyId = index - 1
-                if (precedentSurveyId === 1) {
-                    const precedentSurvey = await SurveyClient.find(precedentSurveyId, {
-                        paginate_student: 0
-                    })
-        
-                    if (precedentSurvey !== undefined) {
-                        precedentMeasuredStudents = precedentSurvey?.students as Student[]
-                        break
-                    }
+                // if (precedentSurveyId === 1) { // Need verification (It must not be 1 Forcely)
+                const precedentSurvey = await SurveyClient.find(precedentSurveyId, {
+                    paginate_student: 0
+                })
+
+                if (precedentSurvey !== undefined && precedentSurvey !== null) {
+                    precedentMeasuredStudents = precedentSurvey?.students as Student[]
+                    break
                 }
+                //}
             }
 
             if (selectedSurvey) {
                 measuredStudents = selectedSurvey.students;
-                formData.date = measuredStudents?.at(0)?.pivot?.date
-            }
+                formData.date = measuredStudents?.at(0)?.pivot?.date ?? formData.date
 
-            const students = await StudentClient.get({
-                paginate: false,
-                school_id: formData.school_id,
-                classe_id: formData.class_id,
-                scholar_year: formData.scholar_year
-            })
-            
-            if (students && students.length > 0) {
-                const studentDatas: StudentData[] = []
-
-                students.map((studentClass, index) => {
-                    const foundStudent = measuredStudents.find(student => student.id === studentClass.student.id)
-                    const precedentStudent = precedentMeasuredStudents.find(student => student.id === studentClass.student.id)
-                    
-                    const firstName = studentClass.student.firstname
-                    const lastName = studentClass.student.lastname
-                    const fullName = firstName + " " + (lastName === null ? '' : lastName)
-                    const precedentHeight = precedentStudent ? precedentStudent.pivot.length : null
-                    const precedentWeight = precedentStudent ? precedentStudent.pivot.weight : null
-
-                    precedentStudent ?? setPrecedentPhase(precedentSurveyId)
-
-                    // loadings.push(false)
-
-                    studentDatas.push({
-                        fullname: fullName,
-                        birth_date: studentClass.student.birth_date,
-                        height: foundStudent ? foundStudent.pivot.length ?? 0 : 0,
-                        student_id: studentClass.student_id,
-                        precedentHeight: precedentHeight,
-                        precedentWeight: precedentWeight,
-                        weight: foundStudent ? foundStudent.pivot.weight ?? 0 : 0,
-                        saved: foundStudent ? true : false
-                    })
+                const students = await StudentClient.get({
+                    paginate: false,
+                    school_id: formData.school_id,
+                    classe_id: formData.class_id,
+                    category: formData.category,
+                    scholar_year: selectedSurvey.scholar_year
                 })
-                // setLoadings([...loadings])
-                setFormData({...formData, students: studentDatas})
+
+                if (students && students.length > 0) {
+                    const studentDatas: StudentData[] = []
+
+                    students.map((studentClass) => {
+                        const foundStudent = measuredStudents.find(student => student.id === studentClass.student.id)
+                        const precedentStudent = precedentMeasuredStudents.find(student => student.id === studentClass.student.id)
+
+                        const firstName = studentClass.student.firstname
+                        const lastName = studentClass.student.lastname
+                        const fullName = firstName + " " + (lastName === null ? '' : lastName)
+                        const precedentHeight = precedentStudent ? precedentStudent.pivot.length : null
+                        const precedentWeight = precedentStudent ? precedentStudent.pivot.weight : null
+
+                        precedentStudent ?? setPrecedentPhase(precedentSurveyId)
+
+                        studentDatas.push({
+                            fullname: fullName,
+                            birth_date: studentClass.student.birth_date,
+                            height: foundStudent ? foundStudent.pivot.length ?? 0 : 0,
+                            student_id: studentClass.student_id,
+                            precedentHeight: precedentHeight,
+                            precedentWeight: precedentWeight,
+                            weight: foundStudent ? foundStudent.pivot.weight ?? 0 : 0,
+                            saved: foundStudent ? true : false
+                        })
+                    })
+                    setFormData({...formData, scholar_year: selectedSurvey.scholar_year, students: studentDatas})
+                } else {
+                    setFormData({...formData, scholar_year: selectedSurvey.scholar_year, students: []})
+                }
             } else {
-                // setLoadings([])
-                setFormData({...formData, students: []})
+                toast("Une erreur s'est produite", {
+                    position: config.toastPosition,
+                    type: "error"
+                })
             }
+
+        } else {
+            toast("Formulaire invalide", {
+                position: config.toastPosition,
+                type: "error"
+            })
         }
     }
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Formulaire de mesure</h2>
-                <Link to="/anthropo-measure/survey/list" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Liste des mésures
-                </Link>
-            </div>
+            <PageTitle title="Formulaire de mésure">
+                <PrimaryLink icon="list" to="/anthropo-measure/survey/list">
+                    Liste des mésures
+                </PrimaryLink>
+            </PageTitle>
 
-            <Block className="mb-5">
+            <Block>
                 <form action="" method="post">
                     <div className="row mb-4">
                         <div className="col-6 mb-3">
@@ -308,7 +289,7 @@ export function AddSurveyStudent(): JSX.Element {
                                 value={formData.school_id}
                                 controlled />
                         </div>
-                        <div className="col-6 mb-3">
+                        <div className="col-3 mb-3">
                             <Select
                                 label='Classe'
                                 options={classes}
@@ -320,29 +301,27 @@ export function AddSurveyStudent(): JSX.Element {
                                 value={formData.class_id}
                                 controlled />
                         </div>
+                        <div className="col-3 mb-3">
+                            <Select
+                                label="Catégorie"
+                                name="category"
+                                value={formData.category}
+                                options={class_categories}
+                                onChange={({target}) => handleChange(target)}
+                                required={false}
+                                controlled
+                            />
+                        </div>
+
                         <div className="col-6 mb-3">
-                            <Select
-                                label='Année scolaire'
-                                options={scholar_years()}
-                                placeholder="Année scolaire"
-                                onChange={({target}) => handleChange(target)}
-                                name='scholar_year'
-                                value={formData.scholar_year}
-                                controlled />
-                        </div>
-                        <div className="col-3 mb-3">
-                            <Select
-                                label="Phase d'enquête"
-                                options={surveysList}
-                                config={{ valueKey: 'phase', optionKey: 'id' }}
-                                placeholder="Selectionner une phase"
-                                onChange={({target}) => handleChange(target)}
-                                name='survey_id'
-                                value={formData.survey_id}
+                            <SurveySelector
+                                datas={surveysList}
+                                surveyId={surveyId}
+                                setSurveyId={setSurveyId}
                                 loading={SurveyListRequestState.loading}
-                                controlled />
+                            />
                         </div>
-                        <div className="col-3 mb-3">
+                        <div className="col-6 mb-3">
                             <Input
                                 type="date"
                                 label='Date de pesée'
@@ -353,51 +332,52 @@ export function AddSurveyStudent(): JSX.Element {
                     </div>
 
                     <div className="d-flex justify-content-between">
-                        <Button loading={SurveyRequestState.loading || StudentRequestState.loading} icon="check" mode="primary" onClick={getStudents}>Valider</Button>
-                        {SurveyRequestState.loading && <Spinner className="text-center" isBorder />}
+                        <Button disabled={!isValid(formData)} loading={SurveyRequestState.loading || StudentRequestState.loading} icon="check" mode="primary" onClick={getStudents}>Valider</Button>
                     </div>
                 </form>
             </Block>
 
-            {canDisplayTable() && <Block><table className='table table-striped table-bordered mb-5'>
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th className='text-nowrap'>Nom et prénoms</th>
-                        <th className='text-nowrap'>Date de naissance</th>
-                        <th className='text-nowrap'>Taille Pr {precedentPhase !== null ? `(${precedentPhase})` : ''}</th>
-                        <th className='text-nowrap'>Poids Pr {precedentPhase !== null ? `(${precedentPhase})` : ''}</th>
-                        <th>Taille</th>
-                        <th>Poids</th>
-                        <th>Actions</th>
-                        <th>Etat</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {(SurveyRequestState.loading || StudentRequestState.loading) && <tr><td className="text-center" colSpan={9}>Chargement</td></tr>}
-                    {formData.students && formData.students.map((student, index) => <tr key={student.student_id} className='align-middle'>
-                        <td>{student.student_id}</td>
-                        <td>{student.fullname}</td>
-                        <td>{student.birth_date}</td>
-                        <td>{student.precedentHeight}</td>
-                        <td>{student.precedentWeight}</td>
-                        <td>
-                            <Input onChange={({target}) => handleChange(target, index)} name="students.height" type='number' placeholder='Taille' value={student.height} />
-                        </td>
-                        <td>
-                            <Input onChange={({target}) => handleChange(target, index)} name="students.weight" type='number' placeholder='Poids' value={student.weight} />
-                        </td>
-                        <td className="d-flex justify-content-center align-items-center h-full">
-                            <Button onClick={() => saveData(index)} icon="save" mode="primary" size="sm" className="me-2" />
-                            <Button onClick={() => removeData(index)} icon="trash" mode="danger" size="sm" />
-                        </td>
-                        <td className="text-center">
-                            {student.saved ? <span className="fw-bold text-success">OK</span> : <span className="fw-bold text-danger">X</span>}
-                        </td>
-                    </tr>)}
-                    {!SurveyRequestState.loading && !StudentRequestState.loading && formData.students.length <= 0 && <tr><td className="text-center" colSpan={9}>Aucune données</td></tr>}
-                </tbody>
-            </table></Block>}
+            {canDisplayTable() && <Block>
+                <table className='table table-striped table-bordered text-sm'>
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th className='text-nowrap'>Nom et prénoms</th>
+                            <th className='text-nowrap'>Date de naissance</th>
+                            <th className='text-nowrap'>Taille Prec {precedentPhase !== null ? `(${precedentPhase})` : ''}</th>
+                            <th className='text-nowrap'>Poids Prec {precedentPhase !== null ? `(${precedentPhase})` : ''}</th>
+                            <th>Taille</th>
+                            <th>Poids</th>
+                            <th>Actions</th>
+                            <th>Etat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {(SurveyRequestState.loading || StudentRequestState.loading) && <tr><td className="text-center" colSpan={9}>Chargement</td></tr>}
+                        {formData.students && formData.students.map((student, index) => <tr key={index} className='align-middle'>
+                            <td>{student.student_id}</td>
+                            <td>{student.fullname}</td>
+                            <td>{student.birth_date}</td>
+                            <td>{student.precedentHeight ? `${student.precedentHeight} Cm` : '-'}</td>
+                            <td>{student.precedentWeight ? `${student.precedentWeight} Kg` : '-'}</td>
+                            <td>
+                                <Input onChange={({target}) => handleChange(target, index)} name="students.height" type='number' placeholder='Taille' value={student.height} />
+                            </td>
+                            <td>
+                                <Input onChange={({target}) => handleChange(target, index)} name="students.weight" type='number' placeholder='Poids' value={student.weight} />
+                            </td>
+                            <td className="d-flex justify-content-center align-items-center h-full">
+                                <Button onClick={() => saveData(index)} icon="save" mode="primary" size="sm" className="me-2" />
+                                <Button onClick={() => removeData(index)} icon="trash" mode="danger" size="sm" />
+                            </td>
+                            <td className="text-center">
+                                {student.saved ? <span className="fw-bold text-success"><i className="bi bi-check2-all"></i></span> : <span className="fw-bold text-danger"><i className="bi bi-x-lg"></i></span>}
+                            </td>
+                        </tr>)}
+                        {!SurveyRequestState.loading && !StudentRequestState.loading && formData.students.length <= 0 && <tr><td className="text-center" colSpan={9}>Aucune données</td></tr>}
+                    </tbody>
+                </table>
+            </Block>}
         </>
     )
 }

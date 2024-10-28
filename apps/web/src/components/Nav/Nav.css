@@ -1,0 +1,8 @@
+.app-nav .nav-icon {
+    top: auto;
+}
+
+.app-nav .nav-icon svg {
+    width: 20px;
+    height: 20px;
+}

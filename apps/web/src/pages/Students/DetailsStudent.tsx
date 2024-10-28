@@ -1,15 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { useParams } from 'react-router-dom'
-import { ApiErrorMessage, Block } from 'ui'
-import { config } from '@renderer/config'
-import { useEffect, useState } from 'react'
-import { StudentEvolution, StudentStatus } from '@renderer/charts'
-import { Link } from '@renderer/components'
+import { ApiErrorMessage, Block, PageTitle } from 'ui'
+import { config } from '@base/config'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { StudentEvolution, StudentStatus } from '@base/charts'
+import { PrimaryLink } from '@base/components'
 
-export function DetailsStudent(): JSX.Element {
-    const { Client, error, resetError } = useApi<Student>({
+export function DetailsStudent(): ReactNode {
+    const { Client, error, resetError, RequestState } = useApi<Student>({
         baseUrl: config.baseUrl,
-        
         url: 'students'
     })
 
@@ -17,23 +17,22 @@ export function DetailsStudent(): JSX.Element {
 
     const { id } = useParams()
 
-    const getStudent = async (id: number): Promise<void> => {
+    const getStudent = useCallback(async (id: number) => {
         const student = await Client.find(id, { student_only: 1 })
         if (student) setStudent(student)
-    }
+    }, [id])
 
     useEffect(() => {
         getStudent(id as unknown as number)
-    }, [])
+    }, [id])
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>{student && student.fullname}</h2>
-                <Link to="/anthropo-measure/student/list" className="btn primary-link">
-                    <i className="fa fa-list me-2"></i>Liste des étudiants
-                </Link>
-            </div>
+            <PageTitle title={student && student.fullname}>
+                <PrimaryLink to="/anthropo-measure/student/list" icon="list">
+                    Liste des étudiants
+                </PrimaryLink>
+            </PageTitle>
 
             {error && (
                 <ApiErrorMessage
@@ -45,9 +44,10 @@ export function DetailsStudent(): JSX.Element {
                 />
             )}
 
-            <Block className="mb-5">
-                <h3 className="mb-3">Classes</h3>
-                <table className="table table-striped">
+            <Block className="mb-4">
+                <h6>Détails de la classe</h6>
+                <hr />
+                <table className="table table-striped table-bordered text-sm m-0">
                     <thead>
                         <tr>
                             <th>Classe</th>
@@ -56,6 +56,7 @@ export function DetailsStudent(): JSX.Element {
                         </tr>
                     </thead>
                     <tbody>
+                        {RequestState.loading && <tr><td colSpan={3} className="text-center">Chargement</td></tr>}
                         {student &&
                             student.classes?.map((classe) => {
                                 const school = student.schools?.find((school) => {
@@ -66,7 +67,7 @@ export function DetailsStudent(): JSX.Element {
                                     <tr key={classe.name}>
                                         <td>{classe.name}</td>
                                         <td>{classe.pivot.scholar_year}</td>
-                                        <td>{school.name}</td>
+                                        <td>{school?.name}</td>
                                     </tr>
                                 )
                             })}

@@ -1,6 +1,6 @@
 import { ErrorResponse } from "react-router";
 
-export function ErrorComponent({ error }: { error: ErrorResponse }): JSX.Element {
+export function ErrorComponent({ error }: { error: ErrorResponse }): ReactNode {
     return (
         <>
             <div className="text-center">

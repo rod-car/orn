@@ -1,2 +1,5 @@
+export { SchoolsByClassesChart } from './SchoolsByClassesChart.tsx'
+export { SchoolsByScholarYearChart } from './SchoolsByScholarYearChart.tsx'
+export { ZBySchoolChart } from './ZBySchoolChart.tsx'
 export { StudentEvolution } from './StudentEvolution'
 export { StudentStatus } from './StudentStatus'

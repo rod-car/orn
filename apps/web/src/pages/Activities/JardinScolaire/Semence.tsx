@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Block, Button, Input } from "ui";
-import { config } from '@renderer/config'
+import { config } from '@base/config'
 import { useApi } from "hooks";
 import { range } from "functions";
 import Skeleton from "react-loading-skeleton";

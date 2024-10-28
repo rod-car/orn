@@ -4,16 +4,16 @@ import TopBarProgress from "react-topbar-progress-indicator";
 
 TopBarProgress.config({
     barColors: {
-        "0": "tomato",
-        "1.0": "tomato"
+        "0": "#002496",
+        "1.0": "#0d3edf"
     },
-    barThickness: 5,
+    barThickness: 2,
     shadowBlur: 2
 });
 
 export function ProgressBar(): ReactNode {
     const [loading, setLoading] = useState(false)
-    const location = useLocation();
+    const { pathname } = useLocation();
 
     useEffect(() => {
         setLoading(true)
@@ -21,7 +21,7 @@ export function ProgressBar(): ReactNode {
             setLoading(false)
         }, 1000)
         return () => clearTimeout(timeoutId)
-    }, [location]);
+    }, [pathname]);
 
     return <>{loading && <TopBarProgress />}</>
 }

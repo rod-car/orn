@@ -1,21 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from "hooks";
-import { ReactNode, useEffect } from "react";
-import { Block, Button } from "ui";
-import { config } from '@renderer/config'
-import { ActivityLoading, Link } from "@renderer/components";
-import { Pagination } from 'react-laravel-paginex'
 import { wrap } from 'functions'
-import { confirmAlert } from "react-confirm-alert";
+import { Block, Button, DangerButton, PageTitle } from "ui";
+import { config } from '@base/config'
 import { toast } from "react-toastify";
+import { DetailLink, EditLink, Pagination, PrimaryLink } from '@base/components'
+import { ReactNode, useEffect } from "react";
+import { confirmAlert } from "react-confirm-alert";
+import { ActivityLoading, Link } from "@base/components";
 
 export function AdminActivityList(): ReactNode {
-    const {
-        Client,
-        datas: activities,
-        RequestState
-    } = useApi<Activity>({
+    const { Client, datas: activities, RequestState } = useApi<Activity>({
         baseUrl: config.baseUrl,
-        
         url: '/activities'
     })
 
@@ -40,7 +36,7 @@ export function AdminActivityList(): ReactNode {
         getActivities()
     }, [])
 
-    const handleDelete = async (id: number): Promise<void> => {
+    const handleDelete = async (id: number) => {
         confirmAlert({
             title: 'Question',
             message: 'Voulez-vous supprimer ?',
@@ -50,15 +46,13 @@ export function AdminActivityList(): ReactNode {
                     onClick: async (): Promise<void> => {
                         const response = await Client.destroy(id)
                         if (response.ok) {
-                            toast('Enregistré', {
-                                closeButton: true,
+                            toast('Supprimé', {
                                 type: 'success',
                                 position: config.toastPosition
                             })
                             getActivities()
                         } else {
                             toast('Erreur de soumission', {
-                                closeButton: true,
                                 type: 'error',
                                 position: config.toastPosition
                             })
@@ -69,7 +63,6 @@ export function AdminActivityList(): ReactNode {
                     label: 'Non',
                     onClick: () =>
                         toast('Annulé', {
-                            closeButton: true,
                             type: 'error',
                             position: config.toastPosition
                         })
@@ -79,48 +72,33 @@ export function AdminActivityList(): ReactNode {
     }
 
     return <>
-        <div className="mb-5 d-flex justify-content-between align-items-center">
-            <h2>Liste des activités</h2>
-            <Link to="/activities/add" className="btn secondary-link me-2">
-                <i className="fa fa-plus me-2"></i>Nouveau
-            </Link>
-        </div>
+        <PageTitle title="Liste des activités">
+            <PrimaryLink to="/activities/admin/add" icon="plus-lg">
+                Nouveau
+            </PrimaryLink>
+        </PageTitle>
 
         {RequestState.loading ? <ActivityLoading admin={true} /> : <Block>
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered text-sm">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>#</th>
                         <th>Titre</th>
                         <th>Date</th>
                         <th>Lieu</th>
-                        <th>Détails</th>
-                        <th>Actions</th>
+                        <th className="w-15">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {activities && activities.data?.map((activity: Activity) => <tr>
-                        <td>{activity.id}</td>
+                    {activities && activities.data?.map((activity: Activity, index) => <tr key={activity.id}>
+                        <td>{index + 1}</td>
                         <td>{activity.title}</td>
                         <td>{activity.date}</td>
                         <td>{activity.place}</td>
-                        <td>{wrap(activity.details, 50)}</td>
                         <td className="text-nowrap">
-                            <Link
-                                className="btn-sm me-2 btn btn-primary"
-                                to={`/activities/types/edit/${1}`}
-                            >
-                                <i className="fa fa-edit"></i>
-                            </Link>
-                            <Button
-                                type="button"
-                                mode="danger"
-                                icon="trash"
-                                size="sm"
-                                onClick={(): void => {
-                                    handleDelete(1)
-                                }}
-                            />
+                            <DetailLink className="me-2" to={`/activities/show/${activity.id}`} />
+                            <EditLink className="me-2" to={`/activities/admin/edit/${activity.id}`} />
+                            <DangerButton icon="trash" size="sm" onClick={() => handleDelete(activity.id) }/>
                         </td>
                     </tr>)}
                 </tbody>
