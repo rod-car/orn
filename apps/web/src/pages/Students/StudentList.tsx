@@ -31,30 +31,30 @@ export function StudentList(): ReactNode {
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
 
     const { Client: StudentClient, RequestState: SRequestState, error: Serror, datas: students } = useApi<Student>({
-        baseUrl: config.baseUrl,
+        
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassClient, datas: classes, RequestState: ClassRequestState } = useApi<Classes>({
-        baseUrl: config.baseUrl,
+        
         url: '/classes',
         key: 'data'
     })
 
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
+        
         url: 'students'
     })
 
     const { Client: ScholarYearClient, datas: scholarYears, RequestState: ScholarYearRequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
+        
         url: 'scholar-years'
     })
 

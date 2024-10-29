@@ -21,25 +21,25 @@ export function StudentsClasses(): ReactNode {
     const [studentsClasses, setStudentsClasses] = useState<number[]>([])
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassesClient, datas: classes, RequestState: ClassesRequestState } = useApi<Classes>({
-        baseUrl: config.baseUrl,
+        
         url: '/classes',
         key: 'data'
     })
 
     const { Client: StudentClient, datas: students, setDatas: setStudents, RequestState: StudentRequestState } = useApi<Student>({
-        baseUrl: config.baseUrl,
+        
         url: '/students',
         key: 'data'
     })
 
     const { Client: NextStudentClient } = useApi<Student>({
-        baseUrl: config.baseUrl,
+        
         url: '/students',
         key: 'data'
     })

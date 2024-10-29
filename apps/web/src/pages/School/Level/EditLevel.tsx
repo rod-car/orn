@@ -10,7 +10,7 @@ import { Link, PrimaryLink } from '@base/components'
 export function EditLevel(): ReactNode {
     const [level, setLevel] = useState<Niveau>({ id: 0, label: '', description: '' })
     const { Client, RequestState, error } = useApi<Niveau>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/levels'
     })

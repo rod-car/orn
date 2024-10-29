@@ -15,7 +15,7 @@ export function FoodAdd(): ReactNode {
     const navigate = useNavigate()
 
     const { Client, RequestState, error } = useApi<Food>({
-        baseUrl: config.baseUrl,
+        
         url: '/foods'
     })
 

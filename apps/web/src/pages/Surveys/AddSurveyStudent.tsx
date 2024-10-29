@@ -43,31 +43,31 @@ export function AddSurveyStudent(): ReactNode {
     const [precedentPhase, setPrecedentPhase] = useState<number | null | undefined>(null)
 
     const { Client: SurveyListClient, datas: surveysList, RequestState: SurveyListRequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
+        
         url: '/surveys',
         key: 'data'
     })
 
     const { Client: SurveyClient, RequestState: SurveyRequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
+        
         url: '/surveys',
         key: 'data'
     })
 
     const { Client: StudentClient, RequestState: StudentRequestState } = useApi<Student>({
-        baseUrl: config.baseUrl,
+        
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, RequestState: SchoolRS, datas: schools } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassClient, RequestState: ClassRS, datas: classes } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/classes',
         key: 'data'
     })

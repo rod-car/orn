@@ -8,7 +8,7 @@ import Skeleton from 'react-loading-skeleton'
 
 export function JardinEdit(): ReactNode {
     const { Client, data: garden } = useApi<Garden>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/jardin-scolaires'
     })

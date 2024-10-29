@@ -24,7 +24,7 @@ export function TypeActivityForm({ editedActivity }: TypeActivityFormProps): Rea
         error,
         RequestState
     } = useApi<Activity>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/activities',
         key: 'data'

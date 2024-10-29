@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { config } from '@base/config'
-import { useCallback, useEffect } from 'react'
+import { ReactNode, useCallback, useEffect } from 'react'
 import { Block, Spinner } from 'ui'
 
 export function SchoolByScholarYear(): ReactNode {
     const { Client, RequestState, error, datas } = useApi<Student>({
-        baseUrl: config.baseUrl,
         url: '/students',
         key: 'data'
     })

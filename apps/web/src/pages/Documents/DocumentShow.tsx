@@ -16,7 +16,7 @@ function download(path: string) {
 
 export function DocumentShow(): ReactNode {
     const { Client, data: document, RequestState } = useApi<FileDocument>({
-        baseUrl: config.baseUrl,
+        
         url: '/documents',
         key: 'data'
     })

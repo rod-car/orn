@@ -41,13 +41,13 @@ export function ArticlePriceSiteChart(): ReactNode {
     const [searchParams, setSearchParams] = useSearchParams(queryParams as unknown as URLSearchParams)
 
     const { Client: SiteClient, datas: sites } = useApi<Site>({
-        baseUrl: config.baseUrl,
+        
         url: '/prices/sites',
         key: 'data'
     })
 
     const { Client: ArticleClient, datas: articles } = useApi<Article>({
-        baseUrl: config.baseUrl,
+        
         url: '/prices/articles',
         key: 'data'
     })
@@ -57,7 +57,7 @@ export function ArticlePriceSiteChart(): ReactNode {
         datas: StateDatas,
         RequestState
     } = useApi<{ data: ArticlePrice }>({
-        baseUrl: config.baseUrl,
+        
         url: '/prices',
         key: 'data'
     })

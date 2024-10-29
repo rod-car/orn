@@ -6,14 +6,12 @@ import { range, round } from 'functions'
 import Skeleton from 'react-loading-skeleton'
 import { ExcelExportButton } from '@base/components/index.ts'
 
-export function StudentBySchoolZ({ surveyId }: { surveyId: number }): ReactNode {
+export function StudentBySchoolZ({ surveyId }: { surveyId: number | undefined }): ReactNode {
     const { Client, RequestState, error, datas } = useApi<SurveySchoolZ>({
-        baseUrl: config.baseUrl,
         url: '/students'
     })
 
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
         url: '/surveys'
     })
 

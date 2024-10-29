@@ -10,7 +10,7 @@ import 'react-photo-view/dist/react-photo-view.css';
 
 export function ActivityShow(): ReactNode {
     const { Client, data: activity, RequestState } = useApi<Activity>({
-        baseUrl: config.baseUrl,
+        
         url: '/activities'
     })
 

@@ -9,7 +9,7 @@ import { confirmAlert } from 'react-confirm-alert'
 
 export function SchoolList(): ReactNode {
     const { Client, datas: schools, RequestState, error, resetError } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/schools',
         key: 'data'
     })

@@ -7,7 +7,7 @@ import { PageTitle } from "ui";
 
 export function ActivityList(): ReactNode {
     const { Client, datas: activities, RequestState } = useApi<Activity>({
-        baseUrl: config.baseUrl,
+        
         url: '/activities'
     })
 

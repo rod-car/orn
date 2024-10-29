@@ -12,7 +12,7 @@ export function AddAbaque(): ReactNode {
     ])
 
     const { Client, RequestState } = useApi<MeasureLength>({
-        baseUrl: config.baseUrl,
+        
         url: '/measures'
     })
 

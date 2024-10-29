@@ -9,7 +9,7 @@ import { EditLink, PrimaryLink } from '@base/components'
 
 export function Levels(): ReactNode {
     const { Client, datas, RequestState, error, resetError, success } = useApi<Niveau>({
-        baseUrl: config.baseUrl,
+        
         url: '/levels',
         key: 'data'
     })

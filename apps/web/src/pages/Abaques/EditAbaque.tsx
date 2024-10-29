@@ -11,7 +11,7 @@ export function EditAbaque(): ReactNode {
     const [abaque, setAbaque] = useState<Partial<MeasureLength>>(abaqueConfig.defaultFields)
     const { id } = useParams()
     const { Client, RequestState } = useApi<MeasureLength>({
-        baseUrl: config.baseUrl,
+        
         url: '/measures'
     })
 

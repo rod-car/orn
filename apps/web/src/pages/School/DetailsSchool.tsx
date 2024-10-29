@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 
 export function DetailsSchool(): ReactNode {
     const { Client, error, resetError } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         
         url: 'schools'
     })

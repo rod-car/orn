@@ -9,7 +9,7 @@ import { confirmAlert } from "react-confirm-alert";
 
 export function Semence(): ReactNode {
     const { datas: semences, setDatas, Client, RequestState, error } = useApi<Semence>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/jardin-scolaires/semences'
     })

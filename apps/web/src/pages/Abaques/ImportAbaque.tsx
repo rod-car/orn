@@ -10,7 +10,7 @@ export function ImportAbaque(): ReactNode {
     const { json, importing, toJSON, resetJSON } = useExcelReader()
 
     const { Client, RequestState } = useApi<MeasureLength>({
-        baseUrl: config.baseUrl,
+        
         url: '/measures'
     })
 

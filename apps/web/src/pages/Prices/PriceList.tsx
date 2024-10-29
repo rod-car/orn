@@ -11,28 +11,28 @@ export function PriceList(): ReactNode {
     const [searchParams, setSearchParams] = useSearchParams()
 
     const { Client, datas: articlePrices, RequestState } = useApi<ArticlePrice>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices',
         key: 'data'
     })
 
     const { Client: SiteClient, datas: sites, RequestState: SiteRequestState } = useApi<Site>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/sites',
         key: 'data'
     })
 
     const { Client: ArticleClient, datas: articles, RequestState: ArticleRequestState } = useApi<Site>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/articles',
         key: 'data'
     })
 
     const { Client: UnitClient, datas: units, RequestState: UnitRequestState } = useApi<Site>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/units',
         key: 'data'

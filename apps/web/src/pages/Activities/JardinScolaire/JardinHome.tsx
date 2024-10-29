@@ -11,7 +11,7 @@ export function JardinHome(): ReactNode {
         datas: activities,
         RequestState
     } = useApi<Activity>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/activities',
         key: 'data'

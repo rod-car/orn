@@ -10,7 +10,7 @@ export function EditClass(): ReactNode {
     const [classes, setClasses] = useState<Classes>({ id: 0, name: '', level_id: 0, notation: '' })
     const { id } = useParams()
     const { Client, datas } = useApi<Niveau>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/levels',
         key: 'data'
@@ -21,7 +21,7 @@ export function EditClass(): ReactNode {
         RequestState,
         error
     } = useApi<Classes>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/classes'
     })

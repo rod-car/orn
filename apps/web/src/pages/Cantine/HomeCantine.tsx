@@ -9,19 +9,19 @@ import './HomeCantine.modules.scss'
 
 export function HomeCantine(): ReactNode {
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
-        baseUrl: config.baseUrl,
+        
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schoolCount } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: SurveyClient, datas: surveyCount } = useApi<Survey>({
-        baseUrl: config.baseUrl,
+        
         url: '/surveys',
         key: 'data'
     })

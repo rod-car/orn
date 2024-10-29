@@ -16,7 +16,7 @@ import { Block, Button, Input } from "ui";
  */
 export function Profile(): ReactNode {
     const [user, setUser] = useState<User>()
-    const { Client } = useApi({ baseUrl: config.baseUrl, url: '/auth' })
+    const { Client } = useApi({  url: '/auth' })
     const { Client: UpdateClient, RequestState, error } = useApi({ url: '/auth/users' })
     const { user: currentUser, updateUser } = useAuthStore();
 

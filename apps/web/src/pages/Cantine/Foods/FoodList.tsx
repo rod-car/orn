@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 
 export function FoodList(): ReactNode {
     const { Client, RequestState, error, datas: foods } = useApi<Food>({
-        baseUrl: config.baseUrl,
+        
         url: '/foods'
     })
 

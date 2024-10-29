@@ -13,7 +13,7 @@ export function EditStudent(): ReactNode {
     const { id } = useParams()
 
     const { Client: StudentClient, data: student } = useApi<Student>({
-        baseUrl: config.baseUrl,
+        
         url: '/students'
     })
 

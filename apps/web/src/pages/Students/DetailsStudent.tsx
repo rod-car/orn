@@ -9,7 +9,7 @@ import { PrimaryLink } from '@base/components'
 
 export function DetailsStudent(): ReactNode {
     const { Client, error, resetError, RequestState } = useApi<Student>({
-        baseUrl: config.baseUrl,
+        
         url: 'students'
     })
 

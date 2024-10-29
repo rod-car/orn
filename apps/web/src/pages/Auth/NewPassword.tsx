@@ -13,7 +13,7 @@ export function NewPassword(): ReactNode {
     const navigate = useNavigate()
 
     const { Client, RequestState } = useApi<User>({
-        baseUrl: config.baseUrl,
+        
         url: '/auth/new-password',
         key: 'data'
     })

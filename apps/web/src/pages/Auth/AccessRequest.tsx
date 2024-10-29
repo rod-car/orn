@@ -18,7 +18,7 @@ export function AccessRequest(): ReactNode {
     const [perPage, setPerPage] = useState(30)
 
     const { Client, RequestState, error, datas: users, setDatas: setUsers } = useApi<User>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/auth/users',
         key: 'data'

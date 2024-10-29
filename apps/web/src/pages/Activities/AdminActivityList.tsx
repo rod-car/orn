@@ -11,7 +11,7 @@ import { ActivityLoading, Link } from "@base/components";
 
 export function AdminActivityList(): ReactNode {
     const { Client, datas: activities, RequestState } = useApi<Activity>({
-        baseUrl: config.baseUrl,
+        
         url: '/activities'
     })
 

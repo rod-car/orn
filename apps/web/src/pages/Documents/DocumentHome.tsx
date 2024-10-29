@@ -18,7 +18,7 @@ import Skeleton from "react-loading-skeleton";
  */
 export function DocumentHome(): ReactNode {
     const { Client, datas: documents, RequestState } = useApi<FileDocument>({
-        baseUrl: config.baseUrl,
+        
         url: '/documents'
     })
 

@@ -11,7 +11,7 @@ import { PrimaryLink } from '@base/components'
 
 export function EditSchool(): ReactNode {
     const { Client, data: school } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/schools'
     })
 

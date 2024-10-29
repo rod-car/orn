@@ -17,17 +17,17 @@ export function DetailsSurvey(): ReactNode {
     const { id } = useParams()
 
     const { Client, data: survey, RequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
+        
         url: 'surveys'
     })
 
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
+        
         url: 'surveys'
     })
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: 'schools',
         key: 'data'
     })

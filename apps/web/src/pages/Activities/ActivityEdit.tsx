@@ -11,7 +11,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 export function ActivityEdit(): ReactNode {
     const { Client, data: activity } = useApi<Activity>({
-        baseUrl: config.baseUrl,
+        
         url: '/activities'
     })
 

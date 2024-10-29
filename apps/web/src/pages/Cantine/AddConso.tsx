@@ -20,18 +20,18 @@ export function AddConso(): ReactNode {
     const navigate = useNavigate()
 
     const { Client, RequestState, error } = useApi<Food>({
-        baseUrl: config.baseUrl,
+        
         url: '/foods'
     })
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassClient, datas: classes, RequestState: ClassRequestState } = useApi<Classes>({
-        baseUrl: config.baseUrl,
+        
         url: '/classes',
         key: 'data'
     })

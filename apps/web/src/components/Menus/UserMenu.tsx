@@ -10,7 +10,7 @@ import { Button } from "ui";
 export function UserMenu(): ReactNode {
     const navigate = useNavigate()
     const { user, logout, isSuperuser } = useAuthStore()
-    const { Client, RequestState } = useApi<User>({ baseUrl: config.baseUrl, url: '/auth' })
+    const { Client, RequestState } = useApi<User>({  url: '/auth' })
 
     const handleLogout = async (): Promise<void> => {
         toast('Deconnexion en cours', {

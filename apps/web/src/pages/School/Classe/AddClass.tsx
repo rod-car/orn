@@ -9,13 +9,13 @@ import { PrimaryLink } from '@base/components'
 export function AddClass(): ReactNode {
     const [classes, setClasses] = useState<Classes>({ id: 0, name: '', level_id: 0, notation: '' })
     const { Client, datas } = useApi<Niveau>({
-        baseUrl: config.baseUrl,
+        
         url: '/levels',
         key: 'data'
     })
 
     const { Client: ClassClient, RequestState, error } = useApi<Classes>({
-        baseUrl: config.baseUrl,
+        
         url: '/classes'
     })
 

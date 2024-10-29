@@ -14,7 +14,7 @@ export function ImportStudent(): ReactNode {
 
     const { json, importing, toJSON, resetJSON } = useExcelReader()
     const { Client, RequestState } = useApi<StudentImport>({
-        baseUrl: config.baseUrl,
+        
         url: '/students'
     })
 

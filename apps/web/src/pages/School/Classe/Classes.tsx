@@ -9,7 +9,7 @@ import { EditLink, PrimaryLink } from '@base/components'
 
 export function Classes(): ReactNode {
     const { Client, datas, RequestState, error, resetError } = useApi<Classes>({
-        baseUrl: config.baseUrl,
+        
         url: '/classes',
         key: 'data'
     })

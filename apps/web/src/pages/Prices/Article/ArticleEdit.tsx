@@ -9,7 +9,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 export function ArticleEdit(): ReactNode {
     const { Client, data: article } = useApi<Article>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/articles'
     })

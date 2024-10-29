@@ -13,7 +13,7 @@ export function ArticleList(): ReactNode {
         datas: articles,
         RequestState
     } = useApi<Article>({
-        baseUrl: config.baseUrl,
+        
         url: '/prices/articles'
     })
 

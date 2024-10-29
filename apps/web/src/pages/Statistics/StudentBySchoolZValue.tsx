@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { config } from '@base/config'
 import { ReactNode, useCallback, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { range } from 'functions'
@@ -8,12 +7,10 @@ import { ExcelExportButton } from '@base/components/ExportExcelButton.tsx'
 
 export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNode {
     const { Client, RequestState, error, datas } = useApi<SurveySchoolZ>({
-        baseUrl: config.baseUrl,
         url: '/students'
     })
 
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
         url: '/surveys'
     })
 

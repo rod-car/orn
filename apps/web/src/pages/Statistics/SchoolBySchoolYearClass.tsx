@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { config } from '@base/config'
-import { useCallback, useEffect } from 'react'
+import { ReactNode, useCallback, useEffect } from 'react'
 import { Block, Spinner } from 'ui'
 
 export function SchoolBySchoolYearClass(): ReactNode {
     const { Client, RequestState, error, datas } = useApi<Student>({
-        baseUrl: config.baseUrl,
         url: '/students',
         key: 'data'
     })
@@ -23,21 +21,16 @@ export function SchoolBySchoolYearClass(): ReactNode {
     const realData = datas.data
 
     return (
-        <Block>
-            <div className="d-flex align-items-center justify-content-between">
-                <h5 className="text-primary fw-semibold">Repartition des étudiants</h5>
-            </div>
+        <>
             {error && <div className="alert alert-danger">{error.message}</div>}
-
             {RequestState.loading && <Spinner isBorder size="sm" />}
-
             {realData &&
-                Object.keys(realData).map((scholar_year) => {
+                Object.keys(realData).reverse().map((scholar_year) => {
                     const data = realData[scholar_year]
                     return (
-                        <div key={scholar_year}>
+                        <Block key={scholar_year} className='mb-4'>
                             <div className="d-flex align-items-center justify-content-between mb-3">
-                                <h6 className="text-muted m-0">Annee scolaire: {scholar_year}</h6>
+                                <h6 className="text-info m-0">Année scolaire: {scholar_year}</h6>
                             </div>
                             <table className="table table-striped table-bordered text-sm">
                                 <thead>
@@ -61,9 +54,9 @@ export function SchoolBySchoolYearClass(): ReactNode {
                                     ))}
                                 </tbody>
                             </table>
-                        </div>
+                        </Block>
                     )
                 })}
-        </Block>
+        </>
     )
 }

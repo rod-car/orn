@@ -52,7 +52,7 @@ export function Account(): ReactNode {
 
     const roles = useMemo(() => ["Invité", "Administrateur", "Super administrateur"], [])
 	const { Client } = useApi({
-		baseUrl: config.baseUrl,
+		
 		url: '/auth'
 	})
 

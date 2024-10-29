@@ -29,7 +29,7 @@ export function ScholarYearSelectorServer({
     setScholarYear
 }: ScholarYearSelectorProps): ReactNode {
     const { Client, RequestState, datas: scholarYears } = useApi<Survey>({
-        baseUrl: config.baseUrl,
+        
         url: '/scholar-years'
     })
 

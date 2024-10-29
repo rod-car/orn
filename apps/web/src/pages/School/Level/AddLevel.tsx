@@ -8,7 +8,7 @@ import { PrimaryLink } from '@base/components'
 export function AddLevel(): ReactNode {
     const [level, setLevel] = useState<Niveau>({ id: 0, label: '', description: '' })
     const { Client, RequestState, error } = useApi<Niveau>({
-        baseUrl: config.baseUrl,
+        
         url: '/levels'
     })
 

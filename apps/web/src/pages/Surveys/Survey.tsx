@@ -10,7 +10,7 @@ import { format } from 'functions'
 
 export function Survey(): ReactNode {
     const { Client, RequestState, error, datas: surveys } = useApi<Survey>({
-        baseUrl: config.baseUrl,
+        
         url: '/surveys',
         key: 'data'
     })

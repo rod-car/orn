@@ -11,7 +11,7 @@ import { Col, Row } from "@base/components/Bootstrap";
 
 export function DocumentEdit(): ReactNode {
     const { Client, data: document, RequestState } = useApi<FileDocument>({
-        baseUrl: config.baseUrl,
+        
         url: '/documents',
         key: 'data'
     })

@@ -15,7 +15,7 @@ export function RegisterForm({ external = true }: { external?: boolean }): React
     }
 
     const { Client, RequestState } = useApi<User>({
-        baseUrl: config.baseUrl,
+        
         url: '/auth',
         key: 'data'
     })

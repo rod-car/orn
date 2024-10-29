@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 export function JardinList(): ReactNode {
     const { Client, datas: jardins, RequestState } = useApi<Garden>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/jardin-scolaires',
         key: 'data'

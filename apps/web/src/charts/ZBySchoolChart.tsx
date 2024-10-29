@@ -42,7 +42,7 @@ export function ZBySchoolChart(): ReactNode {
     const [surveyId, setSurveyId] = useState(1)
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/schools',
         key: 'data'
     })
@@ -52,7 +52,7 @@ export function ZBySchoolChart(): ReactNode {
         datas: StateDatas,
         RequestState
     } = useApi<SurveySchoolZ>({
-        baseUrl: config.baseUrl,
+        
         url: '/students'
     })
 

@@ -16,7 +16,7 @@ export function AddSurvey(): ReactNode {
     const [scholarYear, setScholarYear] = useState<string | number>(0);
 
     const { Client, RequestState, error } = useApi<Survey>({
-        baseUrl: config.baseUrl,
+        
         url: '/surveys'
     })
 

@@ -15,6 +15,11 @@ export function SidePanel(): ReactNode {
             <nav id="app-nav-main" className="app-nav app-nav-main flex-grow-1">
                 <ul className="app-menu list-unstyled accordion" id="menu-accordion">
                     <NavItem icon="speedometer" active={pathname === "/"} to="/" label="Tableau de bord" />
+                    <DropDown icon="bar-chart-fill" base="/anthropo-measure/statistics" label="Statistique" menus={[
+                        { label: "Repartition des étudiants", to: "/student-repartition" },
+                        { label: "Résultat par métrique", to: "/result-by-metric", can: isAdmin },
+                        { label: "Résultat global", to: "/result-global", can: isAdmin }
+                    ]} />
 
                     <GroupSeparator title="Mesure anthropométrique" />
                     <DropDown icon="people" base="/anthropo-measure/student" label="Etudiants" menus={[
