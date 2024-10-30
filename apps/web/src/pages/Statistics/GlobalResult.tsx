@@ -1,16 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { PrimaryLink, SurveySelector } from "@base/components";
-import { ReactNode, useEffect, useState } from "react";
-import { Block, PageTitle } from "ui";
+import { ReactNode, useCallback, useEffect, useState } from "react";
+import { Block, PageTitle, Spinner } from "ui";
 import { StudentBySchoolZ } from "./StudentBySchoolZ.tsx";
 import { useApi } from "hooks";
 
 export function GlobalResult(): ReactNode {
-    const [surveyId, setSurveyId] = useState<number>(1)
+    const [surveyId, setSurveyId] = useState<number>(-1)
     const { Client, datas, RequestState } = useApi<Survey>({url: 'surveys', key: 'data' })
 
+    const getSurveys = useCallback(async () => {
+        const surveys = await Client.get()
+        const lastSurvey = surveys.at(-1)
+        lastSurvey && setSurveyId(lastSurvey.id)
+    }, [])
+
     useEffect(() => {
-        Client.get()
+        getSurveys()
     }, [])
 
     return <>
@@ -18,7 +24,7 @@ export function GlobalResult(): ReactNode {
             <PrimaryLink to="/" icon="speedometer">Tableau de bord</PrimaryLink>
         </PageTitle>
 
-        <Block className="mb-4">
+        {surveyId > -1 ? <Block className="mb-4">
             <div className="mb-4">
                 <SurveySelector
                     setSurveyId={setSurveyId}
@@ -27,6 +33,6 @@ export function GlobalResult(): ReactNode {
                     surveyId={surveyId} />
             </div>
             <StudentBySchoolZ surveyId={surveyId === 0 ? undefined : surveyId} />
-        </Block>
+        </Block> : <Spinner isBorder className="text-center" size="sm" />}
     </>
 }

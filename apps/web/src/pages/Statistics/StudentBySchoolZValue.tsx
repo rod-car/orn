@@ -32,9 +32,7 @@ export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNod
 
     return <>
         {error && <div className="alert alert-danger">{error.message}</div>}
-
         {RequestState.loading && <LoadingComponent />}
-
         {realData &&
             Object.keys(realData).map((surveyDetails: string) => {
                 const data = realData[surveyDetails]
@@ -65,20 +63,20 @@ export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNod
                                 <table className="table table-striped table-bordered text-sm">
                                     <thead>
                                         <tr className="text-nowrap">
-                                            <th></th>
-                                            {headers.map((header, index) => <th key={index}>{header}</th>)}
+                                            <th className='bg-primary text-white'></th>
+                                            {headers.map((header, index) => <th className='bg-primary text-white text-end' key={index}>{header}</th>)}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {schoolsName && Object.values(schoolsName).map((schoolName: string) => <tr key={schoolName}>
-                                            <td>{schoolName}</td>
-                                            {headers.map((header, index) => <td key={index} className={header === 'TOTAL' ? 'fw-bold' : ''}>
-                                                {JSON.stringify(datas[header][schoolName])}
+                                            <td className='text-white bg-info fw-bold'>{schoolName}</td>
+                                            {headers.map((header, index) => <td key={index} className={`text-end ${header === 'TOTAL' ? 'fw-bold text-white bg-info' : ''}`}>
+                                                {datas[header][schoolName]}
                                             </td>)}
                                         </tr>)}
                                         <tr>
-                                            <td>TAUX</td>
-                                            {headers.map((header, index) => <td key={index}>{datas[header]['TAUX GENERALE']} %</td>)}
+                                            <td className='fw-bold text-white bg-primary'>TAUX</td>
+                                            {headers.map((header, index) => <td className='fw-bold text-white bg-primary text-end' key={index}>{datas[header]['TAUX GENERALE']} %</td>)}
                                         </tr>
                                     </tbody>
                                 </table>
@@ -101,10 +99,6 @@ function LoadingComponent(): ReactNode {
     const headers = [1, 2, 3, 4, 5, 6, 7, 8]
     const schools = range(10)
     return <div className="mb-5">
-        <div className="d-flex align-items-center justify-content-between mb-4">
-            <Skeleton style={{height: 30, width: 250}} />
-            <Skeleton style={{height: 30, width: 250}} />
-        </div>
         <div className='mb-5'>
             <h5 className="mb-4 fw-bold"><Skeleton style={{height: 30, width: 300}} /></h5>
             <table className="table table-striped table-bordered">

@@ -49,11 +49,7 @@ export function HomePage(): ReactNode {
 
     return (
         <>
-            <PageTitle title="Tableau de bord">
-                <Link to="/anthropo-measure/statistics" className="btn btn-primary">
-                    <i className="bi bi-list me-2"></i>Statistiques
-                </Link>
-            </PageTitle>
+            <PageTitle title="Tableau de bord" />
 
             <div className="row mb-5">
                 <div className="col-4">

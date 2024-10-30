@@ -2,7 +2,7 @@ import { PropsWithChildren, ReactNode } from "react";
 import { Spinner } from "ui";
 
 type ExcelExportButtonProps = PropsWithChildren & {
-    ExportClient: any;
+    ExportClient: unknown;
     url: string;
     requestData?: Record<string, unknown>;
     elements: {label: string, params: Record<string, unknown>}[];
@@ -24,7 +24,7 @@ export function ExcelExportButton(
         <button
             style={{ fontSize: 'small' }}
             disabled={loading}
-            className="btn btn-warning dropdown-toggle d-flex align-items-center shadow"
+            className="btn btn-warning dropdown-toggle d-flex align-items-center shadow p-2"
             type="button"
             id="printDropdown"
             data-bs-toggle="dropdown"

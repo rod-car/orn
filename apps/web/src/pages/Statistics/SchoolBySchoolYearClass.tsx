@@ -23,7 +23,7 @@ export function SchoolBySchoolYearClass(): ReactNode {
     return (
         <>
             {error && <div className="alert alert-danger">{error.message}</div>}
-            {RequestState.loading && <Spinner isBorder size="sm" />}
+            {RequestState.loading && <Spinner className='text-center' isBorder size="sm" />}
             {realData &&
                 Object.keys(realData).reverse().map((scholar_year) => {
                     const data = realData[scholar_year]
@@ -35,21 +35,19 @@ export function SchoolBySchoolYearClass(): ReactNode {
                             <table className="table table-striped table-bordered text-sm">
                                 <thead>
                                     <tr>
-                                        <th></th>
-                                        {headers && Object.values(headers).map(header => <th key={header}>{header}</th>)}
-                                        <th>Total</th>
+                                        <th className='bg-primary text-white'></th>
+                                        {headers && Object.values(headers).map(header => <th className='bg-primary text-white text-end' key={header}>{header}</th>)}
+                                        <th className='bg-primary text-white text-end'>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {Object.keys(data).map((school) => (
                                         <tr key={school}>
-                                            <td>{school}</td>
-                                            {Object.values(headers).map(classe => <td key={classe as string} className="text-primary">
-                                                {data[school][classe] ?? (
-                                                    <span className="text-danger">0</span>
-                                                )}
+                                            <td className={`text-white fw-bold ${school === 'TOTAUX_GENERALE' ? 'bg-primary' : 'bg-info'}`}>{school}</td>
+                                            {Object.values(headers).map(classe => <td key={classe} className={`text-primary text-end ${school === 'TOTAUX_GENERALE' && 'fw-bold text-white bg-primary'}`}>
+                                                {data[school][classe] ?? <span className="text-danger">-</span>}
                                             </td>)}
-                                            <td className="fw-bold">{data[school].total}</td>
+                                            <td className={`fw-bold text-white text-end ${school === 'TOTAUX_GENERALE' ? 'bg-primary' : 'bg-info'}`}>{data[school].total}</td>
                                         </tr>
                                     ))}
                                 </tbody>

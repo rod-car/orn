@@ -268,3 +268,16 @@ border: 1px solid #071E78;
     writing-mode: tb;
     transform: rotate(180deg);
 }
+
+.app-card-link-mask {
+  transition: all;
+  transition-duration: .4s;
+}
+
+.app-card-link-mask:hover {
+  border: 1px solid var(--PrimaryColor);
+  border-radius: 5px;
+  transition: all;
+  transition-duration: .4s;
+  background: rgba(139, 139, 255, 0.164);
+}
