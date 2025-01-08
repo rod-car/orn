@@ -1,6 +1,6 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@base/components";
 import { Block, Button, PageTitle } from "ui";
 import { ActivityLoading } from "@base/components";
 

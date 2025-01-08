@@ -1,5 +1,5 @@
 import { useApi } from 'hooks'
-import { NavLink, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Block, PageTitle } from 'ui'
 import { ReactNode, useEffect, useState } from 'react'
 import { PrimaryLink } from '@base/components/index.ts'

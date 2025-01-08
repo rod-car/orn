@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink } from '@base/components'
 import { Block, PageTitle } from 'ui'
 import { TypeActivityForm } from '@base/pages/Activities'
 import { ReactNode } from 'react'

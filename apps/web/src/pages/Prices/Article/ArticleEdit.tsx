@@ -1,7 +1,8 @@
 import { useApi } from 'hooks'
 import { ReactNode, useEffect } from 'react'
-import { NavLink, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Block } from 'ui'
+import { NavLink } from "@base/components"
 import { ArticleForm } from '@base/pages/Prices'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'

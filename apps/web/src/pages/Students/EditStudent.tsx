@@ -3,7 +3,7 @@ import { ReactNode, useCallback, useEffect } from 'react'
 import { Block, PageTitle } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { Link, PrimaryLink, StudentFormLoading } from '@base/components'
+import { PrimaryLink, StudentFormLoading } from '@base/components'
 import { StudentForm } from './StudentForm'
 import Skeleton from 'react-loading-skeleton'
 import { Flex } from '@base/components';
