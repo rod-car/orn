@@ -92,7 +92,7 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path: '/auth',
+        path: '/orn/auth',
         element: <AuthRoot />,
         errorElement: <AuthRoot error={true} />,
         children: userRoute
