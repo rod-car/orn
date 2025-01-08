@@ -13,7 +13,7 @@ export function UserMenu(): ReactNode {
     const { user, logout, isSuperuser } = useAuthStore()
     const { Client, RequestState } = useApi<User>({  url: '/auth' })
 
-    const handleLogout = async (): Promise<void> => {
+    const handleLogout = async () => {
         toast('Deconnexion en cours', {
             type: 'info',
             isLoading: RequestState.creating,
@@ -31,7 +31,7 @@ export function UserMenu(): ReactNode {
                 position: config.toastPosition
             })
         }
-        navigate('/auth/login')
+        navigate('/orn/auth/login')
     }
 
     return <div className="app-utility-item app-user-dropdown dropdown">
@@ -40,11 +40,11 @@ export function UserMenu(): ReactNode {
             {excerpt(user?.name)} ({user?.role})
         </a>
         <ul className="dropdown-menu" aria-labelledby="user-dropdown-toggle">
-            <li><NavLink className="dropdown-item" to="/auth/account">Mon compte</NavLink></li>
-            <li><NavLink className="dropdown-item" to="/auth/settings">Paramètres</NavLink></li>
+            <li><NavLink className="dropdown-item" to="/orn/auth/account">Mon compte</NavLink></li>
+            <li><NavLink className="dropdown-item" to="/orn/auth/settings">Paramètres</NavLink></li>
             {isSuperuser && <>
-                <li><NavLink className="dropdown-item" to="/auth/users">Utilisateurs</NavLink></li>
-                <li><NavLink className="dropdown-item" to="/auth/access-request">Demandes d'accès</NavLink></li>
+                <li><NavLink className="dropdown-item" to="/orn/auth/users">Utilisateurs</NavLink></li>
+                <li><NavLink className="dropdown-item" to="/orn/auth/access-request">Demandes d'accès</NavLink></li>
             </>}
             <li><hr className="dropdown-divider" /></li>
             <li><Button onClick={handleLogout} className="dropdown-item shadow-none fw-normal">Se deconnecter</Button></li>

@@ -19,7 +19,7 @@ export function Register(): ReactNode {
                         <h2 className="auth-heading text-center mb-4">Demander un accès</h2>
                         <div className="auth-form-container text-start mx-auto">
                             <RegisterForm />
-                            <div className="auth-option text-center pt-5">A déjà un compte? <Link className="text-link" to="/auth/login" >Se connecter</Link></div>
+                            <div className="auth-option text-center pt-5">A déjà un compte? <Link className="text-link" to="/orn/auth/login" >Se connecter</Link></div>
                             </div>
                         </div>
                         <Footer className="app-auth-footer" />

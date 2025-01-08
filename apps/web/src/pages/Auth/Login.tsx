@@ -37,7 +37,7 @@ export function Login(): ReactNode {
                 type: 'success',
                 position: config.toastPosition
             })
-            navigate('/')
+            navigate('/orn')
         } else {
             setErrors(response.data.errors)
             toast("Données du formulaire invalide", {
@@ -55,7 +55,7 @@ export function Login(): ReactNode {
                 <div className="d-flex flex-column align-content-end">
                     <div className="app-auth-body mx-auto">
                         <div className="app-auth-branding mb-4">
-                            <Link className="app-logo" to="/register">
+                            <Link className="app-logo" to="/orn/register">
                                 <img className="logo-icon me-2" src={logo} alt="logo" />
                             </Link>
                         </div>
