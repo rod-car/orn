@@ -1,61 +1,188 @@
-import { useExcelReader } from 'hooks'
-import { ChangeEvent } from 'react'
-import { Link } from '@base/components'
-import { Block, Button, Input, Spinner } from 'ui'
+import {ChangeEvent, CSSProperties, ReactNode, useCallback, useEffect, useState} from 'react'
+import {useApi, useExcelReader} from 'hooks'
+import {PrimaryLink, ScholarYearSelectorServer} from '@base/components'
+import {Block, Input, PageTitle, PrimaryButton, Select, Spinner} from 'ui'
+import {Col, Row} from "@base/components/Bootstrap";
+import {toast} from "react-toastify";
+import {config} from "@base/config";
+import { isDate } from 'functions';
 
 export function ImportConso(): ReactNode {
-    const { json, importing, toJSON } = useExcelReader()
+    const [scholarYear, setScholarYear] = useState<string|number>(0)
+    const [schoolId, setSchoolId] = useState<number>(0)
+    const [foodId, setFoodId] = useState<number>(0)
 
-    function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+    const { json, importing, toJSON, resetJSON } = useExcelReader()
+    const { Client, datas: classes, RequestState } = useApi<Classes>({
+        url: '/classes',
+        key: 'data'
+    });
+
+    const { Client: ConsommationClient, RequestState: ConsommationRequestState } = useApi<ConsommationModel>({ url: '/consommations' })
+    const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
+        url: '/schools',
+        key: 'data'
+    })
+
+    const { Client: FoodClient, datas: foods, RequestState: FoodRequestState } = useApi<Food>({
+        url: '/foods'
+    })
+
+    async function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
         e.preventDefault()
-        toJSON(e.target)
+        await toJSON(e.target)
     }
+    
+    const getClasses = useCallback(async () => {
+        await Client.get()
+    }, [])
+    
+    useEffect(() => {
+        SchoolClient.get()
+        FoodClient.get()
+        getClasses()
+    }, [])
 
-    async function save() {
 
-    }
+    const save = useCallback(async () => {
+        toast('Importation en cours', {
+            type: 'info',
+            closeButton: false,
+            isLoading: RequestState.creating,
+            position: config.toastPosition
+        })
+
+        const data = json.map(d => {
+            const key = 'Date'
+            return {
+                ...d,
+                [key]: isDate(d[key]) ? d[key].toLocaleDateString() : d[key]
+            }
+        })
+
+        const response = await ConsommationClient.post({
+            consommations: data as unknown as Consommation[],
+            scholar_year_id: scholarYear,
+            school_id: schoolId,
+            food_id: foodId
+        }, '/import')
+
+        if (response.ok) {
+            toast(response.message, {
+                closeButton: true,
+                type: 'success',
+                position: config.toastPosition
+            })
+
+            setSchoolId(0)
+            setScholarYear(0)
+            setFoodId(0)
+            resetJSON()
+        } else {
+            toast(response.message, {
+                closeButton: true,
+                type: 'error',
+                position: config.toastPosition
+            })
+        }
+    }, [json, foodId, schoolId, scholarYear])
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Importer une consommation</h2>
-                <Link to="/cantine/list-conso" className="btn primary-link">
-                    <i className="bi bi-list me-2"></i>Liste des consommation
-                </Link>
-            </div>
+            <PageTitle title='Importer une consommation'>
+                <PrimaryLink icon='list' to="/cantine/list-conso">
+                    Liste des consommation
+                </PrimaryLink>
+            </PageTitle>
 
             <Block className="mb-5">
-                <form action="" encType="multipart/form-data">
-                    <Input
-                        type="file"
-                        required={true}
-                        label="Selectionner un fichier"
-                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                        onChange={handleFileChange}
-                    />
+                <form encType="multipart/form-data">
+                    <Row className="mb-6">
+                        <Col n={3} className="mb-3">
+                            <Select
+                                label="Établissement"
+                                options={schools}
+                                config={{optionKey: 'id', valueKey: 'name'}}
+                                loading={SchoolRequestState.loading}
+                                value={schoolId}
+                                onChange={({target}) => setSchoolId(parseInt(target.value, 10))}
+                                controlled
+                            />
+                        </Col>
+                        <Col n={3} className="mb-3">
+                            <ScholarYearSelectorServer
+                                label="Année scolaire"
+                                scholarYear={scholarYear}
+                                setScholarYear={setScholarYear}
+                            />
+                        </Col>
+                        <Col n={3} className="mb-3">
+                            <Select
+                                label="Collation"
+                                options={foods}
+                                loading={FoodRequestState.loading}
+                                value={foodId}
+                                onChange={({target}) => setFoodId(parseInt(target.value, 10))}
+                                controlled
+                            />
+                        </Col>
+                        <Col n={3}>
+                            <Input
+                                type="file"
+                                required
+                                label="Selectionner un fichier"
+                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                onChange={handleFileChange}
+                            />
+                        </Col>
+                    </Row>
                 </form>
             </Block>
 
-            <Block className="mb-5">
-                <div className="d-flex justify-content-between align-items-center mb-5">
-                    <h4 className="text-primary">Affichage temporaire des données</h4>
-                    {json.length > 0 && (
-                        <Button
-                            loading={true}
-                            icon="save"
-                            type="button"
-                            mode="primary"
-                            onClick={save}
-                        >Enregistrer</Button>
-                    )}
+            <Block>
+                <div className="d-flex justify-content-between align-items-center">
+                    <h6 className="text-primary">Affichage temporaire des données</h6>
+                    {json.length > 0 && <PrimaryButton loading={importing || RequestState.loading | ConsommationRequestState.creating} icon="save" onClick={save}>
+                        Enregistrer
+                    </PrimaryButton>}
                 </div>
                 <hr />
-                <div className="table-responsive mb-5">
-                    
+
+                <div className="table-responsive">
+                    {classes.length > 0 && json.length > 0 ? <table className="table table-bordered table-striped text-sm">
+                        <thead>
+                        <tr>
+                            <th style={styles.head}>#</th>
+                            <th style={styles.head}>Jour</th>
+                            <th style={styles.head}>Date</th>
+                            {classes.map((classe, index) => <th style={styles.head} key={index}>{classe.notation}</th>)}
+                            <th style={styles.head}>Ens</th>
+                            <th style={styles.head}>Cui</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {json.map((data: Record<string, unknown>, index: number) => <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{data['Jour']}</td>
+                            <td>{data['Date'].toLocaleDateString()}</td>
+                            {classes.map((classe, index) => <td key={index}>{data[classe.notation]}</td>)}
+                            <td>{data['Ens']}</td>
+                            <td>{data['Cui']}</td>
+                        </tr>)}
+                        </tbody>
+                    </table> : <p className="text-center fw-bold">Aucune donnees</p>}
                 </div>
 
-                {importing && <Spinner />}
+                {importing && <Spinner isBorder className="text-center" />}
             </Block>
         </>
     )
+}
+
+
+const styles = {
+    head: {
+        backgroundColor: 'silver',
+        color: 'black'
+    } as CSSProperties
 }

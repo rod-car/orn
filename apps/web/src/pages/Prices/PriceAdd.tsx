@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Block } from 'ui'
 import { PriceForm } from './PriceForm'
+import { ReactNode } from 'react'
 
 export function PriceAdd(): ReactNode {
     return (

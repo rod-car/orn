@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { ChangeEvent, ReactNode, useCallback, useEffect, useState } from 'react'
 import { createSearchParams } from 'react-router-dom'
 import { config, abaque } from '@base/config'
@@ -28,6 +28,8 @@ export function ListAbaque(): ReactNode {
     const handleTypeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
         setAbaqueType(e.target.value)
     }
+
+    const { isAdmin } = useAuthStore()
 
     const remove = async (abaqueId: number): Promise<void> => {
         confirmAlert({
@@ -70,7 +72,7 @@ export function ListAbaque(): ReactNode {
     return (
         <>
             <PageTitle title="Liste des abaques">
-                <PrimaryLink icon="plus-lg" to="/anthropo-measure/abaques/add">
+                <PrimaryLink can={isAdmin} icon="plus-lg" to="/anthropo-measure/abaques/add">
                     Ajouter un abaque
                 </PrimaryLink>
             </PageTitle>
@@ -140,6 +142,7 @@ export function ListAbaque(): ReactNode {
                                             <td>{abaque['Z+97']}</td>
                                             <td>
                                                 <Link
+                                                    can={isAdmin}
                                                     className="me-2 btn btn-primary btn-sm"
                                                     to={{
                                                         pathname: `/anthropo-measure/abaques/edit/${abaque.id}`,
@@ -152,7 +155,8 @@ export function ListAbaque(): ReactNode {
                                                 </Link>
 
                                                 <Button
-                                                    onClick={(): Promise<void> => remove(abaque.id)}
+                                                    can={isAdmin}
+                                                    onClick={() => remove(abaque.id)}
                                                     type="button"
                                                     icon="trash"
                                                     mode="danger"
@@ -203,6 +207,7 @@ export function ListAbaque(): ReactNode {
                                         <td>{abaque['Z+2']}</td>
                                         <td>
                                             <Link
+                                                can={isAdmin}
                                                 className="me-2 btn btn-primary btn-sm"
                                                 to={{
                                                     pathname: `/anthropo-measure/abaques/edit/${abaque.id}`,
@@ -268,6 +273,7 @@ export function ListAbaque(): ReactNode {
                                         <td>{abaque['MEDIAN-0']}</td>
                                         <td>
                                             <Link
+                                                can={isAdmin}
                                                 className="me-2 btn btn-primary btn-sm"
                                                 to={{
                                                     pathname: `/anthropo-measure/abaques/edit/${abaque.id}`,

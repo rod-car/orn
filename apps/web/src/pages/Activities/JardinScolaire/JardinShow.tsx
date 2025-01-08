@@ -1,8 +1,8 @@
-import { config } from "@base/config";
+import { Link } from "@base/components";
 import { capitalize } from "functions";
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Block } from "ui";
 
 export function JardinShow(): ReactNode {

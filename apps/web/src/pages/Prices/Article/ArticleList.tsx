@@ -1,19 +1,14 @@
-import { useApi } from "hooks";
+import { useApi, useAuthStore } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Block, Button } from "ui";
+import { Block, Button, PageTitle } from "ui";
 import { config } from '@base/config'
-import { ArticleLoading, Link } from "@base/components";
+import { ArticleLoading, Link, PrimaryLink } from "@base/components";
 import { Pagination } from '@base/components'
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
 
 export function ArticleList(): ReactNode {
-    const {
-        Client,
-        datas: articles,
-        RequestState
-    } = useApi<Article>({
-        
+    const { Client, datas: articles, RequestState } = useApi<Article>({
         url: '/prices/articles'
     })
 
@@ -75,13 +70,14 @@ export function ArticleList(): ReactNode {
         })
     }
 
+    const { isAdmin } = useAuthStore()
+
     return <>
-        <div className="mb-5 d-flex justify-content-between align-items-center">
-            <h2>Liste des articles</h2>
-            <Link to="/prices/articles/add" className="btn secondary-link me-2">
+        <PageTitle title="Liste des articles">
+            <PrimaryLink can={isAdmin} to="/prices/articles/add" className="btn secondary-link me-2">
                 <i className="bi bi-plus-lg me-2"></i>Nouveau article
-            </Link>
-        </div>
+            </PrimaryLink>
+        </PageTitle>
 
         {RequestState.loading ? <ArticleLoading /> : <Block className="mb-4">
             <table className="table table-striped table-bordered">
@@ -102,12 +98,14 @@ export function ArticleList(): ReactNode {
                         <td>-</td>
                         <td className="text-nowrap">
                             <Link
+                                can={isAdmin}
                                 className="btn-sm me-2 btn btn-primary"
                                 to={`/prices/articles/edit/${article.id}`}
                             >
                                 <i className="bi bi-pencil-square"></i>
                             </Link>
                             <Button
+                                can={isAdmin}
                                 type="button"
                                 mode="danger"
                                 icon="trash"

@@ -2,14 +2,12 @@
 import { useApi } from 'hooks'
 import { useParams } from 'react-router-dom'
 import { ApiErrorMessage, Block, PageTitle } from 'ui'
-import { config } from '@base/config'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { StudentEvolution, StudentStatus } from '@base/charts'
 import { PrimaryLink } from '@base/components'
 
 export function DetailsStudent(): ReactNode {
     const { Client, error, resetError, RequestState } = useApi<Student>({
-        
         url: 'students'
     })
 

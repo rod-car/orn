@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { ReactNode, useCallback, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { range } from 'functions'
@@ -13,6 +13,8 @@ export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNod
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
         url: '/surveys'
     })
+
+    const { isAdmin } = useAuthStore()
 
     const getData = useCallback(async () => {
         let url = '/state/student-school-z-value'
@@ -42,6 +44,7 @@ export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNod
                     <div className="d-flex align-items-center justify-content-between mb-4">
                         <h6 className="text-primary fw-bold m-0">Phase {parts[1]} pour l'année {parts[2]}</h6>
                         <ExcelExportButton
+                            can={isAdmin}
                             ExportClient={ExportClient}
                             loading={ExportRequestState.creating}
                             url={`/${parts[0]}/metrics-to-excel`}

@@ -11,14 +11,14 @@ export function SidePanel(): ReactNode {
     return <div id="app-sidepanel" className="app-sidepanel">
         <div id="sidepanel-drop" className="sidepanel-drop"></div>
         <div className="sidepanel-inner d-flex flex-column">
-            <AppTitle appLogo={logo} appName="PLATEFORME ORN" />
+            <AppTitle appLogo={logo} appName="ORN ATSINANANA" />
             <nav id="app-nav-main" className="app-nav app-nav-main flex-grow-1">
                 <ul className="app-menu list-unstyled accordion" id="menu-accordion">
                     <NavItem icon="speedometer" active={pathname === "/"} to="/" label="Tableau de bord" />
                     <DropDown icon="bar-chart-fill" base="/anthropo-measure/statistics" label="Statistique" menus={[
                         { label: "Repartition des étudiants", to: "/student-repartition" },
-                        { label: "Résultat par métrique", to: "/result-by-metric", can: isAdmin },
-                        { label: "Résultat global", to: "/result-global", can: isAdmin }
+                        { label: "Résultat par métrique", to: "/result-by-metric" },
+                        { label: "Résultat global", to: "/result-global" }
                     ]} />
 
                     <GroupSeparator title="Mesure anthropométrique" />
@@ -103,6 +103,9 @@ export function SidePanel(): ReactNode {
 
                     <GroupSeparator title="Divers" />
                     <NavItem icon="file-earmark-text-fill" active={pathname.includes("/documents")} to="/documents" label="Documents" />
+                    <DropDown label="Outils" base="/tools" icon="tools" menus={[
+                        { to: '/z-calculator', label: 'Calculateur de Z' },
+                    ]} />
                 </ul>
             </nav>
 

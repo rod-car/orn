@@ -1,12 +1,15 @@
 import { useApi, useAuth } from 'hooks';
 import { FormEvent, ReactNode, useState } from 'react';
-import { Button, Checkbox, Input, Select } from 'ui';
-import { config } from '@base/config';
+import { Button, Input, Select } from 'ui';
 import { toast } from 'react-toastify';
+import { useConfigStore } from 'hooks';
 
 export function RegisterForm({ external = true }: { external?: boolean }): ReactNode {
+    const config = useConfigStore()
+
     const defaultUser = {
         name: '',
+        occupation: '',
         email: '',
         username: '',
         role: 0,
@@ -15,14 +18,13 @@ export function RegisterForm({ external = true }: { external?: boolean }): React
     }
 
     const { Client, RequestState } = useApi<User>({
-        
         url: '/auth',
         key: 'data'
     })
 
     const [showPassword, setShowPassword] = useState(false)
     const [user, setUser] = useState<Partial<User>>(defaultUser)
-    const defaultErrors = {username: [''], password: [''], name: [''], email: [''], password_confirmation: [''], role: ['']}
+    const defaultErrors = {username: [''], password: [''], name: [''], occupation: [''], email: [''], password_confirmation: [''], role: ['']}
     const [errors, setErrors] = useState<typeof defaultErrors>(defaultErrors)
     const { register, loading } = useAuth<User>({ baseUrl: config.baseUrl })
 
@@ -72,6 +74,24 @@ export function RegisterForm({ external = true }: { external?: boolean }): React
                     srOnly={external}
                 />
             </div>
+
+            <div className={`email mb-3 col-${external ? 12 : 6}`}>
+                <Input
+                    value={user.occupation}
+                    onChange={({ target }): void => {
+                        setUser({ ...user, occupation: target.value })
+                        if (target.value.length > 0 && errors)
+                            setErrors({ ...errors, occupation: [] })
+                    }}
+                    required={false}
+                    label="Occupation"
+                    placeholder="Ex: Responsable nutrition"
+                    className="signup-name"
+                    error={errors?.occupation}
+                    srOnly={external}
+                />
+            </div>
+
             {!external && <div className="email mb-3 col-6"><Select
                 value={user.role}
                 onChange={({ target }): void => {
@@ -82,7 +102,7 @@ export function RegisterForm({ external = true }: { external?: boolean }): React
                 error={errors?.role}
                 label="Rôle"
                 placeholder={null}
-                options={[{ id: 0, label: "Visiteur" }, { id: 1, label: "Administrateur" }, { id: 2, label: "Super administrateur" }]}
+                options={[{ id: 0, label: "Invité" }, { id: 1, label: "Administrateur" }, { id: 2, label: "Super administrateur" }]}
                 config={{ optionKey: "id", valueKey: "label" }}
                 controlled
             /></div>}
@@ -163,16 +183,16 @@ export function RegisterForm({ external = true }: { external?: boolean }): React
             </div>
         </div>
 
-        <div className="extra mb-3">
+        {/*<div className="extra mb-3">
             <Checkbox checked={false} onCheck={() => {}} label={<span>J'accepte <a href="#" className="app-link">Les termes et conditions</a></span>} />
-        </div>
+        </div>*/}
         <div className="text-center">
             <div className="d-flex justify-content-between align-items-center">
                 <Button
                     loading={loading || RequestState.creating}
                     type="submit"
                     mode="primary"
-                    className={`app-btn-primary ${external && 'w-100'} theme-btn mx-auto`}
+                    className={`app-btn-primary w-100 theme-btn mx-auto`}
                 >{external ? "Demander l'accès" : "Enregistrer"}</Button>
             </div>
         </div>

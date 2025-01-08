@@ -1,63 +1,96 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FormEvent, ReactNode, useCallback, useEffect, useState } from 'react'
-import { Block, DangerButton, Input, PageTitle, PrimaryButton, Select } from 'ui'
-import { PrimaryLink } from '@base/components'
+import { Block, DangerButton, Input, PageTitle, PrimaryButton, Select, Spinner } from 'ui'
+import { PrimaryLink, ScholarYearSelectorServer } from '@base/components'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
-import { useNavigate, useParams } from 'react-router'
+import { Col, Row } from '@base/components/Bootstrap'
 
-const defaultFood = { label: '', unit: '' }
+let defaultConsommation: Consommation = {}
 
-type Consommation = Record<string, string | number>;
+export function AddConso({editedConso = undefined}: {editedConso?: ConsommationModel}): ReactNode {
+    const [consommations, setConsommations] = useState<Consommation[]>([]);
+    const [scholarYear, setScholarYear] = useState<string|number>(editedConso ? editedConso.scholar_year_id : 0)
+    const [schoolId, setSchoolId] = useState<number>(editedConso ? editedConso.school_id : 0)
+    const [foodId, setFoodId] = useState<number>(editedConso ? editedConso.food_id : 0)
 
-export function AddConso(): ReactNode {
-    const [food, setFood] = useState(defaultFood);
-    const [defaultConsommation, setDefauultConsommation] = useState<Consommation>({date: "date"})
-    const [consommations, setConsommations] = useState<Consommation[]>([defaultConsommation]);
-
-    const {id} = useParams()
-    const navigate = useNavigate()
-
-    const { Client, RequestState, error } = useApi<Food>({
-        
-        url: '/foods'
-    })
-
+    const { Client, RequestState } = useApi<ConsommationModel>({ url: '/consommations' })
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
-        
         url: '/schools',
         key: 'data'
     })
 
-    const { Client: ClassClient, datas: classes, RequestState: ClassRequestState } = useApi<Classes>({
-        
+    const { Client: ClassClient, datas: classes } = useApi<Classes>({
         url: '/classes',
         key: 'data'
     })
 
+    const { Client: FoodClient, datas: foods, RequestState: FoodRequestState } = useApi<Food>({
+        url: '/foods'
+    })
+
+    const getConsommations = async () => {
+        const classes = await ClassClient.get()
+        if (classes)
+        {
+            const updatedConsommation = { ...defaultConsommation };
+
+            updatedConsommation['_date'] = { type: 'date', value: "2024-01-01" };
+
+            classes.forEach(classe => {
+                updatedConsommation["_" + classe.id] = { type: 'number', value: 10 };
+            });
+
+            updatedConsommation['_teachers'] = { type: 'number', value: 5 };
+            updatedConsommation['_cookers'] = { type: 'number', value: 4 };
+
+            defaultConsommation = { ...updatedConsommation }
+
+            if (editedConso) generateConsommations(editedConso.id)
+            else setConsommations([updatedConsommation]);
+        }
+    }
+
     const handleInputChange = useCallback(({ target }: InputChange) => {
-        setFood(prevState => ({
-            ...prevState,
-            [target.name]: target.value
-        }))
+        const { name, value } = target;
+        const [index, key] = name.split("_");
+
+        setConsommations(prevConsommations => {
+            const updatedConsommations = [...prevConsommations];
+            const consommationToUpdate = { ...updatedConsommations[index] };
+
+            consommationToUpdate[`_${key}`] = {
+                ...consommationToUpdate[`_${key}`],
+                value: value,
+            };
+
+            updatedConsommations[index] = consommationToUpdate;
+            return updatedConsommations;
+        });
     }, [])
 
     const handleSubmit = useCallback(async (e: FormEvent) => {
         e.preventDefault()
+        const data = {
+            scholar_year_id: scholarYear,
+            school_id: schoolId,
+            food_id: foodId,
+            consommations: consommations
+        }
 
-        const response = id === undefined
-            ? await Client.post(food)
-            : await Client.patch(id, food)
+        const response = editedConso === undefined
+            ? await Client.post(data)
+            : await Client.patch(editedConso.id, data)
 
         if (response.ok) {
-            const message = id === undefined ? "Enregistré" : "Modifé"
+            const message = editedConso === undefined ? "Enregistré" : "Modifié"
 
             toast(message, {
                 type: 'success',
                 position: config.toastPosition
             })
-            id === undefined && setFood(defaultFood)
+            editedConso === undefined && setConsommations([defaultConsommation])
         } else {
             const r = response?.response;
             if (r.status === 403) {
@@ -72,42 +105,38 @@ export function AddConso(): ReactNode {
                 })
             }
         }
-    }, [Client, food])
+    }, [Client])
 
-    const getClasses = async () => {
-        const classes = await ClassClient.get()
-        if (classes) {
-            classes.forEach(classe => {
-                defaultConsommation[" " + classe.id] = "number"
-            })
+    const add = () => {
+        setConsommations([...consommations, {...defaultConsommation}])
+    }
 
-            defaultConsommation["teachers"] = "number"
-            defaultConsommation["cookers"] = "number"
-
-            setDefauultConsommation({...defaultConsommation})
-            setConsommations([defaultConsommation])
-        }
+    const remove = (mainKey: number) => {
+        const fields = consommations.filter((_value, key) => {
+            return key !== mainKey
+        })
+        setConsommations([...fields])
     }
 
     useEffect(() => {
-        const getFood = async () => {
-            if (id !== undefined) {
-                const food = await Client.find(id)
-                if (food !== null) {
-                    setFood(food)
-                    return
-                }
-                navigate('not-found', {replace: true})
-            }
-        }
-        getFood()
         SchoolClient.get()
-        getClasses()
+        FoodClient.get()
+        getConsommations()
     }, [])
+
+    async function generateConsommations(consoId: number) {
+        const response = await Client.get({
+            school_id: schoolId,
+            scholar_year_id: scholarYear,
+            food_id: foodId
+        }, '/generate/' + consoId)
+
+        setConsommations(Object.values(response) as unknown as Consommation[])
+    }
 
     return (
         <>
-            <PageTitle title={id === undefined ? "Ajouter une consommation" : "Modifier un aliment"}>
+            <PageTitle title={editedConso === undefined ? "Ajouter une consommation" : "Mise a jour des consommations"}>
                 <PrimaryLink icon="list" to="/cantine/consommation/list">
                     Historique des consommations
                 </PrimaryLink>
@@ -115,36 +144,45 @@ export function AddConso(): ReactNode {
 
             <Block>
                 <form onSubmit={handleSubmit} method="post">
-                    <div className="row mb-4">
-                        <div className="col-6 mb-3">
-                            <Select label="Établissement" options={schools} config={{optionKey: 'id', valueKey: 'name'}} loading={SchoolRequestState.loading} />
-                        </div>
-                        <div className="col-3 mb-3">
-                            <Input
-                                onChange={handleInputChange}
-                                value={food.label}
-                                error={error?.data?.errors?.label}
-                                label="Date de prise"
-                                name="date"
-                                type="date"
+                    <Row className="mb-6">
+                        <Col n={4} className="mb-3">
+                            <Select
+                                label="Établissement"
+                                options={schools}
+                                config={{optionKey: 'id', valueKey: 'name'}}
+                                loading={SchoolRequestState.loading}
+                                value={schoolId}
+                                onChange={({target}) => setSchoolId(parseInt(target.value, 10))}
+                                disabled={editedConso !== undefined}
+                                controlled
                             />
-                        </div>
-                        <div className="col-3 mb-3">
-                            <Select label="Année scolaire" options={["Année 1", "Année 2", "Année 3"]} />
-                        </div>
-
-                        <div className="col-6 mb-3">
-                            <Input label="Nombre d'enseignant" placeholder="Nombre des enseignants qui ont mangé" type="number" />
-                        </div>
-                        <div className="col-6 mb-3">
-                            <Input label="Nombre de cuisinier" placeholder="Nombre des enseignants qui ont mangé" type="number" />
-                        </div>
-                    </div>
+                        </Col>
+                        <Col n={4} className="mb-3">
+                            <ScholarYearSelectorServer
+                                label="Année scolaire"
+                                scholarYear={scholarYear}
+                                setScholarYear={setScholarYear}
+                                disabled={editedConso !== undefined}
+                            />
+                        </Col>
+                        <Col n={4} className="mb-3">
+                            <Select
+                                label="Collation"
+                                options={foods}
+                                config={{optionKey: 'id', valueKey: 'label'}}
+                                loading={FoodRequestState.loading}
+                                value={foodId}
+                                onChange={({target}) => setFoodId(parseInt(target.value, 10))}
+                                disabled={editedConso !== undefined}
+                                controlled
+                            />
+                        </Col>
+                    </Row>
 
                     <h6 className="text-primary mt-4">Consommation des étudiants</h6>
                     <hr />
 
-                    <div className="table-responsive mb-3">
+                    {consommations.length > 0 ? <div className="table-responsive mb-3">
                         <table className="table table-bordered table-striped text-sm mb-0">
                             <thead>
                                 <tr>
@@ -158,22 +196,25 @@ export function AddConso(): ReactNode {
                             <tbody>
                                 {consommations.map((consommation, index) => <tr key={index}>
                                     {Object.keys(consommation).map(key => {
-                                        const fieldType = consommation[key]
-                                        return <td key={key}>
-                                            {fieldType === "number" && <Input type="number" value={0} onChange={() => {}} />}
-                                            {fieldType === "date" && <Input type="date" value={new Date().toDateString()} onChange={() => {}} />}
-                                        </td>})
-                                    }
+                                        if (typeof consommation[key] === 'object') {
+                                            const fieldType = consommation[key].type
+                                            const fieldValue = consommation[key].value
+                                            return <td key={key}>
+                                                {fieldType === "number" && <Input name={index + key} type="number" value={fieldValue} onChange={handleInputChange} />}
+                                                {fieldType === "date" && <Input name={index + key} type="date" value={fieldValue} onChange={handleInputChange} />}
+                                            </td>
+                                        }
+                                    })}
                                     <td className="d-flex align-items-center">
-                                        <PrimaryButton icon="plus-lg" onClick={() => alert("Hello world")} />
-                                        <DangerButton icon="dash-lg" onClick={() => alert("Minus")} />
+                                        {index === 0 && <PrimaryButton icon="plus-lg" className='me-2 p-2' onClick={add} />}
+                                        {index > 0 && <DangerButton icon="dash-lg" className='p-2' onClick={() => remove(index)} />}
                                     </td>
                                 </tr>)}
                             </tbody>
                         </table>
-                    </div>
+                    </div> : <Spinner isBorder size='sm' className='text-center' />}
 
-                    <PrimaryButton loading={RequestState.creating || RequestState.loading || RequestState.updating} icon="save" type="submit">
+                    <PrimaryButton loading={RequestState.creating || RequestState.loading || RequestState.updating || FoodRequestState.loading || SchoolRequestState.loading } icon="save" type="submit">
                         Enregistrer
                     </PrimaryButton>
                 </form>

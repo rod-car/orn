@@ -1,6 +1,31 @@
 /// <reference types="vite/client" />
 declare module 'react-laravel-paginex'
 
+type Person = {
+    id: number;
+    firstname: string;
+    lastname: string;
+    birth_date: string;
+    gender: string;
+    parents: string;
+    height: number;
+    weight: number;
+    z_ia: number;
+    z_hw: number;
+    z_ha: number;
+    z_wa: number;
+}
+
+type Consommation = Record<string, Record<string, string | number>>;
+type ConsommationModel = {
+    id: number;
+    scholar_year: string|number;
+    scholar_year_id: string|number;
+    food_id: number;
+    school_id: number;
+    consommations: Consommation[]
+}
+
 type MeasureLength = {
     id: number
     age: number
@@ -89,6 +114,7 @@ type ElementSize = 'sm' | 'md' | 'lg'
 type User = {
     id: number
     name: string
+    occupation: string;
     email: string
     role: number
     username: string
@@ -274,3 +300,4 @@ type InputChange = ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAr
 
 type OneSheet = Record<string, string>[];
 type MultiSheet = Record<string, OneSheet>
+type ScholarYear = { id: string; label: string }

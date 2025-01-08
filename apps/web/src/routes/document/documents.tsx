@@ -11,13 +11,13 @@ export const documentRoute:RouteObject[] = [
     },
     {
         path: "add",
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <DocumentAdd />
         </PrivateRoute>
     },
     {
         path: "edit/:id",
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <DocumentEdit />
         </PrivateRoute>
     },

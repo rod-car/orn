@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from "hooks";
-import { wrap } from 'functions'
-import { Block, Button, DangerButton, PageTitle } from "ui";
+import { useApi, useAuthStore } from "hooks";
+import { Block, DangerButton, PageTitle } from "ui";
 import { config } from '@base/config'
 import { toast } from "react-toastify";
 import { DetailLink, EditLink, Pagination, PrimaryLink } from '@base/components'
 import { ReactNode, useEffect } from "react";
 import { confirmAlert } from "react-confirm-alert";
-import { ActivityLoading, Link } from "@base/components";
+import { ActivityLoading } from "@base/components";
 
 export function AdminActivityList(): ReactNode {
     const { Client, datas: activities, RequestState } = useApi<Activity>({
@@ -35,6 +34,8 @@ export function AdminActivityList(): ReactNode {
     useEffect(() => {
         getActivities()
     }, [])
+
+    const { isAdmin } = useAuthStore()
 
     const handleDelete = async (id: number) => {
         confirmAlert({
@@ -73,7 +74,7 @@ export function AdminActivityList(): ReactNode {
 
     return <>
         <PageTitle title="Liste des activités">
-            <PrimaryLink to="/activities/admin/add" icon="plus-lg">
+            <PrimaryLink can={isAdmin} to="/activities/admin/add" icon="plus-lg">
                 Nouveau
             </PrimaryLink>
         </PageTitle>
@@ -97,8 +98,8 @@ export function AdminActivityList(): ReactNode {
                         <td>{activity.place}</td>
                         <td className="text-nowrap">
                             <DetailLink className="me-2" to={`/activities/show/${activity.id}`} />
-                            <EditLink className="me-2" to={`/activities/admin/edit/${activity.id}`} />
-                            <DangerButton icon="trash" size="sm" onClick={() => handleDelete(activity.id) }/>
+                            <EditLink can={isAdmin} className="me-2" to={`/activities/admin/edit/${activity.id}`} />
+                            <DangerButton can={isAdmin} icon="trash" size="sm" onClick={() => handleDelete(activity.id) }/>
                         </td>
                     </tr>)}
                 </tbody>

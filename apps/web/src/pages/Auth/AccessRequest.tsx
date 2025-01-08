@@ -1,8 +1,8 @@
-import { useApi } from 'hooks'
-import { Link } from '@base/components'
+import { useApi, useAuthStore } from 'hooks'
+import { Link, PrimaryLink } from '@base/components'
 import { config } from '@base/config'
-import { Block, Button, Select } from 'ui'
-import { useEffect, useState } from 'react'
+import { Block, Button, PageTitle, Select } from 'ui'
+import { ReactNode, useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
 import { format, number_array, range } from 'functions'
@@ -18,8 +18,6 @@ export function AccessRequest(): ReactNode {
     const [perPage, setPerPage] = useState(30)
 
     const { Client, RequestState, error, datas: users, setDatas: setUsers } = useApi<User>({
-        
-        
         url: '/auth/users',
         key: 'data'
     })
@@ -122,10 +120,11 @@ export function AccessRequest(): ReactNode {
         }
     }
 
+    const { isAdmin } = useAuthStore()
+
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2 className="text-muted">Liste des demande d'accès</h2>
+            <PageTitle title="Demande d'accès">
                 <div className="d-flex align-items-between">
                     <Button
                         icon="arrow-clockwise"
@@ -137,19 +136,19 @@ export function AccessRequest(): ReactNode {
                     >
                         Recharger
                     </Button>
-                    <Link to="/auth/add-user" className="btn secondary-link me-2">
+                    <Link can={isAdmin} to="/auth/add-user" className="btn secondary-link me-2">
                         <i className="bi bi-plus-lg me-2"></i>Nouveau utilisateur
                     </Link>
-                    <Link to="/auth/users" className="btn primary-link">
+                    <PrimaryLink can={isAdmin} to="/auth/users">
                         <i className="bi bi-file-earmark-text me-2"></i>Liste des utilisateurs
-                    </Link>
+                    </PrimaryLink>
                 </div>
-            </div>
+            </PageTitle>
 
             {error && <div className="alert alert-danger">{error.message}</div>}
 
             <Block className="mb-5 mt-3">
-                <table className="table table-striped">
+                <table className="table table-striped text-sm">
                     <thead>
                         <tr>
                             <th>Elements</th>
@@ -174,11 +173,12 @@ export function AccessRequest(): ReactNode {
 
             <Block>
                 <div className="table-responsive">
-                    <table className="table table-striped table-bordered mb-5">
+                    <table className="table table-striped table-bordered text-sm">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Nom</th>
+                                <th>Fonction</th>
                                 <th className="text-nowrap">Adresse e-mail</th>
                                 <th className="text-nowrap">Nom d'utilisateur</th>
                                 <th>Rôle</th>
@@ -191,16 +191,17 @@ export function AccessRequest(): ReactNode {
                             {RequestState.loading &&
                                 range(10).map((number) => (
                                     <tr key={number}>
-                                        {range(8).map((key) => (
+                                        {range(9).map((key) => (
                                             <td key={key} className="text-center">
                                                 <Skeleton count={1} style={{ height: 30 }} />
                                             </td>
                                         ))}
                                     </tr>
                                 ))}
-                            {users.data?.length > 0 && users.data.map((user: User) => <tr key={user.id}>
-                                <td>{user.id}</td>
+                            {users.data?.length > 0 && users.data.map((user: User, index: number) => <tr key={user.id}>
+                                <td>{index + 1}</td>
                                 <td className="text-nowrap">{user.name}</td>
+                                <td>{user.occupation}</td>
                                 <td>{user.email}</td>
                                 <td>{user.username}</td>
                                 <td><UserRole role={user.role} /></td>
@@ -218,7 +219,7 @@ export function AccessRequest(): ReactNode {
                                     <Button
                                         type="button"
                                         mode="danger"
-                                        icon="close"
+                                        icon="x-lg"
                                         size="sm"
                                         onClick={() => invalidate(user)}
                                     />
@@ -226,7 +227,7 @@ export function AccessRequest(): ReactNode {
                             </tr>)}
                             {!RequestState.loading && users.total === 0 && (
                                 <tr>
-                                    <td colSpan={8} className="text-center">
+                                    <td colSpan={9} className="text-center">
                                         Aucune données
                                     </td>
                                 </tr>
@@ -242,7 +243,7 @@ export function AccessRequest(): ReactNode {
     )
 }
 
-const roles = ["Visiteur", "Administrateur", "Super administrateur"]
+const roles = ["Invite", "Administrateur", "Super administrateur"]
 const classes = ["primary", "danger", "success"]
 const userStatus = ["valide", "Non valide"]
 

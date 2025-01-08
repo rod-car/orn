@@ -1,6 +1,6 @@
 import { useApi, useExcelReader } from 'hooks'
 import { ChangeEvent, ReactNode, useState } from 'react'
-import { Link, PrimaryLink } from '@base/components'
+import { PrimaryLink } from '@base/components'
 import { Block, Button, Input, PageTitle, PrimaryButton, Select, Spinner } from 'ui'
 import { config, abaque } from '@base/config'
 import { toast } from 'react-toastify'

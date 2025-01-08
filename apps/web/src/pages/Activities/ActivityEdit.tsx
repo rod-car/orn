@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Block, PageTitle } from 'ui'
 import { useApi } from 'hooks'
-import { config } from '@base/config'
 import { ReactNode, useEffect } from 'react'
 import { ActivityForm } from './ActivityForm'
 import Skeleton from 'react-loading-skeleton'

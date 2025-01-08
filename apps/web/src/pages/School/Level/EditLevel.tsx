@@ -1,17 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Block, Button, Input, PageTitle } from 'ui'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
-import { Link, PrimaryLink } from '@base/components'
+import { PrimaryLink } from '@base/components'
 
 export function EditLevel(): ReactNode {
     const [level, setLevel] = useState<Niveau>({ id: 0, label: '', description: '' })
     const { Client, RequestState, error } = useApi<Niveau>({
-        
-        
         url: '/levels'
     })
 

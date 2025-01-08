@@ -7,7 +7,7 @@ import { CSSProperties, FormEvent, MouseEventHandler, PropsWithChildren, ReactNo
 import { confirmAlert } from "react-confirm-alert";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { Button, Checkbox, Input } from "ui";
+import { Button, Checkbox, Input, PageTitle } from "ui";
 
 
 /**
@@ -44,6 +44,7 @@ export function Account(): ReactNode {
     const [user, setUser] = useState<User>()
     const [showChangePassword, setShowChangePassword] = useState(false)
     const [showChangeName, setShowChangeName] = useState(false)
+    const [showChangeOccupation, setShowChangeOccupation] = useState(false)
     const [showChangeEmail, setShowChangeEmail] = useState(false)
     const [showChangeUsername, setShowChangeUsername] = useState(false)
     const { lastLogin } = useAuthStore()
@@ -75,9 +76,8 @@ export function Account(): ReactNode {
                         label: 'Oui',
                         onClick: async (): Promise<void> => {
                             const password = prompt("Saisir votre mot de passe")
-                            console.log(password);
-                            
-                            /*const response = await Client.destroy(user.id)
+
+                            const response = await Client.destroy(user.id)
                             if (response.ok) {
                                 toast('Compte supprimé', {
                                     closeButton: true,
@@ -90,7 +90,7 @@ export function Account(): ReactNode {
                                     type: 'error',
                                     position: config.toastPosition
                                 })
-                            }*/
+                            }
                         }
                     },
                     {
@@ -116,6 +116,11 @@ export function Account(): ReactNode {
         if (update === true) getUser();
     }, [])
 
+    const toogleChangeOccupation = useCallback(function(update?: boolean) {
+        setShowChangeOccupation(v => !v);
+        if (update === true) getUser();
+    }, [])
+
     const toogleChangeEmail = useCallback(function(update?: boolean) {
         setShowChangeEmail(v => !v);
         if (update === true) getUser();
@@ -127,10 +132,10 @@ export function Account(): ReactNode {
     }, [])
 
 	return <>
-		<h1 className="app-page-title">Mon compte</h1>
+        <PageTitle title="Mon compte"/>
 		<div className="row gy-4">
 			<div className="col-12 col-lg-6">
-				<CardAccount title="Profil" icon="user" action={{ label: "Modifier mon profil", action: "/auth/profile" }}>
+				<CardAccount title="Profil" icon="person" action={{ label: "Modifier mon profil", action: "/auth/profile" }}>
                     <CardAccountItem
                         showComponent={showChangeName}
                         action={{
@@ -140,6 +145,16 @@ export function Account(): ReactNode {
                         }}
                         title="Nom"
                         value={user ? user.name : 'Chargement'}
+                    />
+                    <CardAccountItem
+                        showComponent={showChangeOccupation}
+                        action={{
+                            label: 'Editer',
+                            action: toogleChangeOccupation,
+                            component: <ChangeFieldComponent field="occupation" user={user} onClose={toogleChangeOccupation} />
+                        }}
+                        title="Occupation"
+                        value={user ? user.occupation : 'Chargement'}
                     />
                     <CardAccountItem
                         showComponent={showChangeEmail}
@@ -189,7 +204,7 @@ export function Account(): ReactNode {
                 </CardAccount>
 			</div>
 			<div className="col-12 col-lg-6">
-				<CardAccount title="Autres informations" icon="list-alt">
+				<CardAccount title="Autres informations" icon="list-ul">
                     <CardAccountItem title="Membre depuis" value={user ? format(user.created_at, "d/MM/y") : 'Chargement'} />
                     <CardAccountItem title="Dernière connexion" value={lastLogin && format(lastLogin, "d/MM/y HH:ii")} />
                 </CardAccount>

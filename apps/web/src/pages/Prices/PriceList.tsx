@@ -1,9 +1,8 @@
-import { useApi } from "hooks";
+import { useApi, useAuthStore } from "hooks";
 import { ReactNode, useEffect, useState } from "react";
 import { Block, Button, Select } from "ui";
-import { config } from '@base/config'
-import { Pagination } from '@base/components'
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, Pagination } from '@base/components'
+import { useSearchParams } from "react-router-dom";
 import { formatPrice, range } from "functions";
 import Skeleton from "react-loading-skeleton";
 
@@ -11,29 +10,21 @@ export function PriceList(): ReactNode {
     const [searchParams, setSearchParams] = useSearchParams()
 
     const { Client, datas: articlePrices, RequestState } = useApi<ArticlePrice>({
-        
-        
         url: '/prices',
         key: 'data'
     })
 
-    const { Client: SiteClient, datas: sites, RequestState: SiteRequestState } = useApi<Site>({
-        
-        
+    const { Client: SiteClient, datas: sites } = useApi<Site>({
         url: '/prices/sites',
         key: 'data'
     })
 
-    const { Client: ArticleClient, datas: articles, RequestState: ArticleRequestState } = useApi<Site>({
-        
-        
+    const { Client: ArticleClient, datas: articles } = useApi<Site>({
         url: '/prices/articles',
         key: 'data'
     })
 
-    const { Client: UnitClient, datas: units, RequestState: UnitRequestState } = useApi<Site>({
-        
-        
+    const { Client: UnitClient, datas: units } = useApi<Site>({
         url: '/prices/units',
         key: 'data'
     })
@@ -82,12 +73,14 @@ export function PriceList(): ReactNode {
         getArticlePrices(getSearchParams())
     }, [])
 
+    const { isAdmin } = useAuthStore()
+
     return <>
         <div className="mb-5 d-flex justify-content-between align-items-center">
             <h2 className="mb-0">Les prix des articles</h2>
             <div className="d-flex justify-content-between">
                 <Button onClick={() => getArticlePrices()} icon="arrow-clockwise" type="button" mode="secondary" className="me-2">Recharger</Button>
-                <Link to="/prices/add" className="btn btn-primary">
+                <Link can={isAdmin} to="/prices/add" className="btn btn-primary">
                     <i className="bi bi-plus-lg me-2"></i>Ajouter un prix d'articles
                 </Link>
             </div>

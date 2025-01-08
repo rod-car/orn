@@ -1,16 +1,12 @@
-import { useApi } from "hooks";
+import { useApi, useAuthStore } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Block, Button } from "ui";
-import { config } from '@base/config'
-import { Pagination } from '@base/components'
+import { Block, Button, PageTitle } from "ui";
+import { Link, Pagination } from '@base/components'
 import { range } from "functions";
 import Skeleton from "react-loading-skeleton";
-import { Link } from "react-router-dom";
 
 export function JardinList(): ReactNode {
     const { Client, datas: jardins, RequestState } = useApi<Garden>({
-        
-        
         url: '/jardin-scolaires',
         key: 'data'
     })
@@ -39,13 +35,14 @@ export function JardinList(): ReactNode {
         alert(id)
     }
 
+    const { isAdmin } = useAuthStore()
+
     return <>
-        <div className="mb-5 d-flex justify-content-between align-items-center">
-            <h3>Jardin scolaires (Distribution)</h3>
-            <Link to="/scholar-garden/add" className="btn btn-primary">
+        <PageTitle title="Jardin scolaires (Distribution)">
+            <Link can={isAdmin} to="/scholar-garden/add" className="btn btn-primary">
                 <i className="bi bi-plus-lg me-2"></i>Nouveau jardin
             </Link>
-        </div>
+        </PageTitle>
 
         <Block>
             <table className="table table-bordered table-striped">
@@ -84,8 +81,8 @@ export function JardinList(): ReactNode {
                         <td>{Object.keys(jardin.steps ?? {}).length}</td>
                         <td>
                             <Link to={`/scholar-garden/show/${jardin.id}`} className="btn btn-info btn-sm me-2"><i className="bi bi-folder"></i></Link>
-                            <Link to={`/scholar-garden/edit/${jardin.id}`} className="btn btn-primary btn-sm me-2"><i className="bi bi-pencil-square"></i></Link>
-                            <Button icon="trash" mode="danger" size="sm" onClick={() => handleDelete(jardin.id)} />
+                            <Link can={isAdmin} to={`/scholar-garden/edit/${jardin.id}`} className="btn btn-primary btn-sm me-2"><i className="bi bi-pencil-square"></i></Link>
+                            <Button can={isAdmin} icon="trash" mode="danger" size="sm" onClick={() => handleDelete(jardin.id)} />
                         </td>
                     </tr>)}
                 </tbody>

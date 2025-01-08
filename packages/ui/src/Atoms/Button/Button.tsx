@@ -27,6 +27,8 @@ type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
      */
     loading?: boolean;
 
+    can?: boolean;
+
     /**
      * Lorsque le bouton est cliqué
      */
@@ -37,12 +39,12 @@ type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
  * Composant bouton
  */
 export const Button = ({
-    mode = "default", size = 'md', type = "button", ...props
+    mode = "default", size = 'md', type = "button", can = true, ...props
 }: ButtonProps): ReactNode => {
     let id = useId();
     if (props.id) id = props.id;
-    return (
-        <button
+    return <>
+        {can ? <button
             id={id}
             disabled={props.disabled || props.loading}
             onClick={props.onClick}
@@ -56,8 +58,8 @@ export const Button = ({
             }
 
             {props.children}
-        </button>
-    );
+        </button> : undefined}
+    </>;
 };
 
 export const PrimaryButton = (props: ButtonProps): ReactNode => {

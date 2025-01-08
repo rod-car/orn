@@ -5,19 +5,19 @@ import { AccessRequest, Account, AddUser, ForgotPassword, Login, NewPassword, Pr
 export const authRoute: RouteObject[] = [
     {
         path: 'access-request',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['super-admin']}>
             <AccessRequest />
         </PrivateRoute>
     },
     {
         path: 'users',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['super-admin']}>
             <Users />
         </PrivateRoute>
     },
     {
         path: 'add-user',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['super-admin']}>
             <AddUser />
         </PrivateRoute>
     },

@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from 'hooks'
-import { config } from '@base/config'
+import { useApi, useAuthStore } from 'hooks'
 import { Fragment, ReactNode, useCallback, useEffect } from 'react'
 import { range, round } from 'functions'
 import Skeleton from 'react-loading-skeleton'
@@ -14,6 +13,8 @@ export function StudentBySchoolZ({ surveyId }: { surveyId: number | undefined })
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
         url: '/surveys'
     })
+
+    const { isAdmin } = useAuthStore()
 
     const getData = useCallback(async () => {
         let url = '/state/student-school-z'
@@ -44,6 +45,7 @@ export function StudentBySchoolZ({ surveyId }: { surveyId: number | undefined })
                 <div className="d-flex align-items-center justify-content-between mb-4">
                     <h6 className="text-primary fw-bold m-0">Phase {parts[1]} pour l'année {parts[2]}</h6>
                     <ExcelExportButton
+                        can={isAdmin}
                         ExportClient={ExportClient}
                         loading={ExportRequestState.creating}
                         url={`/${parts[0]}/global-to-excel`}

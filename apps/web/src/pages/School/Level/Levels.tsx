@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { config } from '@base/config'
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { ApiErrorMessage, Block, Button, PageTitle, SecondaryButton } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
@@ -9,7 +9,6 @@ import { EditLink, PrimaryLink } from '@base/components'
 
 export function Levels(): ReactNode {
     const { Client, datas, RequestState, error, resetError, success } = useApi<Niveau>({
-        
         url: '/levels',
         key: 'data'
     })
@@ -53,6 +52,8 @@ export function Levels(): ReactNode {
         })
     }
 
+    const { isAdmin } = useAuthStore()
+
     return (
         <>
             <PageTitle title="Liste des niveaux">
@@ -63,7 +64,7 @@ export function Levels(): ReactNode {
                         className="me-2"
                         loading={RequestState.loading}
                     >Recharger</SecondaryButton>
-                    <PrimaryLink icon="plus-lg" to="/anthropo-measure/school/levels/add">
+                    <PrimaryLink can={isAdmin} icon="plus-lg" to="/anthropo-measure/school/levels/add">
                         Ajouter un niveau
                     </PrimaryLink>
                 </div>
@@ -102,8 +103,8 @@ export function Levels(): ReactNode {
                                     <td>{level.label}</td>
                                     <td>{level.description ?? 'N/A'}</td>
                                     <td>
-                                        <EditLink to={`/anthropo-measure/school/levels/edit/${level.id}`} />
-                                        <Button
+                                        <EditLink can={isAdmin} to={`/anthropo-measure/school/levels/edit/${level.id}`} />
+                                        <Button can={isAdmin}
                                             mode="danger"
                                             icon="trash"
                                             size="sm"

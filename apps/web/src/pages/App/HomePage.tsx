@@ -4,7 +4,7 @@ import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { PageTitle, Spinner } from 'ui'
 import { SchoolsByClassesChart, SchoolsByScholarYearChart } from '@base/charts'
-import { CardState, Link } from '@base/components'
+import { CardState } from '@base/components'
 
 import './HomePage.modules.scss'
 import { scholar_years } from 'functions'

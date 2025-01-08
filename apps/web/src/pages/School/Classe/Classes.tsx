@@ -1,15 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { config } from '@base/config'
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { toast } from 'react-toastify'
 import { ApiErrorMessage, Block, Button, PageTitle, SecondaryButton } from 'ui'
 import { EditLink, PrimaryLink } from '@base/components'
 
 export function Classes(): ReactNode {
     const { Client, datas, RequestState, error, resetError } = useApi<Classes>({
-        
         url: '/classes',
         key: 'data'
     })
@@ -60,6 +59,8 @@ export function Classes(): ReactNode {
         getData()
     }, [])
 
+    const { isAdmin } = useAuthStore()
+
     return (
         <>
             <PageTitle title={`Liste des classes ${datas.length > 0 ? '(' + datas.length + ')' : ''}`}>
@@ -70,7 +71,7 @@ export function Classes(): ReactNode {
                         className="me-2"
                         loading={RequestState.loading}
                     >Recharger</SecondaryButton>
-                    <PrimaryLink to="/anthropo-measure/school/classes/add" icon="plus-lg">Nouvelle classe</PrimaryLink>
+                    <PrimaryLink can={isAdmin} to="/anthropo-measure/school/classes/add" icon="plus-lg">Nouvelle classe</PrimaryLink>
                 </div>
             </PageTitle>
 
@@ -103,8 +104,8 @@ export function Classes(): ReactNode {
                                     <td>{classes.level?.label ?? 'N/A'}</td>
                                     <td>{classes.notation}</td>
                                     <td>
-                                        <EditLink to={`/anthropo-measure/school/classes/edit/${classes.id}`} />
-                                        <Button
+                                        <EditLink can={isAdmin} to={`/anthropo-measure/school/classes/edit/${classes.id}`} />
+                                        <Button can={isAdmin}
                                             mode="danger"
                                             icon="trash"
                                             size="sm"

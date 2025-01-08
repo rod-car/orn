@@ -1,13 +1,11 @@
 import { useApi } from 'hooks'
 import { NavLink, useParams } from 'react-router-dom'
-import { Block } from 'ui'
-import { config } from '@base/config'
-import { useEffect, useState } from 'react'
+import { Block, PageTitle } from 'ui'
+import { ReactNode, useEffect, useState } from 'react'
+import { PrimaryLink } from '@base/components/index.ts'
 
 export function DetailsSchool(): ReactNode {
-    const { Client, error, resetError } = useApi<School>({
-        
-        
+    const { Client } = useApi<School>({
         url: 'schools'
     })
 
@@ -26,12 +24,11 @@ export function DetailsSchool(): ReactNode {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>{school?.name}</h2>
-                <NavLink to="/anthropo-measure/school/list" className="btn btn-primary">
-                    <i className="bi bi-list me-2"></i>Liste des établissements
-                </NavLink>
-            </div>
+            <PageTitle title={school?.name}>
+                <PrimaryLink icon='list' to="/anthropo-measure/school/list">
+                   Liste des établissements
+                </PrimaryLink>
+            </PageTitle>
 
             <Block>Details de l'école</Block>
         </>

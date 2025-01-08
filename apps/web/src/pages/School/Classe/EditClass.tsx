@@ -1,17 +1,15 @@
-import { FormEvent, useEffect, useState } from 'react'
-import { Button, Input, Select } from 'ui'
+import { FormEvent, ReactNode, useEffect, useState } from 'react'
+import { Button, Input, PageTitle, Select } from 'ui'
 import { config } from '@base/config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import { Link } from '@base/components'
+import { Link, PrimaryLink } from '@base/components'
 
 export function EditClass(): ReactNode {
     const [classes, setClasses] = useState<Classes>({ id: 0, name: '', level_id: 0, notation: '' })
     const { id } = useParams()
     const { Client, datas } = useApi<Niveau>({
-        
-        
         url: '/levels',
         key: 'data'
     })
@@ -79,12 +77,11 @@ export function EditClass(): ReactNode {
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2>Editer: {classes.name}</h2>
-                <Link className="btn primary-link" to="/anthropo-measure/school/classes/list">
-                    <i className="bi bi-list me-2"></i>Liste des classes
-                </Link>
-            </div>
+            <PageTitle title={`Editer: ${classes.name}`}>
+                <PrimaryLink icon='list' to="/anthropo-measure/school/classes/list">
+                    Liste des classes
+                </PrimaryLink>
+            </PageTitle>
 
             <form className="mb-5" action="" onSubmit={handleSubmit} method="post">
                 <div className="row mb-3">

@@ -1,6 +1,6 @@
-import { useApi } from "hooks";
+import { useApi, useAuthStore } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Block, Button } from "ui";
+import { Block, Button, PageTitle } from "ui";
 import { config } from '@base/config'
 import { SiteLoading, Link } from "@base/components";
 import { Pagination } from '@base/components'
@@ -76,13 +76,15 @@ export function SiteList(): ReactNode {
         })
     }
 
+    const { isAdmin } = useAuthStore()
+
     return <>
-        <div className="mb-5 d-flex justify-content-between align-items-center">
+        <PageTitle title="Liste des sites">
             <h2>Liste des sites</h2>
-            <Link to="/prices/sites/add" className="btn secondary-link me-2">
+            <Link can={isAdmin} to="/prices/sites/add" className="btn secondary-link me-2">
                 <i className="bi bi-plus-lg me-2"></i>Ajouter un site
             </Link>
-        </div>
+        </PageTitle>
 
         {error && <div className="alert alert-danger mb-5">{error.message}</div>}
 
@@ -106,12 +108,14 @@ export function SiteList(): ReactNode {
                         <td>{site.district?.name}</td>
                         <td className="text-nowrap">
                             <Link
+                                can={isAdmin}
                                 className="btn-sm me-2 btn btn-primary"
                                 to={`/prices/sites/edit/${site.id}`}
                             >
                                 <i className="bi bi-pencil-square"></i>
                             </Link>
                             <Button
+                                can={isAdmin}
                                 type="button"
                                 mode="danger"
                                 icon="trash"

@@ -1,18 +1,11 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Block, Button } from "ui";
-import { config } from '@base/config'
+import { Block, Button, PageTitle } from "ui";
 import { ActivityLoading } from "@base/components";
 
 export function ActivityStatistics(): ReactNode {
-    const {
-        Client,
-        datas: activities,
-        RequestState
-    } = useApi<Activity>({
-        
-        
+    const { Client, datas: activities, RequestState } = useApi<Activity>({
         url: '/activities',
         key: 'data'
     })
@@ -29,12 +22,11 @@ export function ActivityStatistics(): ReactNode {
     }, [])
 
     return <>
-        <div className="mb-5 d-flex justify-content-between align-items-center">
-            <h2>Nos dernières activités</h2>
+        <PageTitle title="Nos dernières activités">
             <Link to="/activities/list" className="btn primary-link">
                 <i className="bi bi-list me-2"></i>Tous nos activités
             </Link>
-        </div>
+        </PageTitle>
 
         {RequestState.loading && <>
             <div className="mb-4"><ActivityLoading /></div>

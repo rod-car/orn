@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { PrimaryLink, InfoLink, DetailLink, EditLink } from '@base/components'
 import { config } from '@base/config'
 import { Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
@@ -10,7 +10,6 @@ import { format } from 'functions'
 
 export function Survey(): ReactNode {
     const { Client, RequestState, error, datas: surveys } = useApi<Survey>({
-        
         url: '/surveys',
         key: 'data'
     })
@@ -61,6 +60,8 @@ export function Survey(): ReactNode {
         })
     }, [])
 
+    const { isAdmin } = useAuthStore()
+
     return (
         <>
             <PageTitle title="Liste des mésures">
@@ -71,10 +72,10 @@ export function Survey(): ReactNode {
                         onClick={getDatas}
                         loading={RequestState.loading}
                     >Recharger</SecondaryButton>
-                    <PrimaryLink icon="plus-lg" to="/anthropo-measure/survey/add" className="me-2">
+                    <PrimaryLink can={isAdmin} icon="plus-lg" to="/anthropo-measure/survey/add" className="me-2">
                         Nouvelle mésure
                     </PrimaryLink>
-                    <InfoLink icon="plus-lg" to="/anthropo-measure/survey/add-student">
+                    <InfoLink can={isAdmin} icon="plus-lg" to="/anthropo-measure/survey/add-student">
                         Formulaire de mesure
                     </InfoLink>
                 </div>
@@ -108,8 +109,8 @@ export function Survey(): ReactNode {
                                     <td>{survey.scholar_year}</td>
                                     <td>
                                         <DetailLink to={`/anthropo-measure/survey/details/${survey.id}`} />
-                                        <EditLink to={`/anthropo-measure/survey/edit/${survey.id}`} />
-                                        <DangerButton icon="trash" size="sm" onClick={() => handleDelete(survey.id) }/>
+                                        <EditLink can={isAdmin} to={`/anthropo-measure/survey/edit/${survey.id}`} />
+                                        <DangerButton can={isAdmin} icon="trash" size="sm" onClick={() => handleDelete(survey.id) }/>
                                     </td>
                                 </tr>
                             ))}

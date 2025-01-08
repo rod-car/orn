@@ -5,7 +5,6 @@ import { ChangeEvent, memo, ReactNode, useEffect, useState } from "react";
 import { Input, PageTitle, PrimaryButton } from "ui";
 import icons from "@base/assets/icons";
 import { useApi, useAuthStore } from "hooks";
-import { config } from "@base/config";
 import { Pagination } from '@base/components';
 import { range } from "functions";
 import Skeleton from "react-loading-skeleton";
@@ -18,7 +17,6 @@ import Skeleton from "react-loading-skeleton";
  */
 export function DocumentHome(): ReactNode {
     const { Client, datas: documents, RequestState } = useApi<FileDocument>({
-        
         url: '/documents'
     })
 
@@ -54,9 +52,11 @@ export function DocumentHome(): ReactNode {
         setTimeoutId(newTimeoutId)
     }
 
+    const { isAdmin } = useAuthStore()
+
     return <>
         <PageTitle title="Les derniers documents">
-            <Link className="btn btn-primary" to="/documents/add"><i className="bi bi-plus-lg me-2"></i>Ajouter</Link>
+            <Link can={isAdmin} className="btn btn-primary" to="/documents/add"><i className="bi bi-plus-lg me-2"></i>Ajouter</Link>
         </PageTitle>
 
         <div className="mb-5 mt-3 d-flex">
@@ -77,7 +77,7 @@ export function DocumentHome(): ReactNode {
         {RequestState.loading && <DocumentsLoading />}
 
         {documents && documents.data && documents.data.length > 0 && <Row className="mb-4">
-            {documents.data.map((document: FileDocument) => <Col key={document.id} className="mb-3" xl={3}>
+            {documents.data.map((document: FileDocument) => <Col key={document.id} className="mb-3" n={3}>
                 <DocumentCard document={document} />
             </Col>)}
         </Row>}
@@ -93,7 +93,7 @@ export function DocumentHome(): ReactNode {
  */
 const DocumentsLoading = memo(function(): ReactNode {
     return <Row className="mb-3">
-        {range(12).map(index => <Col key={index} className="mb-3" xl={3}>
+        {range(12).map(index => <Col key={index} className="mb-3" n={3}>
             <DocumentCardLoading />
         </Col>)}
     </Row>
@@ -139,7 +139,7 @@ function DocumentCard({document}: {document: FileDocument}): ReactNode {
             </div>
             <p className="fst-italic text-primary text-center text-sm">{document.date}</p>
             <p className="text-center text-sm">Par: {document.creator && document.creator.name}</p>
-            {isAdmin && <Link className="text-center d-block" to={`/documents/edit/${document.id}`}>Editer le document</Link>}
+            <Link can={isAdmin} className="text-center d-block" to={`/documents/edit/${document.id}`}>Editer le document</Link>
         </BasicCard>
     </>
 }

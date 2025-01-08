@@ -1,16 +1,13 @@
 import { useApi } from 'hooks'
-import { useEffect } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block } from 'ui'
-import { config } from '@base/config'
 import { ArticleForm } from '@base/pages/Prices'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 export function ArticleEdit(): ReactNode {
     const { Client, data: article } = useApi<Article>({
-        
-        
         url: '/prices/articles'
     })
 
