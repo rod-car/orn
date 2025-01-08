@@ -1,17 +1,13 @@
 import { useApi } from 'hooks'
 import { FormEvent, ReactNode, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Button, Input } from 'ui'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
 import { Footer, Link } from '@base/components'
-
 import logo from '@base/assets/images/logo.png'
 
 export function ForgotPassword(): ReactNode {
     const [email, setEmail] = useState('')
-    const navigate = useNavigate()
-
     const { Client, RequestState, error } = useApi<User>({ url: '/auth/forgot-password' })
 
     const handleLogin = async (e: FormEvent): Promise<void> => {

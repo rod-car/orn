@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { DetailLink, EditLink, Link } from '@base/components'
 import { config } from '@base/config'
 import { ApiErrorMessage, Block, Button, PageTitle, SecondaryButton } from 'ui'
@@ -9,10 +9,11 @@ import { confirmAlert } from 'react-confirm-alert'
 
 export function SchoolList(): ReactNode {
     const { Client, datas: schools, RequestState, error, resetError } = useApi<School>({
-        baseUrl: config.baseUrl,
         url: '/schools',
         key: 'data'
     })
+
+    const { isAdmin } = useAuthStore()
 
     const getSchools = async () => {
         await Client.get()
@@ -68,7 +69,7 @@ export function SchoolList(): ReactNode {
             <PageTitle title={`Liste des établissement ${schools.length > 0 ? '('+ schools.length +' école(s))' : ''}`}>
                 <div className="d-flex">
                     <SecondaryButton onClick={getSchools} className="me-2" icon="arrow-clockwise" loading={RequestState.loading}>Rechargher</SecondaryButton>
-                    <Link to="/anthropo-measure/school/add" className="btn primary-link">
+                    <Link can={isAdmin} to="/anthropo-measure/school/add" className="btn primary-link">
                         <i className="bi bi-plus-lg me-2"></i>Nouveau
                     </Link>
                 </div>
@@ -116,8 +117,8 @@ export function SchoolList(): ReactNode {
                                     <td>{school.responsable}</td>
                                     <td>
                                         <DetailLink to={`/anthropo-measure/school/details/${school.id}`} />
-                                        <EditLink to={`/anthropo-measure/school/edit/${school.id}`} />
-                                        <Button
+                                        <EditLink can={isAdmin} to={`/anthropo-measure/school/edit/${school.id}`} />
+                                        <Button can={isAdmin}
                                             mode="danger"
                                             icon="trash"
                                             size="sm"

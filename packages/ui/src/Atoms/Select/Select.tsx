@@ -1,4 +1,4 @@
-import { ChangeEvent, CSSProperties, useId } from "react"
+import { ChangeEvent, CSSProperties, PropsWithChildren, useId } from "react"
 import { RequiredSign } from "../RequiredSign/RequiredSign"
 
 type Option = Partial<{
@@ -13,6 +13,7 @@ type Option = Partial<{
 type SelectProps = {
     label?: string;
     required?: boolean;
+    disabled?: boolean;
     defaultOption?: string | number;
     name?: string;
     controlled?: boolean;
@@ -28,7 +29,7 @@ type SelectProps = {
     onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
 }
 
-export function Select({ label, name, value, options, defaultOption, onChange, controlled = false, required = true, config = { optionKey: 'id', valueKey: 'label' }, placeholder = "Selectionner un option", error = undefined, loading = false }: SelectProps) {
+export function Select({ label, name, value, options, defaultOption, onChange, controlled = false, required = true, config = { optionKey: 'id', valueKey: 'label' }, placeholder = "Selectionner un option", disabled = false, error = undefined, loading = false }: SelectProps) {
     const id = useId()
 
     return <div className="form-group">
@@ -37,7 +38,7 @@ export function Select({ label, name, value, options, defaultOption, onChange, c
             <RequiredSign value={required} />
         </label>}
         {loading ? <p style={styles.placeholder} className="form-select bg-grey m-0 text-sm">Chargement</p> :
-            <select style={styles.select} value={value} defaultValue={defaultOption} onChange={controlled ? onChange : () => { }} name={name} id={id} className="form-select shadow-sm text-sm">
+            <select disabled={disabled} style={styles.select} value={value} defaultValue={defaultOption} onChange={controlled ? onChange : () => { }} name={name} id={id} className="form-select shadow-sm text-sm">
                 {placeholder && <option value={0}>{placeholder}</option>}
                 {options && options.map(o => typeof o === 'object'
                     ? <option key={o[config.optionKey]} value={o[config.optionKey]}>{o[config.valueKey]}</option>

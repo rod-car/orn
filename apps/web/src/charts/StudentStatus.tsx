@@ -61,13 +61,13 @@ ChartJS.register(
 
 export function StudentStatus({ student_id }: { student_id: number }): ReactNode {
     const { Client: SurveyClient, datas: surveys } = useApi<Survey>({
-        baseUrl: config.baseUrl,
+        
         url: '/surveys',
         key: 'data'
     })
 
     const { Client: StateClient, datas: StateDatas, RequestState } = useApi<Student>({
-        baseUrl: config.baseUrl,
+        
         url: '/students'
     })
 

@@ -32,18 +32,18 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
     const [scholarYear, setScholarYear] = useState<string|number>(defaultStudent.scholar_year)
 
     const { Client: SClient, RequestState: SRequestState, error } = useApi<typeof defaultStudent>({
-        baseUrl: config.baseUrl,
+        
         url: '/students'
     })
 
     const { Client: ScClient, datas: schools, RequestState: ScRequestState } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClClient, datas: ClDatas, RequestState: ClRequestState } = useApi<Classes>({
-        baseUrl: config.baseUrl,
+        
         url: '/classes',
         key: 'data'
     })

@@ -71,7 +71,7 @@ ChartJS.register(
 
 export function SchoolsByScholarYearChart(): ReactNode {
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/schools',
         key: 'data'
     })
@@ -81,7 +81,7 @@ export function SchoolsByScholarYearChart(): ReactNode {
         datas: StateDatas,
         RequestState
     } = useApi<Student>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/students',
         key: 'data'

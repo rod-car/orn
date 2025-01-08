@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { Block } from 'ui'
 import { ArticleForm } from '@base/pages/Prices'
+import { ReactNode } from 'react'
 
 export function ArticleAdd(): ReactNode {
     return (

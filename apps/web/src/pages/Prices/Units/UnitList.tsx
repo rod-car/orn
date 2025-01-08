@@ -14,7 +14,7 @@ export function UnitList(): ReactNode {
         RequestState,
         error
     } = useApi<Unit>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/units'
     })

@@ -21,7 +21,7 @@ export function UnitForm({ editedUnit }: UnitFormProps): ReactNode {
         error,
         RequestState
     } = useApi<Unit>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/units',
         key: 'data'

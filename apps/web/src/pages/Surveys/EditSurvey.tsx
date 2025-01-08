@@ -11,7 +11,7 @@ export function EditSurvey(): ReactNode {
     const [survey, setSurvey] = useState<Partial<Survey>>({ id: 0, phase: 0, date: '' })
     const { id } = useParams()
     const { Client, RequestState, error } = useApi<Survey>({
-        baseUrl: config.baseUrl,
+        
         url: '/surveys'
     })
 

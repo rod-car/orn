@@ -21,7 +21,7 @@ type Steps = {
 
 export function Steps(): ReactNode {
     const { datas, setDatas, Client, RequestState, error } = useApi<Steps>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/jardin-scolaires/steps'
     })

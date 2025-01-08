@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { config } from '@base/config'
 import { Loading, PrimaryLink } from "@base/components";
 import { Block, PageTitle } from "ui";
 import { useNavigate, useParams } from "react-router";
@@ -10,7 +9,6 @@ import 'react-photo-view/dist/react-photo-view.css';
 
 export function ActivityShow(): ReactNode {
     const { Client, data: activity, RequestState } = useApi<Activity>({
-        baseUrl: config.baseUrl,
         url: '/activities'
     })
 

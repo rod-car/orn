@@ -19,7 +19,7 @@ export function DocumentForm({ editedDocument }: { editedDocument?: FileDocument
     const [document, setDocument] = useState<FileDocument>(defaultDocument);
     const [abstract, setAbstract] = useState("");
     const { Client, error, RequestState } = useApi<FileDocument>({
-        baseUrl: config.baseUrl,
+        
         url: '/documents',
         key: 'data'
     })

@@ -45,8 +45,6 @@ export function SearchBar(): ReactNode {
         let results: Record<string, string> = {}
 
         if (value !== "") Object.keys(searchableLinks).map(label => {
-            console.log(value);
-
             const link = searchableLinks[label].toLowerCase()
             const v = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
             const l = label.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()

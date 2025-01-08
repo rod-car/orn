@@ -1,15 +1,12 @@
 import { useApi } from 'hooks'
-import { useEffect } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Block } from 'ui'
-import { config } from '@base/config'
 import { JardinForm } from './JardinForm'
 import Skeleton from 'react-loading-skeleton'
 
 export function JardinEdit(): ReactNode {
     const { Client, data: garden } = useApi<Garden>({
-        baseUrl: config.baseUrl,
-        
         url: '/jardin-scolaires'
     })
 

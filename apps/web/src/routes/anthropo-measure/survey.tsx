@@ -11,13 +11,13 @@ export const surveyRoute: RouteObject[] = [
     },
     {
         path: 'add',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <AddSurvey />
         </PrivateRoute>
     },
     {
         path: 'edit/:id',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <EditSurvey />
         </PrivateRoute>
     },
@@ -29,19 +29,19 @@ export const surveyRoute: RouteObject[] = [
     },
     {
         path: ':id/import-result',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <ImportResultSurvey />
         </PrivateRoute>
     },
     {
         path: 'add-student',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <AddSurveyStudent />
         </PrivateRoute>
     },
     {
         path: 'edit-student/:student_id/:survey_id',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <AddSurveyStudent />
         </PrivateRoute>
     }

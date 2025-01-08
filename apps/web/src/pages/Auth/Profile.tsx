@@ -6,7 +6,7 @@ import { FormEvent, ReactNode, useCallback, useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { Block, Button, Input } from "ui";
+import { Block, Button, Input, PageTitle } from "ui";
 
 /**
  * Description placeholder
@@ -16,7 +16,7 @@ import { Block, Button, Input } from "ui";
  */
 export function Profile(): ReactNode {
     const [user, setUser] = useState<User>()
-    const { Client } = useApi({ baseUrl: config.baseUrl, url: '/auth' })
+    const { Client } = useApi({  url: '/auth' })
     const { Client: UpdateClient, RequestState, error } = useApi({ url: '/auth/users' })
     const { user: currentUser, updateUser } = useAuthStore();
 
@@ -56,7 +56,7 @@ export function Profile(): ReactNode {
     }, [])
 
     return <>
-        <h1 className="app-page-title">Modifier mon compte</h1>
+        <PageTitle title="Modifier mon compte"/>
         <Block>
             {user ? <form method="post" onSubmit={handleSubmit}>
                 <UnprocessableEntityError error={error} />
@@ -64,6 +64,9 @@ export function Profile(): ReactNode {
                 <div className="row mb-4">
                     <div className="col-6 mb-3">
                         <Input name="name" label="Nom" placeholder="Nom" defaultValue={user.name} />
+                    </div>
+                    <div className="col-6 mb-3">
+                        <Input name="occupation" label="Occupation" placeholder="Ex: AP ORN Ats" defaultValue={user.occupation} />
                     </div>
                     <div className="col-6 mb-3">
                         <Input name="email" label="Adresse e-mail" placeholder="Adresse e-mail" defaultValue={user.email} />

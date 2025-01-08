@@ -20,13 +20,13 @@ const defaultSchool: School = {
 export function SchoolForm({ editedSchool }: SchoolFormProps): ReactNode {
     const [school, setSchool] = useState(defaultSchool)
     const { Client: SchoolClient, error, RequestState } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: CommuneClient, datas: communes } = useApi<Commune>({
-        baseUrl: config.baseUrl,
+        
         url: '/communes'
     })
 

@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { Statistics } from '@base/pages/Statistics';
 import { AuthRoot } from '@base/pages/Auth';
 import { priceRoute } from '@base/routes/prices';
 import { cantineRoute } from '@base/routes/cantine/cantine';
@@ -9,8 +8,9 @@ import { authRoute, userRoute } from '@base/routes/auth';
 import { scholarGardenRoute } from '@base/routes/scholar-garden/';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { AppRoot, About, Contributors, HomePage } from '@base/pages/App';
-import { studentRoute, abaqueRoute, schoolRoute, surveyRoute } from '@base/routes/anthropo-measure';
+import { studentRoute, abaqueRoute, schoolRoute, surveyRoute, statisticRoute } from '@base/routes/anthropo-measure';
 import { documentRoute } from '@base/routes/document/documents';
+import { toolsRoute } from '@base/routes/tools/tools';
 
 const router = createBrowserRouter([
     {
@@ -44,10 +44,8 @@ const router = createBrowserRouter([
                 path: '/anthropo-measure',
                 children: [
                     {
-                        path: 'statistics',
-                        element: <PrivateRoute>
-                            <Statistics />
-                        </PrivateRoute>
+                        path: 'statistics/',
+                        children: statisticRoute
                     },
                     {
                         path: 'student/',
@@ -86,6 +84,10 @@ const router = createBrowserRouter([
             {
                 path: '/documents',
                 children: documentRoute
+            },
+            {
+                path: '/tools',
+                children: toolsRoute
             }
         ]
     },
@@ -94,6 +96,10 @@ const router = createBrowserRouter([
         element: <AuthRoot />,
         errorElement: <AuthRoot error={true} />,
         children: userRoute
+    },
+    {
+        path: '/forbidden',
+        element: <AppRoot error={true}/>
     }
 ])
 

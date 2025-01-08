@@ -381,9 +381,9 @@
 		.page-item {
 			&.active {
 				.page-link {
-					background: lighten($theme-text-color-secondary, 10%);
+					background: lighten($theme-color-primary, 0%);
 					color: #fff;
-					border-color: lighten($theme-text-color-secondary, 10%);
+					border-color: lighten($theme-color-primary, 0%);
 				}
 			}
 			&.disabled {

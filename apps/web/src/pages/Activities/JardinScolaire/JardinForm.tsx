@@ -39,11 +39,11 @@ export function JardinForm({ editedGarden }: GardenFormProps): ReactNode {
     const [gardenSemence, setGardenSemence] = useState(defaultGardenSemences)
     const [gardenEngrais, setGardenEngrais] = useState(defaultGardenEngraiss)
 
-    const { Client, error, RequestState } = useApi<Garden>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires', key: 'data' })
-    const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({ baseUrl: config.baseUrl,  url: '/schools', key: 'data' })
-    const { Client: MaterielClient, datas: materiels } = useApi<Materiel>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires/materiels' })
-    const { Client: SemenceClient, datas: semences } = useApi<Semence>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires/semences' })
-    const { Client: EngraisClient, datas: engrais } = useApi<Engrais>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires/engrais' })
+    const { Client, error, RequestState } = useApi<Garden>({   url: '/jardin-scolaires', key: 'data' })
+    const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({   url: '/schools', key: 'data' })
+    const { Client: MaterielClient, datas: materiels } = useApi<Materiel>({   url: '/jardin-scolaires/materiels' })
+    const { Client: SemenceClient, datas: semences } = useApi<Semence>({   url: '/jardin-scolaires/semences' })
+    const { Client: EngraisClient, datas: engrais } = useApi<Engrais>({   url: '/jardin-scolaires/engrais' })
 
     useEffect(() => {
         SchoolClient.get()

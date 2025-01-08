@@ -20,5 +20,5 @@ export default defineConfig({
   build: {
     target: 'esnext',
   },
-  base: "/orn"
+  base: "/"
 })

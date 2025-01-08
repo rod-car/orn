@@ -1,27 +1,23 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect } from 'react'
-import { config } from '@base/config'
 import { Block, HomeCard, Spinner } from 'ui'
-import { NavLink } from 'react-router-dom'
-import { Link } from '@base/components'
+import { Link, NavLink } from '@base/components'
 
 import './HomeCantine.modules.scss'
 
 export function HomeCantine(): ReactNode {
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
-        baseUrl: config.baseUrl,
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schoolCount } = useApi<School>({
-        baseUrl: config.baseUrl,
         url: '/schools',
         key: 'data'
     })
 
     const { Client: SurveyClient, datas: surveyCount } = useApi<Survey>({
-        baseUrl: config.baseUrl,
         url: '/surveys',
         key: 'data'
     })
@@ -49,7 +45,7 @@ export function HomeCantine(): ReactNode {
             <div className="row mb-5">
                 <NavLink to="/cantine/student/list" className="col-4 clickable-card">
                     <HomeCard
-                        title="Étudiant nouris"
+                        title="Étudiant nourris"
                         icon="users"
                         type="primary"
                         value={'count' in studentCount ? studentCount.count : <Spinner />}

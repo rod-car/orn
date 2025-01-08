@@ -22,7 +22,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
     const [activity, setActivity] = useState(defaultActivity)
     const [details, setDetails] = useState("")
     const { Client, error, RequestState } = useApi<Activity>({
-        baseUrl: config.baseUrl,
+        
         url: '/activities',
         key: 'data'
     })

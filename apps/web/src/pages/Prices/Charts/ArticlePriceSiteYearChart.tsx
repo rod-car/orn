@@ -37,19 +37,19 @@ export function ArticlePriceSiteYearChart(): ReactNode {
     const [displayedArticles, setDisplayedArticle] = useState<Article[]>([])
 
     const { Client: SiteClient, datas: sites } = useApi<Site>({
-        baseUrl: config.baseUrl,
+        
         url: '/prices/sites',
         key: 'data'
     })
 
     const { Client: ArticleClient, datas: articles } = useApi<Article>({
-        baseUrl: config.baseUrl,
+        
         url: '/prices/articles',
         key: 'data'
     })
 
     const { Client: ArticlePriceClient, datas: StateDatas, RequestState } = useApi<{ data: ArticlePrice }>({
-        baseUrl: config.baseUrl,
+        
         url: '/prices',
         key: 'data'
     })

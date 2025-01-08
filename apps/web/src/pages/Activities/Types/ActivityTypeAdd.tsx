@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { Block } from 'ui'
 import { ActivityForm } from '@base/pages/Activities'
+import { ReactNode } from 'react'
 
 export function ActivityTypeAdd(): ReactNode {
     return (

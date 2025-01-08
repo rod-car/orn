@@ -9,7 +9,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 export function SiteEdit(): ReactNode {
     const { Client, data: site } = useApi<Site>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/sites'
     })

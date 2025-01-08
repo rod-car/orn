@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from 'hooks'
-import { DetailLink, EditLink, ExcelExportButton, InfoLink, Link, PrimaryLink } from '@base/components'
+import { useApi, useAuthStore } from 'hooks'
+import { DetailLink, EditLink, ExcelExportButton, InfoLink, PrimaryLink } from '@base/components'
 import { class_categories, config } from '@base/config'
-import { Block, Button, DangerButton, Input, PageTitle, PrimaryButton, SecondaryButton, Select } from 'ui'
+import { Block, DangerButton, Input, PageTitle, PrimaryButton, SecondaryButton, Select } from 'ui'
 import { ChangeEvent, Key, memo, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
@@ -31,30 +31,25 @@ export function StudentList(): ReactNode {
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
 
     const { Client: StudentClient, RequestState: SRequestState, error: Serror, datas: students } = useApi<Student>({
-        baseUrl: config.baseUrl,
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
-        baseUrl: config.baseUrl,
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassClient, datas: classes, RequestState: ClassRequestState } = useApi<Classes>({
-        baseUrl: config.baseUrl,
         url: '/classes',
         key: 'data'
     })
 
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
         url: 'students'
     })
 
     const { Client: ScholarYearClient, datas: scholarYears, RequestState: ScholarYearRequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
         url: 'scholar-years'
     })
 
@@ -94,7 +89,7 @@ export function StudentList(): ReactNode {
                     onClick: async () => {
                         const response = await StudentClient.destroy(id)
                         if (response.ok) {
-                            toast('Enregistré', {
+                            toast('Supprime', {
                                 closeButton: true,
                                 type: 'success',
                                 position: config.toastPosition
@@ -186,6 +181,8 @@ export function StudentList(): ReactNode {
         StudentClient.get({ ...requestData, page: data.page })
     }, [requestData])
 
+    const { isAdmin } = useAuthStore()
+
     return (
         <>
             <PageTitle title={`Liste des etudiants ${!SRequestState.loading ? '(' + students?.total + ')' : ''}`}>
@@ -196,8 +193,8 @@ export function StudentList(): ReactNode {
                         onClick={getDatas}
                         loading={SRequestState.loading}
                     >Recharger</SecondaryButton>
-                    <PrimaryLink to="/anthropo-measure/student/add" icon="plus" className="me-2">Nouveau</PrimaryLink>
-                    <InfoLink to="/anthropo-measure/student/import" icon="file-earmark-text">Importer une liste</InfoLink>
+                    <PrimaryLink can={isAdmin} to="/anthropo-measure/student/add" icon="plus" className="me-2">Nouveau</PrimaryLink>
+                    <InfoLink can={isAdmin} to="/anthropo-measure/student/import" icon="file-earmark-text">Importer une liste</InfoLink>
                 </div>
             </PageTitle>
 
@@ -274,6 +271,7 @@ export function StudentList(): ReactNode {
                             </td>
                             <td>
                                 <ExcelExportButton
+                                    can={isAdmin}
                                     ExportClient={ExportClient}
                                     url={'/to-excel'}
                                     loading={ExportRequestState.creating}
@@ -339,8 +337,8 @@ export function StudentList(): ReactNode {
                                             </td>
                                             <td className="text-nowrap">
                                                 <DetailLink className="me-2" to={`/anthropo-measure/student/details/${student.id}`} />
-                                                <EditLink className="me-2" to={`/anthropo-measure/student/edit/${student.id}`} />
-                                                <DangerButton icon="trash" size="sm"
+                                                <EditLink can={isAdmin} className="me-2" to={`/anthropo-measure/student/edit/${student.id}`} />
+                                                <DangerButton can={isAdmin} icon="trash" size="sm"
                                                     onClick={() => {
                                                         handleDelete(student.id)
                                                     }}

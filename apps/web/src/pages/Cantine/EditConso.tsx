@@ -1,28 +1,24 @@
+import { ReactNode, useEffect } from 'react'
+import { AddConso } from './AddConso.tsx'
 import { useApi } from 'hooks'
-import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
-import { config, abaque as abaqueConfig } from '@base/config'
-import { Button, Input } from 'ui'
-import { toast } from 'react-toastify'
-import { Link } from '@base/components'
+import { useNavigate, useParams } from 'react-router'
+import { Spinner } from 'ui'
 
 export function EditConso(): ReactNode {
-    async function save() {
+    const { Client, data, RequestState } = useApi<ConsommationModel>({ url: '/consommations' })
+    const { id } = useParams()
+    const navigate = useNavigate()
 
+    const getConso = async () => {
+        if (!id) return navigate('/not-found')
+        const response = await Client.find(parseInt(id))
+
+        if (response === null) return navigate('/not-found')
     }
 
-    return (
-        <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                <h2 className="m-0">Modifier les consommation</h2>
-                <Link to="/cantine/list-conso" className="btn primary-link">
-                    <i className="bi bi-list me-2"></i>Liste des conso
-                </Link>
-            </div>
+    useEffect(() => {
+        getConso()
+    }, [])
 
-            <form action="" onSubmit={save}>
-
-            </form>
-        </>
-    )
+    return <>{RequestState.loading ? <Spinner isBorder className='text-center' /> : <AddConso editedConso={data as ConsommationModel} />}</>
 }

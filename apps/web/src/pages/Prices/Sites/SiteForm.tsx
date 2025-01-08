@@ -21,7 +21,7 @@ export function SiteForm({ editedSite }: SiteFormProps): ReactNode {
         error,
         RequestState
     } = useApi<Site>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/sites',
         key: 'data'
@@ -31,7 +31,7 @@ export function SiteForm({ editedSite }: SiteFormProps): ReactNode {
         Client: CommuneClient,
         datas: communes
     } = useApi<Commune>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/communes'
     })

@@ -5,19 +5,19 @@ import { RouteObject } from "react-router";
 const classRoute: RouteObject[] = [
     {
         path: 'list',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <Classes />
         </PrivateRoute>
     },
     {
         path: 'add',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <AddClass />
         </PrivateRoute>
     },
     {
         path: 'edit/:id',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <EditClass />
         </PrivateRoute>
     }
@@ -26,19 +26,19 @@ const classRoute: RouteObject[] = [
 const levelRoute: RouteObject[] = [
     {
         path: 'list',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <Levels />
         </PrivateRoute>
     },
     {
         path: 'add',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <AddLevel />
         </PrivateRoute>
     },
     {
         path: 'edit/:id',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <EditLevel />
         </PrivateRoute>
     }
@@ -53,19 +53,19 @@ export const schoolRoute: RouteObject[] = [
     },
     {
         path: 'add',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <AddSchool />
         </PrivateRoute>
     },
     {
         path: 'edit/:id',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <EditSchool />
         </PrivateRoute>
     },
     {
         path: 'details/:id',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <DetailsSchool />
         </PrivateRoute>
     },

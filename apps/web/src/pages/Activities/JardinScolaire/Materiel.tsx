@@ -9,7 +9,7 @@ import { Button, Block, Input, Textarea } from "ui";
 
 export function Materiel(): ReactNode {
     const { datas: materiels, setDatas, Client, RequestState, error } = useApi<Materiel>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/jardin-scolaires/materiels'
     })

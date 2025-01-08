@@ -15,13 +15,13 @@ export function ImportResultSurvey(): ReactNode {
     const { json, importing, toJSON, resetJSON } = useExcelReader()
 
     const { Client: SchoolClient, RequestState: SchoolRs, datas: schools } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: 'schools',
         key: 'data'
     })
 
     const { Client, RequestState, data: survey } = useApi<Survey | {date: string, school_id: number, data: Survey}>({
-        baseUrl: config.baseUrl,
+        
         url: 'surveys'
     })
 

@@ -2,7 +2,7 @@ import { FormEvent, ReactNode, useState } from 'react'
 import { Footer, Link } from '@base/components'
 import logo from '@base/assets/images/logo.png';
 import './Auth.modules.scss'
-import { Navigate, useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { config } from '@base/config';
 import { useApi } from 'hooks';
 import { Button, Input } from 'ui';
@@ -13,7 +13,6 @@ export function NewPassword(): ReactNode {
     const navigate = useNavigate()
 
     const { Client, RequestState } = useApi<User>({
-        baseUrl: config.baseUrl,
         url: '/auth/new-password',
         key: 'data'
     })
@@ -31,8 +30,6 @@ export function NewPassword(): ReactNode {
         e.preventDefault()
         const response = await Client.post({...user, token: token})
         const message = "Mot de passe réinitialisé";
-
-        console.log(response);
 
         if (response === undefined) {
             toast("Impossible de contacter le serveur", {
