@@ -14,7 +14,7 @@ import { toolsRoute } from '@base/routes/tools/tools';
 
 const router = createBrowserRouter([
     {
-        path: '/',
+        path: '/orn',
         element: <AppRoot />,
         errorElement: <AppRoot error={true} />,
         children: [
