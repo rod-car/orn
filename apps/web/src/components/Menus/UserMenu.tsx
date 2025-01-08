@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { useApi, useAuthStore } from "hooks";
 import avatar from '@base/assets/images/user.svg';
 import { Button } from "ui";
+import { excerpt } from "functions";
 
 export function UserMenu(): ReactNode {
     const navigate = useNavigate()
@@ -36,7 +37,7 @@ export function UserMenu(): ReactNode {
     return <div className="app-utility-item app-user-dropdown dropdown">
         <a className="dropdown-toggle" id="user-dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
             <img src={avatar} style={{ width: 30 }} alt="user profile" />
-            {user?.name}
+            {excerpt(user?.name)} ({user?.role})
         </a>
         <ul className="dropdown-menu" aria-labelledby="user-dropdown-toggle">
             <li><NavLink className="dropdown-item" to="/auth/account">Mon compte</NavLink></li>

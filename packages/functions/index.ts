@@ -12,3 +12,15 @@ export { addDays, subDays, isDate } from 'date-fns'
 export function in_array(array: unknown[], value: unknown): boolean {
     return array.includes(value)
 }
+
+
+export function excerpt(text?: string, wordCount: number = 2): string | null {
+    if (text) {
+        const textParts = text.split(' ');
+
+        if (textParts.length > wordCount) return textParts.slice(0, wordCount).join(' ');
+        return text
+    }
+
+    return null
+}
