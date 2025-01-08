@@ -21,13 +21,13 @@ const defaultGardenSemences: GardenSemence[] = [defaultGardenSemence]
 
 export function StepsData(): ReactNode {
     const { datas: steps, Client, RequestState, error } = useApi<Steps>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/jardin-scolaires/steps'
     })
 
     const { datas: schools, Client: SchoolClient, RequestState: SchoolRequestState } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/schools',
         key: 'data'
@@ -41,9 +41,9 @@ export function StepsData(): ReactNode {
     const [gardenSemence, setGardenSemence] = useState(defaultGardenSemences)
     const [gardenEngrais, setGardenEngrais] = useState(defaultGardenEngraiss)
 
-    const { Client: MaterielClient, datas: materiels } = useApi<Materiel>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires/materiels' })
-    const { Client: SemenceClient, datas: semences } = useApi<Semence>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires/semences' })
-    const { Client: EngraisClient, datas: engrais } = useApi<Engrais>({ baseUrl: config.baseUrl,  url: '/jardin-scolaires/engrais' })
+    const { Client: MaterielClient, datas: materiels } = useApi<Materiel>({   url: '/jardin-scolaires/materiels' })
+    const { Client: SemenceClient, datas: semences } = useApi<Semence>({   url: '/jardin-scolaires/semences' })
+    const { Client: EngraisClient, datas: engrais } = useApi<Engrais>({   url: '/jardin-scolaires/engrais' })
 
     async function getDatas() {
         await Client.get()

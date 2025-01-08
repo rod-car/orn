@@ -80,7 +80,6 @@ export const Handled: Story = {
         icon: "trash",
         onClick: (e) => {
             alert("Hello world")
-            console.log(`e`, e);
         }
     },
 };

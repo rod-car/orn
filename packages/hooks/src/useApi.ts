@@ -1,8 +1,10 @@
 import { AxiosError, AxiosRequestConfig } from "axios";
 import axios from "./axios";
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useState } from "react"
 import { useAuthStore } from "../src/store/useAuthStore.ts";
 import { useConfigStore } from "../src/store/useConfigStore.ts";
+
+export type RequestParams = Record<string, string | number | boolean>
 
 type APIProps = {
     url: string;
@@ -79,7 +81,7 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
      * @param params 
      * @returns 
      */
-    const buildQuery = useCallback((params: Record<string, string | number | boolean> | undefined): string | undefined => {
+    const buildQuery = useCallback((params: RequestParams | undefined): string | undefined => {
 
         if (!params || JSON.stringify(params) === '{}') return undefined;
 
@@ -97,7 +99,7 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
      * 
      * @param {Record<string, any>} params
      */
-    const get = useCallback(async (params?: Record<string, string | number | boolean>, addUrl?: string) => {
+    const get = useCallback(async (params?: RequestParams, addUrl?: string) => {
         reset(true);
         setRequestState({ loading: true });
 
@@ -115,7 +117,7 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
             }
 
             if (params?.prefix === false && addUrl !== undefined) response = await axios.get(addUrl, {
-                baseURL: baseUrl.replace(params.replace, ''),
+                baseURL: (baseUrl as string).replace(params.replace as string, ''),
                 headers: headers
             });
             else response = await axios.get(requestUri, {
@@ -123,7 +125,7 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
             })
 
             response.ok = response.status === 200
-            if (response.status === 200) datas = key ? response.data[key] : response.data;
+            if (response.status === 200) datas = key && key in response.data ? response.data[key] : response.data;
             else setError({
                 message: response.statusText,
                 status: response.status
@@ -145,7 +147,7 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
      * @param params 
      * @returns 
      */
-    const find = useCallback(async (id: string | number, params?: Record<string, string | number | boolean>): Promise<T | null> => {
+    const find = useCallback(async (id: string | number, params?: RequestParams): Promise<T | null> => {
         reset(false);
         setRequestState({ loading: true });
         let data: T | null = null
@@ -184,7 +186,7 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
      * @param {string} data
      * @async
      */
-    const post = useCallback(async (data: Partial<T>, addUrl: string | undefined = undefined, params?: Record<string, unknown>, config?: AxiosRequestConfig): Promise<PostResponse> => {
+    const post = useCallback(async (data: Partial<T>, addUrl: string | undefined = undefined, params?: RequestParams, config?: AxiosRequestConfig): Promise<PostResponse> => {
         reset(false);
         setRequestState({ creating: true });
 
@@ -290,10 +292,10 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
                 params: params
             });
 
-            if (response.status === 200) {
+            if (response.status >= 200 && response.status < 300) {
                 setSuccess(true);
                 setData(response.data);
-                res = { ok: response.status === 200, status: response.status, message: response.statusText, data: response.data }
+                res = { ok: (response.status >= 200 && response.status < 300), status: response.status, message: response.statusText, data: response.data }
             } else {
                 setError({
                     message: response.statusText,

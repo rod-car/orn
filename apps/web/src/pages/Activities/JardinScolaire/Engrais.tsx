@@ -9,7 +9,7 @@ import { Block, Button, Input } from "ui";
 
 export function Engrais(): ReactNode {
     const { datas: engraisData, setDatas, Client, RequestState, error } = useApi<Engrais>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/jardin-scolaires/engrais'
     })

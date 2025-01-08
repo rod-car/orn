@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Block, PageTitle } from 'ui'
 import { useApi } from 'hooks'
-import { config } from '@base/config'
 import { ReactNode, useEffect } from 'react'
 import { ActivityForm } from './ActivityForm'
 import Skeleton from 'react-loading-skeleton'
@@ -11,7 +10,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 export function ActivityEdit(): ReactNode {
     const { Client, data: activity } = useApi<Activity>({
-        baseUrl: config.baseUrl,
+        
         url: '/activities'
     })
 

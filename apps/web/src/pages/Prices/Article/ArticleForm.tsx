@@ -22,7 +22,7 @@ export function ArticleForm({ editedArticle }: ArticleFormProps): ReactNode {
         error,
         RequestState
     } = useApi<Article>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/articles',
         key: 'data'

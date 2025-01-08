@@ -8,6 +8,23 @@ import { capitalize } from '.'
  * @returns 
  */
 export const scholar_years = (deep: number = 5): string[] => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // Months are 0-based in JavaScript
+
+    const startYear =
+        currentMonth < 6
+            ? currentYear - 1
+            : currentYear;
+
+    const years = [];
+    for (let i = 0; i < deep; i++) {
+        const start = startYear - i;
+        const end = start + 1;
+        years.push(`${start}-${end}`);
+    }
+    return years;
+    /*
     const current_year = getYear(new Date) + 1
     const scholar_years: string[] = []
 
@@ -15,7 +32,7 @@ export const scholar_years = (deep: number = 5): string[] => {
         scholar_years.push((current_year - (i + 1)) + "-" + (current_year - i))
     }
 
-    return scholar_years
+    return scholar_years*/
 }
 
 /**
@@ -31,7 +48,7 @@ export const ageLong = (birth_date: string | null): string => {
     const normalMonths = ageYear * 12;
     const leftMonths = ageMonth - normalMonths
 
-    const age = (ageYear > 0 ? ageYear.toString() + " ans " : "") + (leftMonths > 0 ? (leftMonths.toString() + " mois") : "")
+    const age = (ageYear > 0 ? ageYear.toString() + " an(s) " : "") + (leftMonths > 0 ? (leftMonths.toString() + " mois") : "")
 
     if (age.trim() === "") return "Moins d'un mois"
     return age

@@ -3,7 +3,6 @@ import { ReactNode, useCallback, useEffect } from 'react'
 import { Block, PageTitle } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
-import { config } from '@base/config'
 import { Link, PrimaryLink, StudentFormLoading } from '@base/components'
 import { StudentForm } from './StudentForm'
 import Skeleton from 'react-loading-skeleton'
@@ -13,7 +12,6 @@ export function EditStudent(): ReactNode {
     const { id } = useParams()
 
     const { Client: StudentClient, data: student } = useApi<Student>({
-        baseUrl: config.baseUrl,
         url: '/students'
     })
 

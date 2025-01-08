@@ -1,6 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { config } from '@base/config'
+import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Block, Select, Spinner } from 'ui'
 import { generateColor } from '@base/utils'
 
@@ -32,17 +32,14 @@ ChartJS.register(
 )
 
 export function SchoolsByClassesChart(): ReactNode {
-    const [scholarYear, setScholarYear] = useState<string>(scholar_years().at(1) as string)
+    const [scholarYear, setScholarYear] = useState<string>(scholar_years().at(0) as string)
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
-        baseUrl: config.baseUrl,
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassCLient, datas: classes } = useApi<Classes>({
-        baseUrl: config.baseUrl,
-        
         url: '/classes',
         key: 'data'
     })
@@ -52,7 +49,7 @@ export function SchoolsByClassesChart(): ReactNode {
         datas: StateDatas,
         RequestState
     } = useApi<StudentState>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/students',
         key: 'data'

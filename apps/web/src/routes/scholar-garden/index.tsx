@@ -11,7 +11,7 @@ export const scholarGardenRoute: RouteObject[] = [
     },
     {
         path: 'add',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <JardinAdd />
         </PrivateRoute>
     },
@@ -23,37 +23,37 @@ export const scholarGardenRoute: RouteObject[] = [
     },
     {
         path: 'list',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <JardinList />
         </PrivateRoute>
     },
     {
         path: 'materiels',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <Materiel />
         </PrivateRoute>
     },
     {
         path: 'semences',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <Semence />
         </PrivateRoute>
     },
     {
         path: 'engrais',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <Engrais />
         </PrivateRoute>
     },
     {
         path: 'steps',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <Steps />
         </PrivateRoute>
     },
     {
         path: 'steps-data',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <StepsData />
         </PrivateRoute>
     },
@@ -65,7 +65,7 @@ export const scholarGardenRoute: RouteObject[] = [
     },
     {
         path: 'edit/:id',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <JardinEdit />
         </PrivateRoute>
     }

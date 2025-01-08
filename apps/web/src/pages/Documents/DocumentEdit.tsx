@@ -3,7 +3,6 @@ import { Link } from "@base/components";
 import { ReactNode, useEffect } from "react";
 import { Block, PageTitle } from "ui";
 import { DocumentForm } from "@base/pages/Documents";
-import { config } from "@base/config";
 import { useApi } from "hooks";
 import { useParams } from "react-router";
 import Skeleton from "react-loading-skeleton";
@@ -11,7 +10,6 @@ import { Col, Row } from "@base/components/Bootstrap";
 
 export function DocumentEdit(): ReactNode {
     const { Client, data: document, RequestState } = useApi<FileDocument>({
-        baseUrl: config.baseUrl,
         url: '/documents',
         key: 'data'
     })

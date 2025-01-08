@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { PrimaryLink, EditLink } from '@base/components'
 import { config } from '@base/config'
 import { Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
@@ -9,7 +9,6 @@ import { toast } from 'react-toastify'
 
 export function FoodList(): ReactNode {
     const { Client, RequestState, error, datas: foods } = useApi<Food>({
-        baseUrl: config.baseUrl,
         url: '/foods'
     })
 
@@ -56,6 +55,8 @@ export function FoodList(): ReactNode {
         })
     }, [])
 
+    const { isAdmin } = useAuthStore()
+
     return (
         <>
             <PageTitle title="Liste des aliments">
@@ -63,7 +64,7 @@ export function FoodList(): ReactNode {
                     <SecondaryButton icon="arrow-clockwise" className="me-2" onClick={getDatas} loading={RequestState.loading}>
                         Recharger
                     </SecondaryButton>
-                    <PrimaryLink icon="plus-lg" to="/cantine/foods/add">
+                    <PrimaryLink can={isAdmin}  icon="plus-lg" to="/cantine/foods/add">
                         Nouveau aliment
                     </PrimaryLink>
                 </div>
@@ -96,8 +97,8 @@ export function FoodList(): ReactNode {
                                     <td>{food.label}</td>
                                     <td>{food.unit}</td>
                                     <td>
-                                        <EditLink to={`/cantine/foods/edit/${food.id}`} />
-                                        <DangerButton icon="trash" size="sm" onClick={() => handleDelete(food.id) }/>
+                                        <EditLink can={isAdmin} to={`/cantine/foods/edit/${food.id}`} />
+                                        <DangerButton can={isAdmin} icon="trash" size="sm" onClick={() => handleDelete(food.id) }/>
                                     </td>
                                 </tr>
                             ))

@@ -1,21 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from 'hooks'
-import { config } from '@base/config'
+import { useApi, useAuthStore } from 'hooks'
 import { Fragment, ReactNode, useCallback, useEffect } from 'react'
 import { range, round } from 'functions'
 import Skeleton from 'react-loading-skeleton'
 import { ExcelExportButton } from '@base/components/index.ts'
 
-export function StudentBySchoolZ({ surveyId }: { surveyId: number }): ReactNode {
+export function StudentBySchoolZ({ surveyId }: { surveyId: number | undefined }): ReactNode {
     const { Client, RequestState, error, datas } = useApi<SurveySchoolZ>({
-        baseUrl: config.baseUrl,
         url: '/students'
     })
 
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
         url: '/surveys'
     })
+
+    const { isAdmin } = useAuthStore()
 
     const getData = useCallback(async () => {
         let url = '/state/student-school-z'
@@ -29,122 +28,115 @@ export function StudentBySchoolZ({ surveyId }: { surveyId: number }): ReactNode 
 
     const headers = datas.headers as string[]
     const realData = datas.datas as SurveySchoolZ[]
-
     const types = ['Global', 'Modéré', 'Sévère']
 
-    return (
-        <>
-            {error && <div className="alert alert-danger">{error.message}</div>}
+    return <>
+        {error && <div className="alert alert-danger">{error.message}</div>}
 
-            {RequestState.loading && <LoadingComponent />}
+        {RequestState.loading && <LoadingComponent />}
 
-            {realData && realData.length === 0 && <p className="text-center fw-bold">Aucune données</p>}
+        {realData && realData.length === 0 && <p className="text-center fw-bold">Aucune données</p>}
 
-            {realData && Object.keys(realData).map((surveyDetails: string) => {
-                const data = realData[surveyDetails]
-                const parts = surveyDetails.split("/") as [string, string, string]
+        {realData && Object.keys(realData).map((surveyDetails: string) => {
+            const data = realData[surveyDetails]
+            const parts = surveyDetails.split("/") as [string, string, string]
 
-                return (
-                    <div key={parts[0]} className="mb-3">
-                        <div className="d-flex align-items-center justify-content-between mb-4">
-                            <h6 className="text-primary fw-bold m-0">Phase {parts[1]} pour l'année {parts[2]}</h6>
-                            <ExcelExportButton
-                                ExportClient={ExportClient}
-                                loading={ExportRequestState.creating}
-                                url={`/${parts[0]}/global-to-excel`}
-                                elements={[
-                                    {label: "Excel CSV", params: {type: 'csv'}},
-                                    {label: "Excel XLSX", params: {type: 'xlsx'}}
-                                ]}
-                            >Exporter ces résultats</ExcelExportButton>
-                        </div>
-                        <div className="table-responsive" style={{ border: '1px solid silver' }}>
-                            <table className="table table-striped table-bordered text-sm">
-                                <thead>
-                                    <tr className="text-nowrap">
-                                        <th></th>
-                                        {headers &&
-                                            headers.map((header: string) => (
-                                                <th key={header}>
-                                                    <span className="vertical-text">
-                                                        {header}
-                                                    </span>
-                                                </th>
-                                            ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td className="text-nowrap">Nombre d'élève</td>
-                                        <Td headers={headers} keyOne="T" schoolZ={data} />
-                                    </tr>
-                                    <tr>
-                                        <td
-                                            className="text-uppercase fw-bold"
-                                            colSpan={headers.length + 1}
-                                        >
-                                            Mal nutrition aigüe
-                                        </td>
-                                    </tr>
-                                    {types.map((type) => (
-                                        <tr key={type}>
-                                            <td className="text-nowrap text-uppercase">
-                                                {type} {type === 'Global' ? '(M + S)' : ''}
-                                            </td>
-                                            <Td
-                                                headers={headers}
-                                                keyOne="MA"
-                                                keyTwo={type}
-                                                schoolZ={data}
-                                            />
-                                        </tr>
+            return <div key={parts[0]} className="mb-3">
+                <div className="d-flex align-items-center justify-content-between mb-4">
+                    <h6 className="text-primary fw-bold m-0">Phase {parts[1]} pour l'année {parts[2]}</h6>
+                    <ExcelExportButton
+                        can={isAdmin}
+                        ExportClient={ExportClient}
+                        loading={ExportRequestState.creating}
+                        url={`/${parts[0]}/global-to-excel`}
+                        elements={[
+                            {label: "Excel CSV", params: {type: 'csv'}},
+                            {label: "Excel XLSX", params: {type: 'xlsx'}}
+                        ]}
+                    >Exporter ces résultats</ExcelExportButton>
+                </div>
+                <div className="table-responsive" style={{ border: '1px solid silver' }}>
+                    <table className="table table-striped table-bordered text-sm">
+                        <thead>
+                            <tr className="text-nowrap">
+                                <th className='text-white bg-primary'></th>
+                                {headers &&
+                                    headers.map((header: string) => (
+                                        <th key={header} className='bg-primary text-white'>
+                                            <span className="vertical-text">
+                                                {header}
+                                            </span>
+                                        </th>
                                     ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="text-nowrap text-uppercase bg-info text-white fw-bold">Nombre d'élève</td>
+                                <Td headers={headers} keyOne="T" schoolZ={data} />
+                            </tr>
+                            <tr>
+                                <td className="text-uppercase fw-bold bg-primary text-white" colSpan={headers.length + 1}>
+                                    Mal nutrition aiguë
+                                </td>
+                            </tr>
+                            {types.map((type) => (
+                                <tr key={type}>
+                                    <td className="text-nowrap text-uppercase bg-info text-white fw-bold">
+                                        {type} {type === 'Global' ? '(M + S)' : ''}
+                                    </td>
+                                    <Td
+                                        headers={headers}
+                                        keyOne="MA"
+                                        keyTwo={type}
+                                        schoolZ={data}
+                                    />
+                                </tr>
+                            ))}
 
-                                    <tr>
-                                        <td className="text-uppercase fw-bold" colSpan={headers.length + 1}>
-                                            Insuffisance pondérale
-                                        </td>
-                                    </tr>
-                                    {types.map((type) => (
-                                        <tr key={type}>
-                                            <td className="text-nowrap text-uppercase">
-                                                {type} {type === 'Global' ? '(M + S)' : ''}
-                                            </td>
-                                            <Td
-                                                headers={headers}
-                                                keyOne="IP"
-                                                keyTwo={type}
-                                                schoolZ={data}
-                                            />
-                                        </tr>
-                                    ))}
+                            <tr>
+                                <td className="text-uppercase fw-bold bg-primary text-white" colSpan={headers.length + 1}>
+                                    Insuffisance pondérale
+                                </td>
+                            </tr>
+                            {types.map((type) => (
+                                <tr key={type}>
+                                    <td className="text-nowrap text-uppercase bg-info text-white fw-bold">
+                                        {type} {type === 'Global' ? '(M + S)' : ''}
+                                    </td>
+                                    <Td
+                                        headers={headers}
+                                        keyOne="IP"
+                                        keyTwo={type}
+                                        schoolZ={data}
+                                    />
+                                </tr>
+                            ))}
 
-                                    <tr>
-                                        <td className="text-uppercase fw-bold" colSpan={headers.length + 1}>
-                                            Malnutrition Chronique
-                                        </td>
-                                    </tr>
-                                    {types.map((type) => (
-                                        <tr key={type}>
-                                            <td className="text-nowrap text-uppercase">
-                                                {type} {type === 'Global' ? '(M + S)' : ''}
-                                            </td>
-                                            <Td
-                                                headers={headers}
-                                                keyOne="CH"
-                                                keyTwo={type}
-                                                schoolZ={data}
-                                            />
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                )
-            })}
-        </>
-    )
+                            <tr>
+                                <td className="text-uppercase fw-bold bg-primary text-white" colSpan={headers.length + 1}>
+                                    Malnutrition Chronique
+                                </td>
+                            </tr>
+                            {types.map((type) => (
+                                <tr key={type}>
+                                    <td className="text-nowrap text-uppercase bg-info text-white fw-bold">
+                                        {type} {type === 'Global' ? '(M + S)' : ''}
+                                    </td>
+                                    <Td
+                                        headers={headers}
+                                        keyOne="CH"
+                                        keyTwo={type}
+                                        schoolZ={data}
+                                    />
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        })}
+    </>
 }
 
 
@@ -211,7 +203,7 @@ const Td = ({ headers, keyOne, keyTwo, schoolZ }: TdProps): ReactNode => {
                 const schoolTab = schoolZSchool ? schoolZSchool[keyOne] : null
 
                 return (
-                    <td key={school}>
+                    <td key={school} className='text-end'>
                         {schoolTab !== null && typeof schoolTab === 'object' ? (
                             <span className={school === 'TOTAL' ? 'fw-bold' : 'fw-bold'}>
                                 {schoolTab[keyTwo]['value']} {keyTwo === 'Global' ? '/' + schoolZSchool['T'] : ''} {' '}
@@ -227,7 +219,7 @@ const Td = ({ headers, keyOne, keyTwo, schoolZ }: TdProps): ReactNode => {
                                 </span>}
                             </span>
                         ) : (school === 'TOTAL' ? (
-                            <span className="fw-bold">{schoolTab}</span>
+                            <span className="fw-bold text-end">{schoolTab}</span>
                         ) : (
                             schoolTab ?? "-"
                         ))}

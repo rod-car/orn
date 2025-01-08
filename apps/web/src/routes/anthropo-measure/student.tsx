@@ -7,29 +7,29 @@ export const studentRoute: RouteObject[] = [
         path: 'list',
         element: <PrivateRoute>
             <StudentList />
-        </PrivateRoute>
+        </PrivateRoute>,
     },
     {
         path: 'add',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={["admin"]}>
             <AddStudent />
         </PrivateRoute>
     },
     {
         path: 'edit/:id',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={["super"]}>
             <EditStudent />
         </PrivateRoute>
     },
     {
         path: 'import',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={["admin"]}>
             <ImportStudent />
         </PrivateRoute>
     },
     {
         path: 'import-class',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={["admin"]}>
             <ImportStudentClass />
         </PrivateRoute>
     },
@@ -41,7 +41,7 @@ export const studentRoute: RouteObject[] = [
     },
     {
         path: 'students-classes',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={["admin"]}>
             <StudentsClasses />
         </PrivateRoute>
     }

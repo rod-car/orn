@@ -1,37 +1,52 @@
+import { PrivateRoute } from "@base/components/Auth/";
 import { ArticleAdd, ArticleEdit, ArticleList, ArticleShow, PriceAdd, PriceHome, PriceList, SiteAdd, SiteEdit, SiteList, UnitAdd, UnitEdit, UnitList } from "@base/pages/Prices";
 import { RouteObject } from "react-router";
 
 export const priceRoute: RouteObject[] = [
     {
         path: 'manage',
-        element: <PriceHome />
+        element: <PrivateRoute can={['admin']}>
+            <PriceHome />
+        </PrivateRoute>
     },
     {
         path: 'manage/add',
-        element: <PriceAdd />
+        element: <PrivateRoute can={['admin']}>
+            <PriceAdd />
+        </PrivateRoute>
     },
     {
         path: 'manage/list',
-        element: <PriceList />
+        element: <PrivateRoute can={['admin']}>
+            <PriceList />
+        </PrivateRoute>
     },
     {
         path: 'articles',
         children: [
             {
                 path: 'add',
-                element: <ArticleAdd />
+                element: <PrivateRoute can={['admin']}>
+                    <ArticleAdd />
+                </PrivateRoute>
             },
             {
                 path: 'edit/:id',
-                element: <ArticleEdit />
+                element: <PrivateRoute can={['admin']}>
+                    <ArticleEdit />
+                </PrivateRoute>
             },
             {
                 path: 'show/:id',
-                element: <ArticleShow />
+                element: <PrivateRoute can={['admin']}>
+                    <ArticleShow />
+                </PrivateRoute>
             },
             {
                 path: 'list',
-                element: <ArticleList />
+                element: <PrivateRoute>
+                    <ArticleList />
+                </PrivateRoute>
             }
         ]
     },
@@ -40,15 +55,21 @@ export const priceRoute: RouteObject[] = [
         children: [
             {
                 path: 'add',
-                element: <UnitAdd />
+                element: <PrivateRoute can={['admin']}>
+                    <UnitAdd />
+                </PrivateRoute>
             },
             {
                 path: 'edit/:id',
-                element: <UnitEdit />
+                element: <PrivateRoute can={['admin']}>
+                    <UnitEdit />
+                </PrivateRoute>
             },
             {
                 path: 'list',
-                element: <UnitList />
+                element: <PrivateRoute>
+                    <UnitList />
+                </PrivateRoute>
             }
         ]
     },
@@ -57,15 +78,21 @@ export const priceRoute: RouteObject[] = [
         children: [
             {
                 path: 'add',
-                element: <SiteAdd />
+                element: <PrivateRoute can={['admin']}>
+                    <SiteAdd />
+                </PrivateRoute>
             },
             {
                 path: 'edit/:id',
-                element: <SiteEdit />
+                element: <PrivateRoute can={['admin']}>
+                    <SiteEdit />
+                </PrivateRoute>
             },
             {
                 path: 'list',
-                element: <SiteList />
+                element: <PrivateRoute>
+                    <SiteList />
+                </PrivateRoute>
             }
         ]
     }

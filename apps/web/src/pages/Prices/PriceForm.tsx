@@ -35,7 +35,7 @@ export function PriceForm(): ReactNode {
         error,
         RequestState
     } = useApi<ArticlePrice[]>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices',
         key: 'data'
@@ -44,7 +44,7 @@ export function PriceForm(): ReactNode {
     const {
         Client: SiteClient, datas: sites
     } = useApi<Site>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/sites',
         key: 'data'
@@ -53,7 +53,7 @@ export function PriceForm(): ReactNode {
     const {
         Client: ArticleClient, datas: articles
     } = useApi<Article>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/articles',
         key: 'data'
@@ -62,7 +62,7 @@ export function PriceForm(): ReactNode {
     const {
         Client: UnitClient, datas: units
     } = useApi<Unit>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/units',
         key: 'data'

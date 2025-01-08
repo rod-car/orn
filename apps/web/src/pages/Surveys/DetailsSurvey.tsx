@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { useParams } from 'react-router-dom'
 import { Block, Button, Input, PageTitle, SecondaryButton, Select } from 'ui'
-import { config } from '@base/config'
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { ageMonth, ageYear, number_array, range } from 'functions'
 import { DetailLink, ExcelExportButton, InfoLink, PrimaryLink } from '@base/components'
@@ -16,18 +15,17 @@ export function DetailsSurvey(): ReactNode {
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
     const { id } = useParams()
 
+    const { isAdmin } = useAuthStore()
+
     const { Client, data: survey, RequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
         url: 'surveys'
     })
 
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
-        baseUrl: config.baseUrl,
         url: 'surveys'
     })
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
-        baseUrl: config.baseUrl,
         url: 'schools',
         key: 'data'
     })
@@ -108,7 +106,7 @@ export function DetailsSurvey(): ReactNode {
                     <PrimaryLink to="/anthropo-measure/survey/list" icon="list" className="me-2">
                         Liste des mésures
                     </PrimaryLink>
-                    <InfoLink to={`/anthropo-measure/survey/${id}/import-result`} icon="file-earmark-text">
+                    <InfoLink can={isAdmin} to={`/anthropo-measure/survey/${id}/import-result`} icon="file-earmark-text">
                         Importer des résultat
                     </InfoLink>
                 </div>
@@ -149,6 +147,7 @@ export function DetailsSurvey(): ReactNode {
                             </td>
                             <td className="d-flex align-items-center">
                                 <ExcelExportButton
+                                    can={isAdmin}
                                     ExportClient={ExportClient}
                                     url={'/' + survey?.id + '/to-excel'}
                                     loading={ExportRequestState.creating}

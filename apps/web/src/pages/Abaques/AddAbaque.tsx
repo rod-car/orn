@@ -1,6 +1,6 @@
 import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, ReactNode, useState } from 'react'
-import { Link, PrimaryLink } from '@base/components'
+import { PrimaryLink } from '@base/components'
 import { config, abaque } from '@base/config'
 import { Block, Button, DangerButton, Input, PageTitle, PrimaryButton, Select } from 'ui'
 import { toast } from 'react-toastify'
@@ -12,7 +12,7 @@ export function AddAbaque(): ReactNode {
     ])
 
     const { Client, RequestState } = useApi<MeasureLength>({
-        baseUrl: config.baseUrl,
+        
         url: '/measures'
     })
 

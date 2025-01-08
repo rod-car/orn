@@ -4,13 +4,14 @@ import './Link.modules.scss';
 
 type LinkProps = RouterFomLinkProps & {
     icon?: string;
+    can?: boolean;
 }
 
-export function Link(props: LinkProps): ReactNode {
-    return <RouterDomLink style={{ fontSize: 'small' }} {...props}>
+export function Link({ can = true, ...props }: LinkProps): ReactNode {
+    return <>{can ? <RouterDomLink style={{ fontSize: 'small' }} {...props}>
         {props.icon && <i className={`bi bi-${props.icon} me-2`}></i>}
         {props.children}
-    </RouterDomLink>
+    </RouterDomLink> : undefined}</>
 }
 
 export function PrimaryLink(props: LinkProps): ReactNode {
@@ -24,6 +25,7 @@ export function InfoLink(props: LinkProps): ReactNode {
 export function EditLink(props: LinkProps): ReactNode {
     return <Link {...props} className="btn-sm me-2 btn btn-primary shadow">
         <i className="bi bi-pencil-square"></i>
+        {props.children && <span className="ms-2">{props.children}</span>}
     </Link>
 }
 

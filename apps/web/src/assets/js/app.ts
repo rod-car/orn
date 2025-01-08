@@ -16,7 +16,8 @@ const popoverTriggerList = document.querySelectorAll(
 //  new bootstrap.Alert(alert)
 //});
 
-document.addEventListener("DOMContentLoaded", () => {
+// document.addEventListener("DOMContentLoaded", () => {
+window.onload = () => {
   // const alertList = document.querySelectorAll(".alert");
   // const alerts = [...alertList].map((element) => new bootstrap.Alert(element));
 
@@ -46,11 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   sidePanelToggler?.addEventListener("click", () => {
     if (sidePanel?.classList.contains("sidepanel-visible")) {
-      console.log("visible");
       sidePanel?.classList.remove("sidepanel-visible");
       sidePanel?.classList.add("sidepanel-hidden");
     } else {
-      console.log("hidden");
       sidePanel?.classList.remove("sidepanel-hidden");
       sidePanel?.classList.add("sidepanel-visible");
     }
@@ -61,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sidePanelToggler?.click();
   });
 
-  sidePanelDrop?.addEventListener("click", (e) => {
+  sidePanelDrop?.addEventListener("click", () => {
     sidePanelToggler?.click();
   });
 
@@ -84,4 +83,4 @@ document.addEventListener("DOMContentLoaded", () => {
       searchMobileTriggerIcon?.classList.add("fa-magnifying-glass");
     }
   });
-});
+};

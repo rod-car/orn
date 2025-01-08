@@ -1,5 +1,14 @@
 import { PrivateRoute } from "@base/components/Auth"
-import { AddConso, EditConso, HomeCantine, ImportConso, ListConso, FoodAdd, FoodList } from "@base/pages/Cantine"
+import {
+    AddConso,
+    EditConso,
+    HomeCantine,
+    ImportConso,
+    ListConso,
+    FoodAdd,
+    FoodList,
+    RecapConso
+} from "@base/pages/Cantine"
 import { RouteObject } from "react-router"
 
 export const cantineRoute: RouteObject[] = [
@@ -15,18 +24,18 @@ export const cantineRoute: RouteObject[] = [
             {
                 path: 'statistics',
                 element: <PrivateRoute>
-                    <h1>Je suis la statistique</h1>
+                    <RecapConso />
                 </PrivateRoute>
             },
             {
                 path: 'add',
-                element: <PrivateRoute>
+                element: <PrivateRoute can={['admin']}>
                     <AddConso />
                 </PrivateRoute>
             },
             {
                 path: 'edit/:id',
-                element: <PrivateRoute>
+                element: <PrivateRoute can={['admin']}>
                     <EditConso />
                 </PrivateRoute>
             },
@@ -38,7 +47,7 @@ export const cantineRoute: RouteObject[] = [
             },
             {
                 path: 'import',
-                element: <PrivateRoute>
+                element: <PrivateRoute can={['admin']}>
                     <ImportConso />
                 </PrivateRoute>
             },
@@ -49,13 +58,13 @@ export const cantineRoute: RouteObject[] = [
         children: [
             {
                 path: "add",
-                element: <PrivateRoute>
+                element: <PrivateRoute can={['admin']}>
                     <FoodAdd />
                 </PrivateRoute>
             },
             {
                 path: "edit/:id",
-                element: <PrivateRoute>
+                element: <PrivateRoute can={['admin']}>
                     <FoodAdd />
                 </PrivateRoute>
             },

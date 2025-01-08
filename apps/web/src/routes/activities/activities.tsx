@@ -1,6 +1,9 @@
 import { PrivateRoute } from "@base/components/Auth";
-import { ActivityAdd, ActivityEdit, ActivityHome, ActivityList, ActivityShow, ActivityStatistics, AdminActivityList } from "@base/pages/Activities";
 import { RouteObject } from "react-router";
+import {
+    ActivityAdd, ActivityEdit, ActivityHome, ActivityList, ActivityShow,
+    ActivityStatistics, AdminActivityList
+} from "@base/pages/Activities";
 
 export const activityRoute: RouteObject[] = [
     {
@@ -11,7 +14,7 @@ export const activityRoute: RouteObject[] = [
     },
     {
         path: 'admin/add',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <ActivityAdd />
         </PrivateRoute>
     },
@@ -29,7 +32,7 @@ export const activityRoute: RouteObject[] = [
     },
     {
         path: 'admin/list',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <AdminActivityList />
         </PrivateRoute>
     },
@@ -41,7 +44,7 @@ export const activityRoute: RouteObject[] = [
     },
     {
         path: 'admin/edit/:id',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <ActivityEdit />
         </PrivateRoute>
     }

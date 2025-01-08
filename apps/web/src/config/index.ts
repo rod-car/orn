@@ -1,8 +1,8 @@
 import { ToastPosition } from 'react-toastify'
 
 export const config = {
-    baseUrl: 'https://api.clinique-hugney.mg/api',
-    // baseUrl: 'http://localhost:8000/api',
+    // baseUrl: 'https://api.clinique-hugney.mg/api',
+    baseUrl: 'http://localhost:8000/api',
     toastPosition: 'bottom-right' as ToastPosition,
     pagination: {
         containerClass: 'pagination justify-content-center pagination-sm',

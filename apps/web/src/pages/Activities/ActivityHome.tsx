@@ -2,13 +2,11 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Block, PageTitle } from "ui";
-import { config } from '@base/config'
 import { PrimaryLink } from "@base/components";
 import { Loading, ActivityBlock } from "@base/components";
 
 export function ActivityHome(): ReactNode {
     const { Client, datas: activities, RequestState } = useApi<Activity>({
-        baseUrl: config.baseUrl,
         url: '/activities',
         key: 'data'
     })

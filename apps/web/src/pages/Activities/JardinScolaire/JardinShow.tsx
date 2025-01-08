@@ -1,13 +1,13 @@
-import { config } from "@base/config";
+import { Link } from "@base/components";
 import { capitalize } from "functions";
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Block } from "ui";
 
 export function JardinShow(): ReactNode {
     const { id } = useParams()
-    const { Client, data } = useApi<Garden>({ baseUrl: config.baseUrl, url: "/jardin-scolaires" })
+    const { Client, data } = useApi<Garden>({  url: "/jardin-scolaires" })
 
     function getData() {
         Client.find(parseInt(id as string))

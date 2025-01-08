@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { useEffect } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Block, PageTitle,  } from 'ui'
-import { config } from '@base/config'
 import { SchoolForm } from './SchoolForm'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -11,7 +10,6 @@ import { PrimaryLink } from '@base/components'
 
 export function EditSchool(): ReactNode {
     const { Client, data: school } = useApi<School>({
-        baseUrl: config.baseUrl,
         url: '/schools'
     })
 

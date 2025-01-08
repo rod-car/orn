@@ -11,14 +11,16 @@ export function Login(): ReactNode {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [errors, setErrors] = useState<{ username: string[]; password: string[] }>()
     const navigate = useNavigate()
 
     const { login } = useAuthStore()
-    const { Client, RequestState } = useApi<User>({ url: '/auth' })
+    const { Client } = useApi<User>({ url: '/auth' })
 
     const handleLogin = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
+        setLoading(true)
         const response = await login(Client, {username: username, password: password})
 
         if (response === undefined) {
@@ -26,6 +28,7 @@ export function Login(): ReactNode {
                 position: config.toastPosition,
                 type: 'error'
             })
+            setLoading(false)
             return
         }
 
@@ -43,6 +46,7 @@ export function Login(): ReactNode {
             })
             setPassword("")
         }
+        setLoading(false)
     }
 
     return <div className="app-login p-0">
@@ -104,7 +108,7 @@ export function Login(): ReactNode {
                                 </div>
                                 <div className="text-center">
                                     <Button
-                                        loading={RequestState.loading}
+                                        loading={loading}
                                         type="submit"
                                         mode="primary"
                                         className="app-btn-primary w-100 theme-btn mx-auto">

@@ -1,5 +1,6 @@
 export { useAuthStore } from './src/store/useAuthStore.ts'
-export { useApi } from './src/useApi'
+export { useConfigStore } from './src/store/useConfigStore.ts'
+export { useApi, type RequestParams } from './src/useApi'
 export { useExcelReader } from './src/useExcelReader'
 export { usePdf } from './src/usePdf'
 export { useAuth } from './src/useAuth'

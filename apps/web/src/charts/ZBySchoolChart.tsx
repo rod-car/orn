@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { useCallback, useEffect, useState } from 'react'
-import { config } from '@base/config'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { Block, Select, Spinner } from 'ui'
 import { generateColor } from '@base/utils'
 
@@ -42,7 +41,6 @@ export function ZBySchoolChart(): ReactNode {
     const [surveyId, setSurveyId] = useState(1)
 
     const { Client: SchoolCLient, datas: schools } = useApi<School>({
-        baseUrl: config.baseUrl,
         url: '/schools',
         key: 'data'
     })
@@ -52,7 +50,6 @@ export function ZBySchoolChart(): ReactNode {
         datas: StateDatas,
         RequestState
     } = useApi<SurveySchoolZ>({
-        baseUrl: config.baseUrl,
         url: '/students'
     })
 

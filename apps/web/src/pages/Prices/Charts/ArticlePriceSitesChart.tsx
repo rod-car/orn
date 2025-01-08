@@ -78,13 +78,13 @@ export function ArticlePriceSitesChart(): ReactNode {
     const [displayedSites, setDisplayedSites] = useState<Site[]>([])
 
     const { Client: SiteClient, datas: sites } = useApi<Site>({
-        baseUrl: config.baseUrl,
+        
         url: '/prices/sites',
         key: 'data'
     })
 
     const { Client: ArticleClient, datas: articles } = useApi<Article>({
-        baseUrl: config.baseUrl,
+        
         url: '/prices/articles',
         key: 'data'
     })
@@ -94,7 +94,7 @@ export function ArticlePriceSitesChart(): ReactNode {
         datas: StateDatas,
         RequestState
     } = useApi<{ data: ArticlePrice }>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices',
         key: 'data'

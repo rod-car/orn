@@ -5,25 +5,25 @@ import { RouteObject } from "react-router";
 export const abaqueRoute: RouteObject[] = [
     {
         path: 'list',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <ListAbaque />
         </PrivateRoute>
     },
     {
         path: 'add',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <AddAbaque />
         </PrivateRoute>
     },
     {
         path: 'edit/:id',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <EditAbaque />
         </PrivateRoute>
     },
     {
         path: 'import',
-        element: <PrivateRoute>
+        element: <PrivateRoute can={['admin']}>
             <ImportAbaque />
         </PrivateRoute>
     }

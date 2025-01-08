@@ -1,5 +1,5 @@
 import { useApi } from 'hooks'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, ReactNode, useState } from 'react'
 import { Block, PrimaryButton, Input, PageTitle } from 'ui'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
@@ -8,7 +8,6 @@ import { PrimaryLink } from '@base/components'
 export function AddLevel(): ReactNode {
     const [level, setLevel] = useState<Niveau>({ id: 0, label: '', description: '' })
     const { Client, RequestState, error } = useApi<Niveau>({
-        baseUrl: config.baseUrl,
         url: '/levels'
     })
 

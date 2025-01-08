@@ -33,18 +33,18 @@ export function ImportStudentClass(): ReactNode {
 
     const { json, importing, sheets, getSheets, toJSON, resetJSON } = useExcelReader()
     const { Client, RequestState } = useApi<StudentImport>({
-        baseUrl: config.baseUrl,
+        
         url: '/students'
     })
 
     const { Client: ClasseClient, datas: classes, RequestState: ClasseRs } = useApi<Classes>({
-        baseUrl: config.baseUrl,
+        
         url: '/classes',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRs } = useApi<School>({
-        baseUrl: config.baseUrl,
+        
         url: '/schools',
         key: 'data'
     })

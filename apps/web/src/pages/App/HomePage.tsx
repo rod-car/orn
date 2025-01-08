@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
-import { config } from '@base/config'
 import { PageTitle, Spinner } from 'ui'
 import { SchoolsByClassesChart, SchoolsByScholarYearChart } from '@base/charts'
-import { CardState, Link } from '@base/components'
+import { CardState } from '@base/components'
 
 import './HomePage.modules.scss'
+import { scholar_years } from 'functions'
 
 /**
  * Description placeholder
@@ -16,20 +16,19 @@ import './HomePage.modules.scss'
  * @returns {ReactNode}
  */
 export function HomePage(): ReactNode {
+    const [scholarYear] = useState<string>(scholar_years().at(0) as string)
+
     const { Client: StudentClient, datas: studentCount } = useApi<Student>({
-        baseUrl: config.baseUrl,
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schoolCount } = useApi<School>({
-        baseUrl: config.baseUrl,
         url: '/schools',
         key: 'data'
     })
 
     const { Client: SurveyClient, datas: surveyCount } = useApi<Survey>({
-        baseUrl: config.baseUrl,
         url: '/surveys',
         key: 'data'
     })
@@ -50,16 +49,12 @@ export function HomePage(): ReactNode {
 
     return (
         <>
-            <PageTitle title="Tableau de bord">
-                <Link to="/anthropo-measure/statistics" className="btn btn-primary">
-                    <i className="bi bi-list me-2"></i>Statistiques
-                </Link>
-            </PageTitle>
+            <PageTitle title="Tableau de bord" />
 
             <div className="row mb-5">
                 <div className="col-4">
                     <CardState
-                        title="Étudiants"
+                        title={`Étudiants (${scholarYear})`}
                         link="/anthropo-measure/student/list"
                         value={'count' in studentCount ? studentCount.count as number : <Spinner />} 
                     />

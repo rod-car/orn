@@ -32,9 +32,7 @@ export const ControlledInput: Story = {
     controlled: true,
     value: "Lorem ipsum",
     label: "Controlled Input",
-    onChange: (e) => {
-      console.log(e.target.value)
-    }
+    onChange: () => {}
   },
 };
 

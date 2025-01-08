@@ -1,8 +1,7 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@base/components";
 import { Block, Button } from "ui";
-import { config } from '@base/config'
 import { ActivityLoading } from "@base/components";
 
 export function JardinStatistics(): ReactNode {
@@ -11,7 +10,7 @@ export function JardinStatistics(): ReactNode {
         datas: activities,
         RequestState
     } = useApi<Activity>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/activities',
         key: 'data'

@@ -9,7 +9,7 @@ type PaginationProps = {
 }
 
 export function Pagination({data, options, changePage}: PaginationProps): ReactNode {
-    return <div className="app-pagination">
+    return <div className="app-pagination mt-4">
         <ReactPagination changePage={changePage} data={data} options={{ ...config.pagination, ...options }} />
     </div>
 }

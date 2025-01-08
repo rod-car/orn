@@ -11,10 +11,8 @@ import { Col, Modal, Row } from '@base/components/Bootstrap';
 export function ImportStudent(): ReactNode {
     const [isOpen, setIsOpen] = useState(false)
     const [scholarYear, setScholarYear] = useState<string|number>(0)
-
     const { json, importing, toJSON, resetJSON } = useExcelReader()
     const { Client, RequestState } = useApi<StudentImport>({
-        baseUrl: config.baseUrl,
         url: '/students'
     })
 

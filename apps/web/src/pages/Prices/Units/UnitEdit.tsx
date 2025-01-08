@@ -9,7 +9,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 export function UnitEdit(): ReactNode {
     const { Client, data: unit } = useApi<Unit>({
-        baseUrl: config.baseUrl,
+        
         
         url: '/prices/units'
     })
