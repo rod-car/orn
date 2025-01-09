@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 // import "./globals.css";
 import "./custom.css";
-import { NextScript } from "next/document.js";
-import Script from "next/script.js";
+import Script from "next/script";
+import React from "react";
+
+import {Header} from '@/app/components/Header'
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -25,7 +27,6 @@ export default function RootLayout({ children }: Readonly<{
 }>) {
     return <>
         <html lang="en">
-            <title>ORN Atsinanana</title>
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100 text-gray-800`}>
                 <div className="preloader">
                     <div className="loader">
@@ -44,52 +45,7 @@ export default function RootLayout({ children }: Readonly<{
                     </div>
                 </div>
 
-                <header className="header navbar-area bg-white">
-                    <div className="container">
-                        <div className="row align-items-center">
-                            <div className="col-lg-12">
-                                <nav className="navbar navbar-expand-lg">
-                                    <a className="navbar-brand" href="index.html">
-                                        <img src="/img/logo/logo.svg" alt="Logo" />
-                                    </a>
-                                    <button className="navbar-toggler" type="button" data-toggle="collapse"
-                                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                        aria-expanded="false" aria-label="Toggle navigation">
-                                        <span className="toggler-icon"></span>
-                                        <span className="toggler-icon"></span>
-                                        <span className="toggler-icon"></span>
-                                    </button>
-
-                                    <div className="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
-                                        <ul id="nav" className="navbar-nav ml-auto">
-                                            <li className="nav-item">
-                                                <a className="page-scroll active" href="#home">Home</a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="page-scroll" href="#about">About</a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="page-scroll" href="#services">Services</a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="page-scroll" href="#portfolio">Portfolio</a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="page-scroll" href="#team">Team</a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="page-scroll" href="#contact">Contact</a>
-                                            </li>
-                                        </ul>
-                                        <div className="header-btn">
-                                            <a href="javascript:void(0)" className="theme-btn">Get Started</a>
-                                        </div>
-                                    </div>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </header>
+                <Header />
 
                 {children}
                 <footer className="footer pt-100">
@@ -97,7 +53,10 @@ export default function RootLayout({ children }: Readonly<{
                         <div className="row">
                             <div className="col-xl-3 col-lg-4 col-md-6">
                                 <div className="footer-widget mb-60 wow fadeInLeft" data-wow-delay=".2s">
-                                    <a href="index.html" className="logo mb-30"><img src="/img/logo/logo.svg" alt="logo" /></a>
+                                    <a href="index.html" className="logo mb-30">
+                                        <img style={{width: 50, height: "auto"}} src="/img/logo/logo.png" alt="logo" />
+                                        <span className="font-weight-bold ml-3 font-size-xl">ORN Atsinanana</span>
+                                    </a>
                                     <p className="mb-30 footer-desc">We Crafted an awesome desig library that is robust and intuitive to use. No matter you're building a business presentation websit.</p>
                                 </div>
                             </div>
@@ -170,8 +129,7 @@ export default function RootLayout({ children }: Readonly<{
                                     </div>
                                 </div>
                                 <div className="col-md-6">
-                                    <p className="wow fadeInUp" data-wow-delay=".3s">Template by <a href="https://uideck.com" rel="nofollow">UIdeck</a>
-                                    </p>
+                                    <p className="wow fadeInUp" data-wow-delay=".3s">ORN Atsinanana</p>
                                 </div>
                             </div>
                         </div>

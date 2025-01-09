@@ -6,7 +6,7 @@ export default function Home() {
             <div id="carouselExampleCaptions" className="carousel slide carousel-fade" data-ride="carousel">
                 <div className="carousel-inner">
                     <div className="carousel-section carousel-item active clip-bg pt-225 pb-200 img-bg"
-                        style={{backgroundImage: "url('/img/carousel/1.jpg')"}}>
+                        style={{backgroundImage: "url('/img/carousel/1.jpg')", backgroundPosition: "center"}}>
                         <div className="container">
                             <div className="row">
                                 <div className="col-xl-8 col-lg-10 mx-auto">
