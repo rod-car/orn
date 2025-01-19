@@ -22,7 +22,7 @@ export default async function Home() {
             }
         })
         activities = await data.json()
-        console.log("Connected to server")
+        console.log("Connected to server 1: " + JSON.stringify(activities))
     } catch (e) {
         console.log("Server error " + JSON.stringify(e))
     }
