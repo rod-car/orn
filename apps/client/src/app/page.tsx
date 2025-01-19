@@ -1,5 +1,4 @@
 import { Activity } from "@/app/components/Activity"
-import Link from "next/link"
 import ClientLogo from "@/app/components/ClientLogo"
 
 export const dynamic = 'force-dynamic'
@@ -180,7 +179,7 @@ export default async function Home() {
                                     </div>
                                 </div>
                                 <div className="wow fadeInUp mt-40" data-wow-delay=".9s">
-                                    <Link href="/projets" className="btn btn-outline-primary">Voir nos projets</Link>
+                                    <a href="/projets" className="btn btn-outline-primary">Voir nos projets</a>
                                 </div>
                             </div>
                         </div>
@@ -305,7 +304,7 @@ export default async function Home() {
                             <p className="wow fadeInUp" data-wow-delay=".6s">
                                 Découvrez les initiatives clés récemment mises en œuvre pour promouvoir le bien-être et la nutrition dans la région.
                             </p>
-                            <Link href="/activites" className="btn btn-primary">Voir tous les activites</Link>
+                            <a href="/activites" className="btn btn-primary">Voir tous les activites</a>
                         </div>
                     </div>
                 </div>
