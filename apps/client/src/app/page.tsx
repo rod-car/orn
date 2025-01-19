@@ -19,10 +19,11 @@ export default async function Home() {
     try {
         const data = await fetch('http://admin.orn-atsinanana.mg/api/activities?imagesCount=4&take=4', {
             next: {
-                revalidate: 10
+                revalidate: 5
             }
         })
         activities = await data.json()
+        console.log("Connected to server")
     } catch (e) {
         console.log("Impossible de contacter le serveur")
     }
