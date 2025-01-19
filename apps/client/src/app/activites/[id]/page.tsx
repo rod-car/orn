@@ -17,6 +17,7 @@ export default async function Page({ params }: {
         const data = await fetch(`http://admin.orn-atsinanana.mg/api/activities/${id}`)
         activity = await data.json()
     } catch (e) {
+        console.log("Server error " + JSON.stringify(e))
         notFound()
     }
 
