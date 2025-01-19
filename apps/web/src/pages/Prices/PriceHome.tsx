@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@base/components";
 import { ArticlePriceChart, ArticlePriceSiteChart, ArticlePriceSiteYearChart, ArticlePriceSitesChart } from "@base/pages/Prices"
 
 export function PriceHome(): ReactNode {

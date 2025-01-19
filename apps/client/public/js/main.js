@@ -24,7 +24,7 @@ window.onscroll = function () {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    let wow = new WOW({
+    /*let wow = new WOW({
         mobile: false
     });
 
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         interval: 100,
     });
 
-    cu.start();
+    cu.start();*/
 
     let pageLink = document.querySelectorAll('.page-scroll');
 
@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function onScroll(event) {
+        console.log("On scroll")
         let sections = document.querySelectorAll('.page-scroll');
         let scrollPos = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
@@ -69,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    window.document.addEventListener('scroll', onScroll);
+    document.addEventListener('scroll', onScroll);
 
     let navbarToggler = document.querySelector(".navbar-toggler");
     let navbarCollapse = document.querySelector(".navbar-collapse");

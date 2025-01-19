@@ -42,7 +42,7 @@ export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNod
 
                 return <div key={parts[0]}>
                     <div className="d-flex align-items-center justify-content-between mb-4">
-                        <h6 className="text-primary fw-bold m-0">Phase {parts[1]} pour l'année {parts[2]}</h6>
+                        <h6 className="text-primary fw-bold m-0">Mesure {parts[1]} pour l'année {parts[2]}</h6>
                         <ExcelExportButton
                             can={isAdmin}
                             ExportClient={ExportClient}

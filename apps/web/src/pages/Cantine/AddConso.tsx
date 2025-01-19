@@ -39,11 +39,11 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
             updatedConsommation['_date'] = { type: 'date', value: "2024-01-01" };
 
             classes.forEach(classe => {
-                updatedConsommation["_" + classe.id] = { type: 'number', value: 10 };
+                updatedConsommation["_" + classe.id] = { type: 'number', value: 0 };
             });
 
-            updatedConsommation['_teachers'] = { type: 'number', value: 5 };
-            updatedConsommation['_cookers'] = { type: 'number', value: 4 };
+            updatedConsommation['_teachers'] = { type: 'number', value: 0 };
+            updatedConsommation['_cookers'] = { type: 'number', value: 0 };
 
             defaultConsommation = { ...updatedConsommation }
 
@@ -199,7 +199,7 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
                                         if (typeof consommation[key] === 'object') {
                                             const fieldType = consommation[key].type
                                             const fieldValue = consommation[key].value
-                                            return <td key={key}>
+                                            return <td style={{minWidth: 90}} key={key}>
                                                 {fieldType === "number" && <Input name={index + key} type="number" value={fieldValue} onChange={handleInputChange} />}
                                                 {fieldType === "date" && <Input name={index + key} type="date" value={fieldValue} onChange={handleInputChange} />}
                                             </td>

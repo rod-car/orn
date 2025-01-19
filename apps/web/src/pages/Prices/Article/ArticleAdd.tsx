@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink } from '@base/components'
 import { Block } from 'ui'
 import { ArticleForm } from '@base/pages/Prices'
 import { ReactNode } from 'react'

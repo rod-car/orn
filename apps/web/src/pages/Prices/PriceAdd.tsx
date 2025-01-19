@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from '@base/components'
 import { Block } from 'ui'
 import { PriceForm } from './PriceForm'
 import { ReactNode } from 'react'

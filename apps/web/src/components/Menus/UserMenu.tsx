@@ -13,7 +13,7 @@ export function UserMenu(): ReactNode {
     const { user, logout, isSuperuser } = useAuthStore()
     const { Client, RequestState } = useApi<User>({  url: '/auth' })
 
-    const handleLogout = async (): Promise<void> => {
+    const handleLogout = async () => {
         toast('Deconnexion en cours', {
             type: 'info',
             isLoading: RequestState.creating,
@@ -31,7 +31,7 @@ export function UserMenu(): ReactNode {
                 position: config.toastPosition
             })
         }
-        navigate('/auth/login')
+        navigate('/auth/login', {replace: true})
     }
 
     return <div className="app-utility-item app-user-dropdown dropdown">

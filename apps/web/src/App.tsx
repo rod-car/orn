@@ -14,95 +14,67 @@ import { toolsRoute } from '@base/routes/tools/tools';
 
 const router = createBrowserRouter([
     {
-        path: '/orn',
         element: <AppRoot />,
         errorElement: <AppRoot error={true} />,
         children: [
             {
                 path: '',
-                element: <PrivateRoute>
-                    <HomePage />
-                </PrivateRoute>
+                element: (
+                    <PrivateRoute>
+                        <HomePage />
+                    </PrivateRoute>
+                ),
             },
             {
                 path: 'about',
-                element: <PrivateRoute>
-                    <About />
-                </PrivateRoute>
+                element: (
+                    <PrivateRoute>
+                        <About />
+                    </PrivateRoute>
+                ),
             },
             {
                 path: 'contributors',
-                element: <PrivateRoute>
-                    <Contributors />
-                </PrivateRoute>
+                element: (
+                    <PrivateRoute>
+                        <Contributors />
+                    </PrivateRoute>
+                ),
             },
             {
-                path: '/auth',
-                children: authRoute
+                path: 'auth',
+                children: authRoute,
             },
             {
-                path: '/anthropo-measure',
+                path: 'anthropo-measure',
                 children: [
-                    {
-                        path: 'statistics/',
-                        children: statisticRoute
-                    },
-                    {
-                        path: 'student/',
-                        children: studentRoute
-                    },
-                    {
-                        path: 'abaques/',
-                        children: abaqueRoute
-                    },
-                    {
-                        path: 'school',
-                        children: schoolRoute
-                    },
-                    {
-                        path: 'survey/',
-                        children: surveyRoute
-                    }
-                ]
+                    { path: 'statistics', children: statisticRoute },
+                    { path: 'student', children: studentRoute },
+                    { path: 'abaques', children: abaqueRoute },
+                    { path: 'school', children: schoolRoute },
+                    { path: 'survey', children: surveyRoute },
+                ],
             },
-            {
-                path: '/cantine',
-                children: cantineRoute
-            },
-            {
-                path: '/activities',
-                children: activityRoute
-            },
-            {
-                path: '/scholar-garden',
-                children: scholarGardenRoute
-            },
-            {
-                path: '/prices',
-                children: priceRoute
-            },
-            {
-                path: '/documents',
-                children: documentRoute
-            },
-            {
-                path: '/tools',
-                children: toolsRoute
-            }
-        ]
+            { path: 'cantine', children: cantineRoute },
+            { path: 'activities', children: activityRoute },
+            { path: 'scholar-garden', children: scholarGardenRoute },
+            { path: 'prices', children: priceRoute },
+            { path: 'documents', children: documentRoute },
+            { path: 'tools', children: toolsRoute },
+        ],
     },
     {
-        path: '/orn/auth',
+        path: 'auth',
         element: <AuthRoot />,
         errorElement: <AuthRoot error={true} />,
-        children: userRoute
+        children: userRoute,
     },
     {
-        path: '/forbidden',
-        element: <AppRoot error={true}/>
-    }
-])
+        path: 'forbidden',
+        element: <AppRoot error={true} />,
+    },
+]);
 
 export function App(): ReactNode {
-    return <RouterProvider router={router} />
+    return <RouterProvider router={router} />;
 }

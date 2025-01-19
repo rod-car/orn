@@ -7,8 +7,8 @@ type LinkProps = RouterFomLinkProps & {
     can?: boolean;
 }
 
-export function Link({ can = true, ...props }: LinkProps): ReactNode {
-    return <>{can ? <RouterDomLink style={{ fontSize: 'small' }} {...props}>
+export function Link({ to, can = true, ...props }: LinkProps): ReactNode {
+    return <>{can ? <RouterDomLink to={to} style={{ fontSize: 'small' }} {...props}>
         {props.icon && <i className={`bi bi-${props.icon} me-2`}></i>}
         {props.children}
     </RouterDomLink> : undefined}</>

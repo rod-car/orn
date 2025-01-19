@@ -14,7 +14,7 @@ export function SidePanel(): ReactNode {
             <AppTitle appLogo={logo} appName="ORN ATSINANANA" />
             <nav id="app-nav-main" className="app-nav app-nav-main flex-grow-1">
                 <ul className="app-menu list-unstyled accordion" id="menu-accordion">
-                    <NavItem icon="speedometer" active={pathname === "/"} to="/" label="Tableau de bord" />
+                    <NavItem icon="speedometer" active={pathname === "/"} to="" label="Tableau de bord" />
                     <DropDown icon="bar-chart-fill" base="/anthropo-measure/statistics" label="Statistique" menus={[
                         { label: "Repartition des étudiants", to: "/student-repartition" },
                         { label: "Résultat par métrique", to: "/result-by-metric" },

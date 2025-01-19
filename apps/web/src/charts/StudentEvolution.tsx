@@ -41,7 +41,7 @@ const options = {
         x: {
             title: {
                 display: true,
-                text: "Phase d'enquête"
+                text: "Mesure"
             },
             suggestedMax: 0
         }

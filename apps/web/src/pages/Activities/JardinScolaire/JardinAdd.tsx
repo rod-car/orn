@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom'
+import { Link } from '@base/components'
 import { Block } from 'ui'
 import { JardinForm } from './JardinForm'
+import { ReactNode } from 'react'
 
 export function JardinAdd(): ReactNode {
     return (
