@@ -87,7 +87,7 @@ export function Survey(): ReactNode {
                 <table className="table table-striped table-bordered text-sm">
                     <thead>
                         <tr>
-                            <th>Phase d'enquête</th>
+                            <th>Mesure</th>
                             <th>Date de début</th>
                             <th>Année scolaire</th>
                             <th className="w-15">Actions</th>

@@ -32,7 +32,7 @@ export function DropDown({ label, base = '/', menus, icon, active }: DropDownPro
         <div id={id} className={`collapse submenu ${id}`} data-bs-parent="#menu-accordion">
             <ul className="submenu-list list-unstyled">
                 {menus.map(menu => (menu.can === undefined || menu.can) && <li key={menu.label} className="submenu-item">
-                    <NavLink className="submenu-link" to={'/orn' + base + menu.to}>{menu.label}</NavLink>
+                    <NavLink className="submenu-link" to={base + menu.to}>{menu.label}</NavLink>
                 </li>)}
             </ul>
         </div>

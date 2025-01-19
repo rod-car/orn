@@ -13,9 +13,9 @@ export function PrivateRoute({ children, can = []}: {can?: string[]} & PropsWith
 
     if (!token) {
         resetUser()
-        return <Navigate to="/orn/auth/login" replace />
+        return <Navigate to="/auth/login" replace />
     }
 
-    if (!isAuthorized) return <Navigate to="/orn/forbidden" replace />
+    if (!isAuthorized) return <Navigate to="/forbidden" replace />
     return children
 }

@@ -40,7 +40,7 @@ export const options = {
         x: {
             title: {
                 display: true,
-                text: "Phase d'enquête"
+                text: "Mesure"
             },
             suggestedMin: 0
         }

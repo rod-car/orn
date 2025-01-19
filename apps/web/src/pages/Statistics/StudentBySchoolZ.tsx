@@ -43,7 +43,7 @@ export function StudentBySchoolZ({ surveyId }: { surveyId: number | undefined })
 
             return <div key={parts[0]} className="mb-3">
                 <div className="d-flex align-items-center justify-content-between mb-4">
-                    <h6 className="text-primary fw-bold m-0">Phase {parts[1]} pour l'année {parts[2]}</h6>
+                    <h6 className="text-primary fw-bold m-0">Mesure {parts[1]} pour l'année {parts[2]}</h6>
                     <ExcelExportButton
                         can={isAdmin}
                         ExportClient={ExportClient}

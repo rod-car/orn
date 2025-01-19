@@ -1,13 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { config } from '@base/config'
 import { ActivityBlock, Loading, Pagination } from "@base/components";
 import { PageTitle } from "ui";
 
 export function ActivityList(): ReactNode {
     const { Client, datas: activities, RequestState } = useApi<Activity>({
-        
         url: '/activities'
     })
 

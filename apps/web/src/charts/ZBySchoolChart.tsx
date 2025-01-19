@@ -102,7 +102,7 @@ export function ZBySchoolChart(): ReactNode {
                     <Select
                         controlled
                         placeholder={null}
-                        label="Phase d'enquête"
+                        label="Mesure d'enquête"
                         value={surveyId}
                         options={[1, 2, 3]}
                         onChange={({ target }): void => setSurveyId(parseInt(target.value))}
@@ -121,7 +121,7 @@ export function ZBySchoolChart(): ReactNode {
                         },
                         title: {
                             display: true,
-                            text: `${types[type]} (PHASE ${surveyId})`,
+                            text: `${types[type]} (Mesure ${surveyId})`,
                             font: {
                                 size: 14
                             }

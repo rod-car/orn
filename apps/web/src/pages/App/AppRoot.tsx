@@ -21,7 +21,7 @@ export function AppRoot({ error = false }: { error?: boolean }): ReactNode {
             const users = await Client.get({}, '/user')
             if (users.length === 0) {
                 resetUser()
-                navigate('/orn/auth/login')
+                navigate('/auth/login')
             }
         }
         getUser()

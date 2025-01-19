@@ -6,7 +6,7 @@ type Config = {
 
 export const useConfigStore = create<Config>(
     () => ({
-        baseUrl: "https://api.clinique-hugney.mg/api"
-        // baseUrl: 'http://localhost:8000/api/'
+        // baseUrl: "https://api.orn-atsinanana.mg/api"
+        baseUrl: 'http://localhost:8000/api/'
     })
 );

@@ -123,7 +123,7 @@ export function DocumentForm({ editedDocument }: { editedDocument?: FileDocument
 
             <div className="row mb-4">
                 <div className="col-xl-12">
-                    <RichTextEditor label="Résumé" theme="snow" value={abstract} onChange={setAbstract} />
+                    <RichTextEditor label="Résumé (Obligatoire)" theme="snow" value={abstract} onChange={setAbstract} />
                 </div>
             </div>
 

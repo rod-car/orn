@@ -1,31 +1,53 @@
 "use client"
+
+import { counterUp } from "@/app/js/count-up.min.js"
+import { useEffect } from "react";
 import { ReactNode, useState } from "react";
+import Link from "next/link.js";
+
+function onScroll() {
+    let sections = document.querySelectorAll('.page-scroll');
+    let scrollPos = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+
+    for (let i = 0; i < sections.length; i++) {
+        let currLink = sections[i];
+        let val = currLink.getAttribute('href') as string;
+        let refElement = document.querySelector(val) as HTMLLinkElement;
+        let scrollTopMinus = scrollPos + 73;
+        if (refElement && refElement.offsetTop <= scrollTopMinus && (refElement.offsetTop + refElement.offsetHeight > scrollTopMinus)) {
+            document.querySelector('.page-scroll')?.classList.remove('active');
+            currLink.classList.add('active');
+        } else {
+            currLink.classList.remove('active');
+        }
+    }
+};
 
 export function Header(): ReactNode {
     const [links, setLinks] = useState([
         {
             title: "Accueil",
-            link: "#home",
+            link: "#accueil",
             active: true
         },
         {
-            title: "A propos",
-            link: "#about",
+            title: "À propos",
+            link: "#a-propos",
             active: false
         },
         {
-            title: "Activites",
+            title: "Services",
             link: "#services",
             active: false
         },
         {
-            title: "Partenaires",
-            link: "#team",
+            title: "Activites",
+            link: "#activites",
             active: false
         },
         {
             title: "Partenaires",
-            link: "#portfolio",
+            link: "#partenaries",
             active: false
         },
         {
@@ -46,36 +68,51 @@ export function Header(): ReactNode {
         setLinks(temp)
     }
 
-    return <header className="header navbar-area bg-white">
-    <div className="container">
-        <div className="row align-items-center">
-            <div className="col-lg-12">
-                <nav className="navbar navbar-expand-lg">
-                    <a className="navbar-brand" href="index.html">
-                        <img style={{width: 50, height: 'auto'}} src="/img/logo/logo.png" alt="Logo" />
-                        <span className="ml-3 font-weight-bold">ORN Atsinanana</span>
-                    </a>
-                    <button className="navbar-toggler" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="toggler-icon"></span>
-                        <span className="toggler-icon"></span>
-                        <span className="toggler-icon"></span>
-                    </button>
+    useEffect(() => {
+        const cu = new counterUp({
+            start: 0,
+            duration: 2000,
+            intvalues: true,
+            interval: 100,
+        });
 
-                    <div className="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
-                        <ul id="nav" className="navbar-nav ml-auto">
-                            {links.map((link, index) => <li key={index} onClick={() => changeActive(index)} className="nav-item">
-                                <a className={`page-scroll ${link.active && 'active'}`} href={link.link}>{link.title}</a>
-                            </li>)}
-                        </ul>
-                        <div className="header-btn">
-                            <a href="javascript:void(0)" className="theme-btn">Voir la plateforme</a>
+        cu.start();
+
+        document.addEventListener('scroll', onScroll);
+
+        return () => document.removeEventListener('scroll', onScroll)
+    }, [])
+
+    return <header className="header navbar-area bg-white">
+        <div className="container">
+            <div className="row align-items-center">
+                <div className="col-lg-12">
+                    <nav className="navbar navbar-expand-lg">
+                        <Link className="navbar-brand" href="/">
+                            <img style={{ width: 50, height: "auto" }} src="/img/logo/logo.png" alt="Logo" />
+                            <span className="ml-3 font-weight-bold">ORN Atsinanana</span>
+                        </Link>
+                        <button className="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span className="toggler-icon"></span>
+                            <span className="toggler-icon"></span>
+                            <span className="toggler-icon"></span>
+                        </button>
+
+                        <div className="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+                            <ul id="nav" className="navbar-nav ml-auto">
+                                {links.map((link, index) => <li key={index} onClick={() => changeActive(index)} className="nav-item">
+                                    <a className={`page-scroll ${link.active && 'active'}`} href={link.link}>{link.title}</a>
+                                </li>)}
+                            </ul>
+                            <div className="header-btn">
+                                <a target="_blank" href="https://admin.orn-atsinanana.mg" className="theme-btn">Se connecter</a>
+                            </div>
                         </div>
-                    </div>
-                </nav>
+                    </nav>
+                </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
 }

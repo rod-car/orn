@@ -21,6 +21,9 @@ Index Of css
 @import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap");
 
 :root {
+  --PrimaryColor:#071E78;
+  --SecondaryColor:#F1C038;
+  --TertiaryColor:#4DA11F;
   --primary-color: #002496;
   --bs-blue: #002496;
   --bs-indigo: #6610f2;
@@ -1959,7 +1962,7 @@ p {
 .client-logo-section .client-logo-wrapper .client-logo-carousel .client-logo img {
   max-width: 220px;
   width: 100%;
-  opacity: .3;
+  opacity: .7;
   -webkit-transition: all 0.3s ease-out 0s;
   -moz-transition: all 0.3s ease-out 0s;
   -ms-transition: all 0.3s ease-out 0s;

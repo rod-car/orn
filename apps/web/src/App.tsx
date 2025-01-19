@@ -14,7 +14,6 @@ import { toolsRoute } from '@base/routes/tools/tools';
 
 const router = createBrowserRouter([
     {
-        path: 'orn',
         element: <AppRoot />,
         errorElement: <AppRoot error={true} />,
         children: [
@@ -65,13 +64,13 @@ const router = createBrowserRouter([
         ],
     },
     {
-        path: 'orn/auth',
+        path: 'auth',
         element: <AuthRoot />,
         errorElement: <AuthRoot error={true} />,
         children: userRoute,
     },
     {
-        path: 'orn/forbidden',
+        path: 'forbidden',
         element: <AppRoot error={true} />,
     },
 ]);

@@ -309,7 +309,7 @@ function ChangePasswordComponent({onClose, user}: {onClose: () => void, user?: U
 
                 if (disconnect) {
                     const logoutResponse = await logout(LogoutClient)
-                    if (logoutResponse.ok) navigate("/orn/auth/login", {replace: true})
+                    if (logoutResponse.ok) navigate("/auth/login", {replace: true})
                 }
                 onClose()
             } else {

@@ -88,7 +88,7 @@ export function useExcelReader() {
                     setImporting(false);
                     reject(new Error("Failed to read the file."));
                 };
-    
+
                 reader.readAsArrayBuffer(target.files[0]);
             } else {
                 setImporting(false);

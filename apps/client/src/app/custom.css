@@ -2,3 +2,85 @@
 @import './css/LineIcons.2.0.css';
 @import './css/animate.css';
 @import './css/main.css';
+
+.main-section {
+    padding: 80px 0 !important;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+.navbar-nav .nav-item a.active {
+    color: var(--primary-color);
+    /*font-weight: 500!important;*/
+}
+
+
+/* Customize the scrollbar */
+::-moz-scrollbar {
+    width: 12px;
+    /* Width of the scrollbar */
+}
+
+::-moz-scrollbar-track {
+    background: #f1f1f1;
+    /* Background of the scrollbar track */
+    border-radius: 10px;
+}
+
+::-moz-scrollbar-thumb {
+    background: #888;
+    /* Color of the scrollbar thumb */
+    border-radius: 10px;
+}
+
+::-moz-scrollbar-thumb:hover {
+    background: #555;
+    /* Hover color of the scrollbar thumb */
+}
+
+* {
+    scrollbar-width: thin !important;
+    scrollbar-color: var(--PrimaryColor) var(--SecondaryColor) !important;
+}
+
+/*Caroussel*/
+.test-section .carousel-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.test-section .carousel-inner {
+    padding: 1em;
+}
+
+.test-section .carousel-control-prev,
+.test-section .carousel-control-next {
+    background-color: var(--PrimaryColor);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@media (min-width: 768px) {
+    .test-section .card img {
+        height: 11em;
+    }
+}
+
+.client-logo img {
+    transition-duration: .2s;
+}
+
+.client-logo:hover img {
+    transition-duration: .2s;
+    transform: scale(1.05);
+}

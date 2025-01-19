@@ -44,7 +44,7 @@ export function NewPassword(): ReactNode {
                 type: 'success',
                 position: config.toastPosition
             })
-            navigate('/orn/auth/login', { replace: true })
+            navigate('/auth/login', { replace: true })
         }
     }
 
@@ -121,7 +121,7 @@ export function NewPassword(): ReactNode {
                                     </div>
                                 </div>
                                 <div className="auth-option text-center pt-5">
-                                    <Link className="text-link" to="/orn/auth/login" >Se connecter</Link>
+                                    <Link className="text-link" to="/auth/login" >Se connecter</Link>
                                 </div>
                             </form>
                         </div>
