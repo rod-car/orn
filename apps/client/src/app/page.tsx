@@ -17,7 +17,7 @@ export default async function Home() {
         }[]
     } = { data: [] }
     try {
-        const data = await fetch('http://localhost:8000/api/activities?imagesCount=4&take=4')
+        const data = await fetch('http://admin.orn-atsinanana.mg/api/activities?imagesCount=4&take=4')
         activities = await data.json()
     } catch (e) {
         console.log("Impossible de contacter le serveur")

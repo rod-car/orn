@@ -14,7 +14,7 @@ export default async function Page({ params }: {
     const id = (await params).id
 
     try {
-        const data = await fetch(`http://localhost:8000/api/activities/${id}`)
+        const data = await fetch(`http://admin.orn-atsinanana.mg/api/activities/${id}`)
         activity = await data.json()
     } catch (e) {
         notFound()
