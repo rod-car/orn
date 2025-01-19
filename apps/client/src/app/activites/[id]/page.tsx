@@ -18,7 +18,6 @@ export default async function Page({ params }: {
         activity = await data.json()
     } catch (e) {
         notFound()
-        console.log("Impossible de contacter le serveur " + e)
     }
 
     return <section className="main-section">
