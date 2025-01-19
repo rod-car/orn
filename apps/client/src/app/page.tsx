@@ -21,8 +21,7 @@ export default async function Home() {
         activities = await data.json()
         console.log("Connected to server")
     } catch (e) {
-        console.log("Impossible de contacter le serveur")
-        console.error((e as any).toString())
+        console.log("Server error " + JSON.stringify(e))
     }
 
     return <>
