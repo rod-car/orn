@@ -14,7 +14,11 @@ export default async function Page({ params }: {
     const id = (await params).id
 
     try {
-        const data = await fetch(`http://admin.orn-atsinanana.mg/api/activities/${id}`)
+        const data = await fetch(`http://admin.orn-atsinanana.mg/api/activities/${id}`, {
+            next: {
+                revalidate: 1
+            }
+        })
         activity = await data.json()
     } catch (e) {
         console.log("Server error " + JSON.stringify(e))

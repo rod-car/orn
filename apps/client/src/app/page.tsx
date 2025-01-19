@@ -19,7 +19,7 @@ export default async function Home() {
     try {
         const data = await fetch('https://api.orn-atsinanana.mg/api/activities?imagesCount=4&take=4', {
             next: {
-                revalidate: 0
+                revalidate: 1
             }
         })
         activities = await data.json()
