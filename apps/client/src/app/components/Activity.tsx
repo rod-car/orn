@@ -1,3 +1,4 @@
+import Image from "next/image.js";
 import Link from "next/link.js";
 
 export function Activity({ activity, index = 0 }: { activity: any, index?: number }) {
@@ -10,7 +11,7 @@ export function Activity({ activity, index = 0 }: { activity: any, index?: numbe
                     <div className="row">
                         {activity.images?.map((image: any, index: number) => <div key={index} className="col-6 mb-4" style={{cursor: "pointer"}}>
                             {/*<PhotoView key={index} src={image.path}>*/}
-                                <img key={index} className="w-100" src={image.path} alt={`Image ${index}`} />
+                                <Image key={index} className="w-100" src={image.path} alt={`Image ${index}`} />
                             {/*</PhotoView>*/}
                         </div>)}
                     </div>
