@@ -14,7 +14,7 @@ export default async function Page({ params }: {
     const id = (await params).id
 
     try {
-        const data = await fetch(`http://api.orn-atsinanana.mg/api/activities/${id}`, {
+        const data = await fetch(`https://api.orn-atsinanana.mg/api/activities/${id}`, {
             next: {
                 revalidate: 1
             }
