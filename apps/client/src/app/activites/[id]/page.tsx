@@ -1,3 +1,4 @@
+import Image from "next/image.js"
 import { notFound } from "next/navigation.js"
 
 export default async function Page({ params }: {
@@ -39,7 +40,7 @@ export default async function Page({ params }: {
 
             <div className="row">
                 {activity.images?.map((image, index) => <div key={index} className="col-6 mb-4">
-                    <img className="w-100" src={image.path} alt={`Image ${index}`} />
+                    <Image className="w-100" src={image.path} alt={`Image ${index}`} />
                 </div>)}
             </div>
         </div>}
