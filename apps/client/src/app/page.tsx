@@ -1,5 +1,7 @@
-import { Activity } from "@/app/components/Activity"
-import ClientLogo from "@/app/components/ClientLogo"
+import { Activity } from "@/components/Activity"
+import ClientLogo from "@/components/ClientLogo"
+import { config } from "@/utils/config"
+import Link from "next/link.js"
 
 export const dynamic = 'force-dynamic'
 
@@ -16,13 +18,11 @@ export default async function Home() {
         }[]
     } = { data: [] }
     try {
-        const data = await fetch('https://api.orn-atsinanana.mg/api/activities?imagesCount=4&take=4', {
-            next: {
-                revalidate: 1
-            }
+        const data = await fetch(config.apiUrl + '/activities?imagesCount=4&take=4&orderField=date&orderDirection=desc', {
+            next: {revalidate: 1}
         })
         activities = await data.json()
-        console.log("Connected to server 1: " + JSON.stringify(activities))
+        console.log("Connected to server")
     } catch (e) {
         console.log("Server error " + JSON.stringify(e))
     }
@@ -161,7 +161,7 @@ export default async function Home() {
                                     <li>✅ Distribution de repas enrichis (Koba Aina, PObary) dans 10 écoles maternelles et primaires.</li>
                                 </ul>
 
-                                <div className="mt-5 counter-up wow fadeInUp" data-wow-delay=".8s">
+                                {/*<div className="mt-5 counter-up wow fadeInUp" data-wow-delay=".8s">
                                     <div className="counter">
                                         <span id="client-count" className="countup count color-1" cup-end="50" cup-append="+">50</span>
                                         <h4>Communes partenaires</h4>
@@ -177,9 +177,9 @@ export default async function Home() {
                                         <h4>Bénéficiaires directs</h4>
                                         <p>Familles, enfants et femmes enceintes sensibilisés ou accompagnés.</p>
                                     </div>
-                                </div>
+                                </div>*/}
                                 <div className="wow fadeInUp mt-40" data-wow-delay=".9s">
-                                    <a href="/projets" className="btn btn-outline-primary">Voir nos projets</a>
+                                    <Link href="/a-propos" className="theme-btn py-2">Voir plus de details</Link>
                                 </div>
                             </div>
                         </div>
@@ -304,14 +304,18 @@ export default async function Home() {
                             <p className="wow fadeInUp" data-wow-delay=".6s">
                                 Découvrez les initiatives clés récemment mises en œuvre pour promouvoir le bien-être et la nutrition dans la région.
                             </p>
-                            <a href="/activites" className="btn btn-primary">Voir tous les activites</a>
+                            <Link href="/activites" className="theme-btn">Voir tous les activites</Link>
                         </div>
                     </div>
                 </div>
 
                 {activities.data.length === 0 && <p className="text-center">Aucune donnees</p>}
 
-                {activities.data.map((activity, index: number) => <Activity key={activity.id} index={index} activity={activity} />)}
+                {activities.data.map((activity, index: number) => {
+                    return <div className="bg-white shadow p-5 mb-5 rounded-md" key={activity.id}>
+                        <Activity key={activity.id} index={index} activity={activity} />
+                    </div>
+                })}
             </div>
         </section>
 

@@ -1,11 +1,7 @@
-"use client"
-
-import { counterUp } from "@/app/js/count-up.min.js"
-import { useEffect } from "react";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import Link from "next/link.js";
 
-function onScroll() {
+/*function onScroll() {
     let sections = document.querySelectorAll('.page-scroll');
     let scrollPos = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
 
@@ -21,10 +17,10 @@ function onScroll() {
             currLink.classList.remove('active');
         }
     }
-};
+};*/
 
 export function Header(): ReactNode {
-    const [links, setLinks] = useState([
+    /*const [links, setLinks] = useState([
         {
             title: "Accueil",
             link: "#accueil",
@@ -32,17 +28,17 @@ export function Header(): ReactNode {
         },
         {
             title: "À propos",
-            link: "#a-propos",
-            active: false
-        },
-        {
-            title: "Services",
-            link: "#services",
+            link: "/a-propos",
             active: false
         },
         {
             title: "Activites",
-            link: "#activites",
+            link: "/activites",
+            active: false
+        },
+        {
+            title: "Projets",
+            link: "/projets",
             active: false
         },
         {
@@ -69,19 +65,19 @@ export function Header(): ReactNode {
     }
 
     useEffect(() => {
-        const cu = new counterUp({
+        /*const cu = new counterUp({
             start: 0,
             duration: 2000,
             intvalues: true,
             interval: 100,
         });
 
-        cu.start();
+        cu.start();*/
 
-        document.addEventListener('scroll', onScroll);
+        /*document.addEventListener('scroll', onScroll);
 
         return () => document.removeEventListener('scroll', onScroll)
-    }, [])
+    }, [])*/
 
     return <header className="header navbar-area bg-white">
         <div className="container">
@@ -102,12 +98,14 @@ export function Header(): ReactNode {
 
                         <div className="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                             <ul id="nav" className="navbar-nav ml-auto">
-                                {links.map((link, index) => <li key={index} onClick={() => changeActive(index)} className="nav-item">
-                                    <a className={`page-scroll ${link.active && 'active'}`} href={link.link}>{link.title}</a>
-                                </li>)}
+                                <li className="nav-item"><Link href="/">Accueil</Link></li>
+                                <li className="nav-item"><Link href="/activites">Activites</Link></li>
+                                <li className="nav-item"><Link href="/projets">Projets</Link></li>
+                                <li className="nav-item"><Link href="/a-propos">A propos</Link></li>
+                                <li className="nav-item"><Link href="/contact">Contact</Link></li>
                             </ul>
                             <div className="header-btn">
-                                <a target="_blank" href="https://admin.orn-atsinanana.mg" className="theme-btn">Se connecter</a>
+                                <Link target="_blank" href="https://admin.orn-atsinanana.mg" className="theme-btn">Se connecter</Link>
                             </div>
                         </div>
                     </nav>

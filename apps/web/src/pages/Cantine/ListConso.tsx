@@ -25,7 +25,7 @@ export function ListConso(): ReactNode {
             paginate: true,
             per_page: perPage
         }
-    }, [scholarYearId, schoolId, foodId])
+    }, [])
 
     const { Client: ConsoClient, RequestState, datas: consommations } = useApi<Record<string, unknown>>({ url: '/consommations' })
     const { Client: ScholarYearClient, datas: scholarYears, RequestState: ScholarYearRequestState } = useApi<ScholarYear>({
@@ -70,23 +70,30 @@ export function ListConso(): ReactNode {
     }, [perPage, setPerPage])
 
     const getConso = () => ConsoClient.get(requestParams)
-
-    const getDatas = async () => {
-        FoodClient.get()
-
+    const getSchools = async () => {
         const schools = await SchoolClient.get()
         const currentSchool = schools.at(0)
         if (currentSchool) {
             setSchoolId(currentSchool.id)
             requestParams.school_id = currentSchool.id
         }
+    }
 
+    const getScholarYears = async () => {
         const scholarYears = await ScholarYearClient.get()
         const current = scholarYears.at(0)
         if (current) {
             setScholarYearId(current.id)
             requestParams.scholar_year_id = current.id
         }
+    }
+
+    const getDatas = async () => {
+        FoodClient.get()
+
+        getSchools()
+
+        getScholarYears()
 
         getConso()
     }
@@ -157,6 +164,8 @@ export function ListConso(): ReactNode {
                     </PrimaryLink>
                 </Flex>
             </PageTitle>
+
+            {JSON.stringify(requestParams)}
 
             <Block className='mb-3'>
                 <h6 className='text-info fw-bold text-center'>Filtre des resultats</h6>

@@ -189,7 +189,7 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
                                     <th>Date de prise</th>
                                     {classes && classes.map(classe => <th className="text-nowrap" key={classe.id}>{classe.notation}</th>)}
                                     <th>Ens</th>
-                                    <th>Cui</th>
+                                    <th>Cui/Dist</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>

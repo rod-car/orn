@@ -16,7 +16,6 @@ function download(path: string) {
 
 export function DocumentShow(): ReactNode {
     const { Client, data: document, RequestState } = useApi<FileDocument>({
-        
         url: '/documents',
         key: 'data'
     })
@@ -92,7 +91,7 @@ export function DocumentShow(): ReactNode {
                 <hr />
                 <div className="mt-3">
                     <h6>Resumé</h6>
-                    <p dangerouslySetInnerHTML={{ __html: document.abstract as string }}></p>
+                    <p className="text-justify" dangerouslySetInnerHTML={{ __html: document.abstract as string }}></p>
                 </div>
             </Block>
 

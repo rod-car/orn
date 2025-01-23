@@ -7,6 +7,10 @@ import { useNavigate, useParams } from "react-router";
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import placeholder from "@base/assets/images/placeholder.webp"
+
 export function ActivityShow(): ReactNode {
     const { Client, data: activity, RequestState } = useApi<Activity>({
         url: '/activities'
@@ -36,7 +40,7 @@ export function ActivityShow(): ReactNode {
         {activity && <Block>
             <div className="d-flex align-items-center justify-content-between mb-3">
                 <h5 className="text-primary m-0">{activity.title}</h5>
-                <h5 className="text-primary m-0">{activity.date}</h5>
+                <h5 className="text-primary m-0">{new Date(activity.date).toLocaleDateString()}</h5>
             </div>
 
             <h6 className="">Détails</h6>
@@ -50,7 +54,12 @@ export function ActivityShow(): ReactNode {
                 <div className="row">
                     {activity.images?.map((image, index) => <div className="col-6 mb-4">
                         <PhotoView key={index} src={image.path}>
-                            <img className="w-100" src={image.path} alt={`Image ${index}`} />
+                            <LazyLoadImage
+                                alt={`Image ${index + 1}`}
+                                src={image.path}
+                                effect="blur"
+                                placeholderSrc={placeholder}
+                                width="100%" />
                         </PhotoView>
                     </div>)}
                 </div>

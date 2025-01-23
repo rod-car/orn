@@ -39,48 +39,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cu.start();*/
 
-    let pageLink = document.querySelectorAll('.page-scroll');
+    /*let pageLink = document.querySelectorAll('.page-scroll');
 
     pageLink.forEach(elem => {
         elem.addEventListener('click', e => {
             e.preventDefault();
-            document.querySelector(elem.getAttribute('href')).scrollIntoView({
+            const href = elem.getAttribute('href')
+            if (href.length > 0 && href[0] === "/") return;
+            document.querySelector(href).scrollIntoView({
                 behavior: 'smooth',
                 offsetTop: 1 - 60,
             });
         });
-    });
+    });*/
 
-    function onScroll(event) {
-        console.log("On scroll")
+    /*function onScroll(event) {
         let sections = document.querySelectorAll('.page-scroll');
-        let scrollPos = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        let scrollPos = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
 
         for (let i = 0; i < sections.length; i++) {
             let currLink = sections[i];
             let val = currLink.getAttribute('href');
             let refElement = document.querySelector(val);
             let scrollTopMinus = scrollPos + 73;
-            if (refElement.offsetTop <= scrollTopMinus && (refElement.offsetTop + refElement.offsetHeight > scrollTopMinus)) {
+            if (refElement && refElement.offsetTop <= scrollTopMinus && (refElement.offsetTop + refElement.offsetHeight > scrollTopMinus)) {
                 document.querySelector('.page-scroll').classList.remove('active');
                 currLink.classList.add('active');
             } else {
                 currLink.classList.remove('active');
             }
         }
-    };
+    };*/
 
-    document.addEventListener('scroll', onScroll);
+    // document.addEventListener('scroll', onScroll);
 
     let navbarToggler = document.querySelector(".navbar-toggler");
-    let navbarCollapse = document.querySelector(".navbar-collapse");
+    /*let navbarCollapse = document.querySelector(".navbar-collapse");
 
     document.querySelectorAll(".page-scroll").forEach(e =>
         e.addEventListener("click", () => {
             navbarToggler.classList.remove("active");
             navbarCollapse.classList.remove('show')
         })
-    );
+    );*/
     navbarToggler.addEventListener('click', function () {
         navbarToggler.classList.toggle("active");
     })
