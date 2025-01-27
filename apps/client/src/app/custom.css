@@ -84,3 +84,69 @@ p {
     transition-duration: .2s;
     transform: scale(1.05);
 }
+
+.details p {
+    text-align: justify;
+    word-break: break-word;
+}
+
+.custom-dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 5!important;
+}
+
+.custom-dropdown-toggle {
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    padding-right: 2rem!important;
+}
+
+.custom-dropdown-toggle::after {
+    content: '▼'; /* Unicode character for dropdown indicator */
+    font-size: 0.8em; /* Adjust size of the indicator */
+    margin-left: 0.5rem; /* Space between text and the indicator */
+    position: absolute;
+    right: 1rem; /* Position the indicator towards the right */
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically */
+}
+
+.custom-dropdown-menu {
+    display: block;
+    opacity: 0; 
+    transform: translateY(-10px);
+    position: absolute;
+    top: 100%;
+    background-color: #fff;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth transition */
+    pointer-events: none; /* Prevent interaction when hidden */
+}
+
+.custom-dropdown:hover .custom-dropdown-menu {
+    opacity: 1; /* Fully visible */
+    transform: translateY(0); /* Reset position */
+    pointer-events: auto; /* Enable interaction */
+}
+
+.custom-dropdown-item {
+    padding: 0.5rem 1rem;
+    color: #000;
+    text-decoration: none;
+    display: block;
+    text-wrap: nowrap;
+    width: 100%;
+}
+
+.custom-dropdown-item:hover {
+    background-color: #f8f9fa; /* Optional hover effect */
+}

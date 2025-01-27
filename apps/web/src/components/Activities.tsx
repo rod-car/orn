@@ -18,7 +18,7 @@ export const ActivityBlock = ({activity, index, single = false}: {activity: Acti
         <div className={`d-flex justify-content-between ${index % 2 !== 0 ? 'flex-row-reverse' : ''}`}>
             <div className={`w-50 ${index % 2 !== 0 ? '' : 'me-4'}`}>
                 <h5 className="text-primary">{activity.title}</h5>
-                <h6 className="mb-3 fst-italic">{activity.place} - {new Date(activity.date).toLocaleDateString()}</h6>
+                <h6 className="mb-3 fst-italic">{activity.place} - {activity.date}</h6>
                 <hr />
 
                 <p dangerouslySetInnerHTML={{ __html: activity.details as string }}></p>
@@ -36,7 +36,8 @@ export const ActivityBlock = ({activity, index, single = false}: {activity: Acti
                                     effect="blur"
                                     placeholderSrc={placeholder}
                                     placeholder={<p>Chargement de l'image</p>}
-                                    width="100%" />
+                                    style={{width: "100%", height: "100%", objectFit: "cover"}}
+                                />
                             </PhotoView>
                         </div>)}
                     </div>

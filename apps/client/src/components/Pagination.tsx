@@ -1,26 +1,63 @@
-// components/Pagination.js
-import Link from 'next/link';
+'use client';
 
-export default function Pagination({ currentPage, lastPage }: { currentPage: number, lastPage: number }) {
-    const pages = Array.from({ length: lastPage }, (_, i) => i + 1);
+import { useRouter } from 'next/navigation';
+import "./Pagination.css"
+import { useState } from 'react';
 
-    return (
-        <div className="pagination">
-            {currentPage > 1 && (
-                <Link href={`?page=${currentPage - 1}`}>
-                    <a>Previous</a>
-                </Link>
-            )}
-            {pages.map((page) => (
-                <Link key={page} href={`?page=${page}`}>
-                    <a className={page === currentPage ? 'active' : ''}>{page}</a>
-                </Link>
-            ))}
-            {currentPage < lastPage && (
-                <Link href={`?page=${currentPage + 1}`}>
-                    <a>Next</a>
-                </Link>
-            )}
-        </div>
-    );
+interface PaginationProps {
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+    currentPage: number;
+    perPage: number;
+    totalPages: number;
 }
+
+export const Pagination = ({
+    hasNextPage,
+    hasPrevPage,
+    currentPage,
+    perPage,
+    totalPages
+}: PaginationProps) => {
+    const router = useRouter();
+
+    const handlePageChange = (newPage: number) => {
+        router.push(`/activites?page=${newPage}&perPage=${perPage}`, {
+            scroll: true
+        });
+    };
+
+    return <>
+        {totalPages <= perPage ? undefined : <div className="pagination">
+            <button
+                className={`btn btn-primary btn-sm ${hasPrevPage ? '' : 'btn-secondary cursor-not-allowed'}`}
+                disabled={!hasPrevPage}
+                onClick={() => handlePageChange(currentPage - 1)}
+            >
+                Page precedente
+            </button>
+
+            {Array.from({ length: Math.ceil(totalPages / perPage) }, (_, index) => {
+                const page = index + 1;
+                return (
+                    <button
+                        key={page}
+                        className={`btn ${page === currentPage ? 'btn-primary bg-primary text-white' : ''}`}
+                        onClick={() => handlePageChange(page)}
+                        disabled={page === currentPage}
+                    >
+                        {page}
+                    </button>
+                );
+            })}
+
+            <button
+                className={`btn btn-primary btn-sm ${hasNextPage ? '' : 'btn-secondary cursor-not-allowed'}`}
+                disabled={!hasNextPage}
+                onClick={() => handlePageChange(currentPage + 1)}
+            >
+                Page suivante
+            </button>
+        </div>}
+    </>
+};

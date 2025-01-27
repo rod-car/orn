@@ -37,7 +37,7 @@ export default function RootLayout({ children }: Readonly<{
                     color="#071E78"
                     initialPosition={0.1}
                     crawlSpeed={300}
-                    height={2}
+                    height={4}
                 />
                 <div className="preloader">
                     <div className="loader">

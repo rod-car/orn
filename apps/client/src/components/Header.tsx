@@ -1,84 +1,7 @@
 import { ReactNode } from "react";
 import Link from "next/link.js";
 
-/*function onScroll() {
-    let sections = document.querySelectorAll('.page-scroll');
-    let scrollPos = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
-
-    for (let i = 0; i < sections.length; i++) {
-        let currLink = sections[i];
-        let val = currLink.getAttribute('href') as string;
-        let refElement = document.querySelector(val) as HTMLLinkElement;
-        let scrollTopMinus = scrollPos + 73;
-        if (refElement && refElement.offsetTop <= scrollTopMinus && (refElement.offsetTop + refElement.offsetHeight > scrollTopMinus)) {
-            document.querySelector('.page-scroll')?.classList.remove('active');
-            currLink.classList.add('active');
-        } else {
-            currLink.classList.remove('active');
-        }
-    }
-};*/
-
 export function Header(): ReactNode {
-    /*const [links, setLinks] = useState([
-        {
-            title: "Accueil",
-            link: "#accueil",
-            active: true
-        },
-        {
-            title: "À propos",
-            link: "/a-propos",
-            active: false
-        },
-        {
-            title: "Activites",
-            link: "/activites",
-            active: false
-        },
-        {
-            title: "Projets",
-            link: "/projets",
-            active: false
-        },
-        {
-            title: "Partenaires",
-            link: "#partenaries",
-            active: false
-        },
-        {
-            title: "Contact",
-            link: "#contact",
-            active: false
-        }
-    ])
-
-    const changeActive = (index: number) => {
-        const temp = links.map((link, key) => {
-            link.active = false
-            if (key === index) link.active = true
-
-            return link
-        })
-
-        setLinks(temp)
-    }
-
-    useEffect(() => {
-        /*const cu = new counterUp({
-            start: 0,
-            duration: 2000,
-            intvalues: true,
-            interval: 100,
-        });
-
-        cu.start();*/
-
-        /*document.addEventListener('scroll', onScroll);
-
-        return () => document.removeEventListener('scroll', onScroll)
-    }, [])*/
-
     return <header className="header navbar-area bg-white">
         <div className="container">
             <div className="row align-items-center">
@@ -99,10 +22,19 @@ export function Header(): ReactNode {
                         <div className="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                             <ul id="nav" className="navbar-nav ml-auto">
                                 <li className="nav-item"><Link href="/">Accueil</Link></li>
-                                <li className="nav-item"><Link href="/activites">Activites</Link></li>
+                                <li className="nav-item"><Link href="/activites">Cantine scolaire</Link></li>
                                 <li className="nav-item"><Link href="/projets">Projets</Link></li>
                                 <li className="nav-item"><Link href="/a-propos">A propos</Link></li>
                                 <li className="nav-item"><Link href="/contact">Contact</Link></li>
+                                <li className="nav-item custom-dropdown">
+                                    <a className="custom-dropdown-toggle" id="navbarCantine" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Cantine
+                                    </a>
+                                    <ul className="custom-dropdown-menu" aria-labelledby="navbarCantine">
+                                        <li><a className="custom-dropdown-item" href="#">Action</a></li>
+                                        <li><a className="custom-dropdown-item" href="#">Another action</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                             <div className="header-btn">
                                 <Link target="_blank" href="https://admin.orn-atsinanana.mg" className="theme-btn">Se connecter</Link>

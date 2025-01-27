@@ -22,3 +22,8 @@ export function ucWords(str: string): string {
         return letter.toUpperCase();
     });
 };
+
+export function escapeHtml(unsafeString: string): string
+{
+    return unsafeString.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+}

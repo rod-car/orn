@@ -1,26 +1,30 @@
 import { Activity } from "@/components/Activity"
 import ClientLogo from "@/components/ClientLogo"
 import { config } from "@/utils/config"
+import Image from "next/image.js"
 import Link from "next/link.js"
 
 export const dynamic = 'force-dynamic'
 
+type ActivityType = {
+    data: {
+        images: {
+            path: string
+        }[],
+        id: number
+        title: string
+        date: string
+        details: string
+    }[]
+}
+
 export default async function Home() {
-    let activities: {
-        data: {
-            images: {
-                path: string
-            }[],
-            id: number
-            title: string
-            date: string
-            details: string
-        }[]
-    } = { data: [] }
+    let activities: ActivityType = { data: [] }
     try {
         const data = await fetch(config.apiUrl + '/activities?imagesCount=4&take=4&orderField=date&orderDirection=desc', {
-            next: {revalidate: 1}
+            next: {revalidate: 1},
         })
+
         activities = await data.json()
         console.log("Connected to server")
     } catch (e) {
@@ -137,47 +141,34 @@ export default async function Home() {
                 <div className="row">
                     <div className="col-xl-6 col-lg-6 pr-4">
                         <div className="wow fadeInLeft" data-wow-delay=".3s">
-                            <img className="w-100 mb-5 shadow" src="/img/about/about-img.jpg" alt="About image" />
-                            <img className="w-100 shadow" src="/img/about/about-img-2.png" alt="About image" />
+                            <div className="p-1 shadow bg-white mb-5 rounded">
+                                <Image width={1280} height={1280} style={{objectFit: 'cover'}} className="w-100 h-100 rounded" src="/img/about/about-img.jpg" alt="About image" />
+                            </div>
+
+                            <div className="p-1 shadow bg-white mb-5 rounded">
+                                <Image width={1280} height={1280} style={{objectFit: 'cover'}} className="w-100 h-100 rounded" src="/img/about/about-2.jpg" alt="About image" />
+                            </div>
                         </div>
                     </div>
 
                     <div className="col-xl-6 col-lg-6 pl-4">
                         <div className="about-content-wrapper">
                             <div className="section-title">
-                                <span className="wow fadeInUp" data-wow-delay=".2s">À propos de nous</span>
-                                <h2 className="mb-40 wow fadeInRight" data-wow-delay=".4s">Un pilier pour la nutrition à Atsinanana</h2>
+                                <span className="wow fadeInUp" data-wow-delay=".2s">À propos</span>
+                                <h2 className="mb-40 wow fadeInRight" data-wow-delay=".4s">Le projet <em>Nnutrition scolaire</em></h2>
                             </div>
                             <div className="about-content">
-                                <p className="mb-45 wow fadeInUp" data-wow-delay=".6s">
+                                <p className="mb-3 wow fadeInUp" data-wow-delay=".6s">
                                     L'Office Régional de Nutrition d'Atsinanana (ORN) est une institution publique engagée dans la lutte contre la malnutrition
                                     et l'amélioration de la santé des communautés locales. Nos initiatives couvrent plusieurs domaines clés :
                                     éducation nutritionnelle, sécurité alimentaire, soutien aux enfants vulnérables et suivi des indicateurs nutritionnels.
                                 </p>
-                                <ul className="wow fadeInUp" data-wow-delay=".7s">
-                                    <li>✅ Collaboration avec 50+ communes rurales et urbaines.</li>
-                                    <li>✅ Formation de plus de 200 agents communautaires en pratiques nutritionnelles.</li>
-                                    <li>✅ Sensibilisation de 30,000+ familles à travers des campagnes locales.</li>
-                                    <li>✅ Distribution de repas enrichis (Koba Aina, PObary) dans 10 écoles maternelles et primaires.</li>
+                                <ul className="pl-4" style={{listStyleType: 'initial'}} data-wow-delay=".7s">
+                                    <li>Collaboration avec 10 ecoles.</li>
+                                    <li>Collaboration avec 10 ecoles.</li>
+                                    <li>Collaboration avec 10 ecoles.</li>
                                 </ul>
 
-                                {/*<div className="mt-5 counter-up wow fadeInUp" data-wow-delay=".8s">
-                                    <div className="counter">
-                                        <span id="client-count" className="countup count color-1" cup-end="50" cup-append="+">50</span>
-                                        <h4>Communes partenaires</h4>
-                                        <p>Collaboration directe avec les acteurs locaux pour des solutions adaptées aux besoins spécifiques.</p>
-                                    </div>
-                                    <div className="counter">
-                                        <span id="project-count" className="countup count color-2" cup-end="120" cup-append="+">120</span>
-                                        <h4>Projets réalisés</h4>
-                                        <p>Programmes de prévention, distribution alimentaire et suivi des enfants.</p>
-                                    </div>
-                                    <div className="counter">
-                                        <span id="impact-count" className="countup count color-3" cup-end="30000" cup-append="+">30,000</span>
-                                        <h4>Bénéficiaires directs</h4>
-                                        <p>Familles, enfants et femmes enceintes sensibilisés ou accompagnés.</p>
-                                    </div>
-                                </div>*/}
                                 <div className="wow fadeInUp mt-40" data-wow-delay=".9s">
                                     <Link href="/a-propos" className="theme-btn py-2">Voir plus de details</Link>
                                 </div>
@@ -300,7 +291,7 @@ export default async function Home() {
                     <div className="col-xl-6 col-lg-7 col-md-9 mx-auto">
                         <div className="section-title text-center mb-55">
                             <span className="wow fadeInDown" data-wow-delay=".2s">Activités</span>
-                            <h2 className="wow fadeInUp" data-wow-delay=".4s">Nos Récentes Activités</h2>
+                            <h2 className="wow fadeInUp" data-wow-delay=".4s">Activités Récentes du projet nutrition scolaire</h2>
                             <p className="wow fadeInUp" data-wow-delay=".6s">
                                 Découvrez les initiatives clés récemment mises en œuvre pour promouvoir le bien-être et la nutrition dans la région.
                             </p>

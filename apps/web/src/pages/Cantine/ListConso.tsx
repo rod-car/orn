@@ -165,8 +165,6 @@ export function ListConso(): ReactNode {
                 </Flex>
             </PageTitle>
 
-            {JSON.stringify(requestParams)}
-
             <Block className='mb-3'>
                 <h6 className='text-info fw-bold text-center'>Filtre des resultats</h6>
                 <hr />

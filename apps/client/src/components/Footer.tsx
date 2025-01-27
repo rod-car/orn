@@ -19,16 +19,16 @@ export function Footer() {
                         <h4>Liens rapides</h4>
                         <ul className="footer-links">
                             <li>
-                                <Link href="#accueil">Accueil</Link>
+                                <Link href="/accueil">Accueil</Link>
                             </li>
                             <li>
-                                <Link href="#a-propos">À propos</Link>
+                                <Link href="/a-propos">À propos</Link>
                             </li>
                             <li>
-                                <Link href="#services">Services</Link>
+                                <Link href="/activites">Activites</Link>
                             </li>
                             <li>
-                                <Link href="#activites">Activites</Link>
+                                <Link href="/projets">Projets</Link>
                             </li>
                         </ul>
                     </div>
@@ -58,10 +58,7 @@ export function Footer() {
                     <div className="col-md-6">
                         <div className="footer-social-links">
                             <ul className="d-flex">
-                                <li><Link href="https://www.facebook.com/profile.php?id=100064364605571"><i className="lni lni-facebook-original"></i></Link></li>
-                                {/*<li><Link href="javascript:void(0)"><i className="lni lni-twitter-original"></i></Link></li>
-                                <li><Link href="javascript:void(0)"><i className="lni lni-linkedin-original"></i></Link></li>
-                                <li><Link href="javascript:void(0)"><i className="lni lni-instagram-original"></i></Link></li>*/}
+                                <li><Link target="_blank" href="https://www.facebook.com/profile.php?id=100064364605571"><i className="lni lni-facebook-original"></i></Link></li>
                             </ul>
                         </div>
                     </div>

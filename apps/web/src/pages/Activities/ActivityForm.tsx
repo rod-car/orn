@@ -5,7 +5,6 @@ import { config } from '@base/config'
 import { toast } from 'react-toastify'
 import { RichTextEditor } from '@base/components'
 
-import Resizer from "react-image-file-resizer";
 import imageCompression from 'browser-image-compression';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -108,7 +107,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
     }
 
     const options = {
-        maxSizeMB: 2,
+        maxSizeMB: 1,
         maxWidthOrHeight: 1920,
         useWebWorker: true,
     }
@@ -187,7 +186,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
                 <div className="row">
                     {activity.images && activity.images.length > 0 && activity.images.map(image => {
                         return <div key={image.id} className="col-3 mt-3" style={{ position: 'relative' }}>
-                            <DangerButton onClick={() => removeImage(image.id)} style={{ position: 'absolute', top: 10, right: 20 }} icon="x" size="sm" />
+                            <DangerButton onClick={() => removeImage(image.id)} style={{ position: 'absolute', top: 10, right: 20, zIndex: 50 }} icon="x" size="sm" />
                             <LazyLoadImage
                                 alt={`Image ${image.id}`}
                                 src={image.path}
