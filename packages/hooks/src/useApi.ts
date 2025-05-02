@@ -1,6 +1,6 @@
 import { AxiosError, AxiosRequestConfig } from "axios";
 import axios from "./axios";
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useAuthStore } from "../src/store/useAuthStore.ts";
 import { useConfigStore } from "../src/store/useConfigStore.ts";
 
@@ -94,6 +94,21 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
     }, [])
 
 
+    // Stocker l'AbortController pour annuler les requêtes en cours
+    const abortControllerRef = useRef<AbortController | null>(null);
+
+    // Fonction pour annuler toutes les requêtes en cours
+    const cancelPendingRequests = () => {
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
+        }
+        abortControllerRef.current = new AbortController();
+    };
+
+    useEffect(() => {
+        return () => cancelPendingRequests();
+    }, []);
+
     /**
      * Recuperer une liste des donnees
      * 
@@ -112,16 +127,16 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
             if (query) requestUri += query;
             let response: { data: T[], status: number, statusText: string, ok: boolean }
 
-            const headers = {
-                "Authorization": `Bearer ${token}`
-            }
+            const headers = {"Authorization": `Bearer ${token}`}
 
             if (params?.prefix === false && addUrl !== undefined) response = await axios.get(addUrl, {
                 baseURL: (baseUrl as string).replace(params.replace as string, ''),
-                headers: headers
+                headers: headers,
+                signal: abortControllerRef.current?.signal
             });
             else response = await axios.get(requestUri, {
-                headers: headers
+                headers: headers,
+                signal: abortControllerRef.current?.signal
             })
 
             response.ok = response.status === 200

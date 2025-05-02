@@ -31,7 +31,7 @@ export function UserMenu(): ReactNode {
                 position: config.toastPosition
             })
         }
-        navigate('/auth/login', {replace: true})
+        // navigate('/auth/login', {replace: true})
     }
 
     return <div className="app-utility-item app-user-dropdown dropdown">

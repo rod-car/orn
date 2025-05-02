@@ -85,6 +85,7 @@ export function AdminActivityList(): ReactNode {
                     <tr>
                         <th>#</th>
                         <th>Titre</th>
+                        <th>Catégorie</th>
                         <th>Date</th>
                         <th>Lieu</th>
                         <th className="w-15">Actions</th>
@@ -94,6 +95,7 @@ export function AdminActivityList(): ReactNode {
                     {activities && activities.data?.map((activity: Activity, index) => <tr key={activity.id}>
                         <td>{index + 1}</td>
                         <td>{activity.title}</td>
+                        <td>{activity?.service?.title}</td>
                         <td>{activity.date}</td>
                         <td>{activity.place}</td>
                         <td className="text-nowrap">
@@ -105,6 +107,6 @@ export function AdminActivityList(): ReactNode {
                 </tbody>
             </table>
         </Block>}
-        {activities?.meta?.total > activities?.meta?.per_page && <Pagination changePage={changePage} data={activities} />}
+        {activities?.total > activities?.per_page && <Pagination changePage={changePage} data={activities} />}
     </>
 }

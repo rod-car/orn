@@ -7,7 +7,10 @@ import {
     ListConso,
     FoodAdd,
     FoodList,
-    RecapConso
+    RecapConso,
+    Stock,
+    StockIn,
+    StockOut
 } from "@base/pages/Cantine"
 import { RouteObject } from "react-router"
 
@@ -21,6 +24,12 @@ export const cantineRoute: RouteObject[] = [
     {
         path: 'consommation',
         children: [
+            {
+                path: 'stock',
+                element: <PrivateRoute can={['admin']}>
+                    <Stock />
+                </PrivateRoute>
+            },
             {
                 path: 'statistics',
                 element: <PrivateRoute>
@@ -49,6 +58,29 @@ export const cantineRoute: RouteObject[] = [
                 path: 'import',
                 element: <PrivateRoute can={['admin']}>
                     <ImportConso />
+                </PrivateRoute>
+            },
+        ]
+    },
+    {
+        path: 'stocks',
+        children: [
+            {
+                path: 'recap',
+                element: <PrivateRoute can={['admin']}>
+                    <Stock />
+                </PrivateRoute>
+            },
+            {
+                path: 'in',
+                element: <PrivateRoute can={['admin']}>
+                    <StockIn />
+                </PrivateRoute>
+            },
+            {
+                path: 'out',
+                element: <PrivateRoute can={['admin']}>
+                    <StockOut />
                 </PrivateRoute>
             },
         ]

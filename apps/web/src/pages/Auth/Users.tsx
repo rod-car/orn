@@ -1,5 +1,5 @@
 import { useApi, useAuthStore } from 'hooks'
-import { Link, PrimaryLink } from '@base/components'
+import { EditLink, Link, PrimaryLink } from '@base/components'
 import { config } from '@base/config'
 import { Block, Button, PageTitle, Select } from 'ui'
 import { ReactNode, useEffect, useState } from 'react'
@@ -151,7 +151,7 @@ export function Users(): ReactNode {
                                 <th className="text-nowrap">Adresse e-mail</th>
                                 <th className="text-nowrap">Nom d'utilisateur</th>
                                 <th>Rôle</th>
-                                <th className="text-nowrap">Date</th>
+                                <th className="text-nowrap">Etablissement</th>
                                 <th>Status</th>
                                 <th style={{ width: "10%" }}>Actions</th>
                             </tr>
@@ -174,9 +174,10 @@ export function Users(): ReactNode {
                                 <td>{user.email}</td>
                                 <td>{user.username}</td>
                                 <td><UserRole role={user.role} /></td>
-                                <td className="text-nowrap">{format(user.created_at, "dd-MM-y")}</td>
+                                <td className="text-nowrap">{user.school ? user.school.name : '---'}</td>
                                 <td><UserStatus valid={user.is_valid} /></td>
                                 <td className="text-nowrap">
+                                    <EditLink to={`/auth/edit-user/${user.id}`} />
                                     <Button
                                         type="button"
                                         mode="danger"
@@ -216,8 +217,8 @@ function UserRole({ role }: { role: number }) {
 
 function UserStatus({ valid }: { valid: number }) {
     const key = valid === 1 ? 0 : 1
-    
-    return <span className={`badge rounded-pill p-2 bg-${classes[key]}`}>
+
+    return <span className={`badge rounded-pill p-2 bg-${classes[valid === 1 ? 2 : key]}`}>
         {userStatus[key]}
     </span>
 }

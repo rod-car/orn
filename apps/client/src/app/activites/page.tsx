@@ -35,10 +35,7 @@ export default async function Activities({ searchParams }: { searchParams: Promi
 
         activities = await data.json()
         if (activities.meta?.total) total = activities.meta?.total;
-
-        console.log("Connected to server")
     } catch (e) {
-        console.log("Server error " + JSON.stringify(e))
     }
 
     return <section id="activites" className="main-section" style={{ background: "#eff2f9" }}>

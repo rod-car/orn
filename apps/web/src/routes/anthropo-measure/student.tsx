@@ -17,7 +17,7 @@ export const studentRoute: RouteObject[] = [
     },
     {
         path: 'edit/:id',
-        element: <PrivateRoute can={["super"]}>
+        element: <PrivateRoute can={["admin"]}>
             <EditStudent />
         </PrivateRoute>
     },

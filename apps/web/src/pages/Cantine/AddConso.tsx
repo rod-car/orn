@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FormEvent, ReactNode, useCallback, useEffect, useState } from 'react'
-import { Block, DangerButton, Input, PageTitle, PrimaryButton, Select, Spinner } from 'ui'
+import { Block, DangerButton, Input, PageTitle, PrimaryButton, SecondaryButton, Select, Spinner } from 'ui'
 import { PrimaryLink, ScholarYearSelectorServer } from '@base/components'
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
 import { Col, Row } from '@base/components/Bootstrap'
@@ -30,6 +30,8 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
         url: '/foods'
     })
 
+    const {user} = useAuthStore()
+
     const getConsommations = async () => {
         const classes = await ClassClient.get()
         if (classes)
@@ -42,6 +44,7 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
                 updatedConsommation["_" + classe.id] = { type: 'number', value: 0 };
             });
 
+            updatedConsommation['_others'] = { type: 'number', value: 0 };
             updatedConsommation['_teachers'] = { type: 'number', value: 0 };
             updatedConsommation['_cookers'] = { type: 'number', value: 0 };
 
@@ -119,6 +122,7 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
     }
 
     useEffect(() => {
+        if (user?.school) setSchoolId(user.school.id)
         SchoolClient.get()
         FoodClient.get()
         getConsommations()
@@ -146,7 +150,7 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
                 <form onSubmit={handleSubmit} method="post">
                     <Row className="mb-6">
                         <Col n={4} className="mb-3">
-                            <Select
+                        {user?.school ? <Input label='Établissement' auto disabled defaultValue={user.school.name} /> : <Select
                                 label="Établissement"
                                 options={schools}
                                 config={{optionKey: 'id', valueKey: 'name'}}
@@ -155,7 +159,7 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
                                 onChange={({target}) => setSchoolId(parseInt(target.value, 10))}
                                 disabled={editedConso !== undefined}
                                 controlled
-                            />
+                            />}
                         </Col>
                         <Col n={4} className="mb-3">
                             <ScholarYearSelectorServer
@@ -183,40 +187,48 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
                     <hr />
 
                     {consommations.length > 0 ? <div className="table-responsive mb-3">
-                        <table className="table table-bordered table-striped text-sm mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Date de prise</th>
-                                    {classes && classes.map(classe => <th className="text-nowrap" key={classe.id}>{classe.notation}</th>)}
-                                    <th>Ens</th>
-                                    <th>Cui/Dist</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {consommations.map((consommation, index) => <tr key={index}>
-                                    {Object.keys(consommation).map(key => {
-                                        if (typeof consommation[key] === 'object') {
-                                            const fieldType = consommation[key].type
-                                            const fieldValue = consommation[key].value
-                                            return <td style={{minWidth: 90}} key={key}>
-                                                {fieldType === "number" && <Input name={index + key} type="number" value={fieldValue} onChange={handleInputChange} />}
-                                                {fieldType === "date" && <Input name={index + key} type="date" value={fieldValue} onChange={handleInputChange} />}
-                                            </td>
-                                        }
-                                    })}
-                                    <td className="d-flex align-items-center">
-                                        {index === 0 && <PrimaryButton icon="plus-lg" className='me-2 p-2' onClick={add} />}
-                                        {index > 0 && <DangerButton icon="dash-lg" className='p-2' onClick={() => remove(index)} />}
-                                    </td>
-                                </tr>)}
-                            </tbody>
-                        </table>
+                        <div className="sticky-table">
+                            <table className="table table-bordered table-striped text-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th className='bg-info text-white'>Date de prise</th>
+                                        {classes && classes.map(classe => <th className="text-nowrap text-white bg-info" key={classe.id}>{classe.notation}</th>)}
+                                        <th className='bg-info text-white'>Autres</th>
+                                        <th className='bg-info text-white'>Ens</th>
+                                        <th className='bg-info text-white'>Cui/Dist</th>
+                                        <th className='bg-info text-white'>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {consommations.map((consommation, index) => <tr key={index}>
+                                        {Object.keys(consommation).map(key => {
+                                            if (typeof consommation[key] === 'object') {
+                                                const fieldType = consommation[key].type
+                                                const fieldValue = consommation[key].value
+                                                return <td style={{minWidth: 90}} key={key}>
+                                                    {fieldType === "number" && <Input name={index + key} type="number" value={fieldValue} onChange={handleInputChange} />}
+                                                    {fieldType === "date" && <Input name={index + key} type="date" value={fieldValue} onChange={handleInputChange} />}
+                                                </td>
+                                            }
+                                        })}
+                                        <td className="d-flex align-items-center">
+                                            {index === 0 && <PrimaryButton icon="plus-lg" className='me-2 p-2' onClick={add} />}
+                                            {index > 0 && <DangerButton icon="dash-lg" className='p-2' onClick={() => remove(index)} />}
+                                        </td>
+                                    </tr>)}
+                                </tbody>
+                            </table>
+                        </div>
                     </div> : <Spinner isBorder size='sm' className='text-center' />}
 
-                    <PrimaryButton loading={RequestState.creating || RequestState.loading || RequestState.updating || FoodRequestState.loading || SchoolRequestState.loading } icon="save" type="submit">
-                        Enregistrer
-                    </PrimaryButton>
+                    <div className="d-flex">
+                        <PrimaryButton className='me-3' loading={RequestState.creating || RequestState.loading || RequestState.updating || FoodRequestState.loading || SchoolRequestState.loading } icon="save" type="submit">
+                            Enregistrer
+                        </PrimaryButton>
+                        <SecondaryButton onClick={add} icon="plus" type="button">
+                            Ajouter une ligne
+                        </SecondaryButton>
+                    </div>
                 </form>
             </Block>
         </>

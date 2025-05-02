@@ -8,7 +8,7 @@
 }
 
 .text-justify {
-    text-align: justify;
+    text-align: justify!important;
 }
 
 p {
@@ -139,14 +139,40 @@ p {
 }
 
 .custom-dropdown-item {
-    padding: 0.5rem 1rem;
-    color: #000;
-    text-decoration: none;
-    display: block;
-    text-wrap: nowrap;
-    width: 100%;
+    padding: 0.8rem 1.5rem!important;
+    color: #474747!important;
+    text-decoration: none!important;
+    display: block!important;
+    text-wrap: nowrap!important;
+    width: 100%!important;
 }
 
 .custom-dropdown-item:hover {
-    background-color: #f8f9fa; /* Optional hover effect */
+    background-color: #f8f9fa!important;
+    color: var(--PrimaryColor)!important;
+}
+
+.text-x-large {
+    font-size: x-large;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.vertical-text {
+    writing-mode: tb;
+    transform: rotate(180deg);
+}
+
+.text-sm {
+	font-size: small;
+}
+
+.table-padding-large td, .table-padding-large th {
+    padding: 10px 20px 10px 20px;
 }

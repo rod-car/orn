@@ -5,10 +5,10 @@ import logo from '@base/assets/images/logo.png';
 import { AppTitle, DropDown, NavItem } from "@base/components";
 
 export function SidePanel(): ReactNode {
-    const { isAdmin } = useAuthStore()
+    const { isAdmin, user } = useAuthStore()
     const { pathname } = useLocation()
 
-    return <div id="app-sidepanel" className="app-sidepanel">
+    return <div id="app-sidepanel" className="app-sidepanel sidepanel-visible">
         <div id="sidepanel-drop" className="sidepanel-drop"></div>
         <div className="sidepanel-inner d-flex flex-column">
             <AppTitle appLogo={logo} appName="ORN ATSINANANA" />
@@ -22,42 +22,47 @@ export function SidePanel(): ReactNode {
                     ]} />
 
                     <GroupSeparator title="Mesure anthropométrique" />
-                    <DropDown icon="people" base="/anthropo-measure/student" label="Etudiants" menus={[
+                    <DropDown icon="people" base="/anthropo-measure/student" label="Étudiants" menus={[
                         { label: "Liste des étudiants", to: "/list" },
                         { label: "Ajouter un étudiant", to: "/add", can: isAdmin },
-                        { label: "Importer une liste globale", to: "/import", can: isAdmin },
+                        { label: "Importer une liste globale", to: "/import", can: (isAdmin && !user?.school) },
                         { label: "Mise a jour des classes", to: "/students-classes", can: isAdmin },
-                        { label: "Importer une liste par classe", to: "/import-class", can: isAdmin }
+                        { label: "Importer une liste par classe", to: "/import-class", can: (isAdmin && !user?.school) }
                     ]} />
                     <DropDown base="/anthropo-measure/school" icon="houses" label="Ecoles" menus={[
                         { label: "Liste des écoles", to: "/list" },
-                        { label: "Ajouter un nouveau école", to: "/add", can: isAdmin },
+                        { label: "Ajouter un nouveau école", to: "/add", can: (isAdmin && !user?.school) },
                         { label: "Les classes", to: "/classes/list", can: isAdmin },
                         { label: "Les niveaux", to: "/levels/list", can: isAdmin }
                     ]} />
-                    {isAdmin && <DropDown label="Abaques" base="/anthropo-measure/abaques" icon="database"
+                    {(isAdmin && !user?.school) && <DropDown label="Abaques" base="/anthropo-measure/abaques" icon="database"
                         menus={[
                             { to: '/add', label: 'Ajouter', can: isAdmin },
                             { to: '/list', label: 'Liste' },
                             { to: '/import', label: 'Importer une liste', can: isAdmin }
                         ]}
                     />}
-                    <DropDown icon="rulers" base="/anthropo-measure/survey" label="Mésures" menus={[
-                        { to: '/add', label: 'Nouvelle mesure', can: isAdmin },
+                    <DropDown icon="rulers" base="/anthropo-measure/survey" label="Mesures" menus={[
+                        { to: '/add', label: 'Nouvelle mesure', can: (isAdmin && !user?.school) },
                         { to: '/list', label: 'Liste des mesures' },
                         { to: '/add-student', label: 'Mesurer des étudiants', can: isAdmin }
                     ]} />
 
                     <GroupSeparator title="Cantine scolaire" />
-                    <DropDown label="Aliments" base="/cantine/foods" icon="cookie" menus={[
-                        { to: '/add', label: 'Ajouter', can: isAdmin },
-                        { to: '/list', label: 'Liste des aliments' }
+                    <DropDown label="Collations" base="/cantine/foods" icon="cookie" menus={[
+                        { to: '/add', label: 'Ajouter', can: (isAdmin && !user?.school) },
+                        { to: '/list', label: 'Liste des collations' }
                     ]}/>
                     <DropDown label="Consommations" base="/cantine/consommation" icon="basket3" menus={[
                         { to: '/add', label: 'Ajouter', can: isAdmin },
                         { to: '/list', label: 'Historiques' },
-                        { to: '/import', label: 'Importer', can: isAdmin },
-                        { to: '/statistics', label: 'Recapitulatifs', can: isAdmin }
+                        { to: '/import', label: 'Importer', can: (isAdmin && !user?.school) },
+                        { to: '/statistics', label: 'Récapitulatifs', can: isAdmin }
+                    ]}/>
+                    <DropDown label="Gestion de stocks" base="/cantine/stocks" icon="file" menus={[
+                        { to: '/in', label: 'Entree', can: isAdmin },
+                        { to: '/out', label: 'Stortie' },
+                        { to: '/recap', label: 'Fiche de stock' },
                     ]}/>
 
                     <GroupSeparator title="Activités" />
@@ -105,6 +110,7 @@ export function SidePanel(): ReactNode {
                     <NavItem icon="file-earmark-text-fill" active={pathname.includes("/documents")} to="/documents" label="Documents" />
                     <DropDown label="Outils" base="/tools" icon="tools" menus={[
                         { to: '/z-calculator', label: 'Calculateur de Z' },
+                        { to: '/value-repartition', label: 'Repartisseur de valeur' },
                     ]} />
                 </ul>
             </nav>
@@ -112,9 +118,13 @@ export function SidePanel(): ReactNode {
             <div className="app-sidepanel-footer">
                 <nav className="app-nav app-nav-footer">
                     <ul className="app-menu footer-menu list-unstyled">
+                        <DropDown label="Paramètres" base="/settings" icon="gear" menus={[
+                            { to: '/jardin', label: 'Jardin scolaire', can: isAdmin },
+                            { to: '/services', label: 'Services', can: isAdmin },
+                        ]}/>
+
                         <NavItem to="/about" active={pathname === "/about"} icon="info-circle" label="A propos" />
                         <NavItem to="/contributors" active={pathname === "/contributors"} icon="people" label="Contributeurs" />
-                        <NavItem to="/settings" active={pathname === "/settings"} icon="file" label="Documentations" />
                     </ul>
                 </nav>
             </div>

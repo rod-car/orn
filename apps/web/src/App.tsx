@@ -11,6 +11,7 @@ import { AppRoot, About, Contributors, HomePage } from '@base/pages/App';
 import { studentRoute, abaqueRoute, schoolRoute, surveyRoute, statisticRoute } from '@base/routes/anthropo-measure';
 import { documentRoute } from '@base/routes/document/documents';
 import { toolsRoute } from '@base/routes/tools/tools';
+import { settingsRoute } from '@base/routes/settings/settings';
 
 const router = createBrowserRouter([
     {
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
             { path: 'prices', children: priceRoute },
             { path: 'documents', children: documentRoute },
             { path: 'tools', children: toolsRoute },
+            { path: 'settings', children: settingsRoute },
         ],
     },
     {

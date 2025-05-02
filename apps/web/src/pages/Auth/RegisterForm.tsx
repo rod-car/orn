@@ -1,10 +1,11 @@
 import { useApi, useAuth } from 'hooks';
-import { FormEvent, ReactNode, useState } from 'react';
+import { FormEvent, ReactNode, useEffect, useState } from 'react';
 import { Button, Input, Select } from 'ui';
 import { toast } from 'react-toastify';
+import { config as baseConfig } from '@base/config'
 import { useConfigStore } from 'hooks';
 
-export function RegisterForm({ external = true }: { external?: boolean }): ReactNode {
+export function RegisterForm({ external = true, editUser = undefined }: { external?: boolean, editUser?: User }): ReactNode {
     const config = useConfigStore()
 
     const defaultUser = {
@@ -13,6 +14,7 @@ export function RegisterForm({ external = true }: { external?: boolean }): React
         email: '',
         username: '',
         role: 0,
+        school_id: 0,
         password: external ? '' : 'Default.2024',
         password_confirmation: external ? '' : 'Default.2024'
     }
@@ -22,20 +24,28 @@ export function RegisterForm({ external = true }: { external?: boolean }): React
         key: 'data'
     })
 
+    const { Client: SchoolClient, RequestState: SchoolRequestState, datas: schools } = useApi<School>({
+        url: '/schools',
+        key: 'data'
+    })
+
     const [showPassword, setShowPassword] = useState(false)
-    const [user, setUser] = useState<Partial<User>>(defaultUser)
-    const defaultErrors = {username: [''], password: [''], name: [''], occupation: [''], email: [''], password_confirmation: [''], role: ['']}
+    const [user, setUser] = useState<Partial<User>>(editUser ? editUser : defaultUser)
+    const defaultErrors = {username: [''], password: [''], name: [''], occupation: [''], email: [''], password_confirmation: [''], role: [''], school_id: ['']}
     const [errors, setErrors] = useState<typeof defaultErrors>(defaultErrors)
     const { register, loading } = useAuth<User>({ baseUrl: config.baseUrl })
 
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
-        const response = external ? await register(user) : await Client.post(user, '/add-user')
+        if (user.school_id === 0) setUser({...user, school_id: undefined})
+
+        const url = editUser ? `/update-user/${editUser.id}` : '/add-user'
+        const response = external ? await register(user) : await Client.post(user, url)
         const message = external ? "Demande envoyé. Elle sera validé par l'administrateur" : "Enregistré"
 
         if (response === undefined) {
             toast("Impossible de contacter le serveur", {
-                position: config.toastPosition,
+                position: baseConfig.toastPosition,
                 type: 'error'
             })
             return
@@ -44,17 +54,21 @@ export function RegisterForm({ external = true }: { external?: boolean }): React
         if (response.ok) {
             toast(message, {
                 type: 'success',
-                position: config.toastPosition
+                position: baseConfig.toastPosition
             })
-            setUser(defaultUser)
+            if (!editUser) setUser(defaultUser)
         } else {
             setErrors(response.data.errors)
             toast(response.statusText, {
                 type: 'error',
-                position: config.toastPosition
+                position: baseConfig.toastPosition
             })
         }
     }
+
+    useEffect(() => {
+        if (!external) SchoolClient.get()
+    }, [])
 
     return <form method="POST" onSubmit={handleSubmit} className="auth-form auth-signup-form">
         <div className="row">
@@ -92,20 +106,45 @@ export function RegisterForm({ external = true }: { external?: boolean }): React
                 />
             </div>
 
-            {!external && <div className="email mb-3 col-6"><Select
-                value={user.role}
-                onChange={({ target }): void => {
-                    setUser({ ...user, role: parseInt(target.value) })
-                    if (target.value.length > 0 && errors)
-                        setErrors({ ...errors, role: [] })
-                }}
-                error={errors?.role}
-                label="Rôle"
-                placeholder={null}
-                options={[{ id: 0, label: "Invité" }, { id: 1, label: "Administrateur" }, { id: 2, label: "Super administrateur" }]}
-                config={{ optionKey: "id", valueKey: "label" }}
-                controlled
-            /></div>}
+            {!external && <>
+                <div className="email mb-3 col-6">
+                    <Select
+                        disabled={editUser && editUser.role === 2}
+                        value={user.role}
+                        onChange={({ target }): void => {
+                            setUser({ ...user, role: parseInt(target.value) })
+                            if (target.value.length > 0 && errors)
+                                setErrors({ ...errors, role: [] })
+                        }}
+                        error={errors?.role}
+                        label="Rôle"
+                        placeholder={null}
+                        options={editUser && editUser.role === 2 ? [{ id: 2, label: "Super administrateur" }] : [{ id: 0, label: "Invité" }, { id: 1, label: "Administrateur" }, { id: 2, label: "Super administrateur" }]}
+                        config={{ optionKey: "id", valueKey: "label" }}
+                        controlled
+                    />
+                </div>
+
+                <div className="email mb-3 col-6">
+                    <Select
+                        value={user.school_id}
+                        onChange={({ target }): void => {
+                            setUser({ ...user, school_id: parseInt(target.value) })
+                            if (target.value.length > 0 && errors)
+                                setErrors({ ...errors, school_id: [] })
+                        }}
+                        error={errors?.school_id}
+                        label="Etablissement de rattachement"
+                        placeholder="Selectionner"
+                        defaultOption={undefined}
+                        loading={SchoolRequestState.loading}
+                        options={schools}
+                        config={{ optionKey: "id", valueKey: "name" }}
+                        required={false}
+                        controlled
+                    />
+                </div>
+            </>}
         </div>
 
         <div className="row">

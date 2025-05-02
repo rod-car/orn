@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { ReactNode, useEffect, useState } from 'react'
 import { class_categories, config } from '@base/config'
 import { Input, Select, Block, Button, PageTitle } from 'ui'
@@ -43,36 +43,34 @@ export function AddSurveyStudent(): ReactNode {
     const [precedentPhase, setPrecedentPhase] = useState<number | null | undefined>(null)
 
     const { Client: SurveyListClient, datas: surveysList, RequestState: SurveyListRequestState } = useApi<Survey>({
-        
         url: '/surveys',
         key: 'data'
     })
 
     const { Client: SurveyClient, RequestState: SurveyRequestState } = useApi<Survey>({
-        
         url: '/surveys',
         key: 'data'
     })
 
     const { Client: StudentClient, RequestState: StudentRequestState } = useApi<Student>({
-        
         url: '/students',
         key: 'data'
     })
 
     const { Client: SchoolClient, RequestState: SchoolRS, datas: schools } = useApi<School>({
-        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassClient, RequestState: ClassRS, datas: classes } = useApi<School>({
-        
         url: '/classes',
         key: 'data'
     })
 
+    const { user } = useAuthStore()
+
     useEffect(() => {
+        if (user?.school) setFormData({...formData, school_id: user.school.id})
         SurveyListClient.get()
         ClassClient.get({need_student: false})
         SchoolClient.get()
@@ -278,7 +276,7 @@ export function AddSurveyStudent(): ReactNode {
                 <form action="" method="post">
                     <div className="row mb-4">
                         <div className="col-6 mb-3">
-                            <Select
+                        {user?.school ? <Input label='Établissement' auto disabled defaultValue={user.school.name} /> : <Select
                                 label='Etablissement'
                                 options={schools}
                                 config={{ optionKey: 'id', valueKey: 'name' }}
@@ -287,7 +285,7 @@ export function AddSurveyStudent(): ReactNode {
                                 onChange={({target}) => handleChange(target)}
                                 name='school_id'
                                 value={formData.school_id}
-                                controlled />
+                                controlled />}
                         </div>
                         <div className="col-3 mb-3">
                             <Select

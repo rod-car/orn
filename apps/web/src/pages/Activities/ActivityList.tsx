@@ -12,7 +12,9 @@ export function ActivityList(): ReactNode {
     const queryParams = {
         paginate: true,
         perPage: 5,
-        imagesCount: 4
+        imagesCount: 4,
+        orderField: 'date',
+        orderDirection: 'desc'
     }
 
     const getActivities = async () => {
@@ -39,6 +41,6 @@ export function ActivityList(): ReactNode {
             return <ActivityBlock activity={activity} index={index} />
         })}
 
-        {activities?.meta?.total > activities?.meta?.per_page && <Pagination changePage={changePage} data={activities} />}
+        {activities?.total > activities?.per_page && <Pagination changePage={changePage} data={activities} />}
     </>
 }

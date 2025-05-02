@@ -4,6 +4,7 @@ export { Profile } from "./Profile.tsx";
 export { Account } from "./Account.tsx";
 export { RegisterForm } from "./RegisterForm";
 export { AddUser } from "./AddUser";
+export { EditUser } from "./EditUser";
 export { Users } from "./Users";
 export { AccessRequest } from "./AccessRequest";
 export { AuthRoot } from "./AuthRoot";

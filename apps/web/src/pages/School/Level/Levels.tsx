@@ -52,7 +52,7 @@ export function Levels(): ReactNode {
         })
     }
 
-    const { isAdmin } = useAuthStore()
+    const { isAdmin, user } = useAuthStore()
 
     return (
         <>
@@ -64,7 +64,7 @@ export function Levels(): ReactNode {
                         className="me-2"
                         loading={RequestState.loading}
                     >Recharger</SecondaryButton>
-                    <PrimaryLink can={isAdmin} icon="plus-lg" to="/anthropo-measure/school/levels/add">
+                    <PrimaryLink can={isAdmin && !user?.school} icon="plus-lg" to="/anthropo-measure/school/levels/add">
                         Ajouter un niveau
                     </PrimaryLink>
                 </div>
@@ -103,8 +103,8 @@ export function Levels(): ReactNode {
                                     <td>{level.label}</td>
                                     <td>{level.description ?? 'N/A'}</td>
                                     <td>
-                                        <EditLink can={isAdmin} to={`/anthropo-measure/school/levels/edit/${level.id}`} />
-                                        <Button can={isAdmin}
+                                        <EditLink can={isAdmin && !user?.school} to={`/anthropo-measure/school/levels/edit/${level.id}`} />
+                                        <Button can={isAdmin && !user?.school}
                                             mode="danger"
                                             icon="trash"
                                             size="sm"

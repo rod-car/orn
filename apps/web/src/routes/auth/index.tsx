@@ -1,6 +1,6 @@
 import { RouteObject } from 'react-router'
 import { GuestRoute, PrivateRoute } from '@base/components/Auth'
-import { AccessRequest, Account, AddUser, ForgotPassword, Login, NewPassword, Profile, Register, Users } from '@base/pages/Auth'
+import { AccessRequest, Account, AddUser, EditUser, ForgotPassword, Login, NewPassword, Profile, Register, Users } from '@base/pages/Auth'
 
 export const authRoute: RouteObject[] = [
     {
@@ -19,6 +19,12 @@ export const authRoute: RouteObject[] = [
         path: 'add-user',
         element: <PrivateRoute can={['super-admin']}>
             <AddUser />
+        </PrivateRoute>
+    },
+    {
+        path: 'edit-user/:id',
+        element: <PrivateRoute can={['super-admin']}>
+            <EditUser />
         </PrivateRoute>
     },
     {

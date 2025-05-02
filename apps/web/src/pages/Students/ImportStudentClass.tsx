@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Block, Input, PageTitle, PrimaryButton, Select, Spinner } from 'ui'
-import { useApi, useExcelReader } from 'hooks'
+import { useApi, useAuthStore, useExcelReader } from 'hooks'
 import { ChangeEvent, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { ClassSelector, PrimaryLink, ScholarYearSelectorServer, SchoolSelector } from '@base/components'
 import { class_categories, config } from '@base/config'
@@ -15,6 +15,7 @@ export function ImportStudentClass(): ReactNode {
     const [schoolId, setSchoolId] = useState<number>(0)
     const [category, setCategory] = useState<string>('')
     const [sheet, setSheet] = useState<string>('')
+    const [forbidden, setForbidden] = useState(false)
 
     const fileRef = useRef()
 
@@ -33,18 +34,15 @@ export function ImportStudentClass(): ReactNode {
 
     const { json, importing, sheets, getSheets, toJSON, resetJSON } = useExcelReader()
     const { Client, RequestState } = useApi<StudentImport>({
-        
         url: '/students'
     })
 
     const { Client: ClasseClient, datas: classes, RequestState: ClasseRs } = useApi<Classes>({
-        
         url: '/classes',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRs } = useApi<School>({
-        
         url: '/schools',
         key: 'data'
     })
@@ -52,6 +50,12 @@ export function ImportStudentClass(): ReactNode {
     useEffect(() => {
         SchoolClient.get()
         ClasseClient.get()
+    }, [])
+
+    const {user} = useAuthStore()
+
+    useEffect(() => {
+        if (user?.school) setForbidden(true)
     }, [])
 
     const handleFileChange = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
@@ -124,7 +128,7 @@ export function ImportStudentClass(): ReactNode {
                 </PrimaryLink>
             </PageTitle>
 
-            <Block className="mb-5">
+            {forbidden ? <Forbidden /> : <Block className="mb-5">
                 <Modal title="Consignes" isOpen={isOpen} onClose={() => setIsOpen(false)}>
                     <p className='text-justify'>Les colonnes dans le fichier Excel a importer doit avoir le même ordre que celui du tableau en dessous. En utilisant les nomenclatures suivante: 
                         <ul>
@@ -256,7 +260,7 @@ export function ImportStudentClass(): ReactNode {
                     icon="save"
                     onClick={save}
                 >Enregistrer</PrimaryButton>}
-            </Block>
+            </Block>}
         </>
     )
 }

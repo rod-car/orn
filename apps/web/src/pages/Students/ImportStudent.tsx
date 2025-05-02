@@ -1,15 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Block, Input, PageTitle, PrimaryButton, Spinner } from 'ui'
-import { useApi, useExcelReader } from 'hooks'
-import { ChangeEvent, ReactNode, useCallback, useState } from 'react'
+import { useApi, useAuthStore, useExcelReader } from 'hooks'
+import { ChangeEvent, ReactNode, useCallback, useEffect, useState } from 'react'
 import { PrimaryLink, ScholarYearSelectorServer } from '@base/components'
 import { config } from '@base/config'
 import { isDate } from 'functions'
 import { toast } from 'react-toastify'
 import { Col, Modal, Row } from '@base/components/Bootstrap';
+import { Forbidden } from '../Errors/Forbidden.tsx'
 
 export function ImportStudent(): ReactNode {
     const [isOpen, setIsOpen] = useState(false)
+    const [forbidden, setForbidden] = useState(false)
     const [scholarYear, setScholarYear] = useState<string|number>(0)
     const { json, importing, toJSON, resetJSON } = useExcelReader()
     const { Client, RequestState } = useApi<StudentImport>({
@@ -52,6 +54,12 @@ export function ImportStudent(): ReactNode {
         }
     }, [json])
 
+    const {user} = useAuthStore()
+
+    useEffect(() => {
+        if (user?.school) setForbidden(true)
+    }, [])
+
     return (
         <>
             <PageTitle title="Importer une liste des étudiants">
@@ -60,7 +68,7 @@ export function ImportStudent(): ReactNode {
                 </PrimaryLink>
             </PageTitle>
 
-            <Block className="mb-5">
+            {forbidden ? <Forbidden /> : <Block className="mb-5">
                 <Modal title="Consignes" isOpen={isOpen} onClose={() => setIsOpen(false)}>
                     <p className='text-justify'>Les colonnes dans le fichier Excel a importer doit avoir le même ordre que celui du tableau en dessous. En utilisant les nomenclatures suivante: 
                         <ul>
@@ -159,7 +167,7 @@ export function ImportStudent(): ReactNode {
                     icon="save"
                     onClick={save}
                 >Enregistrer</PrimaryButton>}
-            </Block>
+            </Block>}
         </>
     )
 }

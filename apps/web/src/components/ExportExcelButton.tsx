@@ -8,10 +8,11 @@ type ExcelExportButtonProps = PropsWithChildren & {
     elements: {label: string, params: Record<string, unknown>}[];
     loading?: boolean;
     can?: boolean;
+    className?: string;
 }
 
 export function ExcelExportButton(
-    {ExportClient, url, requestData, elements, loading, children, can = true}: ExcelExportButtonProps
+    {ExportClient, url, requestData, elements, loading, children, can = true, className = ''}: ExcelExportButtonProps
 ): ReactNode {
     async function exportExcel(params: Record<string, unknown>) {
         const response = await ExportClient.post({...requestData, ...params}, url)
@@ -26,7 +27,7 @@ export function ExcelExportButton(
             <button
                 style={{ fontSize: 'small' }}
                 disabled={loading}
-                className="btn btn-warning dropdown-toggle d-flex align-items-center shadow p-2"
+                className={`${className} btn btn-warning dropdown-toggle d-flex align-items-center shadow px-2`}
                 type="button"
                 id="printDropdown"
                 data-bs-toggle="dropdown"

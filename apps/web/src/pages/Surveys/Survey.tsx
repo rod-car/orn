@@ -60,7 +60,7 @@ export function Survey(): ReactNode {
         })
     }, [])
 
-    const { isAdmin } = useAuthStore()
+    const { isAdmin, user } = useAuthStore()
 
     return (
         <>
@@ -72,7 +72,7 @@ export function Survey(): ReactNode {
                         onClick={getDatas}
                         loading={RequestState.loading}
                     >Recharger</SecondaryButton>
-                    <PrimaryLink can={isAdmin} icon="plus-lg" to="/anthropo-measure/survey/add" className="me-2">
+                    <PrimaryLink can={isAdmin && !user?.school} icon="plus-lg" to="/anthropo-measure/survey/add" className="me-2">
                         Nouvelle mésure
                     </PrimaryLink>
                     <InfoLink can={isAdmin} icon="plus-lg" to="/anthropo-measure/survey/add-student">
@@ -109,8 +109,8 @@ export function Survey(): ReactNode {
                                     <td>{survey.scholar_year}</td>
                                     <td>
                                         <DetailLink to={`/anthropo-measure/survey/details/${survey.id}`} />
-                                        <EditLink can={isAdmin} to={`/anthropo-measure/survey/edit/${survey.id}`} />
-                                        <DangerButton can={isAdmin} icon="trash" size="sm" onClick={() => handleDelete(survey.id) }/>
+                                        <EditLink can={(isAdmin && !user?.school)} to={`/anthropo-measure/survey/edit/${survey.id}`} />
+                                        <DangerButton can={isAdmin && !user?.school} icon="trash" size="sm" onClick={() => handleDelete(survey.id) }/>
                                     </td>
                                 </tr>
                             ))}

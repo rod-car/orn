@@ -8,7 +8,7 @@ export function Footer() {
                     <div className="footer-widget mb-60 wow fadeInLeft" data-wow-delay=".2s">
                         <Link href="/" className="logo mb-30">
                             <img style={{ width: 50, height: "auto" }} src="/img/logo/logo.png" alt="logo" />
-                            <span className="font-weight-bold ml-3 font-size-xl">ORN Atsinanana</span>
+                            <span className="font-weight-bold ml-3 font-size-xl">Cantine scolaire</span>
                         </Link>
                         <p className="mb-30 footer-desc text-justify">La nutrition, garant du développement social et économique pour Madagascar.</p>
                     </div>
@@ -25,7 +25,7 @@ export function Footer() {
                                 <Link href="/a-propos">À propos</Link>
                             </li>
                             <li>
-                                <Link href="/activites">Activites</Link>
+                                <Link href="/activites">Activités</Link>
                             </li>
                             <li>
                                 <Link href="/projets">Projets</Link>

@@ -5,7 +5,7 @@ type AuthUser = User & {is_admin: boolean, is_super_user: boolean, is_visitor: b
 
 interface AuthStore {
     isLoggedIn: boolean;
-    user: { username: string, name: string, email: string, role: string } | null,
+    user: { username: string, name: string, email: string, role: string, school: School | null } | null,
     isAdmin: boolean;
     isSuperuser: boolean;
     isVisitor: boolean;
@@ -15,7 +15,7 @@ interface AuthStore {
     register: (Client: unknown, data: Record<string, unknown>) => Promise<any>;
     logout: (Client: unknown) => Promise<any>;
     resetUser: () => void;
-    updateUser: (data: { username: string, name: string, email: string, role: string }) => void;
+    updateUser: (data: { username: string, name: string, email: string, role: string, school: School | null }) => void;
 }
 
 const defaultState = { isLoggedIn: false, user: null, token: null, isAdmin: false, isSuperuser: false, isVisitor: false }
@@ -36,6 +36,7 @@ export const useAuthStore = create(
 
                 if (response.ok) {
                     const user: AuthUser = response.data.user
+
                     if (user) set(getStoredUser(user, response.data.token))
                     return response
                 } else {
@@ -82,6 +83,7 @@ function getStoredUser(user: AuthUser, token: string) {
             username: user!.username,
             email: user!.email,
             name: user!.name,
+            school: user!.school,
             role: user?.is_super_user ? "SAdmin" : (user?.is_admin ? "Admin" : "Invité")
         },
         isVisitor: user?.is_visitor === true,

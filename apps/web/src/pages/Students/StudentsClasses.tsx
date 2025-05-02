@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { toast } from 'react-toastify'
 import { class_categories, config } from '@base/config'
-import { Block, Button, Checkbox, DangerButton, PageTitle, Select } from 'ui'
+import { Block, Button, Checkbox, DangerButton, Input, PageTitle, Select } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
 import { format, in_array } from 'functions'
 import { ChangeEvent, FormEvent, ReactNode, useCallback, useEffect, useState } from 'react'
@@ -21,30 +21,29 @@ export function StudentsClasses(): ReactNode {
     const [studentsClasses, setStudentsClasses] = useState<number[]>([])
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
-        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassesClient, datas: classes, RequestState: ClassesRequestState } = useApi<Classes>({
-        
         url: '/classes',
         key: 'data'
     })
 
     const { Client: StudentClient, datas: students, setDatas: setStudents, RequestState: StudentRequestState } = useApi<Student>({
-        
         url: '/students',
         key: 'data'
     })
 
     const { Client: NextStudentClient } = useApi<Student>({
-        
         url: '/students',
         key: 'data'
     })
 
+    const {user} = useAuthStore()
+
     useEffect(() => {
+        if (user?.school) setSchoolId(user.school.id)
         SchoolClient.get()
         ClassesClient.get()
     }, [])
@@ -211,12 +210,12 @@ export function StudentsClasses(): ReactNode {
                 <form onSubmit={handleSubmit} action="" method="post">
                     <div className="row mb-3">
                         <div className="col-12">
-                            <SchoolSelector
+                        {user?.school ? <Input label='Établissement' auto disabled defaultValue={user.school.name} /> : <SchoolSelector
                                 datas={schools}
                                 schoolId={schoolId}
                                 loading={SchoolRequestState.loading}
                                 setSchoolId={setSchoolId}
-                            />
+                            />}
                         </div>
                     </div>
 

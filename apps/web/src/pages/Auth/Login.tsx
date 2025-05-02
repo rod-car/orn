@@ -13,7 +13,6 @@ export function Login(): ReactNode {
     const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
     const [errors, setErrors] = useState<{ username: string[]; password: string[] }>()
-    const navigate = useNavigate()
 
     const { login } = useAuthStore()
     const { Client } = useApi<User>({ url: '/auth' })
@@ -37,7 +36,6 @@ export function Login(): ReactNode {
                 type: 'success',
                 position: config.toastPosition
             })
-            navigate('/')
         } else {
             setErrors(response.data.errors)
             toast("Données du formulaire invalide", {

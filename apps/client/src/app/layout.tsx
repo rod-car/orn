@@ -21,10 +21,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "ORN Atsinanana",
-    description: "Site officiel de l'Office Regional de Nutrition Atsinanana",
-    abstract: "Site officiel de l'Office Regional de Nutrition Atsinanana",
-    keywords: "Nutrition, Malnutrition, Atsinanana"
+    title: "Cantine scolaire - ORN Atsinanana",
+    description: "Site officiel du projet cantine scolaire dans la region atsinanana en partenatiat avec Ambatovy",
+    abstract: "Site officiel du projet cantine scolaire dans la region atsinanana en partenatiat avec Ambatovy",
+    keywords: "Nutrition, Malnutrition, Atsinanana, Cantine scolaire"
 };
 
 export default function RootLayout({ children }: Readonly<{

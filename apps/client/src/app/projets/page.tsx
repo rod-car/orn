@@ -20,9 +20,7 @@ export default async function Projets() {
             next: {revalidate: 1}
         })
         activities = await data.json()
-        console.log("Connected to server")
     } catch (e) {
-        console.log("Server error " + JSON.stringify(e))
     }*/
 
     return <section id="activites" className="main-section">

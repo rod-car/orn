@@ -55,17 +55,17 @@ export function FoodList(): ReactNode {
         })
     }, [])
 
-    const { isAdmin } = useAuthStore()
+    const { isAdmin, user } = useAuthStore()
 
     return (
         <>
-            <PageTitle title="Liste des aliments">
+            <PageTitle title="Liste des collations">
                 <div className="d-flex justify-content-between">
                     <SecondaryButton icon="arrow-clockwise" className="me-2" onClick={getDatas} loading={RequestState.loading}>
                         Recharger
                     </SecondaryButton>
-                    <PrimaryLink can={isAdmin}  icon="plus-lg" to="/cantine/foods/add">
-                        Nouveau aliment
+                    <PrimaryLink can={isAdmin && !user?.school}  icon="plus-lg" to="/cantine/foods/add">
+                        Nouveau
                     </PrimaryLink>
                 </div>
             </PageTitle>
@@ -97,8 +97,8 @@ export function FoodList(): ReactNode {
                                     <td>{food.label}</td>
                                     <td>{food.unit}</td>
                                     <td>
-                                        <EditLink can={isAdmin} to={`/cantine/foods/edit/${food.id}`} />
-                                        <DangerButton can={isAdmin} icon="trash" size="sm" onClick={() => handleDelete(food.id) }/>
+                                        <EditLink can={isAdmin && !user?.school} to={`/cantine/foods/edit/${food.id}`} />
+                                        <DangerButton can={isAdmin && !user?.school} icon="trash" size="sm" onClick={() => handleDelete(food.id) }/>
                                     </td>
                                 </tr>
                             ))

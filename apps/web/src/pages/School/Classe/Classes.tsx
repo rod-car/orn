@@ -59,7 +59,7 @@ export function Classes(): ReactNode {
         getData()
     }, [])
 
-    const { isAdmin } = useAuthStore()
+    const { isAdmin, user } = useAuthStore()
 
     return (
         <>
@@ -71,7 +71,7 @@ export function Classes(): ReactNode {
                         className="me-2"
                         loading={RequestState.loading}
                     >Recharger</SecondaryButton>
-                    <PrimaryLink can={isAdmin} to="/anthropo-measure/school/classes/add" icon="plus-lg">Nouvelle classe</PrimaryLink>
+                    <PrimaryLink can={isAdmin && !user?.school} to="/anthropo-measure/school/classes/add" icon="plus-lg">Nouvelle classe</PrimaryLink>
                 </div>
             </PageTitle>
 
@@ -104,8 +104,8 @@ export function Classes(): ReactNode {
                                     <td>{classes.level?.label ?? 'N/A'}</td>
                                     <td>{classes.notation}</td>
                                     <td>
-                                        <EditLink can={isAdmin} to={`/anthropo-measure/school/classes/edit/${classes.id}`} />
-                                        <Button can={isAdmin}
+                                        <EditLink can={isAdmin && !user?.school} to={`/anthropo-measure/school/classes/edit/${classes.id}`} />
+                                        <Button can={isAdmin && !user?.school}
                                             mode="danger"
                                             icon="trash"
                                             size="sm"

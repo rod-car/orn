@@ -121,6 +121,9 @@ type User = {
     password: string
     password_confirmation: string
     created_at: string;
+    school: School | null;
+    school_id?: number
+    is_valid: number;
 }
 
 type Survey = {
@@ -139,6 +142,7 @@ type Activity = {
     date: string
     place: string
     details: string
+    service_id: number;
     images?: {path: string, id: number}[]
     files: File[] | null
 }

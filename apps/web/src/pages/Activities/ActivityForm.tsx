@@ -1,5 +1,5 @@
-import { ChangeEvent, FormEvent, ReactNode, useState } from 'react'
-import { DangerButton, Input, PrimaryButton } from 'ui'
+import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from 'react'
+import { DangerButton, Input, PrimaryButton, Select } from 'ui'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
@@ -21,6 +21,7 @@ const defaultActivity: Activity = {
     date: '',
     place: '',
     details: '',
+    service_id: 0,
     files: null
 }
 
@@ -28,8 +29,14 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
     const [activity, setActivity] = useState(defaultActivity)
     const [details, setDetails] = useState("")
     const [optimizing, setOptimizing] = useState(false)
+
     const { Client, error, RequestState } = useApi<Activity>({
         url: '/activities',
+        key: 'data'
+    })
+
+    const { Client: ServiceClient, datas: services, RequestState: ServiceRequestState } = useApi<{id: string, title: string, description: string}>({
+        url: '/services',
         key: 'data'
     })
 
@@ -39,7 +46,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
         for (let i = 0; i < files.length; i++) {
             const resizedImage = await browserResizer(files[i]);
             resizedImages.push(resizedImage);
-            toast(`Image ${i + 1} optimisée`, { position: config.toastPosition, type: 'success' })
+            // toast(`Image ${i + 1} optimisée`, { position: config.toastPosition, type: 'success' })
         }
 
         return resizedImages as File[]
@@ -54,20 +61,19 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
             }
         }
 
-        toast("Optimisation des images en cours", {
-            type: "info",
-            position: config.toastPosition
-        })
-
-        setOptimizing(true)
-
         let optimizedImages = activity.files
 
         if (activity.files) {
+            toast("Optimisation des images en cours", {
+                type: "info",
+                position: config.toastPosition
+            })
+
+            setOptimizing(true)
             optimizedImages = await compressFiles(activity.files)
+            setOptimizing(false)
         }
 
-        setOptimizing(false)
         toast(`Enregistrement des donnees`, { position: config.toastPosition, type: 'info' })
 
         const response = editedActivity
@@ -115,12 +121,10 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
     const browserResizer = async (file: File) => {
         try {
             const compressedFile = await imageCompression(file, options);
-            console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-            console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
 
             return compressedFile
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 
@@ -135,6 +139,10 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
         setActivity({ ...activity, images: imgs })
     }
 
+    useEffect(() => {
+        ServiceClient.get()
+    }, [])
+
     return (
         <form onSubmit={handleSubmit} method="post">
             <div className="row mb-3">
@@ -148,7 +156,8 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
                         name="title"
                     />
                 </div>
-                <div className="col-xl-6">
+
+                <div className="col-xl-3">
                     <Input
                         label="Lieu"
                         placeholder="Ex: EPP Romialo"
@@ -156,6 +165,21 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
                         error={error?.data?.errors?.place}
                         onChange={handleChange}
                         name="place"
+                    />
+                </div>
+
+                <div className="col-xl-3">
+                    <Select
+                        options={services}
+                        config={{optionKey: 'id', valueKey: 'title'}}
+                        value={activity.service_id}
+                        onChange={handleChange}
+                        label="Catégorie"
+                        name="service_id"
+                        placeholder="Aucune"
+                        loading={ServiceRequestState.loading}
+                        required={false}
+                        controlled
                     />
                 </div>
             </div>

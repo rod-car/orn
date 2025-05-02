@@ -24,7 +24,6 @@ export default async function Page({ params }: {
         })
         activity = await data.json()
     } catch (e) {
-        console.log("Server error " + JSON.stringify(e))
         notFound()
     }
 

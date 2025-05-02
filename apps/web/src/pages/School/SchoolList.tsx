@@ -13,7 +13,7 @@ export function SchoolList(): ReactNode {
         key: 'data'
     })
 
-    const { isAdmin } = useAuthStore()
+    const { isAdmin, user } = useAuthStore()
 
     const getSchools = async () => {
         await Client.get()
@@ -69,7 +69,7 @@ export function SchoolList(): ReactNode {
             <PageTitle title={`Liste des établissement ${schools.length > 0 ? '('+ schools.length +' école(s))' : ''}`}>
                 <div className="d-flex">
                     <SecondaryButton onClick={getSchools} className="me-2" icon="arrow-clockwise" loading={RequestState.loading}>Rechargher</SecondaryButton>
-                    <Link can={isAdmin} to="/anthropo-measure/school/add" className="btn primary-link">
+                    <Link can={isAdmin && !user?.school} to="/anthropo-measure/school/add" className="btn primary-link">
                         <i className="bi bi-plus-lg me-2"></i>Nouveau
                     </Link>
                 </div>
@@ -117,8 +117,8 @@ export function SchoolList(): ReactNode {
                                     <td>{school.responsable}</td>
                                     <td>
                                         <DetailLink to={`/anthropo-measure/school/details/${school.id}`} />
-                                        <EditLink can={isAdmin} to={`/anthropo-measure/school/edit/${school.id}`} />
-                                        <Button can={isAdmin}
+                                        <EditLink can={isAdmin && !user?.school} to={`/anthropo-measure/school/edit/${school.id}`} />
+                                        <Button can={isAdmin && !user?.school}
                                             mode="danger"
                                             icon="trash"
                                             size="sm"

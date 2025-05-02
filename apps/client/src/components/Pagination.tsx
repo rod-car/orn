@@ -1,8 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import "./Pagination.css"
-import { useState } from 'react';
 
 interface PaginationProps {
     hasNextPage: boolean;
@@ -20,9 +19,10 @@ export const Pagination = ({
     totalPages
 }: PaginationProps) => {
     const router = useRouter();
+    const pathName = usePathname()
 
     const handlePageChange = (newPage: number) => {
-        router.push(`/activites?page=${newPage}&perPage=${perPage}`, {
+        router.push(`${pathName}?page=${newPage}&perPage=${perPage}`, {
             scroll: true
         });
     };
@@ -34,7 +34,7 @@ export const Pagination = ({
                 disabled={!hasPrevPage}
                 onClick={() => handlePageChange(currentPage - 1)}
             >
-                Page precedente
+                Precedent
             </button>
 
             {Array.from({ length: Math.ceil(totalPages / perPage) }, (_, index) => {
@@ -56,7 +56,7 @@ export const Pagination = ({
                 disabled={!hasNextPage}
                 onClick={() => handlePageChange(currentPage + 1)}
             >
-                Page suivante
+                Suivant
             </button>
         </div>}
     </>
