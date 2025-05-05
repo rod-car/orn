@@ -70,9 +70,9 @@ export function AddSurveyStudent(): ReactNode {
     const { user } = useAuthStore()
 
     useEffect(() => {
-        if (user?.school) setFormData({...formData, school_id: user.school.id})
+        if (user?.school) setFormData({ ...formData, school_id: user.school.id })
         SurveyListClient.get()
-        ClassClient.get({need_student: false})
+        ClassClient.get({ need_student: false })
         SchoolClient.get()
     }, [])
 
@@ -80,9 +80,9 @@ export function AddSurveyStudent(): ReactNode {
         if (target.name.includes('students') && index !== undefined) {
             const nameParts = target.name.split('.')
             formData.students[index][nameParts[1]] = target.value
-            setFormData({...formData})
+            setFormData({ ...formData })
         } else {
-            setFormData({...formData, [target.name]: target.value})
+            setFormData({ ...formData, [target.name]: target.value })
         }
     }
 
@@ -121,7 +121,7 @@ export function AddSurveyStudent(): ReactNode {
                     type: "success"
                 })
                 formData.students[index].saved = true
-                setFormData({...formData})
+                setFormData({ ...formData })
             } else {
                 toast("Erreur d'enregistrement", {
                     position: config.toastPosition,
@@ -137,7 +137,6 @@ export function AddSurveyStudent(): ReactNode {
     }
 
     async function removeData(index: number) {
-        // Check if can update in the database
         const selectedStudent = formData.students[index]
         const height = selectedStudent.height
         const weight = selectedStudent.weight
@@ -169,7 +168,7 @@ export function AddSurveyStudent(): ReactNode {
             formData.students[index].saved = false
             formData.students[index].weight = 0
             formData.students[index].height = 0
-            setFormData({...formData})
+            setFormData({ ...formData })
         }
     }
 
@@ -182,78 +181,50 @@ export function AddSurveyStudent(): ReactNode {
     }
 
     async function getStudents() {
-        if (isValid(formData))
-        {
-            let measuredStudents: Student[] = []
-            let precedentMeasuredStudents: Student[] = []
-
+        if (isValid(formData)) {
             const selectedSurvey = await SurveyClient.find(surveyId, {
                 paginate_student: 0,
-            })
+            }) as Survey
 
-            let precedentSurveyId: number | null = null;
+            const measuredStudents: Student[] = selectedSurvey.students;
+            formData.date = measuredStudents?.at(0)?.pivot?.date ?? formData.date;
 
-            for (let index = surveyId; index > 1; index--) {
-                precedentSurveyId = index - 1
-                // if (precedentSurveyId === 1) { // Need verification (It must not be 1 Forcely)
-                const precedentSurvey = await SurveyClient.find(precedentSurveyId, {
-                    paginate_student: 0
-                })
+            const students = await StudentClient.get({
+                paginate: false,
+                school_id: formData.school_id,
+                classe_id: formData.class_id,
+                category: formData.category,
+                scholar_year: selectedSurvey.scholar_year
+            });
 
-                if (precedentSurvey !== undefined && precedentSurvey !== null) {
-                    precedentMeasuredStudents = precedentSurvey?.students as Student[]
-                    break
-                }
-                //}
-            }
+            if (students && students.length > 0) {
+                const studentDatas: StudentData[] = students.map((studentClass) => {
+                    const foundStudent = measuredStudents.find(student => student.id === studentClass.student.id);
+                    const fullName = `${studentClass.student.firstname} ${studentClass.student.lastname ?? ''}`.trim();
 
-            if (selectedSurvey) {
-                measuredStudents = selectedSurvey.students;
-                formData.date = measuredStudents?.at(0)?.pivot?.date ?? formData.date
+                    return {
+                        fullname: fullName,
+                        birth_date: studentClass.student.birth_date,
+                        height: foundStudent?.pivot?.length ?? 0,
+                        student_id: studentClass.student_id,
+                        precedentHeight: foundStudent?.precedent_height ?? null,
+                        precedentWeight: foundStudent?.precedent_weight ?? null,
+                        weight: foundStudent?.pivot?.weight ?? 0,
+                        saved: !!foundStudent,
+                    };
+                });
 
-                const students = await StudentClient.get({
-                    paginate: false,
-                    school_id: formData.school_id,
-                    classe_id: formData.class_id,
-                    category: formData.category,
-                    scholar_year: selectedSurvey.scholar_year
-                })
-
-                if (students && students.length > 0) {
-                    const studentDatas: StudentData[] = []
-
-                    students.map((studentClass) => {
-                        const foundStudent = measuredStudents.find(student => student.id === studentClass.student.id)
-                        const precedentStudent = precedentMeasuredStudents.find(student => student.id === studentClass.student.id)
-
-                        const firstName = studentClass.student.firstname
-                        const lastName = studentClass.student.lastname
-                        const fullName = firstName + " " + (lastName === null ? '' : lastName)
-                        const precedentHeight = precedentStudent ? precedentStudent.pivot.length : null
-                        const precedentWeight = precedentStudent ? precedentStudent.pivot.weight : null
-
-                        precedentStudent ?? setPrecedentPhase(precedentSurveyId)
-
-                        studentDatas.push({
-                            fullname: fullName,
-                            birth_date: studentClass.student.birth_date,
-                            height: foundStudent ? foundStudent.pivot.length ?? 0 : 0,
-                            student_id: studentClass.student_id,
-                            precedentHeight: precedentHeight,
-                            precedentWeight: precedentWeight,
-                            weight: foundStudent ? foundStudent.pivot.weight ?? 0 : 0,
-                            saved: foundStudent ? true : false
-                        })
-                    })
-                    setFormData({...formData, scholar_year: selectedSurvey.scholar_year, students: studentDatas})
-                } else {
-                    setFormData({...formData, scholar_year: selectedSurvey.scholar_year, students: []})
-                }
+                setFormData({
+                    ...formData,
+                    scholar_year: selectedSurvey.scholar_year,
+                    students: studentDatas
+                });
             } else {
-                toast("Une erreur s'est produite", {
-                    position: config.toastPosition,
-                    type: "error"
-                })
+                setFormData({
+                    ...formData,
+                    scholar_year: selectedSurvey.scholar_year,
+                    students: []
+                });
             }
 
         } else {
@@ -276,13 +247,13 @@ export function AddSurveyStudent(): ReactNode {
                 <form action="" method="post">
                     <div className="row mb-4">
                         <div className="col-6 mb-3">
-                        {user?.school ? <Input label='Établissement' auto disabled defaultValue={user.school.name} /> : <Select
+                            {user?.school ? <Input label='Établissement' auto disabled defaultValue={user.school.name} /> : <Select
                                 label='Etablissement'
                                 options={schools}
                                 config={{ optionKey: 'id', valueKey: 'name' }}
                                 loading={SchoolRS.loading}
                                 placeholder="Selectionner un école"
-                                onChange={({target}) => handleChange(target)}
+                                onChange={({ target }) => handleChange(target)}
                                 name='school_id'
                                 value={formData.school_id}
                                 controlled />}
@@ -294,7 +265,7 @@ export function AddSurveyStudent(): ReactNode {
                                 config={{ optionKey: 'id', valueKey: 'name' }}
                                 loading={ClassRS.loading}
                                 placeholder="Selectionner une classe"
-                                onChange={({target}) => handleChange(target)}
+                                onChange={({ target }) => handleChange(target)}
                                 name='class_id'
                                 value={formData.class_id}
                                 controlled />
@@ -305,7 +276,7 @@ export function AddSurveyStudent(): ReactNode {
                                 name="category"
                                 value={formData.category}
                                 options={class_categories}
-                                onChange={({target}) => handleChange(target)}
+                                onChange={({ target }) => handleChange(target)}
                                 required={false}
                                 controlled
                             />
@@ -323,7 +294,7 @@ export function AddSurveyStudent(): ReactNode {
                             <Input
                                 type="date"
                                 label='Date de pesée'
-                                onChange={({target}) => handleChange(target)}
+                                onChange={({ target }) => handleChange(target)}
                                 name='date'
                                 value={formData.date} />
                         </div>
@@ -342,8 +313,8 @@ export function AddSurveyStudent(): ReactNode {
                             <th>N°</th>
                             <th className='text-nowrap'>Nom et prénoms</th>
                             <th className='text-nowrap'>Date de naissance</th>
-                            <th className='text-nowrap'>Taille Prec {precedentPhase !== null ? `(${precedentPhase})` : ''}</th>
-                            <th className='text-nowrap'>Poids Prec {precedentPhase !== null ? `(${precedentPhase})` : ''}</th>
+                            <th className='text-nowrap'>Taille Prec</th>
+                            <th className='text-nowrap'>Poids Prec</th>
                             <th>Taille</th>
                             <th>Poids</th>
                             <th>Actions</th>
@@ -359,10 +330,10 @@ export function AddSurveyStudent(): ReactNode {
                             <td>{student.precedentHeight ? `${student.precedentHeight} Cm` : '-'}</td>
                             <td>{student.precedentWeight ? `${student.precedentWeight} Kg` : '-'}</td>
                             <td>
-                                <Input onChange={({target}) => handleChange(target, index)} name="students.height" type='number' placeholder='Taille' value={student.height} />
+                                <Input onChange={({ target }) => handleChange(target, index)} name="students.height" type='number' placeholder='Taille' value={student.height} />
                             </td>
                             <td>
-                                <Input onChange={({target}) => handleChange(target, index)} name="students.weight" type='number' placeholder='Poids' value={student.weight} />
+                                <Input onChange={({ target }) => handleChange(target, index)} name="students.weight" type='number' placeholder='Poids' value={student.weight} />
                             </td>
                             <td className="d-flex justify-content-center align-items-center h-full">
                                 <Button onClick={() => saveData(index)} icon="save" mode="primary" size="sm" className="me-2" />

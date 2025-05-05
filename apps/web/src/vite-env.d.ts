@@ -46,6 +46,8 @@ type MeasureLength = {
 }
 
 type Student = {
+    student: any;
+    student_id: any;
     id: number
     number: number
     lastname: string

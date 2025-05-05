@@ -31,7 +31,7 @@ export function Stock(): ReactNode {
             food_id: collation,
             scholar_year: scholarYear
         }
-    }, [school, collation, scholarYear])
+    }, [])
 
     const { user } = useAuthStore()
 
@@ -68,14 +68,14 @@ export function Stock(): ReactNode {
         }
 
         setCollation(value)
-    }, [foods])
+    }, [])
 
     const changeSchool = useCallback(({ target }: ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(target.value, 10)
         requestParams.school_id = value
         setSchool(value)
         getStocks()
-    }, [schools])
+    }, [])
 
     const changeScholarYear = useCallback(({ target }: ChangeEvent<HTMLSelectElement>) => {
         const value = target.value

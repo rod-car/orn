@@ -138,6 +138,7 @@ export function StockIn(): ReactNode {
                                 value={label}
                                 onChange={({ target }) => setLabel(target.value, 10)}
                                 controlled
+                                required={false}
                             />
                         </Col>
 
