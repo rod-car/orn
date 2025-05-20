@@ -14,7 +14,9 @@ export function ActivityHome(): ReactNode {
     const getActivities = async () => {
         await Client.get({
             imagesCount: 4,
-            take: 5
+            take: 5,
+            orderField: 'date',
+            orderDirection: 'desc'
         })
     }
 

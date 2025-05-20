@@ -100,7 +100,7 @@ export function StockIn(): ReactNode {
     return (
         <>
             <PageTitle title="Entree en stock">
-                <PrimaryLink icon="list" to="/cantine/stock/list">
+                <PrimaryLink icon="list" to="/cantine/stocks/recap">
                     Fiche de stock
                 </PrimaryLink>
             </PageTitle>

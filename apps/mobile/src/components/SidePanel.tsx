@@ -18,9 +18,9 @@ export function SidePanel(): ReactNode {
                     <NavItem icon="list" active={pathname === "/cantine/consommation/list"} to="/cantine/consommation/list" label="Historique des consommations" />
 
                     <GroupSeparator title="Gestion de stock" />
-                    <NavItem icon="arrow-right" active={pathname === "/cantine/stock/in"} to="/cantine/stock/in" label="Entree en stock" />
-                    <NavItem icon="arrow-left" active={pathname === "/cantine/stock/out"} to="/cantine/stock/out" label="Sortie de stock" />
-                    <NavItem icon="file" active={pathname === "/cantine/stock/list"} to="/cantine/stock/list" label="Fiche de stock" />
+                    <NavItem icon="arrow-right" active={pathname === "/cantine/stocks/in"} to="/cantine/stocks/in" label="Entree en stock" />
+                    <NavItem icon="arrow-left" active={pathname === "/cantine/stocks/out"} to="/cantine/stocks/out" label="Sortie de stock" />
+                    <NavItem icon="file" active={pathname === "/cantine/stocks/recap"} to="/cantine/stocks/recap" label="Fiche de stock" />
 
                     <GroupSeparator title="Divers" />
                     <DropDown label="Outils" base="/tools" icon="tools" menus={[

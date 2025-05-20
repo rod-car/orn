@@ -147,6 +147,11 @@ type Activity = {
     service_id: number;
     images?: {path: string, id: number}[]
     files: File[] | null
+    is_valid: boolean;
+    validator: User | null,
+    creator: User | null,
+    editable: boolean
+    deletable: boolean
 }
 
 type Unit = {

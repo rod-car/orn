@@ -94,6 +94,31 @@ export default async function Home() {
             </div>
         </section>
 
+        <section id="activites" className="main-section" style={{ background: "#eff2f9" }}>
+            <div className="container">
+                <div className="row">
+                    <div className="col-xl-6 col-lg-7 col-md-9 mx-auto">
+                        <div className="section-title text-center mb-55">
+                            <span>Activités</span>
+                            <h2>Les activités récentes</h2>
+                            <p>
+                                Découvrez les initiatives clés récemment mises en œuvre pour promouvoir le bien-être et la nutrition dans la région.
+                            </p>
+                            <Link href="/activites" className="theme-btn">Voir toutes les activités</Link>
+                        </div>
+                    </div>
+                </div>
+
+                {activities.data.length === 0 && <p className="text-center">Aucune donnees</p>}
+
+                {activities.data.map((activity, index: number) => {
+                    return <div className="bg-white shadow p-5 mb-5 rounded-md" key={activity.id}>
+                        <Activity key={activity.id} index={index} activity={activity} />
+                    </div>
+                })}
+            </div>
+        </section>
+
         <section id="missions" className="main-section">
             <div className="container">
                 <div className="row">
@@ -218,31 +243,6 @@ export default async function Home() {
                         {service.description}
                     </ServiceBlock>)}
                 </div>
-            </div>
-        </section>
-
-        <section id="activites" className="main-section" style={{ background: "#eff2f9" }}>
-            <div className="container">
-                <div className="row">
-                    <div className="col-xl-6 col-lg-7 col-md-9 mx-auto">
-                        <div className="section-title text-center mb-55">
-                            <span>Activités</span>
-                            <h2>Les activités récentes</h2>
-                            <p>
-                                Découvrez les initiatives clés récemment mises en œuvre pour promouvoir le bien-être et la nutrition dans la région.
-                            </p>
-                            <Link href="/activites" className="theme-btn">Voir toutes les activités</Link>
-                        </div>
-                    </div>
-                </div>
-
-                {activities.data.length === 0 && <p className="text-center">Aucune donnees</p>}
-
-                {activities.data.map((activity, index: number) => {
-                    return <div className="bg-white shadow p-5 mb-5 rounded-md" key={activity.id}>
-                        <Activity key={activity.id} index={index} activity={activity} />
-                    </div>
-                })}
             </div>
         </section>
 

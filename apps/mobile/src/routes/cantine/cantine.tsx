@@ -41,7 +41,7 @@ export const cantineRoute: RouteObject[] = [
         ]
     },
     {
-        path: 'stock',
+        path: 'stocks',
         children: [
             {
                 path: 'in',
@@ -56,7 +56,7 @@ export const cantineRoute: RouteObject[] = [
                 </PrivateRoute>
             },
             {
-                path: 'list',
+                path: 'recap',
                 element: <PrivateRoute can={['admin']}>
                     <Stock />
                 </PrivateRoute>

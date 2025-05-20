@@ -194,10 +194,13 @@ export function AddSurveyStudent(): ReactNode {
                 school_id: formData.school_id,
                 classe_id: formData.class_id,
                 category: formData.category,
+                survey_id: surveyId,
                 scholar_year: selectedSurvey.scholar_year
             });
 
             if (students && students.length > 0) {
+                console.log(students);
+                
                 const studentDatas: StudentData[] = students.map((studentClass) => {
                     const foundStudent = measuredStudents.find(student => student.id === studentClass.student.id);
                     const fullName = `${studentClass.student.firstname} ${studentClass.student.lastname ?? ''}`.trim();
@@ -207,8 +210,9 @@ export function AddSurveyStudent(): ReactNode {
                         birth_date: studentClass.student.birth_date,
                         height: foundStudent?.pivot?.length ?? 0,
                         student_id: studentClass.student_id,
-                        precedentHeight: foundStudent?.precedent_height ?? null,
-                        precedentWeight: foundStudent?.precedent_weight ?? null,
+                        code: studentClass.student.number,
+                        precedentHeight: studentClass?.precedent_height ?? null,
+                        precedentWeight: studentClass?.precedent_weight ?? null,
                         weight: foundStudent?.pivot?.weight ?? 0,
                         saved: !!foundStudent,
                     };
@@ -281,7 +285,6 @@ export function AddSurveyStudent(): ReactNode {
                                 controlled
                             />
                         </div>
-
                         <div className="col-6 mb-3">
                             <SurveySelector
                                 datas={surveysList}
@@ -324,7 +327,7 @@ export function AddSurveyStudent(): ReactNode {
                     <tbody>
                         {(SurveyRequestState.loading || StudentRequestState.loading) && <tr><td className="text-center" colSpan={9}>Chargement</td></tr>}
                         {formData.students && formData.students.map((student, index) => <tr key={index} className='align-middle'>
-                            <td>{student.student_id}</td>
+                            <td>{student.code}</td>
                             <td>{student.fullname}</td>
                             <td>{student.birth_date}</td>
                             <td>{student.precedentHeight ? `${student.precedentHeight} Cm` : '-'}</td>

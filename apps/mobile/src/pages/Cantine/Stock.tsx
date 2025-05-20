@@ -3,7 +3,7 @@ import { format, scholar_years } from 'functions';
 import { useApi, useAuthStore } from 'hooks'
 import { Col } from '@base/components/Bootstrap'
 import { Block, Input, PageTitle, PrimaryButton, Select, Spinner } from 'ui'
-import { ChangeEvent, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, ReactNode, SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
 
 export function Stock(): ReactNode {
     const [school, setSchool] = useState<number | undefined>();
@@ -53,40 +53,65 @@ export function Stock(): ReactNode {
         getStocks()
     }
 
-    const getStocks = useCallback(async () => {
+    const getStocks = async () => {
         await StockClient.get(requestParams)
-    }, [])
+    }
 
-    const changeCollation = useCallback(({ target }: ChangeEvent<HTMLSelectElement>) => {
+    const changeCollation = ({ target }: ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(target.value, 10)
-        const selectedCollaction = foods.filter(food => food.id === value).at(0)
-        if (selectedCollaction) {
-            requestParams.food_id = selectedCollaction.id
-            setUnit(selectedCollaction.unit)
+        const selectedCollaction = foods.find(food => food.id === value)
 
-            getStocks()
-        }
+        if (selectedCollaction) setUnit(selectedCollaction.unit)
 
+        requestParams.food_id = value
+        getStocks()
         setCollation(value)
-    }, [])
+    }
 
-    const changeSchool = useCallback(({ target }: ChangeEvent<HTMLSelectElement>) => {
+    const changeSchool = ({ target }: ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(target.value, 10)
         requestParams.school_id = value
         setSchool(value)
         getStocks()
-    }, [])
+    }
 
-    const changeScholarYear = useCallback(({ target }: ChangeEvent<HTMLSelectElement>) => {
+    const changeScholarYear = ({ target }: ChangeEvent<HTMLSelectElement>) => {
         const value = target.value
         requestParams.scholar_year = value
         setScholarYear(value)
         getStocks()
-    }, [])
+    }
 
     useEffect(() => {
         getDatas()
     }, [])
+
+    const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
+    const [selectedItem, setSelectedItem] = useState(null);
+    const menuRef = useRef(null);
+    const parentRef = useRef(null);
+
+    const showOption = (event: MouseEvent, movement: SetStateAction<null>) => {
+        event.preventDefault();
+        setSelectedItem(movement)
+        const parentRect = (parentRef?.current as unknown as HTMLDivElement).getBoundingClientRect();
+
+        setContextMenu({
+            visible: true,
+            x: event.clientX - parentRect.left,
+            y: event.clientY - parentRect.top,
+        });
+    }
+
+    const handleDelete = async () => {
+        const response = await StockClient.destroy(selectedItem?.id)
+
+        if (response) {
+            setContextMenu({...contextMenu, visible: false})
+            setSelectedItem(null)
+            getStocks()
+        }
+    }
 
     return (
         <>
@@ -142,36 +167,62 @@ export function Stock(): ReactNode {
                             <PrimaryButton size='sm' icon='printer'>Imprimer</PrimaryButton>
                         </div>
                         <div className="card-body p-0">
-                            <table className="table table-bordered table-striped m-0">
-                                <thead className="table-primary">
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Mouvement</th>
-                                        <th>Libelle</th>
-                                        <th className='text-end'>Quantité ({unit})</th>
-                                        <th className='text-end'>Stock actuel ({unit})</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className="table-info">
-                                        <td colSpan={4}><strong>Stock initial</strong></td>
-                                        <td className='text-end'><strong>{stockItem.initial_stock}</strong></td>
-                                    </tr>
-                                    {stockItem.movements.map((movement, mIndex) => (
-                                        <tr key={mIndex}>
-                                            <td>{format(movement.date, "dd-MM-y")}</td>
-                                            <td><i className={`me-3 fa fa-arrow-${movement.type === 'e' ? 'up' : 'down'} text-${movement.type === 'e' ? 'success' : 'danger'}`}></i><span>{movement.type === 'e' ? 'Entrée' : 'Sortie'}</span></td>
-                                            <td>{movement.label || '-'}</td>
-                                            <td className='text-end'>{movement.quantity}</td>
-                                            <td className='text-end'>{movement.stock_at_date}</td>
+                            <div ref={parentRef} className="position-relative">
+                                {contextMenu.visible && <ul
+                                    className="dropdown-menu show"
+                                    ref={menuRef}
+                                    style={{
+                                        position: 'absolute',
+                                        top: contextMenu.y,
+                                        left: contextMenu.x,
+                                        zIndex: 1000,
+                                        display: 'block',
+                                    }}
+                                >
+                                    <li>
+                                        <button className="dropdown-item" onClick={handleDelete}>
+                                            Supprimer
+                                        </button>
+                                        <button className="dropdown-item" onClick={() => { 
+                                            setContextMenu({...contextMenu, visible: false})
+                                            setSelectedItem(null)
+                                        }}>
+                                            Annuler
+                                        </button>
+                                    </li>
+                                </ul>}
+
+                                <table className="table table-bordered table-striped m-0">
+                                    <thead className="table-primary">
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Mouvement</th>
+                                            <th>Libelle</th>
+                                            <th className='text-end'>Quantité ({unit})</th>
+                                            <th className='text-end'>Stock actuel ({unit})</th>
                                         </tr>
-                                    ))}
-                                    <tr className="table-warning">
-                                        <td colSpan={4}><strong>Stock final</strong></td>
-                                        <td className='text-end'><strong>{stockItem.final_stock}</strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <tr className="table-info">
+                                            <td colSpan={4}><strong>Stock initial</strong></td>
+                                            <td className='text-end'><strong>{stockItem.initial_stock}</strong></td>
+                                        </tr>
+                                        {stockItem.movements.map((movement, mIndex) => (
+                                            <tr onContextMenu={(event) => showOption(event as unknown as MouseEvent, movement)} key={mIndex}>
+                                                <td>{format(movement.date, "dd-MM-y")}</td>
+                                                <td><i className={`me-3 fa fa-arrow-${movement.type === 'e' ? 'up' : 'down'} text-${movement.type === 'e' ? 'success' : 'danger'}`}></i><span>{movement.type === 'e' ? 'Entrée' : 'Sortie'}</span></td>
+                                                <td>{movement.label || '-'}</td>
+                                                <td className='text-end'>{movement.quantity}</td>
+                                                <td className='text-end'>{movement.stock_at_date}</td>
+                                            </tr>
+                                        ))}
+                                        <tr className="table-warning">
+                                            <td colSpan={4}><strong>Stock final</strong></td>
+                                            <td className='text-end'><strong>{stockItem.final_stock}</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 ))}
