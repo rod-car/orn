@@ -29,7 +29,7 @@ type RequestState = {
 }
 
 const defaultRequestState = {
-    loading: false,
+    loading: true,
     creating: false,
     deleting: false,
     updating: false

@@ -15,7 +15,7 @@ const router = createBrowserRouter([
             {
                 path: '',
                 element: (
-                    <PrivateRoute>
+                    <PrivateRoute permission={["dashboard.view"]}>
                         <HomePage />
                     </PrivateRoute>
                 ),
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
             {
                 path: 'about',
                 element: (
-                    <PrivateRoute>
+                    <PrivateRoute permission={["app.about"]}>
                         <About />
                     </PrivateRoute>
                 ),

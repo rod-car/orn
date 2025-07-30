@@ -1,17 +1,22 @@
 import { ReactNode } from "react";
 import { Link as RouterDomLink, LinkProps as RouterFomLinkProps } from 'react-router-dom';
 import './Link.modules.scss';
+import { useAuthStore } from "hooks";
 
 type LinkProps = RouterFomLinkProps & {
     icon?: string;
-    can?: boolean;
+    permission?: string|string[];
 }
 
-export function Link({ to, can = true, ...props }: LinkProps): ReactNode {
-    return <>{can ? <RouterDomLink to={to} style={{ fontSize: 'small' }} {...props}>
+export function Link({ to, permission = [], ...props }: LinkProps): ReactNode {
+    const { isAllowed } = useAuthStore();
+
+    if (!isAllowed(permission)) return undefined;
+
+    return <RouterDomLink to={to} style={{ fontSize: 'small' }} {...props}>
         {props.icon && <i className={`bi bi-${props.icon} me-2`}></i>}
         {props.children}
-    </RouterDomLink> : undefined}</>
+    </RouterDomLink>
 }
 
 export function PrimaryLink(props: LinkProps): ReactNode {

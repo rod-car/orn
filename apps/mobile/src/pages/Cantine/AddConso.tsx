@@ -110,7 +110,7 @@ export function AddConso(): ReactNode {
     }, [foods])
 
     const changeQuantity = useCallback(({target}: ChangeEvent<HTMLInputElement>) => {
-        const value = parseInt(target.value, 10)
+        const value = parseFloat(target.value)
         if (isNaN(value)) setQuantity(0)
         else setQuantity(value)
     }, [])
@@ -173,6 +173,7 @@ export function AddConso(): ReactNode {
                             <Input
                                 label={`Quantite Consomme ${unit ? '(' + unit + ')' : ''}`}
                                 value={quantity}
+                                type="number"
                                 onChange={changeQuantity}
                                 controlled
                             />
@@ -181,23 +182,6 @@ export function AddConso(): ReactNode {
 
                     <h6 className="text-primary mt-4">Details des consommations</h6>
                     <hr />
-
-                    {/*<div className="row g-3 mb-4">
-                        {consommation && Object.keys(consommation).map(name => <div key={name} className="col-md-4 col-6 col-sm-6 col-xs-6">
-                            <div className="card h-100">
-                                <div className="card-body p-2">
-                                    <h6 className="card-title mb-2 text-primary">{name}</h6>
-                                    <Input
-                                        maxLength={9}
-                                        value={consommation[name].toString()}
-                                        onChange={({ target }) => handleChange(name, parseFloat(target.value))}
-                                        inputMode='numeric'
-                                        type='number'
-                                    />
-                                </div>
-                            </div>
-                        </div>)}
-                    </div>*/}
 
                     {consommation && Object.keys(consommation).map(name => <div key={name} className="col-12">
                         <div className="input-group input-group-sm mb-3">

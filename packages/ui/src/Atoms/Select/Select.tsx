@@ -1,10 +1,11 @@
-import { ChangeEvent, CSSProperties, PropsWithChildren, useId } from "react"
+import { ChangeEvent, CSSProperties, useId } from "react"
 import { RequiredSign } from "../RequiredSign/RequiredSign"
 
 type Option = Partial<{
     id: string | number
     label: string | number
     name: string | number,
+    full_name: string;
     designation: string,
     phase: number,
     title: string

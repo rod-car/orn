@@ -1,3 +1,4 @@
+import { useAuthStore } from "hooks";
 import { PropsWithChildren, ReactNode } from "react";
 import { Spinner } from "ui";
 
@@ -7,11 +8,11 @@ type ExcelExportButtonProps = PropsWithChildren & {
     requestData?: Record<string, unknown>;
     elements: {label: string, params: Record<string, unknown>}[];
     loading?: boolean;
-    can?: boolean;
+    permission?: string|string[];
 }
 
 export function ExcelExportButton(
-    {ExportClient, url, requestData, elements, loading, children, can = true}: ExcelExportButtonProps
+    {ExportClient, url, requestData, elements, loading, children, permission = []}: ExcelExportButtonProps
 ): ReactNode {
     async function exportExcel(params: Record<string, unknown>) {
         const response = await ExportClient.post({...requestData, ...params}, url)
@@ -21,8 +22,12 @@ export function ExcelExportButton(
         }
     }
 
+    const { isAllowed } = useAuthStore();
+
+    if (!isAllowed(permission)) return undefined;
+
     return <>
-        {can ? <div className="dropdown me-2">
+        <div className="dropdown me-2">
             <button
                 style={{ fontSize: 'small' }}
                 disabled={loading}
@@ -42,6 +47,6 @@ export function ExcelExportButton(
                     <a onClick={(e) => { e.preventDefault(); return exportExcel(element.params)}} className="dropdown-item" href="#">{element.label}</a>
                 </li>)}
             </ul>
-        </div> : undefined}
+        </div>
     </>
 }

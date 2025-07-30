@@ -13,7 +13,7 @@ type CarouselProps = {
 
 export default function Carousel({title, description, background, more = undefined, active = false}: CarouselProps) {
     return <div className={`${active && 'active'} carousel-section carousel-item clip-bg pt-225 pb-200 img-bg`} style={{ backgroundImage: `url(${background})` }}>
-        <div className="container">
+        <div className="container-fluid">
             <div className="row">
                 <div className="col-xl-8 col-lg-10 mx-auto">
                     <div className="carousel-content text-center">

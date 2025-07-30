@@ -1,6 +1,6 @@
 export { scholar_years, months, years, reverseYears, getAgeYear as ageYear, getAgeMonth as ageMonth, ageLong as ageFull, format } from "./date";
 export { capitalize, gender, wrap, ucWords, escapeHtml } from "./string";
-export { number_array, range, round, isNumber, formatPrice, ordinalLetters } from "./number";
+export { number_array, range, round, isNumber, formatPrice, ordinalLetters, formatNumber } from "./number";
 export { addDays, subDays, isDate } from 'date-fns'
 
 /**

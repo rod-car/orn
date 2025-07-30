@@ -33,6 +33,13 @@ export const formatPrice = (price: number, format: string = 'mg-MG', currency: s
     return formatter.format(price);
 }
 
+export const formatNumber = (number?: number): string|undefined => {
+    if (number === undefined) return undefined;
+
+    const formatter = new Intl.NumberFormat("fr-FR", {style: "decimal"});
+    return formatter.format(number);
+}
+
 export const ordinalLetters = (n: number, gender: 'M' | 'F' = 'M'): string => {
     return getOrdinal(n, gender)
 }

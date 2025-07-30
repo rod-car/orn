@@ -16,25 +16,25 @@ export const cantineRoute: RouteObject[] = [
         children: [
             {
                 path: 'statistics',
-                element: <PrivateRoute>
+                element: <PrivateRoute permission={["consommation.statistics"]}>
                     <RecapConso />
                 </PrivateRoute>
             },
             {
                 path: 'add',
-                element: <PrivateRoute can={['admin']}>
+                element: <PrivateRoute permission={['consommation.add']}>
                     <AddConso />
                 </PrivateRoute>
             },
             {
                 path: 'edit/:id',
-                element: <PrivateRoute can={['admin']}>
+                element: <PrivateRoute permission={['consommation.edit']}>
                     <EditConso />
                 </PrivateRoute>
             },
             {
                 path: 'list',
-                element: <PrivateRoute>
+                element: <PrivateRoute permission={["consommation.view"]}>
                     <ListConso />
                 </PrivateRoute>
             }
@@ -45,19 +45,19 @@ export const cantineRoute: RouteObject[] = [
         children: [
             {
                 path: 'in',
-                element: <PrivateRoute can={['admin']}>
+                element: <PrivateRoute permission={['stock.in']}>
                     <StockIn />
                 </PrivateRoute>
             },
             {
                 path: 'out',
-                element: <PrivateRoute can={['admin']}>
+                element: <PrivateRoute permission={['stock.out']}>
                     <StockOut />
                 </PrivateRoute>
             },
             {
                 path: 'recap',
-                element: <PrivateRoute can={['admin']}>
+                element: <PrivateRoute permission={['stock.recap']}>
                     <Stock />
                 </PrivateRoute>
             },

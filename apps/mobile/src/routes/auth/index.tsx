@@ -5,7 +5,7 @@ import { ForgotPassword, Login, NewPassword, Profile } from '@base/pages/Auth'
 export const authRoute: RouteObject[] = [
     {
         path: 'profile',
-        element: <PrivateRoute>
+        element: <PrivateRoute permission={["user.profile"]}>
             <Profile />
         </PrivateRoute>
     }

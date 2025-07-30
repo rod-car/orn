@@ -176,3 +176,15 @@ p {
 .table-padding-large td, .table-padding-large th {
     padding: 10px 20px 10px 20px;
 }
+
+.container-fluid {
+    padding-left: 4rem;
+    padding-right: 4rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.img-container {
+    height: 200px;
+    margin-bottom: 15px;
+}

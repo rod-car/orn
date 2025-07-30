@@ -56,46 +56,73 @@ export default async function Home() {
 
     return <>
         <section id="accueil" className="carousel-section-wrapper">
-            <div id="carouselExampleCaptions" className="carousel slide carousel-fade" data-ride="carousel">
-                <div className="carousel-inner">
-                    <Carousel
-                        active
-                        title="Nutrition scolaire"
-                        description="Mise en place de programmes alimentaires équilibrés au sein des établissements scolaires, visant à améliorer la santé et les performances académiques des élèves en leur fournissant des repas adaptés à leurs besoins nutritionnels."
-                        background="/img/carousel/nutrition.jpg"
-                        more={{ link: "#services", text: "Voir plus" }}
-                    />
+            <div className="container-fluid row pl-0">
+                <div className="col-8 p-0">
+                    <div id="carouselExampleCaptions" className="carousel slide carousel-fade" data-ride="carousel">
+                        <div className="carousel-inner">
+                            <Carousel
+                                active
+                                title="Nutrition scolaire"
+                                description="Mise en place de programmes alimentaires équilibrés au sein des établissements scolaires, visant à améliorer la santé et les performances académiques des élèves en leur fournissant des repas adaptés à leurs besoins nutritionnels."
+                                background="/img/carousel/nutrition.jpg"
+                                more={{ link: "#services", text: "Voir plus" }}
+                            />
 
-                    <Carousel
-                        title="Jardin scolaire"
-                        description="Le jardin scolaire consiste en la culture de plantes au sein des établissements scolaires, avec la collaboration des parents, afin d'enseigner aux élèves les principes d'une alimentation saine et durable."
-                        background="/img/carousel/jardin.jpg"
-                        more={{ link: "#services", text: "Voir plus" }}
-                    />
+                            <Carousel
+                                title="Jardin scolaire"
+                                description="Le jardin scolaire consiste en la culture de plantes au sein des établissements scolaires, avec la collaboration des parents, afin d'enseigner aux élèves les principes d'une alimentation saine et durable."
+                                background="/img/carousel/jardin.jpg"
+                                more={{ link: "#services", text: "Voir plus" }}
+                            />
 
-                    <Carousel
-                        title="Mesure anthropométrique"
-                        description="La mesure anthropométrique consiste à évaluer les dimensions corporelles des élèves afin de suivre leur croissance et d'identifier les besoins nutritionnels spécifiques pour assurer leur développement optimal."
-                        background="/img/carousel/mesure.jpg"
-                        more={{ link: "#services", text: "Voir plus" }}
-                    />
+                            <Carousel
+                                title="Mesure anthropométrique"
+                                description="La mesure anthropométrique consiste à évaluer les dimensions corporelles des élèves afin de suivre leur croissance et d'identifier les besoins nutritionnels spécifiques pour assurer leur développement optimal."
+                                background="/img/carousel/mesure.jpg"
+                                more={{ link: "#services", text: "Voir plus" }}
+                            />
+                        </div>
+
+                        <a className="carousel-control carousel-control-prev" href="#carouselExampleCaptions" role="button"
+                            data-slide="prev">
+                            <span className="carousel-control-prev-icon" aria-hidden="true"><i className="lni lni-arrow-left"></i></span>
+                            <span className="sr-only">Previous</span>
+                        </a>
+                        <a className="carousel-control carousel-control-next" href="#carouselExampleCaptions" role="button"
+                            data-slide="next">
+                            <span className="carousel-control-next-icon" aria-hidden="true"><i className="lni lni-arrow-right"></i></span>
+                            <span className="sr-only">Suivant</span>
+                        </a>
+                    </div>
                 </div>
+                <div className="col-4 p-0 pl-5 pt-4">
+                    <div className="section-title">
+                        <span>À propos</span>
+                        <p className="text-italic text-bold mb-4">Financé par <Link target="_blank" href="https://ambatovy.com/">Ambatovy SA</Link></p>
+                    </div>
+                    <div className="about-content">
+                        <div className="img-container">
+                            <Image width={1280} height={1280} style={{ objectFit: 'cover' }} className="w-100 h-100 rounded" src="/img/about/about-img.jpg" alt="About image" />
+                        </div>
 
-                <a className="carousel-control carousel-control-prev" href="#carouselExampleCaptions" role="button"
-                    data-slide="prev">
-                    <span className="carousel-control-prev-icon" aria-hidden="true"><i className="lni lni-arrow-left"></i></span>
-                    <span className="sr-only">Previous</span>
-                </a>
-                <a className="carousel-control carousel-control-next" href="#carouselExampleCaptions" role="button"
-                    data-slide="next">
-                    <span className="carousel-control-next-icon" aria-hidden="true"><i className="lni lni-arrow-right"></i></span>
-                    <span className="sr-only">Suivant</span>
-                </a>
+                        <p style={{fontSize: 14, color: "black"}} className="text-justify leading-relaxed mb-4">
+                            Le 12 septembre 2023, Ambatovy a signé une convention avec l'Office Régional de Nutrition pour la mise en place de cantine scolaire dans 10 écoles des districts de Toamasina I, Toamasina II et Brickaville, sur une période de 3 ans. Cette initiative bénéficiera à 2 500 élèves, répartis entre 8 Écoles Primaires Publiques (Vohitrambato, Ampihaonana, Soamahatsinjo, Tanandava, Amboakarivo, Ampasimadinika, Fanandrana, Tanambao) et 2 écoles maternelles (Tsaratsiry et Romialo).
+                        </p>
+                        {/*<p style={{fontSize: 14, color: "black"}} className="text-justify leading-relaxed mb-4">
+                            L'objectif principal est de renforcer la situation nutritionnelle des élèves afin d'améliorer leurs performances scolaire. Cette collaboration s'appuie sur un partenariat initié en 2018, avec des résultats encourageants : dans les EPP Vohitrambato, Ampihaonana et Soamahatsinjo, le taux de malnutrition chronique est passé de <strong>74 %</strong> en début d'année scolaire 2021-2022 à <strong>43 %</strong>.
+                        </p>*/}
+                        <p style={{fontSize: 14, color: "black"}} className="text-justify leading-relaxed mb-4">
+                            L'Office Régional de Nutrition est fier de contribuer à l'éducation et à la santé des enfants, en collaboration avec ses partenaires pour un avenir meilleur dans notre communauté.
+                        </p>
+
+                        <p className="font-italic">Source: <Link target="_blank" href={"https://ambatovy.com/en/fr/signature-dune-convention-avec-loffice-regional-de-nutrition/"}>Ambatovy le 12/09/2023</Link></p>
+                    </div>
+                </div>
             </div>
         </section>
 
         <section id="activites" className="main-section" style={{ background: "#eff2f9" }}>
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-xl-6 col-lg-7 col-md-9 mx-auto">
                         <div className="section-title text-center mb-55">
@@ -120,7 +147,7 @@ export default async function Home() {
         </section>
 
         <section id="missions" className="main-section">
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-xl-7 col-lg-7 col-md-9 mx-auto">
                         <div className="section-title text-center mb-55">
@@ -180,7 +207,7 @@ export default async function Home() {
         </section>
 
         <section id="a-propos" className="main-section" style={{ background: "#eff2f9" }}>
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-xl-6 col-lg-6 pr-4">
                         <div className="wow fadeInLeft">
@@ -225,7 +252,7 @@ export default async function Home() {
         </section>
 
         <section id="services" className="main-section">
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-xl-7 col-lg-7 col-md-9 mx-auto">
                         <div className="section-title text-center mb-55">
@@ -247,7 +274,7 @@ export default async function Home() {
         </section>
 
         <section id="partenaires" className="client-logo-section main-section">
-            <div className="container">
+            <div className="container-fluid">
                 <div id="partenaireCarousel" className="test-section carousel slide" data-ride="carousel">
                     <div className="carousel-inner">
                         <div className="carousel-item active">
@@ -274,7 +301,7 @@ export default async function Home() {
         </section>
 
         <section id="contact" className="contact-section main-section" style={{ background: "#eff2f9" }}>
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-xl-4">
                         <div className="contact-item-wrapper">

@@ -1,5 +1,4 @@
 import {  ReactNode } from "react";
-import { NavLink } from "@base/components";
 import { toast } from "react-toastify";
 import { config } from "@base/config";
 import { useApi, useAuthStore } from "hooks";
@@ -8,7 +7,7 @@ import { Button } from "ui";
 import { excerpt } from "functions";
 
 export function UserMenu(): ReactNode {
-    const { user, logout, isSuperuser } = useAuthStore()
+    const { user, logout } = useAuthStore()
     const { Client, RequestState } = useApi<User>({  url: '/auth' })
 
     const handleLogout = async () => {

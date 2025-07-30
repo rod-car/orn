@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Block, Button, DangerButton, Input, PageTitle, PrimaryButton, SecondaryButton, Select, Spinner } from 'ui'
-import { Flex, Pagination, PrimaryLink } from '@base/components'
+import { EditLink, Flex, Pagination, PrimaryLink } from '@base/components'
 import { useApi, useAuthStore } from 'hooks';
 import { format } from 'functions';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
@@ -14,7 +14,7 @@ export function ListConso(): ReactNode {
     const [schoolId, setSchoolId] = useState<number>(0)
     const [foodId, setFoodId] = useState<number>(0)
     const [perPage, setPerPage] = useState(5) // Réduit pour une meilleure vue sur tablette
-    const [isFilterExpanded, setIsFilterExpanded] = useState(false)
+    const [isFilterExpanded, setIsFilterExpanded] = useState(true)
     const [selectedConsommation, setSelectedConsommation] = useState(null)
 
     const [showEditModal, setShowEditModal] = useState(false);
@@ -30,6 +30,20 @@ export function ListConso(): ReactNode {
         unit: '',
         classes: []
     });
+
+    const { Client: ConsoClient, RequestState: ConsoRequestState, datas: consommations } = useApi<Record<string, unknown>>({ url: '/consommations' })
+    const { Client: ScholarYearClient, datas: scholarYears, RequestState: ScholarYearRequestState } = useApi<ScholarYear>({
+        url: '/scholar-years'
+    })
+
+    const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
+        url: '/schools',
+        key: 'data'
+    })
+
+    const { Client: FoodClient, datas: foods, RequestState: FoodRequestState } = useApi<Food>({
+        url: '/foods'
+    })
 
     const openEditModal = (consommation, detail) => {
         setCurrentConsommation(consommation);
@@ -67,21 +81,27 @@ export function ListConso(): ReactNode {
         }));
     };
 
-    // Ajoutez cette fonction pour sauvegarder les modifications
     const saveChanges = async () => {
         try {
             const consommationId = currentConsommation?.id;
-            
-            await ConsoClient.patch(consommationId, editForm, {
+            const response = await ConsoClient.patch(consommationId, editForm, {
                 single_date: 1
             })
 
-            toast('Modification enregistrée', {
-                type: 'success',
-                position: config.toastPosition
-            });
-            setShowEditModal(false);
-            getConso();
+            if (response.ok) {
+                toast('Modification enregistrée', {
+                    type: 'success',
+                    position: config.toastPosition
+                });
+                setShowEditModal(false);
+                getConso();
+            } else {
+                const message = response?.response?.data?.message ?? "Une erreur s'est produite. Verifier les donnees.";
+                toast(message, {
+                    type: 'error',
+                    position: config.toastPosition
+                });
+            }
         } catch (error) {
             toast('Erreur lors de la modification', {
                 type: 'error',
@@ -90,7 +110,7 @@ export function ListConso(): ReactNode {
         }
     };
 
-    const { user, isAdmin, isSuperuser } = useAuthStore()
+    const { user } = useAuthStore()
 
     const requestParams = useMemo(() => {
         return {
@@ -102,20 +122,6 @@ export function ListConso(): ReactNode {
             per_page: perPage
         }
     }, [])
-
-    const { Client: ConsoClient, RequestState: ConsoRequestState, datas: consommations } = useApi<Record<string, unknown>>({ url: '/consommations' })
-    const { Client: ScholarYearClient, datas: scholarYears, RequestState: ScholarYearRequestState } = useApi<ScholarYear>({
-        url: '/scholar-years'
-    })
-
-    const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
-        url: '/schools',
-        key: 'data'
-    })
-
-    const { Client: FoodClient, datas: foods, RequestState: FoodRequestState } = useApi<Food>({
-        url: '/foods'
-    })
 
     const changeSchoolId = ({ target }: InputChange) => {
         const value = parseInt(target.value, 10)
@@ -146,17 +152,18 @@ export function ListConso(): ReactNode {
     }
 
     const getConso = () => ConsoClient.get(requestParams)
+
     const getSchools = async () => {
         if (user?.school) {
             setSchoolId(user.school.id)
             requestParams.school_id = user.school.id
-        } else {
-            const schools = await SchoolClient.get()
-            const currentSchool = schools.at(0)
-            if (currentSchool) {
-                setSchoolId(currentSchool.id)
-                requestParams.school_id = currentSchool.id
-            }
+        }
+
+        const schools = await SchoolClient.get()
+        const currentSchool = schools.at(0)
+        if (currentSchool && !requestParams.school_id) {
+            setSchoolId(currentSchool.id)
+            requestParams.school_id = currentSchool.id
         }
     }
 
@@ -187,7 +194,7 @@ export function ListConso(): ReactNode {
         getDatas()
     }, [])
 
-    function deleteConso(date: string, id: number) {
+    function deleteConsoDate(date: string, id: number) {
         confirmAlert({
             title: 'Question',
             message: 'Voulez-vous supprimer cet enregistrement ?',
@@ -195,9 +202,47 @@ export function ListConso(): ReactNode {
                 {
                     label: 'Oui',
                     onClick: async () => {
-                        const response = await ConsoClient.destroy(id, {date: date})
+                        const response = await ConsoClient.destroy(id, { date: date })
                         if (response.ok) {
                             toast('Supprimé', {
+                                closeButton: true,
+                                type: 'success',
+                                position: config.toastPosition
+                            })
+                            getDatas()
+                        } else {
+                            toast('Erreur de soumission', {
+                                closeButton: true,
+                                type: 'error',
+                                position: config.toastPosition
+                            })
+                        }
+                    }
+                },
+                {
+                    label: 'Non',
+                    onClick: () =>
+                        toast('Annulé', {
+                            closeButton: true,
+                            type: 'error',
+                            position: config.toastPosition
+                        })
+                }
+            ]
+        })
+    }
+
+    function deleteConso(id: number) {
+        confirmAlert({
+            title: 'Question',
+            message: 'Voulez-vous supprimer ce consommation ?',
+            buttons: [
+                {
+                    label: 'Oui',
+                    onClick: async () => {
+                        const response = await ConsoClient.destroy(id)
+                        if (response.ok) {
+                            toast('Supprime', {
                                 closeButton: true,
                                 type: 'success',
                                 position: config.toastPosition
@@ -249,8 +294,8 @@ export function ListConso(): ReactNode {
                     >
                         Recharger
                     </SecondaryButton>
-                    <PrimaryLink icon="plus" to="/cantine/consommation/add">
-                        Ajouter
+                    <PrimaryLink permission="consommation.create" icon="plus-lg" to="/cantine/consommation/add">
+                        Ajouter une consommation
                     </PrimaryLink>
                 </Flex>
             </PageTitle>
@@ -267,19 +312,16 @@ export function ListConso(): ReactNode {
                 {isFilterExpanded && (
                     <div className='row mb-0'>
                         <Col n={3} md={6} sm={6} className="mb-3">
-                            {user?.school ?
-                                <Input label='Établissement' auto disabled defaultValue={user.school.name} /> :
-                                <Select
-                                    controlled
-                                    value={schoolId}
-                                    options={schools}
-                                    label="Établissement"
-                                    onChange={changeSchoolId}
-                                    placeholder="Tous les établissement"
-                                    loading={SchoolRequestState.loading}
-                                    config={{ optionKey: 'id', valueKey: 'name' }}
-                                />
-                            }
+                            <Select
+                                controlled
+                                value={schoolId}
+                                options={schools}
+                                label="Établissement"
+                                onChange={changeSchoolId}
+                                placeholder="Tous les établissement"
+                                loading={SchoolRequestState.loading}
+                                config={{ optionKey: 'id', valueKey: 'name' }}
+                            />
                         </Col>
                         <Col n={3} md={6} sm={6} className="mb-3">
                             <Select
@@ -384,17 +426,38 @@ export function ListConso(): ReactNode {
 
                                     </div>
                                     <div className="card-footer">
-                                    {((isAdmin && user?.school?.name === consommation.school) || (isAdmin && !user?.school) || isSuperuser) &&  <div className="d-flex align-items-center justify-content-end">
-                                            <PrimaryButton onClick={() => {
-                                                openEditModal(consommation, {...detail, unit: consommation.unit});
-                                            }} className='me-3' size='sm' icon='pen'>Modifier</PrimaryButton>
-                                            <DangerButton onClick={() => deleteConso(detail.date, consommation.id)} loading={ConsoRequestState.deleting} size='sm' icon='trash'>Supprimer</DangerButton>
-                                        </div>}
+                                        <div className="d-flex align-items-center justify-content-end">
+                                            <PrimaryButton
+                                                permission="consommation.edit"
+                                                onClick={() => {
+                                                    openEditModal(consommation, { ...detail, unit: consommation.unit });
+                                                }}
+                                                className='me-3'
+                                                size='sm'
+                                                icon='pen'
+                                            >
+                                                Modifier
+                                            </PrimaryButton>
+                                            <DangerButton
+                                                permission="consommation.delete"
+                                                onClick={() => deleteConsoDate(detail.date, consommation.id)}
+                                                loading={ConsoRequestState.deleting}
+                                                size='sm'
+                                                icon='trash'
+                                            >
+                                                Supprimer
+                                            </DangerButton>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     )}
+
+                    <div className="d-flex p-3 align-items-center">
+                        {!ConsoRequestState.deleting && <EditLink permission="consommation.edit" to={`/cantine/consommation/edit/${consommation.id}`}>Editer ce consommation</EditLink>}
+                        <DangerButton permission={["consommation.delete"]} loading={ConsoRequestState.deleting} onClick={() => deleteConso(consommation.id)} icon='trash' className='py-1 px-2 me-2'>Supprimer</DangerButton>
+                    </div>
                 </Block>
             ))}
 
@@ -407,7 +470,7 @@ export function ListConso(): ReactNode {
             {showEditModal && currentDetail && (
                 <div className="modal show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
                     <div className="modal-dialog modal-lg">
-                        <div className="modal-content" style={{maxHeight: '80vh', overflowY: 'scroll'}}>
+                        <div className="modal-content" style={{ maxHeight: '80vh', overflowY: 'scroll' }}>
                             <div className="modal-header bg-primary">
                                 <h6 className="modal-title text-white">
                                     Modifier la consommation du {format(currentDetail.date)}
@@ -418,7 +481,7 @@ export function ListConso(): ReactNode {
                                     onClick={() => setShowEditModal(false)}
                                 ></button>
                             </div>
-                            <div className="modal-body" style={{maxHeight: "80vh", overflowY: 'scroll'}}>
+                            <div className="modal-body" style={{ maxHeight: "80vh", overflowY: 'scroll' }}>
                                 <div className="row mb-3">
                                     <div className="col-6">
                                         <Input
@@ -433,9 +496,9 @@ export function ListConso(): ReactNode {
                                             type="number"
                                             maxLength={9}
                                             inputMode="numeric"
-                                            label={`Quantité consommé ${currentDetail.unit ? '('+ currentDetail.unit +')' : ''}`}
+                                            label={`Quantité consommé ${currentDetail.unit ? '(' + currentDetail.unit + ')' : ''}`}
                                             value={editForm.quantity}
-                                            onChange={({target}) => handleFormChange('quantity', parseInt(target.value, 10))}
+                                            onChange={({ target }) => handleFormChange('quantity', target.value ? parseFloat(target.value) : 0)}
                                         />
                                     </div>
                                 </div>
@@ -447,10 +510,10 @@ export function ListConso(): ReactNode {
                                         </span>
                                         <div className="w-80">
                                             <Input
-                                                style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0}}
+                                                style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
                                                 maxLength={9}
                                                 value={cls.quantity}
-                                                onChange={({target}) => handleClassQuantityChange(cls.name, target.value)}
+                                                onChange={({ target }) => handleClassQuantityChange(cls.name, target.value)}
                                                 inputMode='numeric'
                                                 type='number'
                                             />
@@ -464,10 +527,10 @@ export function ListConso(): ReactNode {
                                     </span>
                                     <div className="w-80">
                                         <Input
-                                            style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0}}
+                                            style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
                                             maxLength={9}
                                             value={editForm.teachers}
-                                            onChange={(e) => handleFormChange('teachers', parseInt(e.target.value, 10))}
+                                            onChange={(e) => handleFormChange('teachers', e.target.value ? parseInt(e.target.value, 10) : 0)}
                                             inputMode='numeric'
                                             type='number'
                                         />
@@ -480,10 +543,10 @@ export function ListConso(): ReactNode {
                                     </span>
                                     <div className="w-80">
                                         <Input
-                                            style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0}}
+                                            style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
                                             maxLength={9}
                                             value={editForm.cookers}
-                                            onChange={(e) => handleFormChange('cookers', parseInt(e.target.value, 10))}
+                                            onChange={(e) => handleFormChange('cookers', e.target.value ? parseInt(e.target.value, 10) : 0)}
                                             inputMode='numeric'
                                             type='number'
                                         />
@@ -496,10 +559,10 @@ export function ListConso(): ReactNode {
                                     </span>
                                     <div className="w-80">
                                         <Input
-                                            style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0}}
+                                            style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
                                             maxLength={9}
                                             value={editForm.others}
-                                            onChange={(e) => handleFormChange('others', parseInt(e.target.value, 10))}
+                                            onChange={(e) => handleFormChange('others', e.target.value ? parseInt(e.target.value, 10) : 0)}
                                             inputMode='numeric'
                                             type='number'
                                         />
@@ -507,25 +570,23 @@ export function ListConso(): ReactNode {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <Button
-                                    type="button"
-                                    mode='danger'
+                                <DangerButton
                                     icon='x-lg'
                                     size='sm'
                                     onClick={() => setShowEditModal(false)}
+                                    permission="consommation.edit"
                                 >
                                     Annuler
-                                </Button>
-                                <Button
-                                    type="button"
-                                    mode='primary'
+                                </DangerButton>
+                                <PrimaryButton
                                     icon='save'
                                     size='sm'
+                                    permission="consommation.edit"
                                     loading={ConsoRequestState.updating}
                                     onClick={saveChanges}
                                 >
                                     Enregistrer
-                                </Button>
+                                </PrimaryButton>
                             </div>
                         </div>
                     </div>
