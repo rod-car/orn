@@ -31,8 +31,8 @@ export function EditUser(): ReactNode {
     return (
         <>
             <PageTitle title="Modifier un utilisateur">
-                <PrimaryLink to="/auth/users">
-                    <i className="bi bi-list me-2"></i>Liste des utilisateurs
+                <PrimaryLink permission="user.view" to="/user/list" icon='list'>
+                    Liste des utilisateurs
                 </PrimaryLink>
             </PageTitle>
 

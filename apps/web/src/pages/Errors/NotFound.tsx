@@ -22,7 +22,7 @@ export function NotFound({path}: {path?: string}): ReactNode {
                             La page que vous voulez acceder est introuvable.
                             {path && <p>Chemin: {path}</p>}
                         </div>
-                        <Link className="btn app-btn-primary" to="/">Retourner à la page d'accueil</Link>
+                        <Link permission="dashboard.view" className="btn app-btn-primary" to="/">Retourner à la page d'accueil</Link>
                     </div>
                 </div>
             </div>

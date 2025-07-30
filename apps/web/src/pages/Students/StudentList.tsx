@@ -68,7 +68,7 @@ export function StudentList(): ReactNode {
         StudentClient.get(requestData)
     }, [requestData])
 
-    const { isAdmin, isSuperuser, user } = useAuthStore()
+    const { user } = useAuthStore()
 
     useEffect(() => {
         if (user?.school) {
@@ -198,8 +198,8 @@ export function StudentList(): ReactNode {
                         onClick={getDatas}
                         loading={SRequestState.loading}
                     >Recharger</SecondaryButton>
-                    <PrimaryLink can={isAdmin} to="/anthropo-measure/student/add" icon="plus" className="me-2">Nouveau</PrimaryLink>
-                    <InfoLink can={isAdmin && !user?.school} to="/anthropo-measure/student/import" icon="file-earmark-text">Importer une liste</InfoLink>
+                    <PrimaryLink permission="student.create" to="/anthropo-measure/student/add" icon="plus" className="me-2">Nouveau etudiant</PrimaryLink>
+                    <InfoLink permission="student.import" to="/anthropo-measure/student/import" icon="file-earmark-text">Importer une liste des etudiants</InfoLink>
                 </div>
             </PageTitle>
 
@@ -276,7 +276,7 @@ export function StudentList(): ReactNode {
                             </td>
                             <td>
                                 <ExcelExportButton
-                                    can={isAdmin}
+                                    permission="export.student-list"
                                     ExportClient={ExportClient}
                                     url={'/to-excel'}
                                     loading={ExportRequestState.creating}
@@ -341,9 +341,9 @@ export function StudentList(): ReactNode {
                                                 {classe.name} - {studentClass.school.name}
                                             </td>
                                             <td className="text-nowrap">
-                                                <DetailLink className="me-2" to={`/anthropo-measure/student/details/${student.id}`} />
-                                                <EditLink can={(isAdmin && user?.school?.id === studentClass.school.id) || (isAdmin && !user?.school) || isSuperuser} className="me-2" to={`/anthropo-measure/student/edit/${student.id}`} />
-                                                <DangerButton can={(isAdmin && user?.school?.id === studentClass.school.id) || (isAdmin && !user?.school) || isSuperuser} icon="trash" size="sm"
+                                                <DetailLink permission="student.show" to={`/anthropo-measure/student/details/${student.id}`} />
+                                                <EditLink permission="student.edit" to={`/anthropo-measure/student/edit/${student.id}`} />
+                                                <DangerButton permission="student.delete" icon="trash" size="sm"
                                                     onClick={() => {
                                                         handleDelete(student.id)
                                                     }}

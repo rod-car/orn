@@ -1,7 +1,7 @@
 import { useApi, useAuthStore } from 'hooks'
-import { EditLink, Link, PrimaryLink } from '@base/components'
+import { EditLink, InfoLink, Link, PrimaryLink } from '@base/components'
 import { config } from '@base/config'
-import { Block, Button, PageTitle, Select } from 'ui'
+import { Block, Button, DangerButton, PageTitle, SecondaryButton, Select } from 'ui'
 import { ReactNode, useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
@@ -89,27 +89,24 @@ export function Users(): ReactNode {
         Client.get({ ...requestData, page: data.page })
     }
 
-    const { isAdmin } = useAuthStore()
-
     return (
         <>
             <PageTitle title="Liste des utilisateurs">
                 <div className="d-flex align-items-between">
-                    <Button
+                    <SecondaryButton
+                        permission="user.view"
                         icon="arrow-clockwise"
-                        mode="secondary"
-                        type="button"
                         className="me-2"
                         onClick={getDatas}
                         loading={RequestState.loading}
                     >
                         Recharger
-                    </Button>
-                    <Link can={isAdmin} to="/auth/add-user" className="btn secondary-link me-2">
-                        <i className="bi bi-plus-lg me-2"></i>Nouveau utilisateur
-                    </Link>
-                    <PrimaryLink can={isAdmin} to="/auth/access-request">
-                        <i className="bi bi-file-earmark-text me-2"></i>Liste des demande d'accès
+                    </SecondaryButton>
+                    <InfoLink permission="user.create" to="/user/add" icon="plus-lg" className="me-2">
+                        Nouveau utilisateur
+                    </InfoLink>
+                    <PrimaryLink permission="access-request.view" icon='file-earmark-text' to="/auth/access-request">
+                        Liste des demande d'accès
                     </PrimaryLink>
                 </div>
             </PageTitle>
@@ -177,10 +174,9 @@ export function Users(): ReactNode {
                                 <td className="text-nowrap">{user.school ? user.school.name : '---'}</td>
                                 <td><UserStatus valid={user.is_valid} /></td>
                                 <td className="text-nowrap">
-                                    <EditLink to={`/auth/edit-user/${user.id}`} />
-                                    <Button
-                                        type="button"
-                                        mode="danger"
+                                    <EditLink permission="user.edit" to={`/user/edit/${user.id}`} />
+                                    <DangerButton
+                                        permission="user.delete"
                                         icon="trash"
                                         size="sm"
                                         onClick={() => invalidate(user)}

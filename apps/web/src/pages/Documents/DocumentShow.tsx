@@ -64,11 +64,11 @@ export function DocumentShow(): ReactNode {
         })
     }, [id])
 
+    const { isAllowed } = useAuthStore();
+
     useEffect(() => {
         getDatas()
     }, [])
-
-    const {isAdmin} = useAuthStore()
 
     return <>
         <PageTitle title={document ? document.title : "Détails du document"}>
@@ -81,8 +81,8 @@ export function DocumentShow(): ReactNode {
                 <div className="d-flex justify-content-between">
                     <h5 className="m-0">Par: {document.creator?.name} <span className="badge text-sm bg-primary p-1 ms-3">{document.type?.toUpperCase()}</span></h5>
                     <div className="d-flex">
-                        <InfoLink className="me-2" target="_blank" rel="noreferrer noopener" icon="download" to={document.path as string}>Télécharger</InfoLink>
-                        {isAdmin && <form onSubmit={deleteDocument} method="post">
+                        <InfoLink permission="document.download" className="me-2" target="_blank" rel="noreferrer noopener" icon="download" to={document.path as string}>Télécharger</InfoLink>
+                        {isAllowed("document.delete") && <form onSubmit={deleteDocument} method="post">
                             <Button loading={RequestState.deleting} icon="trash" type="submit" mode="danger">Supprimer</Button>
                         </form>}
                     </div>

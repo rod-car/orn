@@ -4,7 +4,7 @@ import { confirmAlert } from 'react-confirm-alert'
 import { config } from '@base/config'
 import { useApi, useAuthStore } from 'hooks'
 import { toast } from 'react-toastify'
-import { ApiErrorMessage, Block, Button, PageTitle, SecondaryButton } from 'ui'
+import { ApiErrorMessage, Block, Button, DangerButton, PageTitle, SecondaryButton } from 'ui'
 import { EditLink, PrimaryLink } from '@base/components'
 
 export function Classes(): ReactNode {
@@ -59,19 +59,18 @@ export function Classes(): ReactNode {
         getData()
     }, [])
 
-    const { isAdmin, user } = useAuthStore()
-
     return (
         <>
             <PageTitle title={`Liste des classes ${datas.length > 0 ? '(' + datas.length + ')' : ''}`}>
                 <div className="d-flex justify-content-between align-items-center">
                     <SecondaryButton
+                        permission="class.view"
                         onClick={getData}
                         icon="arrow-clockwise"
                         className="me-2"
                         loading={RequestState.loading}
                     >Recharger</SecondaryButton>
-                    <PrimaryLink can={isAdmin && !user?.school} to="/anthropo-measure/school/classes/add" icon="plus-lg">Nouvelle classe</PrimaryLink>
+                    <PrimaryLink permission="class.create" to="/anthropo-measure/school/classes/add" icon="plus-lg">Nouvelle classe</PrimaryLink>
                 </div>
             </PageTitle>
 
@@ -104,9 +103,8 @@ export function Classes(): ReactNode {
                                     <td>{classes.level?.label ?? 'N/A'}</td>
                                     <td>{classes.notation}</td>
                                     <td>
-                                        <EditLink can={isAdmin && !user?.school} to={`/anthropo-measure/school/classes/edit/${classes.id}`} />
-                                        <Button can={isAdmin && !user?.school}
-                                            mode="danger"
+                                        <EditLink permission="class.edit" to={`/anthropo-measure/school/classes/edit/${classes.id}`} />
+                                        <DangerButton permission="class.delete"
                                             icon="trash"
                                             size="sm"
                                             onClick={() => handleDelete(classes.id as number)}

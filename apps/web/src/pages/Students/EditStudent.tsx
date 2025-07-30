@@ -11,7 +11,7 @@ import { Forbidden } from '@base/pages/Errors';
 
 export function EditStudent(): ReactNode {
     const { id } = useParams()
-    const { user, isSuperuser } = useAuthStore()
+    const { user, isAllowed } = useAuthStore()
     const [forbidden, setForbidden] = useState(false)
 
     const { Client: StudentClient, data: student } = useApi<Student>({
@@ -23,7 +23,7 @@ export function EditStudent(): ReactNode {
             student_only: 1
         })
 
-        if (!isSuperuser && (studentData?.schools?.at(0) && studentData.schools.at(0)?.id !== user?.school?.id)) setForbidden(true)
+        if (!isAllowed("user.create") && (studentData?.schools?.at(0) && studentData.schools.at(0)?.id !== user?.school?.id)) setForbidden(true)
     }, [])
 
     useEffect(() => {

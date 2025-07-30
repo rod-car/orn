@@ -14,8 +14,6 @@ export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNod
         url: '/surveys'
     })
 
-    const { isAdmin } = useAuthStore()
-
     const getData = useCallback(async () => {
         let url = '/state/student-school-z-value'
         if (surveyId !== undefined) url += '/' + surveyId.toString()
@@ -44,7 +42,7 @@ export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNod
                     <div className="d-flex align-items-center justify-content-between mb-4">
                         <h6 className="text-primary fw-bold m-0">Mesure {parts[1]} pour l'année {parts[2]}</h6>
                         <ExcelExportButton
-                            can={isAdmin}
+                            permission="export.student-school-z-value"
                             ExportClient={ExportClient}
                             loading={ExportRequestState.creating}
                             url={`/${parts[0]}/metrics-to-excel`}

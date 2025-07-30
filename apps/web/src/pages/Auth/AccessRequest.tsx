@@ -1,7 +1,7 @@
 import { useApi, useAuthStore } from 'hooks'
-import { Link, PrimaryLink } from '@base/components'
+import { InfoLink, Link, PrimaryLink } from '@base/components'
 import { config } from '@base/config'
-import { Block, Button, PageTitle, Select } from 'ui'
+import { Block, Button, PageTitle, SecondaryButton, Select } from 'ui'
 import { ReactNode, useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
@@ -120,27 +120,24 @@ export function AccessRequest(): ReactNode {
         }
     }
 
-    const { isAdmin } = useAuthStore()
-
     return (
         <>
             <PageTitle title="Demande d'accès">
                 <div className="d-flex align-items-between">
-                    <Button
+                    <SecondaryButton
+                        permission="*"
                         icon="arrow-clockwise"
-                        mode="secondary"
-                        type="button"
                         className="me-2"
                         onClick={getDatas}
                         loading={RequestState.loading}
                     >
                         Recharger
-                    </Button>
-                    <Link can={isAdmin} to="/auth/add-user" className="btn secondary-link me-2">
-                        <i className="bi bi-plus-lg me-2"></i>Nouveau utilisateur
-                    </Link>
-                    <PrimaryLink can={isAdmin} to="/auth/users">
-                        <i className="bi bi-file-earmark-text me-2"></i>Liste des utilisateurs
+                    </SecondaryButton>
+                    <InfoLink permission="user.create" to="/user/add" className="me-2" icon='plus-lg'>
+                        Nouveau utilisateur
+                    </InfoLink>
+                    <PrimaryLink permission="user.view" to="/user/list" icon='file-earmark-text'>
+                        Liste des utilisateurs
                     </PrimaryLink>
                 </div>
             </PageTitle>

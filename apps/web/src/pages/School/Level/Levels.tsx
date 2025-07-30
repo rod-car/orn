@@ -2,7 +2,7 @@
 import { ReactNode, useEffect } from 'react'
 import { config } from '@base/config'
 import { useApi, useAuthStore } from 'hooks'
-import { ApiErrorMessage, Block, Button, PageTitle, SecondaryButton } from 'ui'
+import { ApiErrorMessage, Block, Button, DangerButton, PageTitle, SecondaryButton } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
 import { EditLink, PrimaryLink } from '@base/components'
@@ -52,19 +52,18 @@ export function Levels(): ReactNode {
         })
     }
 
-    const { isAdmin, user } = useAuthStore()
-
     return (
         <>
             <PageTitle title="Liste des niveaux">
                 <div className="d-flex justify-content-between align-items-center">
                     <SecondaryButton
+                        permission="level.view"
                         onClick={getData}
                         icon="arrow-clockwise"
                         className="me-2"
                         loading={RequestState.loading}
                     >Recharger</SecondaryButton>
-                    <PrimaryLink can={isAdmin && !user?.school} icon="plus-lg" to="/anthropo-measure/school/levels/add">
+                    <PrimaryLink permission="level.create" icon="plus-lg" to="/anthropo-measure/school/levels/add">
                         Ajouter un niveau
                     </PrimaryLink>
                 </div>
@@ -103,9 +102,8 @@ export function Levels(): ReactNode {
                                     <td>{level.label}</td>
                                     <td>{level.description ?? 'N/A'}</td>
                                     <td>
-                                        <EditLink can={isAdmin && !user?.school} to={`/anthropo-measure/school/levels/edit/${level.id}`} />
-                                        <Button can={isAdmin && !user?.school}
-                                            mode="danger"
+                                        <EditLink permission="level.edit" to={`/anthropo-measure/school/levels/edit/${level.id}`} />
+                                        <DangerButton permission="level.delete"
                                             icon="trash"
                                             size="sm"
                                             onClick={() => handleDelete(level.id as number)}

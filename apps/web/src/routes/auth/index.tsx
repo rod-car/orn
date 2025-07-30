@@ -5,37 +5,37 @@ import { AccessRequest, Account, AddUser, EditUser, ForgotPassword, Login, NewPa
 export const authRoute: RouteObject[] = [
     {
         path: 'access-request',
-        element: <PrivateRoute can={['super-admin']}>
+        element: <PrivateRoute permission={['access-request.view']}>
             <AccessRequest />
         </PrivateRoute>
     },
     {
         path: 'users',
-        element: <PrivateRoute can={['super-admin']}>
+        element: <PrivateRoute permission={['users.view']}>
             <Users />
         </PrivateRoute>
     },
     {
         path: 'add-user',
-        element: <PrivateRoute can={['super-admin']}>
+        element: <PrivateRoute permission={['users.create']}>
             <AddUser />
         </PrivateRoute>
     },
     {
         path: 'edit-user/:id',
-        element: <PrivateRoute can={['super-admin']}>
+        element: <PrivateRoute permission={['users.edit']}>
             <EditUser />
         </PrivateRoute>
     },
     {
         path: 'account',
-        element: <PrivateRoute>
+        element: <PrivateRoute permission={["users.show"]}>
             <Account />
         </PrivateRoute>
     },
     {
         path: 'profile',
-        element: <PrivateRoute>
+        element: <PrivateRoute permission={["users.profile"]}>
             <Profile />
         </PrivateRoute>
     }

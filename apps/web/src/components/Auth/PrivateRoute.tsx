@@ -1,21 +1,22 @@
-import { PropsWithChildren, ReactNode, useMemo } from 'react'
-import { Navigate } from 'react-router-dom'
-import { useAuthStore } from 'hooks'
+import { ReactNode } from 'react';
+import { Navigate } from 'react-router-dom';
+import { useAuthStore } from 'hooks';
 
-export function PrivateRoute({ children, can = []}: {can?: string[]} & PropsWithChildren): ReactNode {
-    const { token, resetUser, isSuperuser, isAdmin } = useAuthStore()
+type PrivateRouteProps = {
+    permission?: string|string[];
+    children: ReactNode;
+};
 
-    const isAuthorized = useMemo(() => {
-        return can.length === 0 ||
-        (can.includes("admin") && isAdmin) ||
-        (can.includes("super-admin") && isSuperuser)
-    }, [can])
+export function PrivateRoute({ permission = [], children }: PrivateRouteProps): ReactNode {
+    const { isTokenValid, isAllowed } = useAuthStore();
 
-    if (!token) {
-        resetUser()
-        return <Navigate to="/auth/login" replace />
+    if (!isTokenValid()) {
+        return <Navigate to="/auth/login" replace />;
     }
 
-    if (!isAuthorized) return <Navigate to="/forbidden" replace />
-    return children
+    if (!isAllowed(permission)) {
+        return <Navigate to="/forbidden" replace />;
+    }
+
+    return children;
 }

@@ -1,16 +1,14 @@
+import { Button } from "ui";
 import {  ReactNode } from "react";
-import { NavLink } from "@base/components";
-import { toast } from "react-toastify";
+import { excerpt } from "functions";
 import { config } from "@base/config";
-import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import { NavLink } from "@base/components";
 import { useApi, useAuthStore } from "hooks";
 import avatar from '@base/assets/images/user.svg';
-import { Button } from "ui";
-import { excerpt } from "functions";
 
 export function UserMenu(): ReactNode {
-    const navigate = useNavigate()
-    const { user, logout, isSuperuser } = useAuthStore()
+    const { user, logout } = useAuthStore()
     const { Client, RequestState } = useApi<User>({  url: '/auth' })
 
     const handleLogout = async () => {
@@ -31,7 +29,6 @@ export function UserMenu(): ReactNode {
                 position: config.toastPosition
             })
         }
-        // navigate('/auth/login', {replace: true})
     }
 
     return <div className="app-utility-item app-user-dropdown dropdown">
@@ -40,14 +37,11 @@ export function UserMenu(): ReactNode {
             {excerpt(user?.name)} ({user?.role})
         </a>
         <ul className="dropdown-menu" aria-labelledby="user-dropdown-toggle">
-            <li><NavLink className="dropdown-item" to="/auth/account">Mon compte</NavLink></li>
-            <li><NavLink className="dropdown-item" to="/auth/settings">Paramètres</NavLink></li>
-            {isSuperuser && <>
-                <li><NavLink className="dropdown-item" to="/auth/users">Utilisateurs</NavLink></li>
-                <li><NavLink className="dropdown-item" to="/auth/access-request">Demandes d'accès</NavLink></li>
-            </>}
+            <li><NavLink permission="user.show" className="dropdown-item" to="/auth/account">Mon compte</NavLink></li>
+            <li><NavLink permission="user.view" className="dropdown-item" to="/user">Utilisateurs</NavLink></li>
+            <li><NavLink permission="access-request.view" className="dropdown-item" to="/auth/access-request">Demandes d'accès</NavLink></li>
             <li><hr className="dropdown-divider" /></li>
-            <li><Button onClick={handleLogout} className="dropdown-item shadow-none fw-normal">Se deconnecter</Button></li>
+            <li><Button permission="*" onClick={handleLogout} className="dropdown-item shadow-none fw-normal">Se deconnecter</Button></li>
         </ul>
     </div>
 }

@@ -118,7 +118,7 @@ type User = {
     name: string
     occupation: string;
     email: string
-    role: number
+    role: string
     username: string
     password: string
     password_confirmation: string
@@ -126,6 +126,11 @@ type User = {
     school: School | null;
     school_id?: number
     is_valid: number;
+    roles: { id: number, name: string }[];
+    permissions: string[];
+    specific_permissions: string[];
+    roles_id: string[];
+    specific_permissions_id: string[];
 }
 
 type Survey = {
@@ -169,17 +174,22 @@ type Site = {
 }
 
 type Article = {
-    id: number
-    designation: string
-    code?: string
-    description?: string
+    id: number;
+    designation: string;
+    code?: string;
+    description?: string;
+    unit_id?: number;
+    unit?: {
+        id: number;
+        name: string;
+    };
 }
 
 type ArticlePrice = {
     id: number
     site_id: number
     article_id: number
-    unit_id: number
+    unit_id?: number|null;
     year: number
     month: number
     price: number

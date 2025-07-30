@@ -30,7 +30,7 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
         url: '/foods'
     })
 
-    const {user} = useAuthStore()
+    const { user } = useAuthStore()
 
     const getConsommations = async () => {
         const classes = await ClassClient.get()
@@ -141,7 +141,7 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
     return (
         <>
             <PageTitle title={editedConso === undefined ? "Ajouter une consommation" : "Mise a jour des consommations"}>
-                <PrimaryLink icon="list" to="/cantine/consommation/list">
+                <PrimaryLink permission="consommation.view" icon="list" to="/cantine/consommation/list">
                     Historique des consommations
                 </PrimaryLink>
             </PageTitle>
@@ -222,10 +222,10 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
                     </div> : <Spinner isBorder size='sm' className='text-center' />}
 
                     <div className="d-flex">
-                        <PrimaryButton className='me-3' loading={RequestState.creating || RequestState.loading || RequestState.updating || FoodRequestState.loading || SchoolRequestState.loading } icon="save" type="submit">
+                        <PrimaryButton permission="consommation.create" className='me-3' loading={RequestState.creating || RequestState.loading || RequestState.updating || FoodRequestState.loading || SchoolRequestState.loading } icon="save" type="submit">
                             Enregistrer
                         </PrimaryButton>
-                        <SecondaryButton onClick={add} icon="plus" type="button">
+                        <SecondaryButton permission="consommation.create" onClick={add} icon="plus" type="button">
                             Ajouter une ligne
                         </SecondaryButton>
                     </div>

@@ -23,3 +23,5 @@ export { ArticleForm } from "./Article/ArticleForm";
 export { PriceList } from "./PriceList";
 export { PriceAdd } from "./PriceAdd";
 export { PriceHome } from "./PriceHome"
+export { PriceRecap } from "./PriceRecap"
+export { PriceStatistics } from "./PriceStatistics";

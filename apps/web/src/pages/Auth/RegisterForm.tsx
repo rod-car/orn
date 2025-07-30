@@ -228,6 +228,7 @@ export function RegisterForm({ external = true, editUser = undefined }: { extern
         <div className="text-center">
             <div className="d-flex justify-content-between align-items-center">
                 <Button
+                    permission="*"
                     loading={loading || RequestState.creating}
                     type="submit"
                     mode="primary"

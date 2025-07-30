@@ -14,9 +14,9 @@ export function AppTitle({appName, appLogo}: {appName: string, appLogo: string})
     return <>
         <a href="#" id="sidepanel-close" className="sidepanel-close d-xl-none">&times;</a>
         <div className="app-branding">
-            <Link className="app-logo" to="/">
+            <Link permission="dashboard.view" className="app-logo" to="/">
                 <img className="logo-icon me-2" src={appLogo} alt="logo" />
-                <span className="logo-text">{appName}</span>
+                <span className="logo-text text-primary">{appName}</span>
             </Link>
         </div>
     </>

@@ -12,10 +12,9 @@ export function DetailsSurvey(): ReactNode {
     const [perPage, setPerPage] = useState(30)
     const [query, setQuery] = useState<string | number>('')
     const [school, setSchool] = useState<number>(0)
+    const [situation, setSituation] = useState<number>(0)
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
     const { id } = useParams()
-
-    const { isAdmin } = useAuthStore()
 
     const { Client, data: survey, RequestState } = useApi<Survey>({
         url: 'surveys'
@@ -30,10 +29,30 @@ export function DetailsSurvey(): ReactNode {
         key: 'data'
     })
 
+    const situations = [
+        {
+            id: 0,
+            name: "Tous"
+        },
+        {
+            id: 1,
+            name: "MA"
+        },
+        {
+            id: 2,
+            name: "MAM"
+        },
+        {
+            id: 3,
+            name: "MAS"
+        }
+    ]
+
     const requestData = {
         per_page: perPage,
         q: query,
         school: school,
+        situation: situation,
         regenerate: true
     }
 
@@ -72,6 +91,11 @@ export function DetailsSurvey(): ReactNode {
             requestData['school'] = parseInt(target.value)
         }
 
+        if (target.name === 'situation') {
+            setSituation(parseInt(target.value))
+            requestData['situation'] = parseInt(target.value)
+        }
+
         await Client.find(parseInt(id as string), requestData)
     }
 
@@ -103,10 +127,10 @@ export function DetailsSurvey(): ReactNode {
         <>
             <PageTitle title={`Détails de la mésure ${surveyDetails}`}>
                 <div className="d-flex">
-                    <PrimaryLink to="/anthropo-measure/survey/list" icon="list" className="me-2">
+                    <PrimaryLink permission="anthropometry.view" to="/anthropo-measure/survey/list" icon="list" className="me-2">
                         Liste des mésures
                     </PrimaryLink>
-                    <InfoLink can={isAdmin} to={`/anthropo-measure/survey/${id}/import-result`} icon="file-earmark-text">
+                    <InfoLink permission="anthropometry.import" to={`/anthropo-measure/survey/${id}/import-result`} icon="file-earmark-text">
                         Importer des résultat
                     </InfoLink>
                 </div>
@@ -118,6 +142,7 @@ export function DetailsSurvey(): ReactNode {
                         <tr>
                             <th>Nombre d'étudiants</th>
                             <th>Etablissement</th>
+                            <th>Situation</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -145,11 +170,22 @@ export function DetailsSurvey(): ReactNode {
                                     controlled
                                 />
                             </td>
+                            <td>
+                                <Select
+                                    placeholder={null}
+                                    config={{ optionKey: 'id', valueKey: 'name' }}
+                                    options={situations}
+                                    value={situation}
+                                    name="situation"
+                                    onChange={({ target }) => filterStudents(target)}
+                                    controlled
+                                />
+                            </td>
                             <td className="d-flex align-items-center">
                                 <ExcelExportButton
-                                    can={isAdmin}
+                                    permission="export.anthropometry"
                                     ExportClient={ExportClient}
-                                    url={'/' + survey?.id + '/to-excel'}
+                                    url={'/' + survey?.id + '/to-excel?need_student=1&paginate_student=0'}
                                     loading={ExportRequestState.creating}
                                     requestData={requestData}
                                     elements={[
@@ -264,7 +300,7 @@ export function DetailsSurvey(): ReactNode {
                                             {student.gender !== 'Fille' ? student.pivot.z_height_age : '-'}
                                         </td>
                                         <td className="text-center text-nowrap">
-                                            <DetailLink to={`/anthropo-measure/student/details/${student.id}`} />
+                                            <DetailLink permission="student.show" to={`/anthropo-measure/student/details/${student.id}`} />
                                         </td>
                                     </tr>
                                 ))}

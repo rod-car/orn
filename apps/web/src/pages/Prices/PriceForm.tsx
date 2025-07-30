@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
@@ -8,62 +9,31 @@ import { years, months } from 'functions'
 type AddInfo = {
     month: number
     year: number
-    site_id: number,
+    site_id: number
     acn: string
 }
 
 const defaultAddInfo: AddInfo = { month: 0, year: 0, site_id: 0, acn: '' }
 
-const d: ArticlePrice = {
-    id: 0,
-    site_id: 0,
-    article_id: 0,
-    unit_id: 0,
-    year: 0,
-    month: 0,
-    acn: '',
-    price: 0
-}
-
-const defaultArticlePrice: ArticlePrice[] = [d]
-
-export function PriceForm(): ReactNode {
-    const [articlePrice, setArticlePrice] = useState(defaultArticlePrice)
+export function PriceForm(): React.ReactNode {
+    const [articlePrice, setArticlePrice] = useState<ArticlePrice[]>([])
     const [addInfo, setAddInfo] = useState(defaultAddInfo)
-    const {
-        Client,
-        error,
-        RequestState
-    } = useApi<ArticlePrice[]>({
-        
-        
+    const { Client, error, RequestState } = useApi<ArticlePrice[]>({
         url: '/prices',
         key: 'data'
     })
 
-    const {
-        Client: SiteClient, datas: sites
-    } = useApi<Site>({
-        
-        
+    const { Client: SiteClient, datas: sites } = useApi<Site>({
         url: '/prices/sites',
         key: 'data'
     })
 
-    const {
-        Client: ArticleClient, datas: articles
-    } = useApi<Article>({
-        
-        
+    const { Client: ArticleClient, datas: articles } = useApi<Article>({
         url: '/prices/articles',
         key: 'data'
     })
 
-    const {
-        Client: UnitClient, datas: units
-    } = useApi<Unit>({
-        
-        
+    const { Client: UnitClient, datas: units } = useApi<Unit>({
         url: '/prices/units',
         key: 'data'
     })
@@ -74,6 +44,23 @@ export function PriceForm(): ReactNode {
         UnitClient.get()
     }, [])
 
+    // Initialisation des articles dès leur chargement
+    useEffect(() => {
+        if (articles.length > 0) {
+            const initialPrices = articles.map(article => ({
+                id: 0,
+                site_id: addInfo.site_id,
+                article_id: article.id,
+                unit_id: article.unit?.id ?? null,
+                year: addInfo.year,
+                month: addInfo.month,
+                acn: addInfo.acn,
+                price: 0
+            }))
+            setArticlePrice(initialPrices)
+        }
+    }, [articles])
+
     const updateData = async () => {
         if (addInfo.month !== 0 && addInfo.site_id !== 0 && addInfo.year !== 0) {
             const data = await Client.get({
@@ -81,13 +68,24 @@ export function PriceForm(): ReactNode {
                 site_id: addInfo.site_id,
                 year: addInfo.year
             }) as unknown as ArticlePrice[]
+
             if (data.length > 0) {
-                setAddInfo({ ...addInfo, acn: data.at(0)?.acn as string })
-                setArticlePrice([...data])
-            } else {
-                setArticlePrice([...articlePrice.map(article => {
-                    return { ...article, price: 0 }
-                })])
+                setAddInfo(prev => ({ ...prev, acn: data[0].acn }))
+
+                const updatedPrices = articles.map(article => {
+                    const existing = data.find(d => d.article_id === article.id)
+                    return {
+                        id: existing?.id ?? 0,
+                        site_id: addInfo.site_id,
+                        article_id: article.id,
+                        unit_id: existing?.unit_id ?? article.unit?.id ?? 0,
+                        year: addInfo.year,
+                        month: addInfo.month,
+                        acn: existing?.acn ?? addInfo.acn,
+                        price: existing?.price ?? 0
+                    }
+                })
+                setArticlePrice(updatedPrices)
             }
         }
     }
@@ -98,15 +96,19 @@ export function PriceForm(): ReactNode {
 
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
-        const temp = articlePrice.map(ap => {
-            return { ...ap, month: addInfo.month, year: addInfo.year, acn: addInfo.acn, site_id: addInfo.site_id }
-        })
+
+        const temp = articlePrice.map(ap => ({
+            ...ap,
+            month: addInfo.month,
+            year: addInfo.year,
+            acn: addInfo.acn,
+            site_id: addInfo.site_id
+        })).filter(ap => (ap.unit_id !== null && parseFloat(ap.price as unknown as string) > 0))
 
         const response = await Client.post(temp)
 
         if (response.ok) {
-            const message = 'Enregistré'
-            toast(message, {
+            toast('Enregistré', {
                 closeButton: true,
                 type: 'success',
                 position: config.toastPosition
@@ -121,38 +123,29 @@ export function PriceForm(): ReactNode {
     }
 
     const handleChange = (target: EventTarget & (HTMLSelectElement | HTMLInputElement)): void => {
-        const value = (target.name === "year" || target.name === "month") ? parseInt(target.value) : target.value
-        const temp = articlePrice.map(a => {
-            return { ...a, [target.name]: value }
-        })
-        setAddInfo({ ...addInfo, [target.name]: value })
-        setArticlePrice([...temp])
-    }
+        const value = (target.name === "year" || target.name === "month" || target.name === "site_id")
+            ? parseInt(target.value) : target.value
 
-    const addElement = () => {
-        setArticlePrice([...articlePrice, d])
-    }
-
-    const removeElement = (index: number) => {
-        setArticlePrice([...articlePrice.filter((_value, key) => key !== index)])
+        setAddInfo(prev => ({ ...prev, [target.name]: value }))
     }
 
     const handleFieldChange = (value: string | number, index: number, key: keyof ArticlePrice) => {
-        articlePrice[index] = { ...articlePrice[index], [key]: value }
-        setArticlePrice([...articlePrice])
+        const updated = [...articlePrice]
+        updated[index] = { ...updated[index], [key]: value }
+        setArticlePrice(updated)
     }
 
     return (
-        <form action="#" onSubmit={handleSubmit} method="post">
+        <form onSubmit={handleSubmit} method="post">
             <div className="row mb-3">
                 <div className="col-xl-6">
                     <Select
                         label="Site"
                         options={sites}
-                        config={{ optionKey: 'id', valueKey: 'name' }}
+                        config={{ optionKey: 'id', valueKey: 'full_name' }}
                         value={addInfo.site_id}
                         error={error?.data?.errors?.site_id}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={({ target }) => handleChange(target)}
                         name="site_id"
                         controlled
                     />
@@ -162,7 +155,7 @@ export function PriceForm(): ReactNode {
                         label="ACN"
                         value={addInfo.acn}
                         error={error?.data?.errors?.acn}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={({ target }) => handleChange(target)}
                         name="acn"
                         required={false}
                     />
@@ -177,7 +170,7 @@ export function PriceForm(): ReactNode {
                         config={{ optionKey: 'id', valueKey: 'label' }}
                         value={addInfo.month}
                         error={error?.data?.errors?.month}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={({ target }) => handleChange(target)}
                         name="month"
                         controlled
                     />
@@ -188,7 +181,7 @@ export function PriceForm(): ReactNode {
                         options={years}
                         value={addInfo.year}
                         error={error?.data?.errors?.year}
-                        onChange={({ target }): void => handleChange(target)}
+                        onChange={({ target }) => handleChange(target)}
                         name="year"
                         controlled
                     />
@@ -197,29 +190,49 @@ export function PriceForm(): ReactNode {
 
             <hr className="mt-4" />
 
-            <table className="table table-striped mb-4">
-                <thead>
+            <table className="table table-striped table-bordered mb-4 text-sm align-middle">
+                <thead className='table-primary'>
                     <tr>
                         <th>Article</th>
                         <th>Unité</th>
                         <th>Prix Unitaire (Ar)</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {RequestState.loading && <tr>
-                        <td colSpan={4}>Chargement</td>
-                    </tr>}
-                    {articlePrice && articlePrice.map((element: ArticlePrice, index) => <tr key={index}>
-                        <td><Select onChange={({ target }) => handleFieldChange(target.value, index, 'article_id')} value={element.article_id} options={articles} config={{ optionKey: 'id', valueKey: 'designation' }} controlled /></td>
-                        <td><Select onChange={({ target }) => handleFieldChange(target.value, index, 'unit_id')} value={element.unit_id} options={units} config={{ optionKey: 'id', valueKey: 'name' }} controlled /></td>
-                        <td><Input onChange={({ target }) => handleFieldChange(target.value, index, 'price')} value={element.price} type="number" /></td>
-                        <td>
-                            {index === 0 && <Button onClick={addElement} type="button" mode="primary" icon="plus" />}
-                            {index > 0 && <Button onClick={() => removeElement(index)} type="button" mode="danger" icon="minus" />}
-                        </td>
-                    </tr>
+                    {RequestState.loading && (
+                        <tr><td colSpan={3}>Chargement…</td></tr>
                     )}
+                    {!RequestState.loading && articlePrice.map((element, index) => {
+                        const article = articles.find(a => a.id === element.article_id)
+                        return (
+                            <tr key={element.article_id}>
+                                <td>{article?.designation ?? '—'}</td>
+                                <td>
+                                    <Select
+                                        onChange={({ target }) =>
+                                            handleFieldChange(parseInt(target.value), index, 'unit_id')
+                                        }
+                                        value={element.unit_id}
+                                        options={units}
+                                        config={{ optionKey: 'id', valueKey: 'name' }}
+                                        error={error?.data?.errors?.[`articlePrice.${index}.unit_id`]}
+                                        controlled
+                                        name={`unit_id-${index}`}
+                                    />
+                                </td>
+                                <td>
+                                    <Input
+                                        onChange={({ target }) =>
+                                            handleFieldChange(parseFloat(target.value), index, 'price')
+                                        }
+                                        value={element.price}
+                                        type="number"
+                                        error={error?.data?.errors?.[`articlePrice.${index}.price`]}
+                                    />
+                                </td>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </table>
 

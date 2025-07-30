@@ -35,8 +35,6 @@ export function AdminActivityList(): ReactNode {
         getActivities()
     }, [])
 
-    const { isAdmin, user } = useAuthStore()
-
     const handleDelete = async (id: number) => {
         confirmAlert({
             title: 'Question',
@@ -109,7 +107,7 @@ export function AdminActivityList(): ReactNode {
 
     return <>
         <PageTitle title="Liste des activités">
-            <PrimaryLink can={isAdmin} to="/activities/admin/add" icon="plus-lg">
+            <PrimaryLink permission="acrivity.view" to="/activities/admin/add" icon="plus-lg">
                 Nouveau
             </PrimaryLink>
         </PageTitle>
@@ -136,10 +134,10 @@ export function AdminActivityList(): ReactNode {
                         <td>{activity.place}</td>
                         <td>{activity.is_valid ? <span className="badge bg-success">Valide par {activity.validator?.name}</span> : <span className="badge bg-warning">Non valide</span>}</td>
                         <td className="text-nowrap">
-                            {!activity.is_valid && <PrimaryButton className="me-2" can={isAdmin && !user?.school} icon="check" size="sm" onClick={() => validateActivity(activity.id) }/>}
-                            <DetailLink className="me-2" to={`/activities/show/${activity.id}`} />
-                            {activity.editable && <EditLink can={isAdmin} className="me-2" to={`/activities/admin/edit/${activity.id}`} />}
-                            {activity.deletable && <DangerButton can={isAdmin} icon="trash" size="sm" onClick={() => handleDelete(activity.id) }/>}
+                            {!activity.is_valid && <PrimaryButton className="me-2" permission="activity.edit" icon="check" size="sm" onClick={() => validateActivity(activity.id) }/>}
+                            <DetailLink permission="activity.show" className="me-2" to={`/activities/show/${activity.id}`} />
+                            {activity.editable && <EditLink permission="activity.edit" className="me-2" to={`/activities/admin/edit/${activity.id}`} />}
+                            {activity.deletable && <DangerButton permission="activity.delete" icon="trash" size="sm" onClick={() => handleDelete(activity.id) }/>}
                         </td>
                     </tr>)}
                 </tbody>

@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi, useAuthStore } from 'hooks'
-import { Fragment, ReactNode, useCallback, useEffect } from 'react'
+import { Fragment, memo, ReactNode, useCallback, useEffect, useMemo } from 'react'
 import { range, round } from 'functions'
 import Skeleton from 'react-loading-skeleton'
 import { ExcelExportButton } from '@base/components/index.ts'
+import { PrimaryButton } from 'ui'
 
 export function StudentBySchoolZ({ surveyId }: { surveyId: number | undefined }): ReactNode {
     const { Client, RequestState, error, datas } = useApi<SurveySchoolZ>({
@@ -14,13 +15,21 @@ export function StudentBySchoolZ({ surveyId }: { surveyId: number | undefined })
         url: '/surveys'
     })
 
-    const { isAdmin } = useAuthStore()
+    const params = useMemo(() => {
+        return { regenerate: false }
+    }, [])
 
     const getData = useCallback(async () => {
         let url = '/state/student-school-z'
         if (surveyId !== undefined) url += '/' + surveyId.toString()
-        await Client.get({}, url)
+        await Client.get(params, url)
     }, [surveyId])
+
+    const reloadData = useCallback(async () => {
+        params.regenerate = true
+        await getData()
+        params.regenerate = false
+    }, [])
 
     useEffect(() => {
         getData()
@@ -44,16 +53,19 @@ export function StudentBySchoolZ({ surveyId }: { surveyId: number | undefined })
             return <div key={parts[0]} className="mb-3">
                 <div className="d-flex align-items-center justify-content-between mb-4">
                     <h6 className="text-primary fw-bold m-0">Mesure {parts[1]} pour l'année {parts[2]}</h6>
-                    <ExcelExportButton
-                        can={isAdmin}
-                        ExportClient={ExportClient}
-                        loading={ExportRequestState.creating}
-                        url={`/${parts[0]}/global-to-excel`}
-                        elements={[
-                            {label: "Excel CSV", params: {type: 'csv'}},
-                            {label: "Excel XLSX", params: {type: 'xlsx'}}
-                        ]}
-                    >Exporter ces résultats</ExcelExportButton>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <PrimaryButton onClick={reloadData} className="me-2" icon="arrow-clockwise">Recharger</PrimaryButton>
+                        <ExcelExportButton
+                            permission="export.student-school-z"
+                            ExportClient={ExportClient}
+                            loading={ExportRequestState.creating}
+                            url={`/${parts[0]}/global-to-excel`}
+                            elements={[
+                                {label: "Excel CSV", params: {type: 'csv'}},
+                                {label: "Excel XLSX", params: {type: 'xlsx'}}
+                            ]}
+                        >Exporter ces résultats</ExcelExportButton>
+                    </div>
                 </div>
                 <div className="table-responsive" style={{ border: '1px solid silver' }}>
                     <table className="table table-striped table-bordered text-sm">

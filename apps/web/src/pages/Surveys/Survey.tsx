@@ -60,8 +60,6 @@ export function Survey(): ReactNode {
         })
     }, [])
 
-    const { isAdmin, user } = useAuthStore()
-
     return (
         <>
             <PageTitle title="Liste des mésures">
@@ -72,10 +70,10 @@ export function Survey(): ReactNode {
                         onClick={getDatas}
                         loading={RequestState.loading}
                     >Recharger</SecondaryButton>
-                    <PrimaryLink can={isAdmin && !user?.school} icon="plus-lg" to="/anthropo-measure/survey/add" className="me-2">
+                    <PrimaryLink permission="anthropometry.create" icon="plus-lg" to="/anthropo-measure/survey/add" className="me-2">
                         Nouvelle mésure
                     </PrimaryLink>
-                    <InfoLink can={isAdmin} icon="plus-lg" to="/anthropo-measure/survey/add-student">
+                    <InfoLink permission="anthropometry.form" icon="plus-lg" to="/anthropo-measure/survey/add-student">
                         Formulaire de mesure
                     </InfoLink>
                 </div>
@@ -108,9 +106,9 @@ export function Survey(): ReactNode {
                                     <td>{format(survey.date, 'dd MMMM y')}</td>
                                     <td>{survey.scholar_year}</td>
                                     <td>
-                                        <DetailLink to={`/anthropo-measure/survey/details/${survey.id}`} />
-                                        <EditLink can={(isAdmin && !user?.school)} to={`/anthropo-measure/survey/edit/${survey.id}`} />
-                                        <DangerButton can={isAdmin && !user?.school} icon="trash" size="sm" onClick={() => handleDelete(survey.id) }/>
+                                        <DetailLink permission="anthropometry.show" to={`/anthropo-measure/survey/details/${survey.id}`} />
+                                        <EditLink permission="anthropometry.edit" to={`/anthropo-measure/survey/edit/${survey.id}`} />
+                                        <DangerButton permission="anthropometry.delete" icon="trash" size="sm" onClick={() => handleDelete(survey.id) }/>
                                     </td>
                                 </tr>
                             ))}

@@ -5,19 +5,19 @@ import { RouteObject } from "react-router";
 export const toolsRoute:RouteObject[] = [
     {
         path: "z-calculator",
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="tools.z-calculator">
             <ZCalculator />
         </PrivateRoute>
     },
     {
         path: "z-history",
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="tools.z-calculator">
             <ZCalculatorHistory />
         </PrivateRoute>
     },
     {
         path: "value-repartition",
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="tools.value-repartition">
             <ValueRepartition />
         </PrivateRoute>
     }

@@ -164,7 +164,6 @@ export function Stock(): ReactNode {
                     <div className="card mb-4" key={idx}>
                         <div className="card-header bg-light d-flex justify-content-between align-items-center">
                             <span><strong>{stockItem.food_name}</strong> - {stockItem.school_name}</span>
-                            <PrimaryButton size='sm' icon='printer'>Imprimer</PrimaryButton>
                         </div>
                         <div className="card-body p-0">
                             <div ref={parentRef} className="position-relative">
@@ -207,7 +206,7 @@ export function Stock(): ReactNode {
                                             <td colSpan={4}><strong>Stock initial</strong></td>
                                             <td className='text-end'><strong>{stockItem.initial_stock}</strong></td>
                                         </tr>
-                                        {stockItem.movements.map((movement, mIndex) => (
+                                        {stockItem.movements.map((movement, mIndex: number) => (
                                             <tr onContextMenu={(event) => showOption(event as unknown as MouseEvent, movement)} key={mIndex}>
                                                 <td>{format(movement.date, "dd-MM-y")}</td>
                                                 <td><i className={`me-3 fa fa-arrow-${movement.type === 'e' ? 'up' : 'down'} text-${movement.type === 'e' ? 'success' : 'danger'}`}></i><span>{movement.type === 'e' ? 'Entrée' : 'Sortie'}</span></td>

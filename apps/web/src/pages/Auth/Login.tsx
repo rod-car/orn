@@ -1,6 +1,5 @@
 import { useApi, useAuthStore } from 'hooks'
 import { FormEvent, ReactNode, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Button, Checkbox, Input } from 'ui'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
@@ -23,7 +22,7 @@ export function Login(): ReactNode {
         const response = await login(Client, {username: username, password: password})
 
         if (response === undefined) {
-            toast("Impossible de contacter le serveur", {
+            toast("Impossible de contacter le serveur. Verifier votre connexion internet.", {
                 position: config.toastPosition,
                 type: 'error'
             })
@@ -42,8 +41,9 @@ export function Login(): ReactNode {
                 type: 'error',
                 position: config.toastPosition
             })
-            setPassword("")
+            // setPassword("")
         }
+
         setLoading(false)
     }
 
@@ -106,6 +106,7 @@ export function Login(): ReactNode {
                                 </div>
                                 <div className="text-center">
                                     <Button
+                                        permission="*"
                                         loading={loading}
                                         type="submit"
                                         mode="primary"

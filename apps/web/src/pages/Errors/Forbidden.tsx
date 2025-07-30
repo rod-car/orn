@@ -18,7 +18,7 @@ export function Forbidden(): ReactNode {
                         <div className="mb-4">
                             Vous n'avez pas l'autorisation de voir cette page.
                         </div>
-                        <Link className="btn app-btn-primary" to="/">Retourner à la page d'accueil</Link>
+                        <Link permission="dashboard.view" className="btn app-btn-primary" to="/">Retourner à la page d'accueil</Link>
                     </div>
                 </div>
             </div>

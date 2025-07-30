@@ -12,6 +12,7 @@ import { studentRoute, abaqueRoute, schoolRoute, surveyRoute, statisticRoute } f
 import { documentRoute } from '@base/routes/document/documents';
 import { toolsRoute } from '@base/routes/tools/tools';
 import { settingsRoute } from '@base/routes/settings/settings';
+import { securityRoute } from './routes/user';
 
 const router = createBrowserRouter([
     {
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
             {
                 path: '',
                 element: (
-                    <PrivateRoute>
+                    <PrivateRoute permission={["dashboard.view"]}>
                         <HomePage />
                     </PrivateRoute>
                 ),
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
             {
                 path: 'about',
                 element: (
-                    <PrivateRoute>
+                    <PrivateRoute permission={["dashboard.view"]}>
                         <About />
                     </PrivateRoute>
                 ),
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
             {
                 path: 'contributors',
                 element: (
-                    <PrivateRoute>
+                    <PrivateRoute permission={["app.contributors"]}>
                         <Contributors />
                     </PrivateRoute>
                 ),
@@ -70,6 +71,12 @@ const router = createBrowserRouter([
         element: <AuthRoot />,
         errorElement: <AuthRoot error={true} />,
         children: userRoute,
+    },
+    {
+        path: 'user',
+        element: <AppRoot />,
+        errorElement: <AppRoot error={true} />,
+        children: securityRoute,
     },
     {
         path: 'forbidden',

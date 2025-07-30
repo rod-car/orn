@@ -8,43 +8,43 @@ import {
 export const activityRoute: RouteObject[] = [
     {
         path: '',
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="activity.view">
             <ActivityHome />
         </PrivateRoute>
     },
     {
         path: 'admin/add',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="activity.create">
             <ActivityAdd />
         </PrivateRoute>
     },
     {
         path: 'statistics',
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="activity.statistics">
             <ActivityStatistics />
         </PrivateRoute>
     },
     {
         path: 'list',
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="activity.view">
             <ActivityList />
         </PrivateRoute>
     },
     {
         path: 'admin/list',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="activity.admin.view">
             <AdminActivityList />
         </PrivateRoute>
     },
     {
         path: 'show/:id',
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="activity.show">
             <ActivityShow />
         </PrivateRoute>
     },
     {
         path: 'admin/edit/:id',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="activity.edit">
             <ActivityEdit />
         </PrivateRoute>
     }

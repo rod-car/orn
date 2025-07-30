@@ -199,8 +199,6 @@ export function AddSurveyStudent(): ReactNode {
             });
 
             if (students && students.length > 0) {
-                console.log(students);
-                
                 const studentDatas: StudentData[] = students.map((studentClass) => {
                     const foundStudent = measuredStudents.find(student => student.id === studentClass.student.id);
                     const fullName = `${studentClass.student.firstname} ${studentClass.student.lastname ?? ''}`.trim();

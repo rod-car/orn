@@ -5,13 +5,13 @@ import { JardinScolaire, Services } from "@base/pages/Settings";
 export const settingsRoute: RouteObject[] = [
     {
         path: 'jardin',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission='garden.view'>
             <JardinScolaire />
         </PrivateRoute>
     },
     {
         path: 'services',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="service.view">
             <Services />
         </PrivateRoute>
     }

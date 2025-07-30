@@ -136,7 +136,7 @@ export function StockIn(): ReactNode {
                             <Input
                                 label="Libelle"
                                 value={label}
-                                onChange={({ target }) => setLabel(target.value, 10)}
+                                onChange={({ target }) => setLabel(target.value)}
                                 controlled
                                 required={false}
                             />
@@ -156,7 +156,8 @@ export function StockIn(): ReactNode {
                             <Input
                                 label={`Quantite recu ${unit ? '(' + unit + ')' : ''}`}
                                 value={quantity}
-                                onChange={({ target }) => setQuantity(parseInt(target.value, 10))}
+                                type="number"
+                                onChange={({ target }) => setQuantity(target.value ? parseFloat(target.value) : 0)}
                                 controlled
                             />
                         </Col>

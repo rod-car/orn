@@ -75,15 +75,9 @@ export function Services(): ReactNode {
         })
     }, [])
 
-    const handleEdit = useCallback(async (id: number) => {
-
-    }, [])
-
     useEffect(() => {
         Client.get()
     }, [])
-
-    const { isAdmin } = useAuthStore()
 
     return <>
         <PageTitle title="Gestion des services" />
@@ -106,9 +100,8 @@ export function Services(): ReactNode {
                         <td>{service.details}</td>
                         <td>{service.description}</td>
                         <td className="text-nowrap">
-                            <DetailLink className="me-2" to={"#"} />
-                            <PrimaryButton onClick={() => handleEdit(service.id)} size="sm" icon="pencil-square" can={isAdmin} className="me-2" />
-                            <DangerButton can={isAdmin} icon="trash" size="sm"
+                            <DetailLink permission="service.show" className="me-2" to={"#"} />
+                            <DangerButton permission="service.delete" icon="trash" size="sm"
                                 onClick={() => {
                                     handleDelete(service.id)
                                 }}
