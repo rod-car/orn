@@ -68,6 +68,7 @@ export function DocumentHome(): ReactNode {
                 className="w-100 me-1"
             />
             <PrimaryButton
+                permission="document.view"
                 icon="search"
                 loading={RequestState.loading}
                 size="sm"

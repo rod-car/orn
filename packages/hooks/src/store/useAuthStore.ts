@@ -30,7 +30,7 @@ interface AuthStore {
         role: string;
         school: School | null;
     }) => void;
-    isAllowed: (permission?: string | string[]) => boolean;
+    isAllowed: (permission?: string | string[], schoolId?: number) => boolean;
     hasRole: (role: string) => boolean;
     isTokenValid: () => boolean;
     refreshUser: (Client: any) => void;
@@ -126,15 +126,24 @@ export const useAuthStore = create(
                 }));
             },
 
-            isAllowed: (permission?: string | string[]): boolean => {
+            isAllowed: (permission?: string | string[], schoolId?: number | undefined): boolean => {
                 if (!permission) return false;
 
-                const { permissions } = useAuthStore.getState();
+                const { permissions, user } = useAuthStore.getState();
+                const userSchoolId = user?.school?.id;
+                let canEditSchool = true;
+
                 if (!permissions || permissions.length === 0) return false;
-                if (Array.isArray(permission)) {
-                    return permission.some(p => permissions.includes(p));
+
+                if (schoolId && userSchoolId) {
+                    if (userSchoolId === schoolId) canEditSchool = true;
+                    else canEditSchool = false;
                 }
-                return permissions.includes(permission);
+
+                if (Array.isArray(permission)) {
+                    return canEditSchool && permission.some(p => permissions.includes(p));
+                }
+                return canEditSchool && permissions.includes(permission);
             },
 
             hasRole: (role: string): boolean => {
@@ -150,6 +159,7 @@ export const useAuthStore = create(
                 const now = Date.now();
 
                 if (!expiration || now > parseInt(expiration)) {
+                    localStorage.removeItem('authStatus');
                     return false;
                 }
                 return true;
@@ -180,7 +190,6 @@ export const useAuthStore = create(
                             });
                         }
                     } else {
-                        console.error('Utilisateur no connecte');
                         set(defaultState);
                         localStorage.removeItem('authStatus');
                     }

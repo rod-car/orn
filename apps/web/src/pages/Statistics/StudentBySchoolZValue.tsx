@@ -61,7 +61,7 @@ export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNod
 
                             return <div key={index} className='mb-3'>
                                 <h6 className="mb-3 fw-bold">{abaqueName}</h6>
-                                <table className="table table-striped table-bordered text-sm">
+                                <table className="table table-striped table-bordered table-hover text-sm">
                                     <thead>
                                         <tr className="text-nowrap">
                                             <th className='bg-primary text-white'></th>
@@ -102,7 +102,7 @@ function LoadingComponent(): ReactNode {
     return <div className="mb-5">
         <div className='mb-5'>
             <h5 className="mb-4 fw-bold"><Skeleton style={{height: 30, width: 300}} /></h5>
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr className="text-nowrap">
                         <th className="w-25"></th>

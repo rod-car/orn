@@ -113,7 +113,7 @@ export function AdminActivityList(): ReactNode {
         </PageTitle>
 
         {RequestState.loading ? <ActivityLoading admin={true} /> : <Block>
-            <table className="table table-striped table-bordered text-sm">
+            <table className="table table-striped table-bordered text-sm table-hover">
                 <thead>
                     <tr>
                         <th>#</th>

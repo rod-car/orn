@@ -247,6 +247,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
             </div>}
 
             <PrimaryButton
+                permission="student.create"
                 loading={SRequestState.creating || SRequestState.updating}
                 icon="save"
                 type="submit"

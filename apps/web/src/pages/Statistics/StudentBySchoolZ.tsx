@@ -54,7 +54,7 @@ export function StudentBySchoolZ({ surveyId }: { surveyId: number | undefined })
                 <div className="d-flex align-items-center justify-content-between mb-4">
                     <h6 className="text-primary fw-bold m-0">Mesure {parts[1]} pour l'année {parts[2]}</h6>
                     <div className="d-flex justify-content-between align-items-center">
-                        <PrimaryButton onClick={reloadData} className="me-2" icon="arrow-clockwise">Recharger</PrimaryButton>
+                        <PrimaryButton permission="anthropometry.view" onClick={reloadData} className="me-2" icon="arrow-clockwise">Recharger</PrimaryButton>
                         <ExcelExportButton
                             permission="export.student-school-z"
                             ExportClient={ExportClient}
@@ -68,7 +68,7 @@ export function StudentBySchoolZ({ surveyId }: { surveyId: number | undefined })
                     </div>
                 </div>
                 <div className="table-responsive" style={{ border: '1px solid silver' }}>
-                    <table className="table table-striped table-bordered text-sm">
+                    <table className="table table-striped table-bordered table-hover text-sm">
                         <thead>
                             <tr className="text-nowrap">
                                 <th className='text-white bg-primary'></th>
@@ -164,7 +164,7 @@ function LoadingComponent(): ReactNode {
             <Skeleton style={{height: 30, width: 300}} />
             <Skeleton style={{height: 30, width: 300}} />
         </div>
-        <table className="table table-bordered">
+        <table className="table table-bordered table-hover text-sm">
             <thead>
                 <tr>
                     <th className="w-25"></th>

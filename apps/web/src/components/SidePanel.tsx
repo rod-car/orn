@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { useLocation } from "react-router";
 import logo from '@base/assets/images/logo.png';
 import { AppTitle, DropDown, NavItem } from "@base/components";
+import { useAuthStore } from "hooks";
 
 export function SidePanel(): ReactNode {
     const { pathname } = useLocation()
@@ -18,13 +19,13 @@ export function SidePanel(): ReactNode {
                         { label: "Résultat par métrique", to: "/result-by-metric", permission: "statistics.view" },
                         { label: "Résultat global", to: "/result-global", permission: "statistics.view" }
                     ]} />
-                    <GroupSeparator title="Mesure anthropométrique" />
+                    <GroupSeparator permission={["student.view", "school.view", "abaque.view", "anthropometry.view"]} title="Mesure anthropométrique" />
                     <DropDown icon="people" base="/anthropo-measure/student" label="Étudiants" permission="student.view" menus={[
                         { label: "Liste des étudiants", to: "/list", permission: "student.view" },
                         { label: "Ajouter un étudiant", to: "/add", permission: "student.create" },
-                        { label: "Importer une liste globale", to: "/import", permission: "student.import.global" },
-                        { label: "Mise a jour des classes", to: "/students-classes", permission: "student.class.update" },
-                        { label: "Importer une liste par classe", to: "/import-class", permission: "student.import.class" }
+                        { label: "Importer une liste globale", to: "/import", permission: "student.import" },
+                        { label: "Mise a jour des classes", to: "/students-classes", permission: "student.update-class" },
+                        { label: "Importer une liste par classe", to: "/import-class", permission: "student.import-class" }
                     ]} />
                     <DropDown base="/anthropo-measure/school" icon="houses" label="Ecoles" permission="school.view" menus={[
                         { label: "Liste des écoles", to: "/list", permission: "school.view" },
@@ -37,13 +38,13 @@ export function SidePanel(): ReactNode {
                         { to: '/list', label: 'Liste', permission: "abaque.view" },
                         { to: '/import', label: 'Importer une liste', permission: "abaque.import" }
                     ]} />
-                    <DropDown icon="rulers" base="/anthropo-measure/survey" label="Mesures" permission="survey.view" menus={[
-                        { to: '/add', label: 'Nouvelle mesure', permission: "survey.create" },
-                        { to: '/list', label: 'Liste des mesures', permission: "survey.view" },
-                        { to: '/add-student', label: 'Mesurer des étudiants', permission: "survey.measure" }
+                    <DropDown icon="rulers" base="/anthropo-measure/survey" label="Mesures" permission="anthropometry.view" menus={[
+                        { to: '/add', label: 'Nouvelle mesure', permission: "anthropometry.create" },
+                        { to: '/list', label: 'Liste des mesures', permission: "anthropometry.view" },
+                        { to: '/add-student', label: 'Mesurer des étudiants', permission: "anthropometry.form" }
                     ]} />
 
-                    <GroupSeparator title="Cantine scolaire" />
+                    <GroupSeparator permission={["food.view", "consommation.view", "stock.view"]} title="Cantine scolaire" />
                     <DropDown label="Collations" base="/cantine/foods" icon="cookie" permission="food.view" menus={[
                         { to: '/add', label: 'Ajouter', permission: "food.create" },
                         { to: '/list', label: 'Liste des collations', permission: "food.view" }
@@ -60,14 +61,15 @@ export function SidePanel(): ReactNode {
                         { to: '/recap', label: 'Fiche de stock', permission: "stock.recap" },
                     ]}/>
 
-                    <GroupSeparator title="Activités" />
+                    <GroupSeparator permission={["activity.view"]} title="Activités" />
                     <NavItem icon="activity" active={pathname === "/activities" || pathname.includes("/activities/show")} to="/activities" permission="activity.view" label="Les dernières activités" />
+                    <NavItem icon="activity" active={pathname === "/activities/list" || pathname.includes("/activities/list")} to="/activities/list" permission="activity.view" label="Tous les activités" />
                     <DropDown label="Gestion des activités" base="/activities/admin" icon="gear" permission="activity.view" menus={[
                         { to: '/add', label: 'Ajouter un activité', permission: "activity.create" },
                         { to: '/list', label: 'Liste des activités', permission: "activity.view" }
                     ]}/>
 
-                    <GroupSeparator title="Gestion des prix" />
+                    <GroupSeparator title="Gestion des prix" permission={["article.view", "unit.view", "price.view"]} />
                     <DropDown label="Articles" base="/prices/articles" icon="list" permission="article.view" menus={[
                         { to: '/add', label: 'Ajouter un article', permission: "article.create" },
                         { to: '/list', label: 'Liste des articles', permission: "article.view" }
@@ -86,7 +88,7 @@ export function SidePanel(): ReactNode {
                         { to: '/list', label: 'Liste des sites', permission: "site.view" }
                     ]}/>
 
-                    <GroupSeparator title="Divers" />
+                    <GroupSeparator permission={["document.view", "tools.z-calculator", "tools.value-repartition"]} title="Divers" />
                     <NavItem icon="file-earmark-text-fill" active={pathname.includes("/documents")} to="/documents" permission="document.view" label="Documents" />
                     <DropDown label="Outils" base="/tools" icon="tools" permission={["tools.z-calculator", "tools.value-repartition"]} menus={[
                         { to: '/z-calculator', label: 'Calculateur de Z', permission: "tools.z-calculator" },
@@ -118,7 +120,11 @@ export function SidePanel(): ReactNode {
     </div>
 }
 
-function GroupSeparator({ title }: { title: ReactNode }): ReactNode {
+function GroupSeparator({ title, permission = [] }: { title: ReactNode, permission: string|string[] }): ReactNode {
+    const { isAllowed } = useAuthStore();
+
+    if (!isAllowed(permission)) return undefined;
+
     return <div className="nav-link-separator">
         <span>{title}</span>
         <hr />

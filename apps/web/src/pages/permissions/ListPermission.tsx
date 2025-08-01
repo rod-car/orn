@@ -89,7 +89,7 @@ export function ListPermission() {
 
         <Block>
             <div className="table-responsive">
-                <table className="table table-striped table-bordered table-hover text-sm">
+                <table className="table table-striped table-bordered table-hover table-hover text-sm">
                     <thead>
                         <tr>
                             {columns.map((column, index) => (

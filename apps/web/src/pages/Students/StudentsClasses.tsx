@@ -201,7 +201,7 @@ export function StudentsClasses(): ReactNode {
     return (
         <>
             <PageTitle title="Mise à jour des classes des étudiants">
-                <PrimaryLink to="/anthropo-measure/student/list" icon="list">
+                <PrimaryLink permission="student.view" to="/anthropo-measure/student/list" icon="list">
                     Liste des étudiants
                 </PrimaryLink>
             </PageTitle>
@@ -306,6 +306,7 @@ export function StudentsClasses(): ReactNode {
                                             onCheck={() => handleStudentCheck(studentClass.student_id)}
                                             label="Admis" />}
                                         <DangerButton
+                                            permission="student.delete"
                                             icon="trash"
                                             size="sm"
                                             onClick={() => removeStudent(studentClass.student_id)}
@@ -325,6 +326,7 @@ export function StudentsClasses(): ReactNode {
                     </div>
 
                     {studentsClasses.length > 0 && canDisplayCheckbox() && <Button
+                        permission="student.update-class"
                         type="submit"
                         mode="primary"
                         icon="check"

@@ -100,7 +100,7 @@ export function StockIn(): ReactNode {
     return (
         <>
             <PageTitle title="Entree en stock">
-                <PrimaryLink icon="list" to="/cantine/stocks/recap">
+                <PrimaryLink permission="stock.recap" icon="list" to="/cantine/stocks/recap">
                     Fiche de stock
                 </PrimaryLink>
             </PageTitle>
@@ -134,9 +134,9 @@ export function StockIn(): ReactNode {
 
                         <Col n={6} className="mb-3">
                             <Input
-                                label="Libelle"
+                                label="Libelle (Numero de bon de sortie)"
                                 value={label}
-                                onChange={({ target }) => setLabel(target.value, 10)}
+                                onChange={({ target }) => setLabel(target.value)}
                                 controlled
                                 required={false}
                             />
@@ -156,14 +156,15 @@ export function StockIn(): ReactNode {
                             <Input
                                 label={`Quantite recu ${unit ? '(' + unit + ')' : ''}`}
                                 value={quantity}
-                                onChange={({ target }) => setQuantity(parseInt(target.value, 10))}
+                                type="number"
+                                onChange={({ target }) => setQuantity(target.value ? parseFloat(target.value) : 0)}
                                 controlled
                             />
                         </Col>
                     </Row>
 
                     <div className="d-flex">
-                        <PrimaryButton className='me-3' loading={RequestState.creating || RequestState.loading || RequestState.updating || FoodRequestState.loading || SchoolRequestState.loading} icon="save" type="submit">
+                        <PrimaryButton permission="stock.in" className='me-3' loading={RequestState.creating || RequestState.updating || FoodRequestState.loading} icon="save" type="submit">
                             Enregistrer
                         </PrimaryButton>
                     </div>

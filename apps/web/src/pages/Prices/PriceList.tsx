@@ -76,7 +76,7 @@ export function PriceList(): ReactNode {
     return <>
         <PageTitle title="Liste des prix d'articles">
             <div className="d-flex justify-content-between">
-                <Button onClick={() => getArticlePrices()} icon="arrow-clockwise" type="button" mode="secondary" className="me-2">Recharger</Button>
+                <Button permission="price.view" onClick={() => getArticlePrices()} icon="arrow-clockwise" type="button" mode="secondary" className="me-2">Recharger</Button>
                 <PrimaryLink permission="price.create" to="/prices/add" icon="plus-lg">
                     Ajouter un prix d'articles
                 </PrimaryLink>
@@ -84,7 +84,7 @@ export function PriceList(): ReactNode {
         </PageTitle>
 
         <Block className="mb-5">
-            <table className="table table-striped table-bordered text-sm">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Site</th>
@@ -105,7 +105,7 @@ export function PriceList(): ReactNode {
         </Block>
 
         <Block>
-            <table className="table table-striped table-bordered mb-4 text-sm">
+            <table className="table table-striped table-bordered mb-4 table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Site</th>

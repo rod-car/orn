@@ -59,7 +59,7 @@ export function AddClass(): ReactNode {
     return (
         <>
             <PageTitle title="Ajouter une classe">
-                <PrimaryLink icon="list" to="/anthropo-measure/school/classes/list">
+                <PrimaryLink permission="class.view" icon="list" to="/anthropo-measure/school/classes/list">
                     Liste des classes
                 </PrimaryLink>
             </PageTitle>
@@ -101,6 +101,7 @@ export function AddClass(): ReactNode {
                     </div>
 
                     <PrimaryButton
+                        permission="class.create"
                         loading={RequestState.creating}
                         icon="save"
                         type="submit"

@@ -331,3 +331,9 @@ border: 1px solid #071E78;
 .app-content {
   background: rgba(255, 255, 255, 0.3);
 }
+
+.app-content .container-xl {
+  margin-left: 1%;
+  margin-right: 1%;
+  max-width: 98%;
+}

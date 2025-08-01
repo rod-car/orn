@@ -56,7 +56,7 @@ export function Login(): ReactNode {
                                 <img className="logo-icon me-2" src={logo} alt="logo" />
                             </Link>
                         </div>
-                        <h2 className="auth-heading text-center mb-5">Se connecter</h2>
+                        <h2 className="auth-heading text-center text-primary mb-5">Se connecter</h2>
                         <div className="auth-form-container text-start">
                             <form onSubmit={handleLogin} action="" method="post" className="auth-form login-form">
                                 <div className="email mb-3">
@@ -105,6 +105,7 @@ export function Login(): ReactNode {
                                 </div>
                                 <div className="text-center">
                                     <Button
+                                        permission="*"
                                         loading={loading}
                                         type="submit"
                                         mode="primary"

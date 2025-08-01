@@ -210,7 +210,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
                 <div className="row">
                     {activity.images && activity.images.length > 0 && activity.images.map(image => {
                         return <div key={image.id} className="col-3 mt-3" style={{ position: 'relative' }}>
-                            <DangerButton onClick={() => removeImage(image.id)} style={{ position: 'absolute', top: 10, right: 20, zIndex: 50 }} icon="x" size="sm" />
+                            <DangerButton permission="activity.create" onClick={() => removeImage(image.id)} style={{ position: 'absolute', top: 10, right: 20, zIndex: 50 }} icon="x" size="sm" />
                             <LazyLoadImage
                                 alt={`Image ${image.id}`}
                                 src={image.path}
@@ -223,7 +223,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
                     {activity.files && activity.files.length > 0 && activity.files.map((file, index) => {
                         const url = URL.createObjectURL(file)
                         return <div key={index} className="col-3 mt-3" style={{ position: 'relative' }}>
-                            <DangerButton onClick={() => removeFile(index)} style={{ position: 'absolute', top: 10, right: 20, zIndex: 10 }} icon="x" size="sm" />
+                            <DangerButton permission="activity.create" onClick={() => removeFile(index)} style={{ position: 'absolute', top: 10, right: 20, zIndex: 10 }} icon="x" size="sm" />
                             <LazyLoadImage
                                 alt={`Image ${index + 1}`}
                                 src={url}
@@ -245,7 +245,10 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
                 loading={RequestState.creating || RequestState.updating || optimizing}
                 icon="save"
                 type="submit"
-            >Enregistrer</PrimaryButton>
+                permission="activity.create"
+            >
+                Enregistrer
+            </PrimaryButton>
         </form>
     )
 }

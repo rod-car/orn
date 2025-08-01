@@ -25,13 +25,13 @@ export const ActivityBlock = ({activity, index, single = false}: {activity: Acti
 
                 <p dangerouslySetInnerHTML={{ __html: activity.details as string }}></p>
 
-                {!single && <PrimaryLink icon="eye" className="mt-5" to={`/activities/show/${activity.id}`}>Plus de détails</PrimaryLink>}
+                {!single && <PrimaryLink permission="activity.show" icon="eye" className="mt-5" to={`/activities/show/${activity.id}`}>Plus de détails</PrimaryLink>}
             </div>
             <div className={`w-50 ${index % 2 !== 0 ? 'me-4' : ''}`}>
                 <PhotoProvider>
                     <div className="row">
-                        {activity.images?.map((image, index) => <div className="col-6 mb-4" style={{cursor: "pointer"}}>
-                            <PhotoView key={index} src={image.path}>
+                        {activity.images?.map((image, index) => <div key={index} className="col-6 mb-4" style={{cursor: "pointer"}}>
+                            <PhotoView src={image.path}>
                                 <LazyLoadImage
                                     alt={`Image ${index + 1}`}
                                     src={image.path}

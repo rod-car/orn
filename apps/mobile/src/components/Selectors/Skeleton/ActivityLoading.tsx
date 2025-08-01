@@ -25,7 +25,7 @@ export const ActivityLoading = memo(function ({ reverse, admin }: { reverse?: bo
                     </div>)}
                 </div>
             </div>
-        </div> : <table className="table table-striped table-bordered text-sm">
+        </div> : <table className="table table-striped table-bordered table-hover text-sm">
             <thead>
                 <tr>
                     <th>#</th>

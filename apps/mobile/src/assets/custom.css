@@ -318,3 +318,22 @@ border: 1px solid #071E78;
 .w-80 {
   width: 80%;
 }
+
+.app-wrapper {
+  background: url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fst2.depositphotos.com%2F1013886%2F10274%2Fi%2F950%2Fdepositphotos_102745826-stock-photo-healthy-eating-background-studio-photo.jpg&f=1&nofb=1&ipt=b8bd43012c235784ee54b99958a330df91f78671f7ffea5f0edf4b64758f2944");
+  background-attachment: fixed;
+  background-origin: content-box;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+}
+
+.app-content {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.app-content .container-xl {
+  margin-left: 1%;
+  margin-right: 1%;
+  max-width: 98%;
+}

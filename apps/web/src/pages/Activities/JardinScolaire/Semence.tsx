@@ -134,7 +134,7 @@ export function Semence(): ReactNode {
         </Block>}
 
         <Block>
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Nom</th>

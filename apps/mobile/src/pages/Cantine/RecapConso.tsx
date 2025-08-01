@@ -30,7 +30,7 @@ export function RecapConso(): ReactNode {
     return (
         <>
             <PageTitle title="Recapitulatifs">
-                <PrimaryLink icon="list" to="/cantine/consommation/list">
+                <PrimaryLink permission="consommation.view" icon="list" to="/cantine/consommation/list">
                     Historique des consommations
                 </PrimaryLink>
             </PageTitle>

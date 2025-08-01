@@ -165,10 +165,11 @@ export function PriceRecap(): ReactNode {
                     onClick={exportToPDF}
                     disabled={isExporting || !response}
                     icon="file-pdf"
+                    permission="price.export"
                 >
                     {isExporting ? 'Export en cours...' : 'Exporter au format PDF'}
                 </SecondaryButton>
-                <PrimaryLink to="/prices/add" icon="plus-lg">
+                <PrimaryLink permission="price.create" to="/prices/add" icon="plus-lg">
                     Ajouter un prix
                 </PrimaryLink>
             </div>

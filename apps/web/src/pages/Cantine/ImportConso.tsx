@@ -90,7 +90,7 @@ export function ImportConso(): ReactNode {
     return (
         <>
             <PageTitle title='Importer une consommation'>
-                <PrimaryLink icon='list' to="/cantine/list-conso">
+                <PrimaryLink permission="consommation.view" icon='list' to="/cantine/list-conso">
                     Liste des consommation
                 </PrimaryLink>
             </PageTitle>
@@ -142,14 +142,14 @@ export function ImportConso(): ReactNode {
             <Block>
                 <div className="d-flex justify-content-between align-items-center">
                     <h6 className="text-primary">Affichage temporaire des données</h6>
-                    {json.length > 0 && <PrimaryButton loading={importing || RequestState.loading | ConsommationRequestState.creating} icon="save" onClick={save}>
+                    {json.length > 0 && <PrimaryButton permission="consommation.import" loading={importing || RequestState.loading || ConsommationRequestState.creating} icon="save" onClick={save}>
                         Enregistrer
                     </PrimaryButton>}
                 </div>
                 <hr />
 
                 <div className="table-responsive">
-                    {classes.length > 0 && json.length > 0 ? <table className="table table-bordered table-striped text-sm">
+                    {classes.length > 0 && json.length > 0 ? <table className="table table-bordered table-striped table-hover text-sm">
                         <thead>
                         <tr>
                             <th style={styles.head}>#</th>

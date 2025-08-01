@@ -1,10 +1,11 @@
+import { Button } from "ui";
 import {  ReactNode } from "react";
-import { toast } from "react-toastify";
+import { excerpt } from "functions";
 import { config } from "@base/config";
+import { toast } from "react-toastify";
+import { NavLink } from "@base/components";
 import { useApi, useAuthStore } from "hooks";
 import avatar from '@base/assets/images/user.svg';
-import { Button } from "ui";
-import { excerpt } from "functions";
 
 export function UserMenu(): ReactNode {
     const { user, logout } = useAuthStore()
@@ -22,7 +23,6 @@ export function UserMenu(): ReactNode {
                 type: 'success',
                 position: config.toastPosition
             })
-            // window.location.href = "/auth/login"
         } else {
             toast(response.statusText, {
                 type: 'error',
@@ -37,7 +37,9 @@ export function UserMenu(): ReactNode {
             {excerpt(user?.name)} ({user?.role})
         </a>
         <ul className="dropdown-menu" aria-labelledby="user-dropdown-toggle">
-            <li><Button onClick={handleLogout} className="dropdown-item shadow-none fw-normal">Se deconnecter</Button></li>
+            <li><NavLink permission="user.show" className="dropdown-item" to="/auth/profile">Mon compte</NavLink></li>
+            <li><hr className="dropdown-divider" /></li>
+            <li><Button permission="*" onClick={handleLogout} className="dropdown-item shadow-none fw-normal">Se deconnecter</Button></li>
         </ul>
     </div>
 }

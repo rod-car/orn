@@ -188,7 +188,7 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
 
                     {consommations.length > 0 ? <div className="table-responsive mb-3">
                         <div className="sticky-table">
-                            <table className="table table-bordered table-striped text-sm mb-0">
+                            <table className="table table-bordered table-striped table-hover text-sm mb-0">
                                 <thead>
                                     <tr>
                                         <th className='bg-info text-white'>Date de prise</th>
@@ -212,8 +212,8 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
                                             }
                                         })}
                                         <td className="d-flex align-items-center">
-                                            {index === 0 && <PrimaryButton icon="plus-lg" className='me-2 p-2' onClick={add} />}
-                                            {index > 0 && <DangerButton icon="dash-lg" className='p-2' onClick={() => remove(index)} />}
+                                            {index === 0 && <PrimaryButton permission="consommation.create" icon="plus-lg" className='me-2 p-2' onClick={add} />}
+                                            {index > 0 && <DangerButton permission="consommation.create" icon="dash-lg" className='p-2' onClick={() => remove(index)} />}
                                         </td>
                                     </tr>)}
                                 </tbody>
@@ -222,7 +222,7 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
                     </div> : <Spinner isBorder size='sm' className='text-center' />}
 
                     <div className="d-flex">
-                        <PrimaryButton permission="consommation.create" className='me-3' loading={RequestState.creating || RequestState.loading || RequestState.updating || FoodRequestState.loading || SchoolRequestState.loading } icon="save" type="submit">
+                        <PrimaryButton permission="consommation.create" className='me-3' loading={RequestState.creating || RequestState.updating || FoodRequestState.loading } icon="save" type="submit">
                             Enregistrer
                         </PrimaryButton>
                         <SecondaryButton permission="consommation.create" onClick={add} icon="plus" type="button">

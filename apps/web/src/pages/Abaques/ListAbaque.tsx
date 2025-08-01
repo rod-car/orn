@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi, useAuthStore } from 'hooks'
+import { useApi } from 'hooks'
 import { ChangeEvent, ReactNode, useCallback, useEffect, useState } from 'react'
 import { createSearchParams } from 'react-router-dom'
 import { config, abaque } from '@base/config'
-import { Block, Button, DangerButton, PageTitle, Select } from 'ui'
+import { Block, DangerButton, PageTitle, Select } from 'ui'
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
-import { EditLink, Link, PrimaryLink } from '@base/components'
+import { EditLink, PrimaryLink } from '@base/components'
 
 export function ListAbaque(): ReactNode {
     const [abaqueType, setAbaqueType] = useState(abaque.abaqueTypes[0].id)
@@ -212,6 +212,7 @@ export function ListAbaque(): ReactNode {
                                             />
 
                                             <DangerButton
+                                                permission="abaque.delete"
                                                 onClick={() => remove(abaque.id)}
                                                 icon="trash"
                                                 size="sm"
@@ -274,6 +275,7 @@ export function ListAbaque(): ReactNode {
                                             />
 
                                             <DangerButton
+                                                permission="abaque.delete"
                                                 onClick={() => remove(abaque.id)}
                                                 icon="trash"
                                                 size="sm"

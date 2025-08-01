@@ -3,7 +3,7 @@ import { PrimaryLink } from "@base/components";
 import { useApi } from "hooks";
 import { ReactNode } from "react";
 import { useEffect, useState } from 'react';
-import { PageTitle } from "ui";
+import { Button, PageTitle } from "ui";
 import React from "react";
 import Select from 'react-select';
 
@@ -189,7 +189,7 @@ export function PriceStatistics(): ReactNode {
 
         return (
             <div id="price-table-content" className="table-responsive">
-                <table className="table table-striped">
+                <table className="table table-striped table-hover text-sm">
                     <thead>
                         <tr>
                             <th>Commune</th>
@@ -228,7 +228,7 @@ export function PriceStatistics(): ReactNode {
 
         return (
             <div id="price-table-content" className="table-responsive">
-                <table className="table table-striped">
+                <table className="table table-striped table-hover text-sm">
                     <thead>
                         <tr>
                             <th>Commune</th>
@@ -282,7 +282,7 @@ export function PriceStatistics(): ReactNode {
 
         return (
             <div id="price-table-content" className="table-responsive">
-                <table className="table table-striped">
+                <table className="table table-striped table-hover text-sm">
                     <thead>
                         <tr>
                             <th rowSpan={2}>Commune</th>
@@ -343,15 +343,16 @@ export function PriceStatistics(): ReactNode {
         <>
             <PageTitle title="Récapitulatif des Prix">
                 <div className="d-flex gap-2">
-                    <button 
+                    <Button 
                         className="btn btn-success"
                         onClick={exportToPDF}
                         disabled={isExporting || (!response && Object.keys(comparisonData).length === 0)}
+                        permission="price.export"
                     >
                         <i className="bi bi-file-pdf me-2"></i>
                         {isExporting ? 'Export en cours...' : 'Export PDF'}
-                    </button>
-                    <PrimaryLink to="/prices/add" icon="plus-lg">
+                    </Button>
+                    <PrimaryLink permission="price.create" to="/prices/add" icon="plus-lg">
                         Ajouter un prix
                     </PrimaryLink>
                 </div>

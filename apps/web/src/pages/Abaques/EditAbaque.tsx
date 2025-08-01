@@ -55,7 +55,7 @@ export function EditAbaque(): ReactNode {
     return (
         <>
             <PageTitle title={`Modifier: ${abaqueConfig.find(type)}`}>
-                <PrimaryLink icon="list" to="/anthropo-measure/abaques/list">
+                <PrimaryLink permission="abaque.view" icon="list" to="/anthropo-measure/abaques/list">
                     Liste des abaques
                 </PrimaryLink>
             </PageTitle>
@@ -353,6 +353,7 @@ export function EditAbaque(): ReactNode {
                     )}
 
                     <PrimaryButton
+                        permission="abaque.edit"
                         loading={RequestState.updating}
                         type="submit"
                         icon="save"

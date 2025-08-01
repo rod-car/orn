@@ -15,11 +15,11 @@ export function ZCalculatorHistory(): ReactNode {
 
     return <>
         <PageTitle title="Historique">
-            <PrimaryLink to="/tools/z-calculator" icon="plus">Calculateur de Z</PrimaryLink>
+            <PrimaryLink permission="tools.z-calculator" to="/tools/z-calculator" icon="plus">Calculateur de Z</PrimaryLink>
         </PageTitle>
 
         <Block>
-            {RequestState.loading ? <Spinner isBorder className="text-center" /> : <table className="table table-striped table-bordered">
+            {RequestState.loading ? <Spinner isBorder className="text-center" /> : <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                 <tr>
                     <th>Code</th>

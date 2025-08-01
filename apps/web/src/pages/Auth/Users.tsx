@@ -114,7 +114,7 @@ export function Users(): ReactNode {
             {error && <div className="alert alert-danger">{error.message}</div>}
 
             <Block className="mb-5 mt-3">
-                <table className="table table-striped">
+                <table className="table table-striped table-hover text-sm">
                     <thead>
                         <tr>
                             <th>Elements</th>
@@ -139,7 +139,7 @@ export function Users(): ReactNode {
 
             <Block>
                 <div className="table-responsive">
-                    <table className="table table-striped table-bordered text-sm">
+                    <table className="table table-striped table-bordered table-hover text-sm">
                         <thead>
                             <tr>
                                 <th>ID</th>

@@ -49,17 +49,14 @@ export function Account(): ReactNode {
     const [showChangeUsername, setShowChangeUsername] = useState(false)
     const { lastLogin } = useAuthStore()
 
-    const navigate = useNavigate()
-
     const roles = useMemo(() => ["Invité", "Administrateur", "Super administrateur"], [])
 	const { Client } = useApi({
-		
 		url: '/auth'
 	})
 
     const getUser = useCallback(async (): Promise<void> => {
         const user = await Client.get({}, '/user')
-        if (user) setUser(user as unknown as User)
+        if (user) setUser((user as unknown as {items: Record<string, unknown>}).items.user as unknown as User)
     }, [])
 
     useEffect(() => {
@@ -229,7 +226,7 @@ function CardAccount(props: CardAccountProps): ReactNode {
 					</div>
 				</div>
 				<div className="col-auto">
-					<h4 className="app-card-title">{props.title}</h4>
+					<h4 className="app-card-title text-primary">{props.title}</h4>
 				</div>
 			</div>
 		</div>
@@ -332,8 +329,8 @@ function ChangePasswordComponent({onClose, user}: {onClose: () => void, user?: U
             <Input className="mb-2" name="new_password" type="password" placeholder="Nouveau mot de passe" />
             <Input className="mb-2" name="new_password_confirmation" type="password" placeholder="Confirmer nouveau mot de passe" />
             <Checkbox checked={disconnect} onCheck={handleCheck} className="mb-3" label="Deconnecter de l'appareil" /><br />
-            <Button loading={RequestState.creating || RequestState.updating} mode="primary" size="md" className="me-2" type="submit">Enregistrer</Button>
-            <Button onClick={onClose} mode="danger">Fermer</Button>
+            <Button permission="*" loading={RequestState.creating || RequestState.updating} mode="primary" size="md" className="me-2" type="submit">Enregistrer</Button>
+            <Button permission="*" onClick={onClose} mode="danger">Fermer</Button>
         </form>
     </>
 }
@@ -391,8 +388,8 @@ function ChangeFieldComponent({onClose, user, field}: ChangeFieldComponentProps)
         <form method="POST" onSubmit={handleSubmit}>
             <Input className="mb-2" defaultValue={user && user[field]} name={field} type="text" placeholder="Renseigner" />
             <Input value={password} onChange={({target}) => setPassword(target.value)}  className="mb-3" name="password" type="password" placeholder="Mot de passe" />
-            <Button loading={RequestState.creating || RequestState.updating} mode="primary" size="md" className="me-2" type="submit">Enregistrer</Button>
-            <Button onClick={() => onClose(false)} mode="danger">Fermer</Button>
+            <Button permission="*" loading={RequestState.creating || RequestState.updating} mode="primary" size="md" className="me-2" type="submit">Enregistrer</Button>
+            <Button permission="*" onClick={() => onClose(false)} mode="danger">Fermer</Button>
         </form>
     </>
 }

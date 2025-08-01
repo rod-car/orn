@@ -257,7 +257,7 @@ export function UserForm({ editUser = null }: Props) {
             </div>
 
             <div className="d-flex justify-content-end align-items-center">
-                <PrimaryButton icon='save' loading={RequestState.creating || RequestState.updating} type="submit">Enregstrer</PrimaryButton>
+                <PrimaryButton permission="user.create" icon='save' loading={RequestState.creating || RequestState.updating} type="submit">Enregstrer</PrimaryButton>
             </div>
         </form>
     );

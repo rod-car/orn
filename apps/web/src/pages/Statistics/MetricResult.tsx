@@ -18,10 +18,10 @@ export function MetricResult(): ReactNode {
     useEffect(() => {
         getSurveys()
     }, [])
-    
+
     return <>
         <PageTitle title="Résultats par métrique">
-            <PrimaryLink to="/" icon="speedometer">Tableau de bord</PrimaryLink>
+            <PrimaryLink permission="dashboard.view" to="/" icon="speedometer">Tableau de bord</PrimaryLink>
         </PageTitle>
 
         {surveyId > -1 ? <Block className="mb-3">

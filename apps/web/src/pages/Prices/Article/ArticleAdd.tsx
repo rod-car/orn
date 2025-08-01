@@ -7,7 +7,7 @@ export function ArticleAdd(): ReactNode {
     return (
         <>
             <PageTitle title="Ajouter un article">
-                <PrimaryLink to="/prices/articles/list"icon='list'>
+                <PrimaryLink permission="article.view" to="/prices/articles/list"icon='list'>
                     Liste des articles
                 </PrimaryLink>
             </PageTitle>

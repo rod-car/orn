@@ -78,7 +78,7 @@ export function EditClass(): ReactNode {
     return (
         <>
             <PageTitle title={`Editer: ${classes.name}`}>
-                <PrimaryLink icon='list' to="/anthropo-measure/school/classes/list">
+                <PrimaryLink permission="class.view" icon='list' to="/anthropo-measure/school/classes/list">
                     Liste des classes
                 </PrimaryLink>
             </PageTitle>

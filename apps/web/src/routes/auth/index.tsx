@@ -11,31 +11,31 @@ export const authRoute: RouteObject[] = [
     },
     {
         path: 'users',
-        element: <PrivateRoute permission={['users.view']}>
+        element: <PrivateRoute permission={['user.view']}>
             <Users />
         </PrivateRoute>
     },
     {
         path: 'add-user',
-        element: <PrivateRoute permission={['users.create']}>
+        element: <PrivateRoute permission={['user.create']}>
             <AddUser />
         </PrivateRoute>
     },
     {
         path: 'edit-user/:id',
-        element: <PrivateRoute permission={['users.edit']}>
+        element: <PrivateRoute permission={['user.edit']}>
             <EditUser />
         </PrivateRoute>
     },
     {
         path: 'account',
-        element: <PrivateRoute permission={["users.show"]}>
+        element: <PrivateRoute permission={["user.show"]}>
             <Account />
         </PrivateRoute>
     },
     {
         path: 'profile',
-        element: <PrivateRoute permission={["users.profile"]}>
+        element: <PrivateRoute permission={["user.profile"]}>
             <Profile />
         </PrivateRoute>
     }

@@ -69,6 +69,7 @@ export function Survey(): ReactNode {
                         className="me-2"
                         onClick={getDatas}
                         loading={RequestState.loading}
+                        permission="anthropometry.view"
                     >Recharger</SecondaryButton>
                     <PrimaryLink permission="anthropometry.create" icon="plus-lg" to="/anthropo-measure/survey/add" className="me-2">
                         Nouvelle mésure
@@ -82,7 +83,7 @@ export function Survey(): ReactNode {
             <Block className="mb-5">
                 {error && <div className="alert alert-danger">{error.message}</div>}
 
-                <table className="table table-striped table-bordered text-sm">
+                <table className="table table-striped table-bordered table-hover text-sm">
                     <thead>
                         <tr>
                             <th>Mesure</th>

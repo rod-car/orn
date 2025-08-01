@@ -1,7 +1,8 @@
-import { ReactNode } from "react";
-import { useLocation } from "react-router";
+import { ReactNode } from 'react';
+import { useAuthStore } from 'hooks';
+import { useLocation } from 'react-router';
 import logo from '@base/assets/images/logo.png';
-import { AppTitle, DropDown, NavItem } from "@base/components";
+import { AppTitle, DropDown, NavItem } from '@base/components';
 
 export function SidePanel(): ReactNode {
     const { pathname } = useLocation()
@@ -13,17 +14,17 @@ export function SidePanel(): ReactNode {
             <nav id="app-nav-main" className="app-nav app-nav-main flex-grow-1">
                 <ul className="app-menu list-unstyled accordion" id="menu-accordion">
                     <NavItem icon="speedometer" active={pathname === "/"} to="" label="Tableau de bord" />
-                    <GroupSeparator title="Consommations" />
-                    <NavItem icon="plus" active={pathname === "/cantine/consommation/add"} to="/cantine/consommation/add" label="Ajouter une consommation" />
-                    <NavItem icon="list" active={pathname === "/cantine/consommation/list"} to="/cantine/consommation/list" label="Historique des consommations" />
+                    <GroupSeparator permission={['consommation.create', 'consommation.view']} title="Consommations" />
+                    <NavItem permission="consommation.create" icon="plus" active={pathname === "/cantine/consommation/add"} to="/cantine/consommation/add" label="Ajouter une consommation" />
+                    <NavItem permission="consommation.view" icon="list" active={pathname === "/cantine/consommation/list"} to="/cantine/consommation/list" label="Historique des consommations" />
 
-                    <GroupSeparator title="Gestion de stock" />
-                    <NavItem icon="arrow-right" active={pathname === "/cantine/stocks/in"} to="/cantine/stocks/in" label="Entree en stock" />
-                    <NavItem icon="arrow-left" active={pathname === "/cantine/stocks/out"} to="/cantine/stocks/out" label="Sortie de stock" />
-                    <NavItem icon="file" active={pathname === "/cantine/stocks/recap"} to="/cantine/stocks/recap" label="Fiche de stock" />
+                    <GroupSeparator permission={['stock.in', 'stock.out', 'stock.recap']} title="Gestion de stock" />
+                    <NavItem permission="stock.in" icon="arrow-right" active={pathname === "/cantine/stocks/in"} to="/cantine/stocks/in" label="Entree en stock" />
+                    <NavItem permission="stock.out" icon="arrow-left" active={pathname === "/cantine/stocks/out"} to="/cantine/stocks/out" label="Sortie de stock" />
+                    <NavItem permission="stock.recap" icon="file" active={pathname === "/cantine/stocks/recap"} to="/cantine/stocks/recap" label="Fiche de stock" />
 
-                    <GroupSeparator title="Divers" />
-                    <DropDown label="Outils" base="/tools" icon="tools" menus={[
+                    <GroupSeparator permission={['tools.z-calculator']} title="Divers" />
+                    <DropDown permission="tools.z-calculator" label="Outils" base="/tools" icon="tools" menus={[
                         { to: '/z-calculator', label: 'Calculateur de Z' },
                     ]} />
                 </ul>
@@ -40,7 +41,11 @@ export function SidePanel(): ReactNode {
     </div>
 }
 
-function GroupSeparator({ title }: { title: ReactNode }): ReactNode {
+function GroupSeparator({ title, permission = [] }: { title: ReactNode, permission: string|string[] }): ReactNode {
+    const { isAllowed } = useAuthStore();
+
+    if (!isAllowed(permission)) return undefined;
+
     return <div className="nav-link-separator">
         <span>{title}</span>
         <hr />

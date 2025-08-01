@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi, useAuthStore } from 'hooks'
+import { useApi } from 'hooks'
 import { PrimaryLink, EditLink } from '@base/components'
 import { config } from '@base/config'
 import { Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
@@ -55,8 +55,6 @@ export function FoodList(): ReactNode {
         })
     }, [])
 
-    const { user } = useAuthStore()
-
     return (
         <>
             <PageTitle title="Liste des collations">
@@ -73,7 +71,7 @@ export function FoodList(): ReactNode {
             <Block className="mb-5">
                 {error && <div className="alert alert-danger">{error.message}</div>}
 
-                <table className="table table-striped table-bordered text-sm">
+                <table className="table table-striped table-bordered table-hover text-sm">
                     <thead>
                         <tr>
                             <th>#</th>

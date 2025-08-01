@@ -5,7 +5,7 @@ import { Block } from "ui";
 
 export function SiteLoading(): ReactNode {
     return <Block>
-        <table className="table table-striped table-bordered">
+        <table className="table table-striped table-bordered table-hover text-sm">
             <thead>
                 <tr>
                     <th>Nom</th>

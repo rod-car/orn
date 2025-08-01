@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {FormEvent, ReactNode, useCallback, useState} from "react";
 import {Block, Input, PageTitle, PrimaryButton, Select} from "ui";
 import {Col, Row} from "@base/components/Bootstrap";
@@ -62,7 +63,7 @@ export function ZCalculator(): ReactNode {
 
     return <>
         <PageTitle title="Calculateur de Z (2 ans a 18 ans)">
-            <PrimaryLink to="/tools/z-history" icon="list">Historique de calcul</PrimaryLink>
+            <PrimaryLink permission="tools.z-calculator" to="/tools/z-history" icon="list">Historique de calcul</PrimaryLink>
         </PageTitle>
         <Row>
             <Col n={8}>
@@ -137,7 +138,7 @@ export function ZCalculator(): ReactNode {
                                 />
                             </Col>
                         </Row>
-                        <PrimaryButton type={"submit"} loading={RequestState.creating} icon="save">Voir le resultat</PrimaryButton>
+                        <PrimaryButton permission="tools.z-calculator" type={"submit"} loading={RequestState.creating} icon="save">Voir le resultat</PrimaryButton>
                     </form>
                 </Block>
             </Col>

@@ -111,7 +111,7 @@ export function ImportResultSurvey(): ReactNode {
     return (
         <>
             <PageTitle title={`Importer des résultats (${survey?.label ?? '-'})`}>
-                <PrimaryLink to={`/anthropo-measure/survey/details/${id}`} icon="folder">
+                <PrimaryLink permission="anthropometry.show" to={`/anthropo-measure/survey/details/${id}`} icon="folder">
                     Details de la mesure
                 </PrimaryLink>
             </PageTitle>
@@ -173,7 +173,7 @@ export function ImportResultSurvey(): ReactNode {
                     const jsonData = json[sheetName] as OneSheet
                     return <div key={index + 1} className="table-responsive mb-4">
                         <h6 className="fw-bold text-danger mb-3">{sheetName} - {jsonData.length} Étudiant(s)</h6>
-                        <table className="table table-striped table-bordered text-sm">
+                        <table className="table table-striped table-bordered table-hover text-sm">
                             <thead>
                                 <tr className="bg-danger">
                                     <th className="text-nowrap">Code</th>

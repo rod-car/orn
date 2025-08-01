@@ -21,7 +21,7 @@ export function GlobalResult(): ReactNode {
 
     return <>
         <PageTitle title="Résultats global">
-            <PrimaryLink to="/" icon="speedometer">Tableau de bord</PrimaryLink>
+            <PrimaryLink permission="dashboard.view" to="/" icon="speedometer">Tableau de bord</PrimaryLink>
         </PageTitle>
 
         {surveyId > -1 ? <Block className="mb-4">

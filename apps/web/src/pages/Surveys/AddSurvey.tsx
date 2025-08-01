@@ -55,7 +55,7 @@ export function AddSurvey(): ReactNode {
     return (
         <>
             <PageTitle title="Nouvelle mésure">
-                <PrimaryLink icon="list" to="/anthropo-measure/survey/list">
+                <PrimaryLink permission="anthropometry.view" icon="list" to="/anthropo-measure/survey/list">
                     Liste des mésures
                 </PrimaryLink>
             </PageTitle>
@@ -89,6 +89,7 @@ export function AddSurvey(): ReactNode {
                     </div>
 
                     <PrimaryButton
+                        permission="anthropometry.create"
                         loading={RequestState.creating}
                         icon="save"
                         type="submit"

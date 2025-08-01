@@ -28,7 +28,7 @@ export function ArticleEdit(): ReactNode {
             <PageTitle
                 title={article ? article.designation : <Skeleton count={1} style={{ height: 40 }} containerClassName="w-50" />}
             >
-                <PrimaryLink to="/prices/articles/list" icon="list">
+                <PrimaryLink permission="article.view" to="/prices/articles/list" icon="list">
                     Liste des articles
                 </PrimaryLink>
             </PageTitle>

@@ -30,7 +30,7 @@ export function ActivityShow(): ReactNode {
 
     return <>
         <PageTitle title="Détails de l'activité">
-            <PrimaryLink icon="list" to="/activities/list">
+            <PrimaryLink permission="activity.view" icon="list" to="/activities/list">
                 Nos activités
             </PrimaryLink>
         </PageTitle>

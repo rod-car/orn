@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi, useAuthStore } from 'hooks'
-import { DetailLink, EditLink, Link, PrimaryLink } from '@base/components'
+import { DetailLink, EditLink, PrimaryLink } from '@base/components'
 import { config } from '@base/config'
-import { ApiErrorMessage, Block, Button, DangerButton, PageTitle, SecondaryButton } from 'ui'
+import { ApiErrorMessage, Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
 import { ReactNode, useCallback, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
@@ -58,6 +58,8 @@ export function SchoolList(): ReactNode {
         })
     }, [])
 
+    const { isAllowed } = useAuthStore();
+
     useEffect(() => {
         getSchools()
     }, [])
@@ -86,7 +88,7 @@ export function SchoolList(): ReactNode {
                     />
                 )}
 
-                <table className="table table-striped table-bordered text-sm">
+                <table className="table table-striped table-bordered table-hover text-sm">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -117,8 +119,9 @@ export function SchoolList(): ReactNode {
                                     <td>{school.responsable}</td>
                                     <td>
                                         <DetailLink permission="school.show" to={`/anthropo-measure/school/details/${school.id}`} />
-                                        <EditLink permission="school.edit" to={`/anthropo-measure/school/edit/${school.id}`} />
-                                        <DangerButton permission="school.delete"
+                                        {isAllowed("school.edit", school.id) && <EditLink permission="school.edit" to={`/anthropo-measure/school/edit/${school.id}`} />}
+                                        <DangerButton
+                                            permission="school.delete"
                                             icon="trash"
                                             size="sm"
                                             onClick={() => handleDelete(school.id)}

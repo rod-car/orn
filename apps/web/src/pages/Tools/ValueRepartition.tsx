@@ -131,7 +131,7 @@ export function ValueRepartition(): ReactNode {
                     </ul>
                 </div>
 
-                <PrimaryButton type="submit" icon="save">Voir la repartition</PrimaryButton>
+                <PrimaryButton permission="tools.value-repartition" type="submit" icon="save">Voir la repartition</PrimaryButton>
             </form>
         </Block>
     </>

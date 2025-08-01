@@ -7,7 +7,7 @@ export function AddStudent(): ReactNode {
     return (
         <>
             <PageTitle title="Ajouter un étudiant">
-                <PrimaryLink to="/anthropo-measure/student/list" icon="list">
+                <PrimaryLink permission="student.view" to="/anthropo-measure/student/list" icon="list">
                     Liste des étudiants
                 </PrimaryLink>
             </PageTitle>

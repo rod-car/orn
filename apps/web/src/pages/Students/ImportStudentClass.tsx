@@ -7,6 +7,7 @@ import { class_categories, config } from '@base/config'
 import { isDate } from 'functions'
 import { toast } from 'react-toastify'
 import { Col, Modal, Row } from '@base/components/Bootstrap';
+import { Forbidden } from '../Errors/index.ts'
 
 export function ImportStudentClass(): ReactNode {
     const [isOpen, setIsOpen] = useState(false)
@@ -123,7 +124,7 @@ export function ImportStudentClass(): ReactNode {
     return (
         <>
             <PageTitle title="Importer une liste des étudiants">
-                <PrimaryLink to="/anthropo-measure/student/list" icon="list">
+                <PrimaryLink permission="" to="/anthropo-measure/student/list" icon="list">
                     Liste des étudiants
                 </PrimaryLink>
             </PageTitle>
@@ -209,6 +210,7 @@ export function ImportStudentClass(): ReactNode {
                         {json.length > 0 && `(${json.length} Etudiant(s))`}
                     </h6>
                     {json.length > 0 && scholarYear as number > 0 && <PrimaryButton
+                        permission="student.import"
                         loading={RequestState.creating}
                         icon="save"
                         onClick={save}
@@ -216,7 +218,7 @@ export function ImportStudentClass(): ReactNode {
                 </div>
 
                 <div className="table-responsive border">
-                    <table className="table table-striped text-sm">
+                    <table className="table table-striped table-hover text-sm">
                         <thead>
                             <tr>
                                 <th className='bg-primary text-white'>N</th>
@@ -256,6 +258,7 @@ export function ImportStudentClass(): ReactNode {
                 {importing && <Spinner className="mt-4 text-center" isBorder />}
 
                 {canDisplayButton() && <PrimaryButton
+                    permission="student.import"
                     loading={RequestState.creating}
                     icon="save"
                     onClick={save}

@@ -44,7 +44,7 @@ export function AddLevel(): ReactNode {
     return (
         <>
             <PageTitle title="Ajouter un niveau">
-                <PrimaryLink to="/anthropo-measure/school/levels/list" icon="list">
+                <PrimaryLink permission="level.view" to="/anthropo-measure/school/levels/list" icon="list">
                     Liste des niveaux
                 </PrimaryLink>
             </PageTitle>
@@ -71,6 +71,7 @@ export function AddLevel(): ReactNode {
                         </div>
                     </div>
                     <PrimaryButton
+                        permission="level.create"
                         loading={RequestState.creating}
                         type="submit"
                         icon="save"

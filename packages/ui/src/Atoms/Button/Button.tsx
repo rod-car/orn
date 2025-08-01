@@ -32,7 +32,7 @@ type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
     /**
      * Permission pour l'accessibilite du bouton
      */
-    permission?: string|string[];
+    permission: string|string[];
 
     /**
      * Lorsque le bouton est cliqué
@@ -44,7 +44,7 @@ type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
  * Composant bouton
  */
 export const Button = ({
-    mode = "default", size = 'md', type = "button", permission = [], ...props
+    mode = "default", size = 'md', type = "button", permission, ...props
 }: ButtonProps): ReactNode => {
     let id = useId();
     if (props.id) id = props.id;

@@ -116,7 +116,7 @@ export function Stock(): ReactNode {
     return (
         <>
             <PageTitle title="Fiche de Stock">
-                <PrimaryButton icon='arrow-clockwise' loading={StockRequestState.loading} onClick={getStocks}>Recharger</PrimaryButton>
+                <PrimaryButton permission="stock.recap" icon='arrow-clockwise' loading={StockRequestState.loading} onClick={getStocks}>Recharger</PrimaryButton>
             </PageTitle>
 
             <Block>
@@ -191,7 +191,7 @@ export function Stock(): ReactNode {
                                     </li>
                                 </ul>}
 
-                                <table className="table table-bordered table-striped m-0">
+                                <table className="table table-bordered table-striped table-hover text-sm m-0">
                                     <thead className="table-primary">
                                         <tr>
                                             <th>Date</th>

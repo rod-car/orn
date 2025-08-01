@@ -160,7 +160,7 @@ export function Steps(): ReactNode {
             </div>
             <div className="mb-4">
                 <label className="form-label text-primary fw-bold">Détails</label>
-                <table className="table table-bordered w-100">
+                <table className="table table-bordered w-100 table-hover text-sm">
                     <thead>
                         <tr>
                             <th>Libellé</th>
@@ -193,7 +193,7 @@ export function Steps(): ReactNode {
         </Block>}
 
         <Block>
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Titre</th>

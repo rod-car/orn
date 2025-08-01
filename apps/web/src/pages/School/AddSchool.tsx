@@ -7,7 +7,7 @@ export function AddSchool(): ReactNode {
     return (
         <>
             <PageTitle title="Ajouter un établissement">
-                <PrimaryLink icon="list" to="/anthropo-measure/school/list">Liste des écoles</PrimaryLink>
+                <PrimaryLink permission="school.view" icon="list" to="/anthropo-measure/school/list">Liste des écoles</PrimaryLink>
             </PageTitle>
 
             <Block className="mb-5">

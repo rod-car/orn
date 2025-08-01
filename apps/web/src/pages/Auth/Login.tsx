@@ -1,10 +1,10 @@
-import { useApi, useAuthStore } from 'hooks'
-import { FormEvent, ReactNode, useState } from 'react'
-import { Button, Checkbox, Input } from 'ui'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
+import { useApi, useAuthStore } from 'hooks'
+import { Button, Checkbox, Input } from 'ui'
 import { Footer, Link } from '@base/components'
 import logo from '@base/assets/images/logo.png'
+import { FormEvent, ReactNode, useState } from 'react'
 
 export function Login(): ReactNode {
     const [username, setUsername] = useState('')
@@ -57,7 +57,7 @@ export function Login(): ReactNode {
                                 <img className="logo-icon me-2" src={logo} alt="logo" />
                             </Link>
                         </div>
-                        <h2 className="auth-heading text-center mb-5">Se connecter</h2>
+                        <h2 className="auth-heading text-center text-primary mb-5">Se connecter</h2>
                         <div className="auth-form-container text-start">
                             <form onSubmit={handleLogin} action="" method="post" className="auth-form login-form">
                                 <div className="email mb-3">

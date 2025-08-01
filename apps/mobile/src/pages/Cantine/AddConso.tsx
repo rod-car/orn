@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ChangeEvent, ChangeEventHandler, FormEvent, ReactNode, useCallback, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, ReactNode, useCallback, useEffect, useState } from 'react'
 import { Block, Input, PageTitle, PrimaryButton, Select } from 'ui'
 import { PrimaryLink } from '@base/components'
 import { useApi, useAuthStore } from 'hooks'
@@ -127,7 +127,7 @@ export function AddConso(): ReactNode {
     return (
         <>
             <PageTitle title="Ajouter une consommation">
-                <PrimaryLink icon="list" to="/cantine/consommation/list">
+                <PrimaryLink permission="consommation.view" icon="list" to="/cantine/consommation/list">
                     Historique des consommations
                 </PrimaryLink>
             </PageTitle>
@@ -217,7 +217,7 @@ export function AddConso(): ReactNode {
                     <hr />
 
                     <div className="d-flex">
-                        <PrimaryButton className='me-3' loading={RequestState.creating || RequestState.loading || RequestState.updating || FoodRequestState.loading || SchoolRequestState.loading} icon="save" type="submit">
+                        <PrimaryButton permission="consommation.create" className='me-3' loading={RequestState.creating || RequestState.updating || FoodRequestState.loading} icon="save" type="submit">
                             Enregistrer
                         </PrimaryButton>
                     </div>

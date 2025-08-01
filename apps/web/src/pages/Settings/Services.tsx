@@ -83,7 +83,7 @@ export function Services(): ReactNode {
         <PageTitle title="Gestion des services" />
 
         <Block>
-            <table className="table table-striped m-0 table-bordered text-sm">
+            <table className="table table-striped m-0 table-bordered table-hover text-sm">
                 <thead>
                     <th className="p-2">#</th>
                     <th className="p-2">Titre</th>

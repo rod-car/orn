@@ -78,7 +78,7 @@ export function ActivityTypeList(): ReactNode {
         </PageTitle>
 
         {RequestState.loading ? <ActivityLoading admin={true} /> : <Block>
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Nom de l'activité</th>

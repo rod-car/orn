@@ -63,7 +63,7 @@ export function ImportStudent(): ReactNode {
     return (
         <>
             <PageTitle title="Importer une liste des étudiants">
-                <PrimaryLink to="/anthropo-measure/student/list" icon="list">
+                <PrimaryLink permission="student.view" to="/anthropo-measure/student/list" icon="list">
                     Liste des étudiants
                 </PrimaryLink>
             </PageTitle>
@@ -109,11 +109,12 @@ export function ImportStudent(): ReactNode {
 
                 <hr />
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h6 className='text-secondary'>
+                    <h6 className='text-primary'>
                         Affichage temporaire des données{' '}
                         {json.length > 0 && `(${json.length} Étudiant(s))`}
                     </h6>
                     {json.length > 0 && scholarYear as number > 0 && <PrimaryButton
+                        permission="student.import"
                         loading={RequestState.creating}
                         icon="save"
                         onClick={save}
@@ -121,7 +122,7 @@ export function ImportStudent(): ReactNode {
                 </div>
 
                 <div className="table-responsive border">
-                    <table className="table table-striped text-sm">
+                    <table className="table table-striped table-hover text-sm">
                         <thead>
                             <tr>
                                 <th>Numero</th>
@@ -163,6 +164,7 @@ export function ImportStudent(): ReactNode {
                 {importing && <Spinner className="mt-4 text-center" isBorder />}
 
                 {json.length > 0 && scholarYear as number > 0 && <PrimaryButton
+                    permission="student.import"
                     loading={RequestState.creating}
                     icon="save"
                     onClick={save}

@@ -7,7 +7,7 @@ export function PriceAdd(): ReactNode {
     return (
         <>
             <PageTitle title="Ajouter un prix d'articles">
-                <PrimaryLink to="/prices/list" icon="list">
+                <PrimaryLink permission="price.view" to="/prices/list" icon="list">
                     Liste des prix d'articles
                 </PrimaryLink>
             </PageTitle>

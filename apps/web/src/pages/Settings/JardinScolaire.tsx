@@ -43,7 +43,7 @@ export function JardinScolaire(): ReactNode {
             <h5 className="text-primary mb-4">Étapes commune a tous les jardins</h5>
             <form method="post" onSubmit={handleSubmit}>
                 <RichTextEditor label="Details commune" theme="snow" value={details} onChange={setDetails} />
-                <PrimaryButton type="submit" className="mt-4" icon="save" loading={RequestState.creating}>Enregistrer</PrimaryButton>
+                <PrimaryButton permission="garden.create" type="submit" className="mt-4" icon="save" loading={RequestState.creating}>Enregistrer</PrimaryButton>
             </form>
         </Block>
     </>

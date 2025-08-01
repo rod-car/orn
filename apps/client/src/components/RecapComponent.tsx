@@ -68,7 +68,7 @@ export function RecapComponent({ recap }: { recap: any }) {
                             </h5>
                         </div>
                         <div className="table-responsive" style={{ border: '1px solid silver' }}>
-                            <table className="table table-striped table-bordered text-sm bg-white mb-0">
+                            <table className="table table-striped table-bordered table-hover text-sm bg-white mb-0">
                                 <thead>
                                     <tr className="text-nowrap">
                                         <th className="bg-white"></th>

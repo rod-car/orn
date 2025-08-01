@@ -11,8 +11,8 @@ export function AddUser(): ReactNode {
     return (
         <>
             <PageTitle title="Ajout un nouveau utilisateur">
-                <PrimaryLink to="/auth/users">
-                    <i className="bi bi-list me-2"></i>Liste des utilisateurs
+                <PrimaryLink permission="user.view" to="/auth/users" icon="list">
+                    Liste des utilisateurs
                 </PrimaryLink>
             </PageTitle>
 

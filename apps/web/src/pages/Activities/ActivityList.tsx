@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { ActivityBlock, Loading, Pagination } from "@base/components";
+import { ActivityBlock, Loading, Pagination, PrimaryLink } from "@base/components";
 import { PageTitle } from "ui";
 
 export function ActivityList(): ReactNode {
@@ -33,7 +33,9 @@ export function ActivityList(): ReactNode {
     }, [])
 
     return <>
-        <PageTitle title="Nos activités" />
+        <PageTitle title="Tous les activités">
+            <PrimaryLink permission="activity.create" to="/activities/admin/add" icon="plus-lg">Ajouter un nouveau</PrimaryLink>
+        </PageTitle>
 
         {RequestState.loading && <Loading />}
 

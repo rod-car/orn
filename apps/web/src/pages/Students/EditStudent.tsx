@@ -37,7 +37,7 @@ export function EditStudent(): ReactNode {
                     <Skeleton style={{ height: 30 }} containerClassName='w-50' />
                 </Flex> : 
                 <PageTitle title={student?.fullname}>
-                    <PrimaryLink to="/anthropo-measure/student/list" icon="list">
+                    <PrimaryLink permission="student.view" to="/anthropo-measure/student/list" icon="list">
                         Liste des étudiants
                     </PrimaryLink>
                 </PageTitle>}

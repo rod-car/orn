@@ -68,7 +68,7 @@ export function StudentList(): ReactNode {
         StudentClient.get(requestData)
     }, [requestData])
 
-    const { user } = useAuthStore()
+    const { user, isAllowed } = useAuthStore()
 
     useEffect(() => {
         if (user?.school) {
@@ -197,6 +197,7 @@ export function StudentList(): ReactNode {
                         className="me-2"
                         onClick={getDatas}
                         loading={SRequestState.loading}
+                        permission="student.view"
                     >Recharger</SecondaryButton>
                     <PrimaryLink permission="student.create" to="/anthropo-measure/student/add" icon="plus" className="me-2">Nouveau etudiant</PrimaryLink>
                     <InfoLink permission="student.import" to="/anthropo-measure/student/import" icon="file-earmark-text">Importer une liste des etudiants</InfoLink>
@@ -206,7 +207,7 @@ export function StudentList(): ReactNode {
             {Serror && <div className="alert alert-danger">{Serror.message}</div>}
 
             <Block className="mb-5 mt-3">
-                <table className="table table-striped m-0 table-bordered">
+                <table className="table table-striped m-0 table-bordered table-hover text-sm">
                     <thead>
                         <tr>
                             <th>Établissement</th>
@@ -302,10 +303,10 @@ export function StudentList(): ReactNode {
                         placeholder="Rechercher un étudiant..."
                         className="w-100 me-1"
                     />
-                    <PrimaryButton icon="search" loading={SRequestState.loading} size="sm" />
+                    <PrimaryButton permission="student.view" icon="search" loading={SRequestState.loading} size="sm" />
                 </div>
                 <div className="table-responsive mb-4">
-                    <table className="table table-striped table-bordered text-sm">
+                    <table className="table table-striped table-bordered table-hover text-sm">
                         <thead>
                             <tr>
                                 <th>Code</th>
@@ -342,12 +343,12 @@ export function StudentList(): ReactNode {
                                             </td>
                                             <td className="text-nowrap">
                                                 <DetailLink permission="student.show" to={`/anthropo-measure/student/details/${student.id}`} />
-                                                <EditLink permission="student.edit" to={`/anthropo-measure/student/edit/${student.id}`} />
-                                                <DangerButton permission="student.delete" icon="trash" size="sm"
+                                                {isAllowed("student.edit", studentClass.school.id) && <EditLink permission="student.edit" to={`/anthropo-measure/student/edit/${student.id}`} />}
+                                                {isAllowed("student.delete", studentClass.school.id) && <DangerButton permission="student.delete" icon="trash" size="sm"
                                                     onClick={() => {
                                                         handleDelete(student.id)
                                                     }}
-                                                />
+                                                />}
                                             </td>
                                         </tr>
                                     )

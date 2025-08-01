@@ -43,7 +43,7 @@ export function JardinList(): ReactNode {
         </PageTitle>
 
         <Block>
-            <table className="table table-bordered table-striped">
+            <table className="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Ecole</th>

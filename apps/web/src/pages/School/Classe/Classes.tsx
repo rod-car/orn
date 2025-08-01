@@ -2,9 +2,9 @@
 import { ReactNode, useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { config } from '@base/config'
-import { useApi, useAuthStore } from 'hooks'
+import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
-import { ApiErrorMessage, Block, Button, DangerButton, PageTitle, SecondaryButton } from 'ui'
+import { ApiErrorMessage, Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
 import { EditLink, PrimaryLink } from '@base/components'
 
 export function Classes(): ReactNode {
@@ -77,7 +77,7 @@ export function Classes(): ReactNode {
             <Block>
                 {error && <ApiErrorMessage className="mb-3" message={error.message} onClose={() => resetError()} />}
 
-                <table className="table table-striped table-bordered text-sm">
+                <table className="table table-striped table-bordered table-hover text-sm">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -104,7 +104,8 @@ export function Classes(): ReactNode {
                                     <td>{classes.notation}</td>
                                     <td>
                                         <EditLink permission="class.edit" to={`/anthropo-measure/school/classes/edit/${classes.id}`} />
-                                        <DangerButton permission="class.delete"
+                                        <DangerButton
+                                            permission="class.delete"
                                             icon="trash"
                                             size="sm"
                                             onClick={() => handleDelete(classes.id as number)}

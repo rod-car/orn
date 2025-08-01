@@ -125,7 +125,7 @@ export function AccessRequest(): ReactNode {
             <PageTitle title="Demande d'accès">
                 <div className="d-flex align-items-between">
                     <SecondaryButton
-                        permission="*"
+                        permission="user.view"
                         icon="arrow-clockwise"
                         className="me-2"
                         onClick={getDatas}
@@ -145,7 +145,7 @@ export function AccessRequest(): ReactNode {
             {error && <div className="alert alert-danger">{error.message}</div>}
 
             <Block className="mb-5 mt-3">
-                <table className="table table-striped text-sm">
+                <table className="table table-striped table-hover table-hover text-sm">
                     <thead>
                         <tr>
                             <th>Elements</th>
@@ -170,7 +170,7 @@ export function AccessRequest(): ReactNode {
 
             <Block>
                 <div className="table-responsive">
-                    <table className="table table-striped table-bordered text-sm">
+                    <table className="table table-striped table-bordered table-hover text-sm">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -222,7 +222,7 @@ export function AccessRequest(): ReactNode {
                                     />
                                 </td>
                             </tr>)}
-                            {!RequestState.loading && users.total === 0 && (
+                            {!RequestState.loading && users?.items?.length === 0 && (
                                 <tr>
                                     <td colSpan={9} className="text-center">
                                         Aucune données

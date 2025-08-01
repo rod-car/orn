@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Block, Button, DangerButton, Input, PageTitle, PrimaryButton, SecondaryButton, Select, Spinner } from 'ui'
+import { Block, DangerButton, Input, PageTitle, PrimaryButton, SecondaryButton, Select, Spinner } from 'ui'
 import { EditLink, Flex, Pagination, PrimaryLink } from '@base/components'
 import { useApi, useAuthStore } from 'hooks';
 import { format } from 'functions';
@@ -110,7 +110,7 @@ export function ListConso(): ReactNode {
         }
     };
 
-    const { user } = useAuthStore()
+    const { user, isAllowed } = useAuthStore()
 
     const requestParams = useMemo(() => {
         return {
@@ -291,6 +291,7 @@ export function ListConso(): ReactNode {
                         onClick={refreshList}
                         icon="arrow-clockwise"
                         className='me-2'
+                        permission="consommation.view"
                     >
                         Recharger
                     </SecondaryButton>
@@ -423,11 +424,10 @@ export function ListConso(): ReactNode {
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div className="card-footer">
                                         <div className="d-flex align-items-center justify-content-end">
-                                            <PrimaryButton
+                                            {isAllowed("consommation.edit", consommation.school_id) && <PrimaryButton
                                                 permission="consommation.edit"
                                                 onClick={() => {
                                                     openEditModal(consommation, { ...detail, unit: consommation.unit });
@@ -437,8 +437,8 @@ export function ListConso(): ReactNode {
                                                 icon='pen'
                                             >
                                                 Modifier
-                                            </PrimaryButton>
-                                            <DangerButton
+                                            </PrimaryButton>}
+                                            {isAllowed("consommation.delete", consommation.school_id) && <DangerButton
                                                 permission="consommation.delete"
                                                 onClick={() => deleteConsoDate(detail.date, consommation.id)}
                                                 loading={ConsoRequestState.deleting}
@@ -446,7 +446,7 @@ export function ListConso(): ReactNode {
                                                 icon='trash'
                                             >
                                                 Supprimer
-                                            </DangerButton>
+                                            </DangerButton>}
                                         </div>
                                     </div>
                                 </div>
@@ -455,8 +455,8 @@ export function ListConso(): ReactNode {
                     )}
 
                     <div className="d-flex p-3 align-items-center">
-                        {!ConsoRequestState.deleting && <EditLink permission="consommation.edit" to={`/cantine/consommation/edit/${consommation.id}`}>Editer ce consommation</EditLink>}
-                        <DangerButton permission={["consommation.delete"]} loading={ConsoRequestState.deleting} onClick={() => deleteConso(consommation.id)} icon='trash' className='py-1 px-2 me-2'>Supprimer</DangerButton>
+                        {(!ConsoRequestState.deleting && isAllowed("consommation.delete", consommation.school_id)) && <EditLink permission={["consommation.edit"]} to={`/cantine/consommation/edit/${consommation.id}`}>Editer ce consommation</EditLink>}
+                        {isAllowed("consommation.delete", consommation.school_id) && <DangerButton permission={["consommation.delete"]} loading={ConsoRequestState.deleting} onClick={() => deleteConso(consommation.id)} icon='trash' className='py-1 px-2 me-2'>Supprimer</DangerButton>}
                     </div>
                 </Block>
             ))}

@@ -25,7 +25,7 @@ export function DetailsSchool(): ReactNode {
     return (
         <>
             <PageTitle title={school?.name}>
-                <PrimaryLink icon='list' to="/anthropo-measure/school/list">
+                <PrimaryLink permission="school.view" icon='list' to="/anthropo-measure/school/list">
                    Liste des établissements
                 </PrimaryLink>
             </PageTitle>

@@ -86,7 +86,7 @@ export function SiteList(): ReactNode {
         {error && <div className="alert alert-danger mb-5">{error.message}</div>}
 
         {RequestState.loading ? <SiteLoading /> : <Block>
-            <table className="table table-striped table-bordered text-sm">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Nom</th>

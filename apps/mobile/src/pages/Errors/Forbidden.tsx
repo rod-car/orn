@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 import logo from "@base/assets/logo.png";
-import { Link } from "@base/components";
+import {  PrimaryLink } from "@base/components";
 
 export function Forbidden(): ReactNode {
     return <div className="app-404-page">
@@ -18,7 +18,7 @@ export function Forbidden(): ReactNode {
                         <div className="mb-4">
                             Vous n'avez pas l'autorisation de voir cette page.
                         </div>
-                        <Link className="btn app-btn-primary" to="/">Retourner à la page d'accueil</Link>
+                        <PrimaryLink permission="dashboard.view" to="/">Retourner à la page d'accueil</PrimaryLink>
                     </div>
                 </div>
             </div>

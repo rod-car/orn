@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
 import { useAuthStore } from 'hooks';
+import { Navigate } from 'react-router-dom';
 
 type PrivateRouteProps = {
     permission?: string|string[];

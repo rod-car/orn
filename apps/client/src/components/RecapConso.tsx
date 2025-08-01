@@ -114,7 +114,7 @@ export function RecapConso() {
                 </h5>
             </div>
 
-            <table className="table table-bordered bg-white text-left mb-5 table-padding-large shadow">
+            <table className="table table-bordered table-hover bg-white text-left mb-5 table-padding-large shadow text-sm">
                 <thead>
                     <tr>
                         <th>Mois</th>
@@ -172,7 +172,7 @@ export function RecapConso() {
             </table>
 
             <div className="table-responsive mb-3 shadow">
-                <table className="table table-bordered bg-white text-left m-0 table-padding-large">
+                <table className="table table-bordered table-hover bg-white text-left m-0 table-padding-large text-sm">
                     <thead>
                         <tr>
                             <th className="bg-info text-white">ECOLE</th>

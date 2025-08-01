@@ -56,7 +56,7 @@ export function RecapConso() {
     return (
         <>
             {/*<PageTitle title="Recapitulatifs">
-                <PrimaryLink icon="list" to="/cantine/consommation/list">
+                <PrimaryLink permission="consommation.view" icon="list" to="/cantine/consommation/list">
                     Historique des consommations
                 </PrimaryLink>
             </PageTitle>
@@ -112,7 +112,7 @@ export function RecapConso() {
                     </div>
                 ) : consommation && consommation.data && (
                     <div className="table-responsive">
-                        <table className="table table-bordered bg-white text-left">
+                        <table className="table table-bordered bg-white text-left table-hover text-sm">
                             <thead>
                                 <tr>
                                     <th className="bg-body-tertiary">
@@ -152,7 +152,7 @@ export function RecapConso() {
             </Block>*/}
 
             <PageTitle title="Recapitulatifs">
-                <PrimaryLink icon="list" to="/cantine/consommation/list">
+                <PrimaryLink permission="consommation.view" icon="list" to="/cantine/consommation/list">
                     Historique des consommations
                 </PrimaryLink>
             </PageTitle>
@@ -209,7 +209,7 @@ export function RecapConso() {
                     </div>
                 ) : consommation && consommation.data && (
                     <div className="table-responsive">
-                        <table className="table table-bordered table-striped bg-white text-left">
+                        <table className="table table-bordered table-striped bg-white text-left table-hover text-sm">
                         <thead>
                                 <tr>
                                     <th className="bg-success text-white">

@@ -109,7 +109,7 @@ export function StockOut(): ReactNode {
     return (
         <>
             <PageTitle title="Sortie de stock">
-                <PrimaryLink icon="list" to="/cantine/stocks/recap">
+                <PrimaryLink permission="stock.recap" icon="list" to="/cantine/stocks/recap">
                     Fiche de stock
                 </PrimaryLink>
             </PageTitle>
@@ -153,16 +153,18 @@ export function StockOut(): ReactNode {
 
                         <Col n={4} className="mb-3">
                             <Input
-                                label={`Quantite recu ${unit ? '(' + unit + ')' : ''}`}
+                                type="number"
+                                inputMode='decimal'
+                                label={`Quantite consomme ${unit ? '(' + unit + ')' : ''}`}
                                 value={quantity}
-                                onChange={({ target }) => setQuantity(parseInt(target.value, 10))}
+                                onChange={({ target }) => setQuantity(parseFloat(target.value))}
                                 controlled
                             />
                         </Col>
                     </Row>
 
                     <div className="d-flex">
-                        <PrimaryButton className='me-3' loading={RequestState.creating || RequestState.loading || RequestState.updating || FoodRequestState.loading || SchoolRequestState.loading} icon="save" type="submit">
+                        <PrimaryButton permission="stock.out" className='me-3' loading={RequestState.creating || RequestState.updating || FoodRequestState.loading} icon="save" type="submit">
                             Enregistrer
                         </PrimaryButton>
                     </div>

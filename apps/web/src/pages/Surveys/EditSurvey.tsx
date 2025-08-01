@@ -64,7 +64,7 @@ export function EditSurvey(): ReactNode {
     return (
         <>
             <PageTitle title="Modifier la mésure">
-                <PrimaryLink icon="list" to="/anthropo-measure/survey/list">
+                <PrimaryLink permission="anthropometry.view" icon="list" to="/anthropo-measure/survey/list">
                     Liste des mésures
                 </PrimaryLink>
             </PageTitle>
@@ -94,6 +94,7 @@ export function EditSurvey(): ReactNode {
                     </div>
 
                     <PrimaryButton
+                        permission="anthropometry.edit"
                         loading={RequestState.creating}
                         icon="save"
                         type="submit"

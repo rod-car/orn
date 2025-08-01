@@ -61,7 +61,7 @@ export function AddAbaque(): ReactNode {
     return (
         <>
             <PageTitle title="Ajouter un abaque">
-                <PrimaryLink icon="list" to="/anthropo-measure/abaques/list">
+                <PrimaryLink permission="abaque.view" icon="list" to="/anthropo-measure/abaques/list">
                     Liste des abaques
                 </PrimaryLink>
             </PageTitle>
@@ -85,7 +85,7 @@ export function AddAbaque(): ReactNode {
                         'length-age-male',
                         'length-age-female'
                     ].includes(abaqueType) && (
-                            <table className="table table-bordered text-sm table-striped">
+                            <table className="table table-bordered text-sm table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>Age</th>
@@ -207,8 +207,8 @@ export function AddAbaque(): ReactNode {
                                             </td>
                                             <td className="align-middle">
                                                 {key > 0
-                                                    ? <DangerButton icon="dash" onClick={() => remove(key)}/>
-                                                    : <PrimaryButton icon="plus-lg" onClick={add}></PrimaryButton>}
+                                                    ? <DangerButton permission="abaque.view" icon="dash" onClick={() => remove(key)}/>
+                                                    : <PrimaryButton permission="abaque.view" icon="plus-lg" onClick={add}></PrimaryButton>}
                                             </td>
                                         </tr>
                                     ))}
@@ -217,7 +217,7 @@ export function AddAbaque(): ReactNode {
                         )}
 
                     {abaqueType === 'imc-age' && (
-                        <table className="table table-bordered text-sm table-striped">
+                        <table className="table table-bordered text-sm table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th>Age</th>
@@ -311,8 +311,8 @@ export function AddAbaque(): ReactNode {
                                         </td>
                                         <td className="align-middle">
                                             {key > 0
-                                                ? <DangerButton icon="dash" onClick={() => remove(key)}/>
-                                                : <PrimaryButton icon="plus-lg" onClick={add}></PrimaryButton>}
+                                                ? <DangerButton permission="abaque.view" icon="dash" onClick={() => remove(key)}/>
+                                                : <PrimaryButton permission="abaque.view" icon="plus-lg" onClick={add}></PrimaryButton>}
                                         </td>
                                     </tr>
                                 ))}
@@ -321,7 +321,7 @@ export function AddAbaque(): ReactNode {
                     )}
 
                     {abaqueType === 'length-weight' && (
-                        <table className="table table-bordered text-sm table-striped">
+                        <table className="table table-bordered text-sm table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th>Taille</th>
@@ -429,8 +429,8 @@ export function AddAbaque(): ReactNode {
                                         </td>
                                         <td className="align-middle">
                                             {key > 0
-                                                ? <DangerButton icon="dash" onClick={() => remove(key)}/>
-                                                : <PrimaryButton icon="plus-lg" onClick={add}></PrimaryButton>}
+                                                ? <DangerButton permission="abaque.view" icon="dash" onClick={() => remove(key)}/>
+                                                : <PrimaryButton permission="abaque.view" icon="plus-lg" onClick={add}></PrimaryButton>}
                                         </td>
                                     </tr>
                                 ))}

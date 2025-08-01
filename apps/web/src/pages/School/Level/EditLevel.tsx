@@ -45,7 +45,7 @@ export function EditLevel(): ReactNode {
     return (
         <>
             <PageTitle title={`Éditer un niveau: ${level?.label}`}>
-                <PrimaryLink to="/anthropo-measure/school/levels/list" icon="list">
+                <PrimaryLink permission="level.view" to="/anthropo-measure/school/levels/list" icon="list">
                     Liste des niveaux
                 </PrimaryLink>
             </PageTitle>

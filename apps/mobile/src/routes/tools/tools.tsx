@@ -5,13 +5,13 @@ import { RouteObject } from "react-router";
 export const toolsRoute:RouteObject[] = [
     {
         path: "z-calculator",
-        element: <PrivateRoute permission={["z-calculator.create"]}>
+        element: <PrivateRoute permission={["tools.z-calculator"]}>
             <ZCalculator />
         </PrivateRoute>
     },
     {
         path: "z-history",
-        element: <PrivateRoute permission={["z-calculator.history"]}>
+        element: <PrivateRoute permission={["tools.z-calculator"]}>
             <ZCalculatorHistory />
         </PrivateRoute>
     },

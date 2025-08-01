@@ -190,7 +190,7 @@ export function PriceForm(): React.ReactNode {
 
             <hr className="mt-4" />
 
-            <table className="table table-striped table-bordered mb-4 text-sm align-middle">
+            <table className="table table-striped table-bordered mb-4 table-hover text-sm align-middle">
                 <thead className='table-primary'>
                     <tr>
                         <th>Article</th>

@@ -130,11 +130,11 @@ export function Materiel(): ReactNode {
                         required={false} />
                 </div>
             </div>
-            <Button loading={RequestState.creating || RequestState.updating} onClick={saveItem} mode="primary" icon="save">Enregistrer</Button>
+            <Button permission="garden.create" loading={RequestState.creating || RequestState.updating} onClick={saveItem} mode="primary" icon="save">Enregistrer</Button>
         </Block>}
 
         <Block>
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Nom</th>

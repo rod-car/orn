@@ -137,7 +137,7 @@ export function DetailsSurvey(): ReactNode {
             </PageTitle>
 
             <Block className="mb-5 mt-3">
-                <table className="table table-striped table-bordered m-0">
+                <table className="table table-striped table-bordered m-0 table-hover text-sm">
                     <thead>
                         <tr>
                             <th>Nombre d'étudiants</th>
@@ -198,6 +198,7 @@ export function DetailsSurvey(): ReactNode {
                                     loading={RequestState.loading}
                                     onClick={refresh}
                                     icon="arrow-clockwise"
+                                    permission="anthropometry.view"
                                 >Recharger</SecondaryButton>
                             </td>
                         </tr>

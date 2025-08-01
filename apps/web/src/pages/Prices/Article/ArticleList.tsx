@@ -81,7 +81,7 @@ export function ArticleList(): ReactNode {
         </PageTitle>
 
         {RequestState.loading ? <ArticleLoading /> : <Block className="mb-4">
-            <table className="table table-striped table-bordered text-sm">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Code</th>

@@ -7,7 +7,7 @@ export function ActivityAdd(): ReactNode {
     return (
         <>
             <PageTitle title="Ajouter un activité">
-                <PrimaryLink to="/activities/admin/list" icon="list">
+                <PrimaryLink permission="activity.admin.view" to="/activities/admin/list" icon="list">
                     Liste des activités
                 </PrimaryLink>
             </PageTitle>

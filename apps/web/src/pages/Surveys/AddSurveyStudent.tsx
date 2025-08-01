@@ -240,7 +240,7 @@ export function AddSurveyStudent(): ReactNode {
     return (
         <>
             <PageTitle title="Formulaire de mésure">
-                <PrimaryLink icon="list" to="/anthropo-measure/survey/list">
+                <PrimaryLink permission="anthropometry.view" icon="list" to="/anthropo-measure/survey/list">
                     Liste des mésures
                 </PrimaryLink>
             </PageTitle>

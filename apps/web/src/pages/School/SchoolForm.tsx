@@ -123,6 +123,7 @@ export function SchoolForm({ editedSchool }: SchoolFormProps): ReactNode {
             </div>
 
             <PrimaryButton
+                permission="school.create"
                 loading={RequestState.creating || RequestState.updating}
                 icon="save"
                 type="submit"

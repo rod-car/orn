@@ -139,7 +139,7 @@ export function Engrais(): ReactNode {
         </Block>}
 
         <Block>
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>Nom</th>
