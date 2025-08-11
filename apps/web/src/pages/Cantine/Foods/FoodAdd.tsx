@@ -33,7 +33,7 @@ export function FoodAdd(): ReactNode {
             : await Client.patch(id, food)
 
         if (response.ok) {
-            const message = id === undefined ? "Enregistré" : "Modifé"
+            const message = id === undefined ? "Enregistré" : "Modifié"
 
             toast(message, {
                 type: 'success',

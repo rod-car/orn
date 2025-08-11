@@ -59,9 +59,9 @@ export function Stock(): ReactNode {
 
     const changeCollation = ({ target }: ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(target.value, 10)
-        const selectedCollaction = foods.find(food => food.id === value)
+        const selectedCollation = foods.find(food => food.id === value)
 
-        if (selectedCollaction) setUnit(selectedCollaction.unit)
+        if (selectedCollation) setUnit(selectedCollation.unit)
 
         requestParams.food_id = value
         getStocks()

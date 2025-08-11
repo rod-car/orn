@@ -390,7 +390,7 @@ export function ListConso(): ReactNode {
                                 <div key={detailIndex} className='card mb-4'>
                                     <div className='card-header bg-light d-flex justify-content-between align-items-center'>
                                         <strong>{format(detail.date)}</strong>
-                                        <span className='badge bg-danger'>Quantite consomme: {detail.quantity} {consommation.unit}</span>
+                                        <span className='badge bg-danger'>Quantité consomme: {detail.quantity} {consommation.unit}</span>
                                     </div>
                                     <div className='card-body p-3'>
                                         <div className='row'>
@@ -455,7 +455,7 @@ export function ListConso(): ReactNode {
                     )}
 
                     <div className="d-flex p-3 align-items-center">
-                        {(!ConsoRequestState.deleting && isAllowed("consommation.delete", consommation.school_id)) && <EditLink permission={["consommation.edit"]} to={`/cantine/consommation/edit/${consommation.id}`}>Editer ce consommation</EditLink>}
+                        {(!ConsoRequestState.deleting && isAllowed("consommation.delete", consommation.school_id)) && <EditLink permission={["consommation.edit"]} to={`/cantine/consommation/edit/${consommation.id}`}>Éditer ce consommation</EditLink>}
                         {isAllowed("consommation.delete", consommation.school_id) && <DangerButton permission={["consommation.delete"]} loading={ConsoRequestState.deleting} onClick={() => deleteConso(consommation.id)} icon='trash' className='py-1 px-2 me-2'>Supprimer</DangerButton>}
                     </div>
                 </Block>

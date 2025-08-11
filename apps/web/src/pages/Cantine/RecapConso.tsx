@@ -12,7 +12,7 @@ export function RecapConso() {
     const [startDate, setStartDate] = useState<string>("")
     const [endDate, setEndDate] = useState<string>("")
 
-    const { Client, datas: consommation, RequestState } = useApi<any>({
+    const { Client, datas: consommation, RequestState } = useApi<unknown>({
         url: '/consommations/recap',
         key: 'data'
     })
@@ -55,102 +55,6 @@ export function RecapConso() {
 
     return (
         <>
-            {/*<PageTitle title="Recapitulatifs">
-                <PrimaryLink permission="consommation.view" icon="list" to="/cantine/consommation/list">
-                    Historique des consommations
-                </PrimaryLink>
-            </PageTitle>
-
-            <Block>
-                <Row className="mb-6">
-                    <Col n={3}>
-                        <Select
-                            label="Mois"
-                            placeholder={null}
-                            options={[{id: 0, label: "Tous"}, ...months]}
-                            config={{ optionKey: 'id', valueKey: 'label' }}
-                            value={selectedMonth}
-                            onChange={({ target }) => setSelectedMonth(parseInt(target.value))}
-                            controlled
-                        />
-                    </Col>
-                    <Col n={3}>
-                        <Select
-                            label="Année"
-                            options={[0, ...years].map(y => ({ id: y, label: y }))}
-                            config={{ optionKey: 'id', valueKey: 'label' }}
-                            value={selectedYear}
-                            onChange={({ target }) => setSelectedYear(parseInt(target.value))}
-                            controlled
-                        />
-                    </Col>
-                    <Col n={3}>
-                        <label className="form-label">Date de début</label>
-                        <input
-                            type="date"
-                            className="form-control"
-                            value={startDate}
-                            max={endDate}
-                            onChange={({ target }) => handleDateChange('start_date', target.value)}
-                        />
-                    </Col>
-                    <Col n={3}>
-                        <label className="form-label">Date de fin</label>
-                        <input
-                            type="date"
-                            className="form-control"
-                            value={endDate}
-                            min={startDate}
-                            onChange={({ target }) => handleDateChange('end_date', target.value)}
-                        />
-                    </Col>
-                </Row>
-
-                {RequestState.loading ? (
-                    <div className="text-center">
-                        <div className="spinner-border text-primary" role="status"></div>
-                    </div>
-                ) : consommation && consommation.data && (
-                    <div className="table-responsive">
-                        <table className="table table-bordered bg-white text-left table-hover text-sm">
-                            <thead>
-                                <tr>
-                                    <th className="bg-body-tertiary">
-                                        {selectedMonth > 0 && selectedYear
-                                            ? `${months.find(m => m.id === selectedMonth)?.label} ${selectedYear}`
-                                            : startDate && endDate
-                                                ? `${startDate} → ${endDate}`
-                                                : "Période : Tous"}
-                                    </th>
-                                    {Object.keys(consommation.data).map((collation) => (
-                                        <th colSpan={2} className="bg-info text-white text-center" key={collation}>{collation}</th>
-                                    ))}
-                                </tr>
-                                <tr>
-                                    <th className="bg-info text-white">ETABLISSEMENT</th>
-                                    {Object.keys(consommation.data).map((collation) => {
-                                        const data = consommation.data[collation]
-                                        return Object.keys(data).map(type => <th className="bg-info text-white text-end" key={type}>{type}</th>)
-                                    })}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {consommation.headers && consommation.headers.map((school: string) => (
-                                    <tr key={school}>
-                                        <td className={school === "TOTAL" ? "fw-bold text-white bg-dark" : ""}>{school}</td>
-                                        {Object.entries(consommation.data).map(([collation, product]) => {
-                                            return Object.keys(product).map((type, index: number) => <td className={school === "TOTAL" ? "text-end fw-bold text-white bg-dark" : "text-end"} key={index}>
-                                                {formatNumber(product[type][school]) ?? "-"}
-                                            </td>)
-                                        })}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </Block>*/}
-
             <PageTitle title="Recapitulatifs">
                 <PrimaryLink permission="consommation.view" icon="list" to="/cantine/consommation/list">
                     Historique des consommations
@@ -224,7 +128,7 @@ export function RecapConso() {
                                     ))}
                                 </tr>
                                 <tr>
-                                    <th className="bg-info text-white">ETABLISSEMENT</th>
+                                    <th className="bg-info text-white">ÉTABLISSEMENT</th>
                                     {Object.keys(consommation.data).map((collation) => {
                                         const data = consommation.data[collation]
                                         return Object.keys(data).map(type => <th className="bg-info text-white text-end text-nowrap" key={type}>{type}</th>)

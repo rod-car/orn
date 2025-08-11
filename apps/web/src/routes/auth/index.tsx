@@ -1,30 +1,12 @@
 import { RouteObject } from 'react-router'
 import { GuestRoute, PrivateRoute } from '@base/components/Auth'
-import { AccessRequest, Account, AddUser, EditUser, ForgotPassword, Login, NewPassword, Profile, Register, Users } from '@base/pages/Auth'
+import { AccessRequest, Account, ForgotPassword, Login, NewPassword, Profile, Register } from '@base/pages/Auth'
 
 export const authRoute: RouteObject[] = [
     {
         path: 'access-request',
         element: <PrivateRoute permission={['access-request.view']}>
             <AccessRequest />
-        </PrivateRoute>
-    },
-    {
-        path: 'users',
-        element: <PrivateRoute permission={['user.view']}>
-            <Users />
-        </PrivateRoute>
-    },
-    {
-        path: 'add-user',
-        element: <PrivateRoute permission={['user.create']}>
-            <AddUser />
-        </PrivateRoute>
-    },
-    {
-        path: 'edit-user/:id',
-        element: <PrivateRoute permission={['user.edit']}>
-            <EditUser />
         </PrivateRoute>
     },
     {

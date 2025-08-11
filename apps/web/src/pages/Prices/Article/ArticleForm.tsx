@@ -123,6 +123,7 @@ export function ArticleForm({ editedArticle }: ArticleFormProps): ReactNode {
             </div>
 
             <Button
+                permission="article.create"
                 loading={RequestState.creating || RequestState.updating}
                 icon="save"
                 type="submit"

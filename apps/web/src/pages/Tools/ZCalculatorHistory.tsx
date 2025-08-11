@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {ReactNode, useEffect} from "react";
 import {Block, PageTitle, Spinner} from "ui";
 import {PrimaryLink, Z} from "@base/components";
@@ -26,7 +27,7 @@ export function ZCalculatorHistory(): ReactNode {
                     <th>Nom complet</th>
                     <th>Taille</th>
                     <th>Poids</th>
-                    <th>Resultats</th>
+                    <th>Résultats</th>
                 </tr>
                 </thead>
                 <tbody>

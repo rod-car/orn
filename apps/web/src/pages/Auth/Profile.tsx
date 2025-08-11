@@ -78,7 +78,7 @@ export function Profile(): ReactNode {
                         <Input name="password" type="password" label="Mot de passe" placeholder="Mot de passe" />
                     </div>
                 </div>
-                <Button icon="save" mode="primary" loading={RequestState.creating || RequestState.updating} type="submit">Enregistrer</Button>
+                <Button permission="*" icon="save" mode="primary" loading={RequestState.creating || RequestState.updating} type="submit">Enregistrer</Button>
             </form> : <ProfileLoading />}
         </Block>
     </>

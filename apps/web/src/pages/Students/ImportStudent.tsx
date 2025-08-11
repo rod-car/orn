@@ -76,14 +76,14 @@ export function ImportStudent(): ReactNode {
                             <li><span className="fw-bold">noms: </span> le nom complet</li>
                             <li><span className="fw-bold">date_naissance: </span> la date de naissance</li>
                             <li><span className="fw-bold">sexe: </span> le sexe (Garçon ou Fille)</li>
-                            <li><span className="fw-bold">parents: </span> le nom des parents separé part "et"</li>
+                            <li><span className="fw-bold">parents: </span> le nom des parents séparé part "et"</li>
                             <li><span className="fw-bold">classe: </span> la classe</li>
                             <li><span className="fw-bold">etablissement: </span> le nom de l'établissement</li>
                             <li><span className="fw-bold">annee_scolaire: </span> l'année scolaire</li>
                         </ul>
                     </p>
 
-                    <p className='text-justify'><b><u>NB:</u></b> A bien respecter ces nomenclatures (les accents a respecter ainsi que les majuscules et miniscules) afin d'éviter des problèmes de fonctionnement de l'importation.</p>
+                    <p className='text-justify'><b><u>NB:</u></b> A bien respecter ces nomenclatures (les accents a respecter ainsi que les majuscules et miniscule) afin d'éviter des problèmes de fonctionnement de l'importation.</p>
                 </Modal>
                 <form>
                     <Row>

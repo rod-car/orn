@@ -13,11 +13,11 @@ export async function getPdf({
   const doc = new jsPDF("p", "px");
   const elements = document.getElementsByClassName(className);
 
-  await creatPdf({ doc, elements, title });
+  await createPdf({ doc, elements, title });
   doc.save(fileName);
 }
 
-async function creatPdf({
+async function createPdf({
   doc,
   elements,
   title,

@@ -26,8 +26,8 @@ interface ResponseData {
 }
 
 const months = [
-    'Janoary', 'Febroary', 'Martsa', 'Aprily', 'Mey', 'Jona',
-    'Jolay', 'Aogositra', 'Septambra', 'Oktobra', 'Novambra', 'Desambra'
+    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
 ]
 
 export function PriceRecap(): ReactNode {

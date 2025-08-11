@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi, useAuthStore } from "hooks";
+import { useApi } from "hooks";
 import { Block, DangerButton, PageTitle, PrimaryButton } from "ui";
 import { config } from '@base/config'
 import { toast } from "react-toastify";
@@ -126,7 +126,7 @@ export function AdminActivityList(): ReactNode {
                     </tr>
                 </thead>
                 <tbody>
-                    {activities && activities.data?.map((activity: Activity, index) => <tr key={activity.id}>
+                    {activities && (activities as unknown as {data: Activity[]}).data?.map((activity: Activity, index: number) => <tr key={activity.id}>
                         <td>{index + 1}</td>
                         <td>{activity.title}</td>
                         <td>{activity?.service?.title}</td>

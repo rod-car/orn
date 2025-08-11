@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ChangeEvent, Dispatch, FormEvent, ReactNode, SetStateAction, useCallback, useEffect, useState } from 'react'
-import { Block, Input, PageTitle, PrimaryButton, Select } from 'ui'
+import { ChangeEvent, FormEvent, ReactNode, useCallback, useState } from 'react'
+import { Block, Input, PageTitle, PrimaryButton } from 'ui'
 import { PrimaryLink, ScholarYearSelectorServer } from '@base/components'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
@@ -54,9 +54,9 @@ export function AddSurvey(): ReactNode {
 
     return (
         <>
-            <PageTitle title="Nouvelle mésure">
+            <PageTitle title="Nouvelle mesure">
                 <PrimaryLink permission="anthropometry.view" icon="list" to="/anthropo-measure/survey/list">
-                    Liste des mésures
+                    Liste des mesures
                 </PrimaryLink>
             </PageTitle>
 

@@ -1,5 +1,6 @@
-import { useApi, useAuthStore } from 'hooks'
-import { InfoLink, Link, PrimaryLink } from '@base/components'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useApi } from 'hooks'
+import { InfoLink, PrimaryLink } from '@base/components'
 import { config } from '@base/config'
 import { Block, Button, PageTitle, SecondaryButton, Select } from 'ui'
 import { ReactNode, useEffect, useState } from 'react'
@@ -133,7 +134,7 @@ export function AccessRequest(): ReactNode {
                     >
                         Recharger
                     </SecondaryButton>
-                    <InfoLink permission="user.create" to="/user/add" className="me-2" icon='plus-lg'>
+                    <InfoLink permission="user.create" to="/user/create" className="me-2" icon='plus-lg'>
                         Nouveau utilisateur
                     </InfoLink>
                     <PrimaryLink permission="user.view" to="/user/list" icon='file-earmark-text'>
@@ -201,11 +202,12 @@ export function AccessRequest(): ReactNode {
                                 <td>{user.occupation}</td>
                                 <td>{user.email}</td>
                                 <td>{user.username}</td>
-                                <td><UserRole role={user.role} /></td>
+                                <td><UserRole roles={user.roles} /></td>
                                 <td className="text-nowrap">{format(user.created_at, "dd-MM-y")}</td>
                                 <td><UserStatus valid={user.is_valid} /></td>
                                 <td className="text-nowrap">
                                     <Button
+                                        permission="user.create"
                                         type="button"
                                         mode="success"
                                         icon="check"
@@ -214,6 +216,7 @@ export function AccessRequest(): ReactNode {
                                         onClick={() => validate(user)}
                                     />
                                     <Button
+                                        permission="user.delete"
                                         type="button"
                                         mode="danger"
                                         icon="x-lg"
@@ -240,14 +243,13 @@ export function AccessRequest(): ReactNode {
     )
 }
 
-const roles = ["Invite", "Administrateur", "Super administrateur"]
 const classes = ["primary", "danger", "success"]
 const userStatus = ["valide", "Non valide"]
 
-function UserRole({ role }: { role: number }) {
-    return <span className={`badge rounded-pill p-2 bg-${classes[role]}`}>
-        {roles[role]}
-    </span>
+function UserRole({ roles }: { roles: {id: number, name: string}[] }) {
+    return roles.map(role => <span key={role.id} className={`badge rounded-pill p-2 bg-primary`}>
+        {role.name}
+    </span>)
 }
 
 function UserStatus({ valid }: { valid: number }) {

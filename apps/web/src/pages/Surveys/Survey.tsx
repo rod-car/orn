@@ -62,7 +62,7 @@ export function Survey(): ReactNode {
 
     return (
         <>
-            <PageTitle title="Liste des mésures">
+            <PageTitle title="Liste des mesures">
                 <div className="d-flex align-items-between">
                     <SecondaryButton
                         icon="arrow-clockwise"
@@ -72,7 +72,7 @@ export function Survey(): ReactNode {
                         permission="anthropometry.view"
                     >Recharger</SecondaryButton>
                     <PrimaryLink permission="anthropometry.create" icon="plus-lg" to="/anthropo-measure/survey/add" className="me-2">
-                        Nouvelle mésure
+                        Nouvelle mesure
                     </PrimaryLink>
                     <InfoLink permission="anthropometry.form" icon="plus-lg" to="/anthropo-measure/survey/add-student">
                         Formulaire de mesure

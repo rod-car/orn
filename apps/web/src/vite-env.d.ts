@@ -46,8 +46,8 @@ type MeasureLength = {
 }
 
 type Student = {
-    student: any;
-    student_id: any;
+    student: unknown;
+    student_id: unknown;
     id: number
     number: number
     lastname: string
@@ -113,6 +113,17 @@ type ElementMode =
 
 type ElementSize = 'sm' | 'md' | 'lg'
 
+type Stock = {
+    initial_stock: ReactNode;
+    id: number;
+    type: string;
+    date: string,
+    school_id: number,
+    food_id: number,
+    quantity: number,
+    label: string
+}
+
 type User = {
     id: number
     name: string
@@ -152,11 +163,12 @@ type Activity = {
     service_id: number;
     images?: {path: string, id: number}[]
     files: File[] | null
-    is_valid: boolean;
-    validator: User | null,
-    creator: User | null,
-    editable: boolean
-    deletable: boolean
+    is_valid?: boolean;
+    validator?: User | null,
+    creator?: User | null,
+    editable?: boolean
+    deletable?: boolean,
+    service?: {title: string}
 }
 
 type Unit = {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Link } from "@base/components";
@@ -45,11 +46,11 @@ export function ActivityStatistics(): ReactNode {
 
                         <p>{activity.details}</p>
 
-                        <Button icon="eye" mode="primary" className="mt-5">Plus de détails</Button>
+                        <Button permission="activity.show" icon="eye" mode="primary" className="mt-5">Plus de détails</Button>
                     </div>
                     <div className={`w-50 ${index % 2 !== 0 ? 'me-4' : ''}`}>
                         <div className="row">
-                            {activity.images.map(image => <img className="col-6 mb-4" src={image.path} alt="" />)}
+                            {activity?.images?.map(image => <img className="col-6 mb-4" src={image.path} alt="" />)}
                         </div>
                     </div>
                 </div>

@@ -17,7 +17,7 @@ export function RecapConso() {
 
     async function fetchData(params?: Record<string, string>) {
         try {
-            setLoading(true);
+            setLoading(true);g
             let url = `${config.apiUrl}/consommations/recap`;
             if (params) url += "?" + new URLSearchParams(params).toString()
             const response = await fetch(url, { cache: "no-store" });

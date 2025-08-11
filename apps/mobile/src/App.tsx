@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 import { AuthRoot } from '@base/pages/Auth';
-import { cantineRoute } from '@base/routes/cantine/cantine';
 import { PrivateRoute } from '@base/components/Auth';
-import { authRoute, userRoute } from '@base/routes/auth';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { AppRoot, About, HomePage } from '@base/pages/App';
 import { toolsRoute } from '@base/routes/tools/tools';
+import { authRoute, userRoute } from '@base/routes/auth';
+import { AppRoot, About, HomePage } from '@base/pages/App';
+import { cantineRoute } from '@base/routes/cantine/cantine';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([
     {

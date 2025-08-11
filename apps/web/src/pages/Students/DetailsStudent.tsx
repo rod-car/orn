@@ -49,8 +49,8 @@ export function DetailsStudent(): ReactNode {
                     <thead>
                         <tr>
                             <th>Classe</th>
-                            <th>Annee scolaire</th>
-                            <th>Etablissement</th>
+                            <th>Année scolaire</th>
+                            <th>Établissement</th>
                         </tr>
                     </thead>
                     <tbody>

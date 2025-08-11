@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { BasicCard, EditLink, Link, PrimaryLink } from "@base/components";
+import { BasicCard, EditLink, PrimaryLink } from "@base/components";
 import { Col, Row } from "@base/components/Bootstrap";
 import { ChangeEvent, memo, ReactNode, useEffect, useState } from "react";
 import { Input, PageTitle, PrimaryButton } from "ui";
 import icons from "@base/assets/icons";
-import { useApi, useAuthStore } from "hooks";
+import { useApi } from "hooks";
 import { Pagination } from '@base/components';
 import { range } from "functions";
 import Skeleton from "react-loading-skeleton";
@@ -119,7 +119,7 @@ const DocumentCardLoading = memo(function(): ReactNode {
 })
 
 /**
- * Card pour representer le document
+ * Card pour représente le document
  *
  * @param {{document: FileDocument}} param0
  * @param {FileDocument} param0.document
@@ -138,7 +138,7 @@ function DocumentCard({document}: {document: FileDocument}): ReactNode {
             </div>
             <p className="fst-italic text-primary text-center text-sm">{document.date}</p>
             <p className="text-center text-sm">Par: {document.creator && document.creator.name}</p>
-            <EditLink permission="document.edit" className="text-center d-block" to={`/documents/edit/${document.id}`}>Editer le document</EditLink>
+            <EditLink permission="document.edit" className="text-center d-block" to={`/documents/edit/${document.id}`}>Éditer le document</EditLink>
         </BasicCard>
     </>
 }

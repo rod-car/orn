@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ReactNode, useEffect } from 'react'
 import { AddConso } from './AddConso.tsx'
 import { useApi } from 'hooks'

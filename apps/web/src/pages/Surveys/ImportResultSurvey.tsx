@@ -27,7 +27,7 @@ export function ImportResultSurvey(): ReactNode {
 
     const { id } = useParams()
 
-    const hanleDateChange = (e: InputChange) => {
+    const handleDateChange = (e: InputChange) => {
         setDate(e.target.value)
     }
 
@@ -133,7 +133,7 @@ export function ImportResultSurvey(): ReactNode {
                                 value={date}
                                 required={false}
                                 label="Date de pesée"
-                                onChange={hanleDateChange}
+                                onChange={handleDateChange}
                             />
                         </Col>
                         <Col n={6}>
@@ -157,6 +157,7 @@ export function ImportResultSurvey(): ReactNode {
                     </h6>
                     {Object.keys(json as MultiSheet).length > 0 && (
                         <Button
+                            permission="survey.create"
                             loading={RequestState.creating}
                             icon="save"
                             type="button"
@@ -213,6 +214,7 @@ export function ImportResultSurvey(): ReactNode {
 
                 {Object.keys(json).length > 0 && (
                     <Button
+                        permission="survey.create"
                         loading={RequestState.creating}
                         icon="save"
                         type="button"

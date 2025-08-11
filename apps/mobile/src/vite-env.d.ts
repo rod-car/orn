@@ -46,6 +46,7 @@ type MeasureLength = {
 }
 
 type Stock = {
+    final_stock: ReactNode;
     id: number;
     type: string;
     date: string,

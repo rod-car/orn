@@ -103,8 +103,8 @@ export function AddConso(): ReactNode {
 
     const changeCollation = useCallback(({ target }: ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(target.value, 10)
-        const selectedCollaction = foods.filter(food => food.id === value).at(0)
-        if (selectedCollaction) setUnit(selectedCollaction.unit)
+        const selectedCollation = foods.filter(food => food.id === value).at(0)
+        if (selectedCollation) setUnit(selectedCollation.unit)
 
         setCollation(value)
     }, [foods])
@@ -171,7 +171,7 @@ export function AddConso(): ReactNode {
 
                         <Col n={4} className="mb-3">
                             <Input
-                                label={`Quantite Consomme ${unit ? '(' + unit + ')' : ''}`}
+                                label={`Quantité Consomme ${unit ? '(' + unit + ')' : ''}`}
                                 value={quantity}
                                 type="number"
                                 onChange={changeQuantity}

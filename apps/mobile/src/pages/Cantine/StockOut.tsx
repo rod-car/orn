@@ -7,21 +7,10 @@ import { config } from '@base/config'
 import { toast } from 'react-toastify'
 import { Col, Row } from '@base/components/Bootstrap'
 
-type Stock = {
-    id: number;
-    type: string;
-    date: string,
-    school_id: number,
-    food_id: number,
-    quantity: number,
-    label: string
-}
-
 export function StockOut(): ReactNode {
     const [school, setSchool] = useState<number | undefined>();
     const [collation, setCollation] = useState<number | undefined>();
     const [unit, setUnit] = useState<string>()
-    const [label, setLabel] = useState<string>('')
     const [quantity, setQuantity] = useState<number | undefined>(0);
     const [date, setDate] = useState<string>('');
 
@@ -66,7 +55,6 @@ export function StockOut(): ReactNode {
             const message = "Enregistré"
 
             setDate('')
-            setLabel('')
             setQuantity(0)
 
             toast(message, {
@@ -91,8 +79,8 @@ export function StockOut(): ReactNode {
 
     const changeCollation = useCallback(({ target }: ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(target.value, 10)
-        const selectedCollaction = foods.filter(food => food.id === value).at(0)
-        if (selectedCollaction) setUnit(selectedCollaction.unit)
+        const selectedCollation = foods.filter(food => food.id === value).at(0)
+        if (selectedCollation) setUnit(selectedCollation.unit)
 
         setCollation(value)
     }, [foods])
@@ -155,7 +143,7 @@ export function StockOut(): ReactNode {
                             <Input
                                 type="number"
                                 inputMode='decimal'
-                                label={`Quantite consomme ${unit ? '(' + unit + ')' : ''}`}
+                                label={`Quantité consomme ${unit ? '(' + unit + ')' : ''}`}
                                 value={quantity}
                                 onChange={({ target }) => setQuantity(parseFloat(target.value))}
                                 controlled

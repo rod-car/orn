@@ -14,7 +14,7 @@ export function SurveySelector({datas, surveyId, setSurveyId, loading}: SurveySe
         config={{optionKey: 'id', valueKey: 'label'}}
         value={surveyId}
         onChange={({target}) => setSurveyId(parseInt(target.value))}
-        label="Mésure"
+        label="Mesure"
         placeholder="Tous"
         loading={loading}
         controlled

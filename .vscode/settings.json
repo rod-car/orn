@@ -1,3 +1,16 @@
 {
-    "cSpell.enabled": false
+    "cSpell.enabled": true,
+    "cSpell.ignoreRegExpList": [
+        // Ignorer tous les attributs HTML : attr="..." ou attr='...'
+        "/\\s+[a-zA-Z-]+\\s*=\\s*(\"[^\"]*\"|'[^']*')/g",
+        
+        // Ignorer les variables PHP : $variable
+        "/\\$[a-zA-Z_][a-zA-Z0-9_]*/g",
+    
+        // Ignorer les noms de classes PHP
+        "/class\\s+[A-Z][A-Za-z0-9_]*/g",
+    
+        // Ignorer les namespaces PHP
+        "/namespace\\s+[A-Z][A-Za-z0-9_\\\\]*/g"
+    ]
 }

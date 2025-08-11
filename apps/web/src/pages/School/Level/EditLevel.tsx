@@ -76,6 +76,7 @@ export function EditLevel(): ReactNode {
                         </div>
                     </div>
                     <Button
+                        permission="level.create"
                         loading={RequestState.updating}
                         type="submit"
                         mode="primary"

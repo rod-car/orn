@@ -49,17 +49,14 @@ export function Account(): ReactNode {
     const [showChangeUsername, setShowChangeUsername] = useState(false)
     const { lastLogin } = useAuthStore()
 
-    const navigate = useNavigate()
-
     const roles = useMemo(() => ["Invité", "Administrateur", "Super administrateur"], [])
 	const { Client } = useApi({
-		
 		url: '/auth'
 	})
 
     const getUser = useCallback(async (): Promise<void> => {
         const user = await Client.get({}, '/user')
-        if (user) setUser(user as unknown as User)
+        if (user) setUser((user as unknown as {items: Record<string, unknown>}).items.user as unknown as User)
     }, [])
 
     useEffect(() => {
@@ -70,13 +67,11 @@ export function Account(): ReactNode {
         if (user) {
             confirmAlert({
                 title: 'Question',
-                message: 'Vous ne pourrez plus acceder au plateforme après cette suppréssion.\nVoulez-vous continuer ?',
+                message: 'Vous ne pourrez plus acceder au plateforme après cette suppression.\nVoulez-vous continuer ?',
                 buttons: [
                     {
                         label: 'Oui',
                         onClick: async (): Promise<void> => {
-                            const password = prompt("Saisir votre mot de passe")
-
                             const response = await Client.destroy(user.id)
                             if (response.ok) {
                                 toast('Compte supprimé', {
@@ -85,7 +80,7 @@ export function Account(): ReactNode {
                                     position: config.toastPosition
                                 })
                             } else {
-                                toast('Erreur de suppréssion', {
+                                toast('Erreur de suppression', {
                                     closeButton: true,
                                     type: 'error',
                                     position: config.toastPosition
@@ -107,26 +102,26 @@ export function Account(): ReactNode {
         }
     }, [user])
 
-    const toogleChangePassword = useCallback(function() {
+    const toggleChangePassword = useCallback(function() {
         setShowChangePassword(v => !v);
     }, [])
 
-    const toogleChangeName = useCallback(function(update?: boolean) {
+    const toggleChangeName = useCallback(function(update?: boolean) {
         setShowChangeName(v => !v);
         if (update === true) getUser();
     }, [])
 
-    const toogleChangeOccupation = useCallback(function(update?: boolean) {
+    const toggleChangeOccupation = useCallback(function(update?: boolean) {
         setShowChangeOccupation(v => !v);
         if (update === true) getUser();
     }, [])
 
-    const toogleChangeEmail = useCallback(function(update?: boolean) {
+    const toggleChangeEmail = useCallback(function(update?: boolean) {
         setShowChangeEmail(v => !v);
         if (update === true) getUser();
     }, [])
 
-    const toogleChangeUsername = useCallback(function(update?: boolean) {
+    const toggleChangeUsername = useCallback(function(update?: boolean) {
         setShowChangeUsername(v => !v);
         if (update === true) getUser();
     }, [])
@@ -139,9 +134,9 @@ export function Account(): ReactNode {
                     <CardAccountItem
                         showComponent={showChangeName}
                         action={{
-                            label: 'Editer',
-                            action: toogleChangeName,
-                            component: <ChangeFieldComponent field="name" user={user} onClose={toogleChangeName} />
+                            label: 'Éditer',
+                            action: toggleChangeName,
+                            component: <ChangeFieldComponent field="name" user={user} onClose={toggleChangeName} />
                         }}
                         title="Nom"
                         value={user ? user.name : 'Chargement'}
@@ -149,9 +144,9 @@ export function Account(): ReactNode {
                     <CardAccountItem
                         showComponent={showChangeOccupation}
                         action={{
-                            label: 'Editer',
-                            action: toogleChangeOccupation,
-                            component: <ChangeFieldComponent field="occupation" user={user} onClose={toogleChangeOccupation} />
+                            label: 'Éditer',
+                            action: toggleChangeOccupation,
+                            component: <ChangeFieldComponent field="occupation" user={user} onClose={toggleChangeOccupation} />
                         }}
                         title="Occupation"
                         value={user ? user.occupation : 'Chargement'}
@@ -159,9 +154,9 @@ export function Account(): ReactNode {
                     <CardAccountItem
                         showComponent={showChangeEmail}
                         action={{
-                            label: 'Editer',
-                            action: toogleChangeEmail,
-                            component: <ChangeFieldComponent field="email" user={user} onClose={toogleChangeEmail} />
+                            label: 'Éditer',
+                            action: toggleChangeEmail,
+                            component: <ChangeFieldComponent field="email" user={user} onClose={toggleChangeEmail} />
                         }}
                         title="Adresse e-mail"
                         value={user ? user.email : 'Chargement'}
@@ -169,9 +164,9 @@ export function Account(): ReactNode {
                     <CardAccountItem
                         showComponent={showChangeUsername}
                         action={{
-                            label: 'Editer',
-                            action: toogleChangeUsername,
-                            component: <ChangeFieldComponent field="username" user={user} onClose={toogleChangeUsername} />
+                            label: 'Éditer',
+                            action: toggleChangeUsername,
+                            component: <ChangeFieldComponent field="username" user={user} onClose={toggleChangeUsername} />
                         }}
                         title="Nom d'utilisateur"
                         value={user ? user.username : 'Chargement'}
@@ -181,7 +176,7 @@ export function Account(): ReactNode {
             <div className="col-12 col-lg-6">
 				<CardAccount title="Préférences" icon="sliders">
                     <CardAccountItem action={{ url: '#', label: 'Changer' }} title="Langue" value="Français" />
-                    <CardAccountItem action={{ url: '#', label: 'Editer' }} title="Notifications par e-mail" value="Oui" />
+                    <CardAccountItem action={{ url: '#', label: 'Éditer' }} title="Notifications par e-mail" value="Oui" />
                 </CardAccount>
 			</div>
 			<div className="col-12 col-lg-6">
@@ -194,13 +189,13 @@ export function Account(): ReactNode {
                         showComponent={showChangePassword}
                         action={{
                             label: 'Changer',
-                            action: toogleChangePassword,
-                            component: <ChangePasswordComponent user={user} onClose={toogleChangePassword} />
+                            action: toggleChangePassword,
+                            component: <ChangePasswordComponent user={user} onClose={toggleChangePassword} />
                         }}
                         title="Mot de passe"
                         value="**********"
                     />
-                    <CardAccountItem title="Type de compte" value={user ? roles[user.role] : 'Chargement'} />
+                    <CardAccountItem title="Type de compte" value={user ? roles[user.role as unknown as number] : 'Chargement'} />
                 </CardAccount>
 			</div>
 			<div className="col-12 col-lg-6">
@@ -229,7 +224,7 @@ function CardAccount(props: CardAccountProps): ReactNode {
 					</div>
 				</div>
 				<div className="col-auto">
-					<h4 className="app-card-title">{props.title}</h4>
+					<h4 className="app-card-title text-primary">{props.title}</h4>
 				</div>
 			</div>
 		</div>
@@ -332,8 +327,8 @@ function ChangePasswordComponent({onClose, user}: {onClose: () => void, user?: U
             <Input className="mb-2" name="new_password" type="password" placeholder="Nouveau mot de passe" />
             <Input className="mb-2" name="new_password_confirmation" type="password" placeholder="Confirmer nouveau mot de passe" />
             <Checkbox checked={disconnect} onCheck={handleCheck} className="mb-3" label="Deconnecter de l'appareil" /><br />
-            <Button loading={RequestState.creating || RequestState.updating} mode="primary" size="md" className="me-2" type="submit">Enregistrer</Button>
-            <Button onClick={onClose} mode="danger">Fermer</Button>
+            <Button permission="*" loading={RequestState.creating || RequestState.updating} mode="primary" size="md" className="me-2" type="submit">Enregistrer</Button>
+            <Button permission="*" onClick={onClose} mode="danger">Fermer</Button>
         </form>
     </>
 }
@@ -391,8 +386,8 @@ function ChangeFieldComponent({onClose, user, field}: ChangeFieldComponentProps)
         <form method="POST" onSubmit={handleSubmit}>
             <Input className="mb-2" defaultValue={user && user[field]} name={field} type="text" placeholder="Renseigner" />
             <Input value={password} onChange={({target}) => setPassword(target.value)}  className="mb-3" name="password" type="password" placeholder="Mot de passe" />
-            <Button loading={RequestState.creating || RequestState.updating} mode="primary" size="md" className="me-2" type="submit">Enregistrer</Button>
-            <Button onClick={() => onClose(false)} mode="danger">Fermer</Button>
+            <Button permission="*" loading={RequestState.creating || RequestState.updating} mode="primary" size="md" className="me-2" type="submit">Enregistrer</Button>
+            <Button permission="*" onClick={() => onClose(false)} mode="danger">Fermer</Button>
         </form>
     </>
 }

@@ -4,7 +4,7 @@ import { config } from '@base/config'
 import { useApi } from 'hooks'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import { Link, PrimaryLink } from '@base/components'
+import { PrimaryLink } from '@base/components'
 
 export function EditClass(): ReactNode {
     const [classes, setClasses] = useState<Classes>({ id: 0, name: '', level_id: 0, notation: '' })
@@ -19,13 +19,11 @@ export function EditClass(): ReactNode {
         RequestState,
         error
     } = useApi<Classes>({
-        
-        
         url: '/classes'
     })
 
     const resetError = (name: string, value: string): void => {
-        if (value.length > 0) error.data.errors[name] = null
+        if (value.length > 0 && error) error.data.errors[name] = []
     }
 
     const handleChange = (target: EventTarget & (HTMLInputElement | HTMLSelectElement)): void => {
@@ -77,7 +75,7 @@ export function EditClass(): ReactNode {
 
     return (
         <>
-            <PageTitle title={`Editer: ${classes.name}`}>
+            <PageTitle title={`Éditer: ${classes.name}`}>
                 <PrimaryLink permission="class.view" icon='list' to="/anthropo-measure/school/classes/list">
                     Liste des classes
                 </PrimaryLink>
@@ -118,7 +116,7 @@ export function EditClass(): ReactNode {
                     />
                 </div>
 
-                <Button loading={RequestState.updating} icon="save" mode="primary" type="submit">
+                <Button permission="class.create" loading={RequestState.updating} icon="save" mode="primary" type="submit">
                     Enregistrer
                 </Button>
             </form>

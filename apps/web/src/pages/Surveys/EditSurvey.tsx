@@ -63,9 +63,9 @@ export function EditSurvey(): ReactNode {
 
     return (
         <>
-            <PageTitle title="Modifier la mésure">
+            <PageTitle title="Modifier la mesure">
                 <PrimaryLink permission="anthropometry.view" icon="list" to="/anthropo-measure/survey/list">
-                    Liste des mésures
+                    Liste des mesures
                 </PrimaryLink>
             </PageTitle>
 

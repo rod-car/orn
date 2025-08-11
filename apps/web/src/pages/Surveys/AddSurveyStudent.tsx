@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { PrimaryLink, SurveySelector } from '@base/components'
 
 type StudentData = {
+    code: ReactNode
     student_id: number
     fullname: string
     precedentHeight: number | null | undefined
@@ -40,7 +41,6 @@ const defaultFormData: FormData = {
 export function AddSurveyStudent(): ReactNode {
     const [formData, setFormData] = useState<FormData>(defaultFormData)
     const [surveyId, setSurveyId] = useState(0);
-    const [precedentPhase, setPrecedentPhase] = useState<number | null | undefined>(null)
 
     const { Client: SurveyListClient, datas: surveysList, RequestState: SurveyListRequestState } = useApi<Survey>({
         url: '/surveys',
@@ -93,7 +93,7 @@ export function AddSurveyStudent(): ReactNode {
 
         if (height > 0 && weight > 0) {
             if ((selectedStudent.precedentHeight && selectedStudent.precedentHeight > height)) {
-                toast("La taille de l'étudiant ne doit pas être inférieur a la taille précedente", {
+                toast("La taille de l'étudiant ne doit pas être inférieur a la taille précédente", {
                     position: config.toastPosition,
                     type: "error"
                 })
@@ -239,9 +239,9 @@ export function AddSurveyStudent(): ReactNode {
 
     return (
         <>
-            <PageTitle title="Formulaire de mésure">
+            <PageTitle title="Formulaire de mesure">
                 <PrimaryLink permission="anthropometry.view" icon="list" to="/anthropo-measure/survey/list">
-                    Liste des mésures
+                    Liste des mesures
                 </PrimaryLink>
             </PageTitle>
 
@@ -302,7 +302,7 @@ export function AddSurveyStudent(): ReactNode {
                     </div>
 
                     <div className="d-flex justify-content-between">
-                        <Button disabled={!isValid(formData)} loading={SurveyRequestState.loading || StudentRequestState.loading} icon="check" mode="primary" onClick={getStudents}>Valider</Button>
+                        <Button permission="survey.create" disabled={!isValid(formData)} loading={SurveyRequestState.loading || StudentRequestState.loading} icon="check" mode="primary" onClick={getStudents}>Valider</Button>
                     </div>
                 </form>
             </Block>
@@ -319,7 +319,7 @@ export function AddSurveyStudent(): ReactNode {
                             <th>Taille</th>
                             <th>Poids</th>
                             <th>Actions</th>
-                            <th>Etat</th>
+                            <th>État</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -337,8 +337,8 @@ export function AddSurveyStudent(): ReactNode {
                                 <Input onChange={({ target }) => handleChange(target, index)} name="students.weight" type='number' placeholder='Poids' value={student.weight} />
                             </td>
                             <td className="d-flex justify-content-center align-items-center h-full">
-                                <Button onClick={() => saveData(index)} icon="save" mode="primary" size="sm" className="me-2" />
-                                <Button onClick={() => removeData(index)} icon="trash" mode="danger" size="sm" />
+                                <Button permission="survey.create" onClick={() => saveData(index)} icon="save" mode="primary" size="sm" className="me-2" />
+                                <Button permission="survey.delete" onClick={() => removeData(index)} icon="trash" mode="danger" size="sm" />
                             </td>
                             <td className="text-center">
                                 {student.saved ? <span className="fw-bold text-success"><i className="bi bi-check2-all"></i></span> : <span className="fw-bold text-danger"><i className="bi bi-x-lg"></i></span>}

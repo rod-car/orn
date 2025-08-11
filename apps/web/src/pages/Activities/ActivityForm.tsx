@@ -1,15 +1,13 @@
 import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from 'react'
-import { DangerButton, Input, PrimaryButton, Select } from 'ui'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
 import { RichTextEditor } from '@base/components'
-
 import imageCompression from 'browser-image-compression';
-
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import placeholder from "@base/assets/images/placeholder.webp"
+import { DangerButton, Input, PrimaryButton, Select } from 'ui'
+import placeholder from '@base/assets/images/placeholder.webp';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 type ActivityFormProps = {
     editedActivity?: Activity
@@ -141,7 +139,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
 
     useEffect(() => {
         ServiceClient.get()
-    }, [])
+    }, [ServiceClient])
 
     return (
         <form onSubmit={handleSubmit} method="post">

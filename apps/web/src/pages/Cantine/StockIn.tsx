@@ -82,8 +82,8 @@ export function StockIn(): ReactNode {
 
     const changeCollation = useCallback(({ target }: ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(target.value, 10)
-        const selectedCollaction = foods.filter(food => food.id === value).at(0)
-        if (selectedCollaction) setUnit(selectedCollaction.unit)
+        const selectedCollation = foods.filter(food => food.id === value).at(0)
+        if (selectedCollation) setUnit(selectedCollation.unit)
 
         setCollation(value)
     }, [foods])
@@ -154,7 +154,7 @@ export function StockIn(): ReactNode {
 
                         <Col n={6} className="mb-3">
                             <Input
-                                label={`Quantite recu ${unit ? '(' + unit + ')' : ''}`}
+                                label={`Quantité reçu ${unit ? '(' + unit + ')' : ''}`}
                                 value={quantity}
                                 type="number"
                                 onChange={({ target }) => setQuantity(target.value ? parseFloat(target.value) : 0)}

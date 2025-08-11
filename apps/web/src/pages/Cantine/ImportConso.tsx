@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {ChangeEvent, CSSProperties, ReactNode, useCallback, useEffect, useState} from 'react'
 import {useApi, useExcelReader} from 'hooks'
 import {PrimaryLink, ScholarYearSelectorServer} from '@base/components'
@@ -163,11 +164,11 @@ export function ImportConso(): ReactNode {
                         <tbody>
                         {json.map((data: Record<string, unknown>, index: number) => <tr key={index}>
                             <td>{index + 1}</td>
-                            <td>{data['Jour']}</td>
-                            <td>{data['Date'].toLocaleDateString()}</td>
-                            {classes.map((classe, index) => <td key={index}>{data[classe.notation]}</td>)}
-                            <td>{data['Ens']}</td>
-                            <td>{data['Cui']}</td>
+                            <td>{data['Jour'] as string}</td>
+                            <td>{(data['Date'] as Date).toLocaleDateString()}</td>
+                            {classes.map((classe, index) => <td key={index}>{data[classe.notation as string] as string}</td>)}
+                            <td>{data['Ens'] as number}</td>
+                            <td>{data['Cui'] as number}</td>
                         </tr>)}
                         </tbody>
                     </table> : <p className="text-center fw-bold">Aucune donnees</p>}

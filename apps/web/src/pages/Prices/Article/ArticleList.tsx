@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi, useAuthStore } from "hooks";
+import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Block, Button, DangerButton, PageTitle } from "ui";
+import { Block, DangerButton, PageTitle } from "ui";
 import { config } from '@base/config'
-import { ArticleLoading, EditLink, Link, PrimaryLink } from "@base/components";
+import { ArticleLoading, EditLink, PrimaryLink } from "@base/components";
 import { Pagination } from '@base/components'
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
-import { PriceStatistics } from "../PriceStatistics.tsx";
 
 export function ArticleList(): ReactNode {
     const { Client, datas: articles, RequestState } = useApi<Article>({
@@ -73,7 +72,6 @@ export function ArticleList(): ReactNode {
     }
 
     return <>
-        {/*<PriceStatistics />*/}
         <PageTitle title="Liste des articles">
             <PrimaryLink permission="article.create" to="/prices/articles/add" icon="plus-lg">
                 Nouveau article

@@ -19,7 +19,7 @@ type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
     icon?: string;
 
     /**
-     * Permet de deactiver le bouton
+     * Permet de désactiver le bouton
      */
     disabled?: boolean;
 
@@ -30,7 +30,7 @@ type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
 
 
     /**
-     * Permission pour l'accessibilite du bouton
+     * Permission pour l’accessibilité du bouton
      */
     permission: string|string[];
 

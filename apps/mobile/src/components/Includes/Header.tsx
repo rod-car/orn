@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { SettingsMenu, UserMenu, SidePanel } from "@base/components";
+import { UserMenu, SidePanel } from "@base/components";
 
 export function Header(): ReactNode {
     return <header className="app-header fixed-top">
@@ -13,7 +13,6 @@ export function Header(): ReactNode {
                             </a>
                         </div>
                         <div className="app-utilities col-auto">
-                            <SettingsMenu />
                             <UserMenu />
                         </div>
                     </div>

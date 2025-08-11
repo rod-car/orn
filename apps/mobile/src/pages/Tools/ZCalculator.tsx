@@ -45,7 +45,7 @@ export function ZCalculator(): ReactNode {
         const response = await Client.post(formData, '/z-calculator')
 
         if (response.ok) {
-            toast("Enregistre avec succe", {
+            toast("Enregistre avec succès", {
                 position: config.toastPosition,
                 type: "success"
             })
@@ -138,7 +138,7 @@ export function ZCalculator(): ReactNode {
                                 />
                             </Col>
                         </Row>
-                        <PrimaryButton permission="tools.z-calculator" type={"submit"} loading={RequestState.creating} icon="save">Voir le resultat</PrimaryButton>
+                        <PrimaryButton permission="tools.z-calculator" type={"submit"} loading={RequestState.creating} icon="save">Voir le résultat</PrimaryButton>
                     </form>
                 </Block>
             </Col>

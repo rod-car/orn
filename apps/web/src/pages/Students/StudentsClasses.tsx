@@ -78,7 +78,7 @@ export function StudentsClasses(): ReactNode {
 
             if (response.length) {
                 const studentIds = response.map((student: Student) => student.student_id)
-                setStudentsClasses(studentIds)
+                setStudentsClasses(studentIds as number[])
             }
         }
     }, [schoolId, nextScholarYear, nextClassId, nextCategory])
@@ -92,7 +92,7 @@ export function StudentsClasses(): ReactNode {
     }, [schoolId, nextScholarYear, nextClassId, nextCategory])
 
     /**
-     * Traiter si un étudiant est selectionné
+     * Traiter si un étudiant est sélectionné
      * @param studentId 
      */
     function handleStudentCheck(studentId: number) {
@@ -106,8 +106,8 @@ export function StudentsClasses(): ReactNode {
     }
 
     /**
-     * Generer les parametres de la requête
-     * @param addParams Parametres additionnel
+     * Générer les paramètres de la requête
+     * @param addParams Paramètres additionnel
      * @returns 
      */
     function getParams(addParams: Record<string, unknown> = {}): Record<string, unknown> {
@@ -125,7 +125,7 @@ export function StudentsClasses(): ReactNode {
     }
 
     /**
-     * Permet de traiter la soumission du formumlaire
+     * Permet de traiter la soumission du formulaire
      * @param e FormEvent
      */
     async function handleSubmit(e: FormEvent) {
@@ -303,13 +303,13 @@ export function StudentsClasses(): ReactNode {
                                             className="me-3 border-1"
                                             mode="primary"
                                             checked={in_array(studentsClasses, studentClass.student_id)}
-                                            onCheck={() => handleStudentCheck(studentClass.student_id)}
+                                            onCheck={() => handleStudentCheck(studentClass.student_id as number)}
                                             label="Admis" />}
                                         <DangerButton
                                             permission="student.delete"
                                             icon="trash"
                                             size="sm"
-                                            onClick={() => removeStudent(studentClass.student_id)}
+                                            onClick={() => removeStudent(studentClass.student_id as number)}
                                         />
                                     </td>
                                 </tr>)}

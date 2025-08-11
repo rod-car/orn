@@ -7,3 +7,13 @@ import '@base/assets/icons.css?asset';
 import '@base/assets/custom.css?asset';
 import '@base/assets/js/app.js?asset';
 import 'bootstrap-icons/font/bootstrap-icons.min.css?asset';
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+        for (const registration of registrations) {
+            registration.unregister();
+        }
+    }).catch(error => {
+        console.error('Erreur lors de la désinscription du service worker :', error);
+    });
+}

@@ -5,13 +5,11 @@ import { cantineRoute } from '@base/routes/cantine/cantine';
 import { PrivateRoute } from '@base/components/Auth';
 import { activityRoute } from '@base/routes/activities/activities';
 import { authRoute, userRoute } from '@base/routes/auth';
-import { scholarGardenRoute } from '@base/routes/scholar-garden/';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { AppRoot, About, Contributors, HomePage } from '@base/pages/App';
 import { studentRoute, abaqueRoute, schoolRoute, surveyRoute, statisticRoute } from '@base/routes/anthropo-measure';
 import { documentRoute } from '@base/routes/document/documents';
 import { toolsRoute } from '@base/routes/tools/tools';
-import { settingsRoute } from '@base/routes/settings/settings';
 import { securityRoute } from './routes/user';
 
 const router = createBrowserRouter([
@@ -59,11 +57,9 @@ const router = createBrowserRouter([
             },
             { path: 'cantine', children: cantineRoute },
             { path: 'activities', children: activityRoute },
-            { path: 'scholar-garden', children: scholarGardenRoute },
             { path: 'prices', children: priceRoute },
             { path: 'documents', children: documentRoute },
             { path: 'tools', children: toolsRoute },
-            { path: 'settings', children: settingsRoute },
         ],
     },
     {

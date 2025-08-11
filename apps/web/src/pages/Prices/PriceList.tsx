@@ -1,4 +1,5 @@
-import { useApi, useAuthStore } from "hooks";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useApi } from "hooks";
 import { ReactNode, useEffect, useState } from "react";
 import { Block, Button, PageTitle, Select } from "ui";
 import { Link, Pagination, PrimaryLink } from '@base/components'

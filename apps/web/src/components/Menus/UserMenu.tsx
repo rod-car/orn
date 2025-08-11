@@ -12,14 +12,14 @@ export function UserMenu(): ReactNode {
     const { Client, RequestState } = useApi<User>({  url: '/auth' })
 
     const handleLogout = async () => {
-        toast('Deconnexion en cours', {
+        toast('Déconnexion en cours', {
             type: 'info',
             isLoading: RequestState.creating,
             position: config.toastPosition
         })
         const response = await logout(Client)
         if (response.ok) {
-            toast('Deconnecté', {
+            toast('Déconnecté', {
                 type: 'success',
                 position: config.toastPosition
             })
@@ -41,7 +41,7 @@ export function UserMenu(): ReactNode {
             <li><NavLink permission="user.view" className="dropdown-item" to="/user/list">Utilisateurs</NavLink></li>
             <li><NavLink permission="access-request.view" className="dropdown-item" to="/auth/access-request">Demandes d'accès</NavLink></li>
             <li><hr className="dropdown-divider" /></li>
-            <li><Button permission="*" onClick={handleLogout} className="dropdown-item shadow-none fw-normal">Se deconnecter</Button></li>
+            <li><Button permission="*" onClick={handleLogout} className="dropdown-item shadow-none fw-normal">Se déconnecter</Button></li>
         </ul>
     </div>
 }

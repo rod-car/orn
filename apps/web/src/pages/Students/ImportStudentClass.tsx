@@ -137,11 +137,11 @@ export function ImportStudentClass(): ReactNode {
                             <li><span className="fw-bold">noms: </span> le nom complet</li>
                             <li><span className="fw-bold">date_naissance: </span> la date de naissance</li>
                             <li><span className="fw-bold">sexe: </span> le sexe (Garçon ou Fille)</li>
-                            <li><span className="fw-bold">parents: </span> le nom des parents separé part "et"</li>
+                            <li><span className="fw-bold">parents: </span> le nom des parents séparé part "et"</li>
                         </ul>
                     </p>
 
-                    <p className='text-justify'><b><u>NB:</u></b> A bien respecter ces nomenclatures (les accents a respecter ainsi que les majuscules et miniscules) afin d'éviter des problèmes de fonctionnement de l'importation.</p>
+                    <p className='text-justify'><b><u>NB:</u></b> A bien respecter ces nomenclatures (les accents a respecter ainsi que les majuscules et miniscule) afin d'éviter des problèmes de fonctionnement de l'importation.</p>
                 </Modal>
                 <form>
                     <Row>
@@ -207,7 +207,7 @@ export function ImportStudentClass(): ReactNode {
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <h6 className='text-primary'>
                         Affichage de la liste{' '}
-                        {json.length > 0 && `(${json.length} Etudiant(s))`}
+                        {json.length > 0 && `(${json.length} Étudiant(s))`}
                     </h6>
                     {json.length > 0 && scholarYear as number > 0 && <PrimaryButton
                         permission="student.import"

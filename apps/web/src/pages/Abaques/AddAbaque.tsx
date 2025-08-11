@@ -439,6 +439,7 @@ export function AddAbaque(): ReactNode {
                     )}
 
                     <Button
+                        permission="abaque.create"
                         loading={RequestState.creating}
                         type="submit"
                         icon="save"

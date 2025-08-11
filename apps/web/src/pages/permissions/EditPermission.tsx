@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks';
 import { Block, PageTitle } from 'ui';
 import { PermissionForm } from './PermissionForm';

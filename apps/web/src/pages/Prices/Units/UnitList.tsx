@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
 import { Block, DangerButton, PageTitle } from "ui";
@@ -54,7 +55,7 @@ export function UnitList(): ReactNode {
                             })
                             getUnits()
                         } else {
-                            toast('Erreur de suppréssion', {
+                            toast('Erreur de suppression', {
                                 closeButton: true,
                                 type: 'error',
                                 position: config.toastPosition

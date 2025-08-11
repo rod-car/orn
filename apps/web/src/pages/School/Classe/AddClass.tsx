@@ -18,7 +18,7 @@ export function AddClass(): ReactNode {
     })
 
     const resetError = (name: string, value: string): void => {
-        if (value.length > 0) error.data.errors[name] = null
+        if (value.length > 0 && error) error.data.errors[name] = []
     }
 
     const handleChange = (target: EventTarget & (HTMLInputElement | HTMLSelectElement)): void => {

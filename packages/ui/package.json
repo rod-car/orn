@@ -9,12 +9,13 @@
     "build": "storybook build"
   },
   "dependencies": {
+    "hooks": "workspace:*",
+    "lucide-react": "^0.539.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-select": "^5.8.0",
     "react-select-search": "^4.1.7",
-    "storybook": "^8.5.0",
-    "hooks": "workspace:*"
+    "storybook": "^8.5.0"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.6.17",

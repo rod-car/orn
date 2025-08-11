@@ -31,9 +31,9 @@ interface ResponseData {
 type ViewMode = 'simple' | 'districts' | 'temporal';
 
 const months = [
-    'Janoary', 'Febroary', 'Martsa', 'Aprily', 'Mey', 'Jona',
-    'Jolay', 'Aogositra', 'Septambra', 'Oktobra', 'Novambra', 'Desambra'
-];
+    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+]
 
 const districts = [
     { id: 1, name: 'Toamasina I' },
@@ -86,7 +86,7 @@ export function PriceStatistics(): ReactNode {
     const [hiddenArticles, setHiddenArticles] = useState<number[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [isExporting, setIsExporting] = useState<boolean>(false);
-    const [showAdvanced, setShowAdvanced] = useState<boolean>(true);
+    const [showAdvanced] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { Client } = useApi<ArticlePrice>({ url: '/prices' });

@@ -39,8 +39,8 @@ export function ActivityList(): ReactNode {
 
         {RequestState.loading && <Loading />}
 
-        {activities && activities.data?.map((activity: Activity, index: number) => {
-            return <ActivityBlock activity={activity} index={index} />
+        {activities && (activities as unknown as {data: Activity[]}).data?.map((activity: Activity, index: number) => {
+            return <ActivityBlock key={index} activity={activity} index={index} />
         })}
 
         {activities?.total > activities?.per_page && <Pagination changePage={changePage} data={activities} />}

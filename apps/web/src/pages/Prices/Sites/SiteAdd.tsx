@@ -1,15 +1,15 @@
+import { ReactNode } from 'react'
 import { Block, PageTitle } from 'ui'
 import { SiteForm } from '@base/pages/Prices'
-import { ReactNode } from 'react'
-import { Link } from '@base/components'
+import { PrimaryLink } from '@base/components'
 
 export function SiteAdd(): ReactNode {
     return (
         <>
             <PageTitle title="Ajouter un site">
-                <Link to="/prices/sites/list" icon='list' className="btn btn-primary">
+                <PrimaryLink permission="site.view" to="/prices/sites/list" icon='list'>
                     Liste des sites
-                </Link>
+                </PrimaryLink>
             </PageTitle>
 
             <Block className="mb-5">

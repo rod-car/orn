@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi, useAuthStore } from 'hooks'
+import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { range } from 'functions'

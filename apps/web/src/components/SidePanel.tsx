@@ -57,7 +57,7 @@ export function SidePanel(): ReactNode {
                     ]}/>
                     <DropDown label="Gestion de stocks" base="/cantine/stocks" icon="file" permission="stock.view" menus={[
                         { to: '/in', label: 'Entree', permission: "stock.in" },
-                        { to: '/out', label: 'Stortie', permission: "stock.out" },
+                        { to: '/out', label: 'Sortie', permission: "stock.out" },
                         { to: '/recap', label: 'Fiche de stock', permission: "stock.recap" },
                     ]}/>
 
@@ -81,7 +81,7 @@ export function SidePanel(): ReactNode {
                     <DropDown label="Gestion des prix" base="/prices/manage" icon="cash" permission="price.view" menus={[
                         { to: '/add', label: "Renseigner un prix d'articles", permission: "price.create" },
                         { to: '/list', label: "Liste des prix d'articles", permission: "price.view" },
-                        { to: '/recap', label: "Recapitulatif", permission: "price.recap" }
+                        { to: '/recap', label: "Récapitulatif", permission: "price.recap" }
                     ]}/>
                     <DropDown label="Sites" base="/prices/sites" icon="houses" permission="site.view" menus={[
                         { to: '/add', label: 'Ajouter un site', permission: "site.create" },
@@ -92,9 +92,8 @@ export function SidePanel(): ReactNode {
                     <NavItem icon="file-earmark-text-fill" active={pathname.includes("/documents")} to="/documents" permission="document.view" label="Documents" />
                     <DropDown label="Outils" base="/tools" icon="tools" permission={["tools.z-calculator", "tools.value-repartition"]} menus={[
                         { to: '/z-calculator', label: 'Calculateur de Z', permission: "tools.z-calculator" },
-                        { to: '/value-repartition', label: 'Repartisseur de valeur', permission: "tools.value-repartition" },
+                        { to: '/value-repartition', label: 'Repartition de valeur', permission: "tools.value-repartition" },
                     ]} />
-
                 </ul>
             </nav>
 

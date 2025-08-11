@@ -69,10 +69,10 @@ export function SchoolList(): ReactNode {
             <PageTitle title={`Liste des établissement ${schools.length > 0 ? '('+ schools.length +' école(s))' : ''}`}>
                 <div className="d-flex">
                     <SecondaryButton permission="school.view" onClick={getSchools} className="me-2" icon="arrow-clockwise" loading={RequestState.loading}>
-                        Rechargher
+                        Recharger
                     </SecondaryButton>
                     <PrimaryLink permission="school.create" to="/anthropo-measure/school/add" icon='plus-lg'>
-                        Nouveau etablissement
+                        Nouveau établissement
                     </PrimaryLink>
                 </div>
             </PageTitle>

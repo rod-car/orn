@@ -11,7 +11,6 @@ import { EditLink, PrimaryLink } from '@base/components'
 export function ListAbaque(): ReactNode {
     const [abaqueType, setAbaqueType] = useState(abaque.abaqueTypes[0].id)
     const { Client, RequestState, datas: abaques } = useApi<MeasureLength>({
-        
         url: '/measures'
     })
 

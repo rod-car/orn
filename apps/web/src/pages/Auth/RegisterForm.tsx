@@ -1,11 +1,11 @@
-import { useApi, useAuth } from 'hooks';
-import { FormEvent, ReactNode, useEffect, useState } from 'react';
-import { Button, Input, Select } from 'ui';
+import { Button, Input } from 'ui';
 import { toast } from 'react-toastify';
-import { config as baseConfig } from '@base/config'
 import { useConfigStore } from 'hooks';
+import { useAuth } from 'hooks';
+import { config as baseConfig } from '@base/config'
+import { FormEvent, ReactNode, useState } from 'react';
 
-export function RegisterForm({ external = true, editUser = undefined }: { external?: boolean, editUser?: User }): ReactNode {
+export function RegisterForm(): ReactNode {
     const config = useConfigStore()
 
     const defaultUser = {
@@ -13,35 +13,22 @@ export function RegisterForm({ external = true, editUser = undefined }: { extern
         occupation: '',
         email: '',
         username: '',
-        role: 0,
-        school_id: 0,
-        password: external ? '' : 'Default.2024',
-        password_confirmation: external ? '' : 'Default.2024'
+        role: "guest",
+        password: 'Default.2024',
+        password_confirmation: 'Default.2024'
     }
 
-    const { Client, RequestState } = useApi<User>({
-        url: '/auth',
-        key: 'data'
-    })
-
-    const { Client: SchoolClient, RequestState: SchoolRequestState, datas: schools } = useApi<School>({
-        url: '/schools',
-        key: 'data'
-    })
-
-    const [showPassword, setShowPassword] = useState(false)
-    const [user, setUser] = useState<Partial<User>>(editUser ? editUser : defaultUser)
-    const defaultErrors = {username: [''], password: [''], name: [''], occupation: [''], email: [''], password_confirmation: [''], role: [''], school_id: ['']}
+    const [showPassword] = useState(false)
+    const [user, setUser] = useState<Partial<User>>(defaultUser)
+    const defaultErrors = {username: [''], password: [''], name: [''], occupation: [''], email: [''], password_confirmation: [''], role: ['']}
     const [errors, setErrors] = useState<typeof defaultErrors>(defaultErrors)
     const { register, loading } = useAuth<User>({ baseUrl: config.baseUrl })
 
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
-        if (user.school_id === 0) setUser({...user, school_id: undefined})
 
-        const url = editUser ? `/update-user/${editUser.id}` : '/add-user'
-        const response = external ? await register(user) : await Client.post(user, url)
-        const message = external ? "Demande envoyé. Elle sera validé par l'administrateur" : "Enregistré"
+        const response =await register(user);
+        const message ="Demande envoyé. Elle sera validé par l'administrateur";
 
         if (response === undefined) {
             toast("Impossible de contacter le serveur", {
@@ -56,7 +43,7 @@ export function RegisterForm({ external = true, editUser = undefined }: { extern
                 type: 'success',
                 position: baseConfig.toastPosition
             })
-            if (!editUser) setUser(defaultUser)
+            setUser(defaultUser)
         } else {
             setErrors(response.data.errors)
             toast(response.statusText, {
@@ -66,13 +53,9 @@ export function RegisterForm({ external = true, editUser = undefined }: { extern
         }
     }
 
-    useEffect(() => {
-        if (!external) SchoolClient.get()
-    }, [])
-
     return <form method="POST" onSubmit={handleSubmit} className="auth-form auth-signup-form">
         <div className="row">
-            <div className={`email mb-3 col-${external ? 12 : 6}`}>
+            <div className={`email mb-3 col-12`}>
                 <Input
                     value={user.name}
                     onChange={({ target }): void => {
@@ -85,11 +68,11 @@ export function RegisterForm({ external = true, editUser = undefined }: { extern
                     placeholder="Nom complet ou nom d'entreprise"
                     className="signup-name"
                     error={errors?.name}
-                    srOnly={external}
+                    srOnly
                 />
             </div>
 
-            <div className={`email mb-3 col-${external ? 12 : 6}`}>
+            <div className={`email mb-3 col-12`}>
                 <Input
                     value={user.occupation}
                     onChange={({ target }): void => {
@@ -102,53 +85,13 @@ export function RegisterForm({ external = true, editUser = undefined }: { extern
                     placeholder="Ex: Responsable nutrition"
                     className="signup-name"
                     error={errors?.occupation}
-                    srOnly={external}
+                    srOnly
                 />
             </div>
-
-            {!external && <>
-                <div className="email mb-3 col-6">
-                    <Select
-                        disabled={editUser && editUser.role === 2}
-                        value={user.role}
-                        onChange={({ target }): void => {
-                            setUser({ ...user, role: parseInt(target.value) })
-                            if (target.value.length > 0 && errors)
-                                setErrors({ ...errors, role: [] })
-                        }}
-                        error={errors?.role}
-                        label="Rôle"
-                        placeholder={null}
-                        options={editUser && editUser.role === 2 ? [{ id: 2, label: "Super administrateur" }] : [{ id: 0, label: "Invité" }, { id: 1, label: "Administrateur" }, { id: 2, label: "Super administrateur" }]}
-                        config={{ optionKey: "id", valueKey: "label" }}
-                        controlled
-                    />
-                </div>
-
-                <div className="email mb-3 col-6">
-                    <Select
-                        value={user.school_id}
-                        onChange={({ target }): void => {
-                            setUser({ ...user, school_id: parseInt(target.value) })
-                            if (target.value.length > 0 && errors)
-                                setErrors({ ...errors, school_id: [] })
-                        }}
-                        error={errors?.school_id}
-                        label="Etablissement de rattachement"
-                        placeholder="Selectionner"
-                        defaultOption={undefined}
-                        loading={SchoolRequestState.loading}
-                        options={schools}
-                        config={{ optionKey: "id", valueKey: "name" }}
-                        required={false}
-                        controlled
-                    />
-                </div>
-            </>}
         </div>
 
         <div className="row">
-            <div className={`email mb-3 col-${external ? 12 : 6}`}>
+            <div className={`email mb-3 col-12`}>
                 <Input
                     value={user.username}
                     onChange={({ target }): void => {
@@ -160,11 +103,11 @@ export function RegisterForm({ external = true, editUser = undefined }: { extern
                     label="Nom d'utilisateur"
                     placeholder="Nom d'utilisateur"
                     error={errors?.username}
-                    srOnly={external}
+                    srOnly
                 />
             </div>
 
-            <div className={`email mb-3 col-${external ? 12 : 6}`}>
+            <div className={`email mb-3 col-12`}>
                 <Input
                     value={user.email}
                     onChange={({ target }): void => {
@@ -179,7 +122,7 @@ export function RegisterForm({ external = true, editUser = undefined }: { extern
                     label="Adresse email"
                     placeholder="Adresse email"
                     error={errors?.email}
-                    srOnly={external}
+                    srOnly
                 />
             </div>
         </div>
@@ -199,7 +142,7 @@ export function RegisterForm({ external = true, editUser = undefined }: { extern
                     placeholder="Créer un mot de passe"
                     error={errors?.password}
                     className="signup-password"
-                    srOnly={external}
+                    srOnly
                 />
             </div>
 
@@ -217,7 +160,7 @@ export function RegisterForm({ external = true, editUser = undefined }: { extern
                     placeholder="Confirmer le mot de passe"
                     error={errors?.password_confirmation}
                     className="signup-password"
-                    srOnly={external}
+                    srOnly
                 />
             </div>
         </div>
@@ -229,11 +172,11 @@ export function RegisterForm({ external = true, editUser = undefined }: { extern
             <div className="d-flex justify-content-between align-items-center">
                 <Button
                     permission="*"
-                    loading={loading || RequestState.creating}
+                    loading={loading}
                     type="submit"
                     mode="primary"
                     className={`app-btn-primary w-100 theme-btn mx-auto`}
-                >{external ? "Demander l'accès" : "Enregistrer"}</Button>
+                >"Demander l'accès</Button>
             </div>
         </div>
     </form>

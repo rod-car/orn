@@ -1,27 +1,15 @@
 import { RouteObject } from "react-router"
 import { PrivateRoute } from "@base/components/Auth"
-import { AddConso, EditConso, ListConso, RecapConso, Stock, StockIn, StockOut } from "@base/pages/Cantine"
+import { AddConso, ListConso, Stock, StockIn, StockOut } from "@base/pages/Cantine"
 
 export const cantineRoute: RouteObject[] = [
     {
         path: 'consommation',
         children: [
             {
-                path: 'statistics',
-                element: <PrivateRoute permission={["consommation.statistics"]}>
-                    <RecapConso />
-                </PrivateRoute>
-            },
-            {
                 path: 'add',
                 element: <PrivateRoute permission={['consommation.create']}>
                     <AddConso />
-                </PrivateRoute>
-            },
-            {
-                path: 'edit/:id',
-                element: <PrivateRoute permission={['consommation.edit']}>
-                    <EditConso />
                 </PrivateRoute>
             },
             {

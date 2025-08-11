@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FormEvent, useEffect, useState } from 'react'
-import { Button, Input, PrimaryButton, Select } from 'ui'
+import { FormEvent, ReactNode, useEffect, useState } from 'react'
+import { Input, PrimaryButton, Select } from 'ui'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
@@ -67,7 +67,7 @@ export function SchoolForm({ editedSchool }: SchoolFormProps): ReactNode {
     const handleChange = (target: EventTarget & (HTMLSelectElement | HTMLInputElement)): void => {
         setSchool({ ...school, [target.name]: target.value })
         if (target.value.length > 0 && error?.data.errors[target.name]) {
-            error.data.errors[target.name] = null
+            error.data.errors[target.name] = []
         }
     }
 

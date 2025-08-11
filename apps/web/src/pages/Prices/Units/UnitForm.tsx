@@ -21,8 +21,6 @@ export function UnitForm({ editedUnit }: UnitFormProps): ReactNode {
         error,
         RequestState
     } = useApi<Unit>({
-        
-        
         url: '/prices/units',
         key: 'data'
     })
@@ -89,6 +87,7 @@ export function UnitForm({ editedUnit }: UnitFormProps): ReactNode {
             </div>
 
             <Button
+                permission="unit.create"
                 loading={RequestState.creating || RequestState.updating}
                 icon="save"
                 type="submit"

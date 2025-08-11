@@ -1,8 +1,9 @@
-import { useApi, useAuthStore } from "hooks";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Block, Button, DangerButton, PageTitle } from "ui";
+import { Block, DangerButton, PageTitle } from "ui";
 import { config } from '@base/config'
-import { SiteLoading, Link, PrimaryLink, EditLink } from "@base/components";
+import { SiteLoading, PrimaryLink, EditLink } from "@base/components";
 import { Pagination } from '@base/components'
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
@@ -55,7 +56,7 @@ export function SiteList(): ReactNode {
                             })
                             getSites()
                         } else {
-                            toast('Erreur de suppréssion', {
+                            toast('Erreur de suppression', {
                                 closeButton: true,
                                 type: 'error',
                                 position: config.toastPosition

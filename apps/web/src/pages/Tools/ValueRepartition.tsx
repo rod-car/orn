@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FormEvent, ReactNode, useCallback, useState } from "react";
 import { Block, Input, PageTitle, PrimaryButton } from "ui";
 import { Col, Row } from "@base/components/Bootstrap";
@@ -22,7 +23,7 @@ export function ValueRepartition(): ReactNode {
     const handleSubmit = useCallback(async (e: FormEvent) => {
         e.preventDefault()
 
-        const res = repartirPrescolaire(formData.total, {
+        const res = repartData(formData.total, {
             PS: formData.PS,
             MS: formData.MS,
             GS: formData.GS,
@@ -32,21 +33,20 @@ export function ValueRepartition(): ReactNode {
         setResult(res)
     }, [formData])
 
-    function repartirPrescolaire(total: number, proportions: Record<string, number>): Record<string, number> {
-        let result: Record<string, number> = {};
-
-        let filteredProportions = Object.entries(proportions).filter(([_, value]) => value > 0);
-        let sumProportions = filteredProportions.reduce((sum, [_, value]) => sum + value, 0);
+    function repartData(total: number, proportions: Record<string, number>): Record<string, number> {
+        const result: Record<string, number> = {};
+        const filteredProportions = Object.entries(proportions).filter(([_, value]) => value > 0);
+        const sumProportions = filteredProportions.reduce((sum, [_, value]) => sum + value, 0);
 
         let restant = total;
         const temp = total - sumProportions;
 
         if (temp > 0) restant = sumProportions;
 
-        let adjustedEntries: [string, number][] = [];
+        const adjustedEntries: [string, number][] = [];
 
-        for (let [key, value] of filteredProportions) {
-            let allocated = Math.round((value / sumProportions) * total);
+        for (const [key, value] of filteredProportions) {
+            const allocated = Math.round((value / sumProportions) * total);
             result[key] = Math.min(allocated, value);
             restant -= result[key];
             adjustedEntries.push([key, value]);
@@ -54,14 +54,14 @@ export function ValueRepartition(): ReactNode {
 
         // Si un écart subsiste, ajuster les valeurs pour atteindre total
         if (restant !== 0) {
-            for (let [key, _] of adjustedEntries.sort((a, b) => b[1] - a[1])) {
+            for (const [key, _] of adjustedEntries.sort((a, b) => b[1] - a[1])) {
                 if (restant === 0) break;
                 result[key] += Math.sign(restant);
                 restant -= Math.sign(restant);
             }
         }
 
-        for (let key in proportions) result[key] = proportions[key] === 0 ? 0 : result[key] ?? 0;
+        for (const key in proportions) result[key] = proportions[key] === 0 ? 0 : result[key] ?? 0;
 
         if (temp > 0) result["Reste"] = temp;
 

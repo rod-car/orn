@@ -1,19 +1,15 @@
-import { useApi } from 'hooks'
-import { EditLink, InfoLink, PrimaryLink } from '@base/components'
-import { config } from '@base/config'
-import { Block, Button, DangerButton, PageTitle, SecondaryButton, Select } from 'ui'
-import { ReactNode, useEffect, useState } from 'react'
-import { confirmAlert } from 'react-confirm-alert'
-import { toast } from 'react-toastify'
-import { number_array, range } from 'functions'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useApi } from 'hooks';
+import { config } from '@base/config';
+import { toast } from 'react-toastify';
+import Skeleton from 'react-loading-skeleton';
+import { Pagination } from '@base/components';
+import { number_array, range } from 'functions';
+import { confirmAlert } from 'react-confirm-alert';
+import { ReactNode, useEffect, useState } from 'react';
+import { EditLink, InfoLink, PrimaryLink } from '@base/components';
+import { Block, DangerButton, PageTitle, SecondaryButton, Select } from 'ui';
 
-import { Pagination } from '@base/components'
-import Skeleton from 'react-loading-skeleton'
-
-/**
- * Page d'accueil de gestion des étudiants
- * @returns ReactNode
- */
 export function ListUser(): ReactNode {
     const [perPage, setPerPage] = useState(10)
 
@@ -38,7 +34,7 @@ export function ListUser(): ReactNode {
     const confirmDelete = async (user: User): Promise<void> => {
         confirmAlert({
             title: 'Question',
-            message: 'Voulez-vous supprimer cet utuilisateur ?',
+            message: 'Voulez-vous supprimer cet utilisateur ?',
             buttons: [
                 {
                     label: 'Oui',
@@ -147,7 +143,7 @@ export function ListUser(): ReactNode {
                                 <th className="text-nowrap">Adresse e-mail</th>
                                 <th className="text-nowrap">Nom d'utilisateur</th>
                                 <th>Rôle</th>
-                                <th className="text-nowrap">Etablissement</th>
+                                <th className="text-nowrap">Établissement</th>
                                 <th style={{ width: "10%" }}>Actions</th>
                             </tr>
                         </thead>

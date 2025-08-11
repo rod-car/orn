@@ -212,7 +212,7 @@ export function PriceForm(): React.ReactNode {
                                         onChange={({ target }) =>
                                             handleFieldChange(parseInt(target.value), index, 'unit_id')
                                         }
-                                        value={element.unit_id}
+                                        value={element.unit_id as number}
                                         options={units}
                                         config={{ optionKey: 'id', valueKey: 'name' }}
                                         error={error?.data?.errors?.[`articlePrice.${index}.unit_id`]}
@@ -237,6 +237,7 @@ export function PriceForm(): React.ReactNode {
             </table>
 
             <Button
+                permission="price.create"
                 loading={RequestState.creating || RequestState.updating}
                 icon="save"
                 type="submit"

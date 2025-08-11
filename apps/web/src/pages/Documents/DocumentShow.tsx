@@ -10,10 +10,6 @@ import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 import { Block, Button, PageTitle, Spinner } from "ui";
 
-function download(path: string) {
-    return window.open(path, 'blank')
-}
-
 export function DocumentShow(): ReactNode {
     const { Client, data: document, RequestState } = useApi<FileDocument>({
         url: '/documents',
@@ -83,14 +79,14 @@ export function DocumentShow(): ReactNode {
                     <div className="d-flex">
                         <InfoLink permission="document.download" className="me-2" target="_blank" rel="noreferrer noopener" icon="download" to={document.path as string}>Télécharger</InfoLink>
                         {isAllowed("document.delete") && <form onSubmit={deleteDocument} method="post">
-                            <Button loading={RequestState.deleting} icon="trash" type="submit" mode="danger">Supprimer</Button>
+                            <Button permission="document.delete" loading={RequestState.deleting} icon="trash" type="submit" mode="danger">Supprimer</Button>
                         </form>}
                     </div>
                 </div>
                 <span className="text-primary fst-italic">Le {format(document.date, 'd/MM/y')}</span>
                 <hr />
                 <div className="mt-3">
-                    <h6>Resumé</h6>
+                    <h6>Résumé</h6>
                     <p className="text-justify" dangerouslySetInnerHTML={{ __html: document.abstract as string }}></p>
                 </div>
             </Block>

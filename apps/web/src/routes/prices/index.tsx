@@ -1,5 +1,5 @@
 import { PrivateRoute } from "@base/components/Auth/";
-import { ArticleAdd, ArticleEdit, ArticleList, ArticleShow, PriceAdd, PriceList, SiteAdd, SiteEdit, SiteList, UnitAdd, UnitEdit, UnitList, PriceRecap } from "@base/pages/Prices";
+import { ArticleAdd, ArticleEdit, ArticleList, PriceAdd, PriceList, SiteAdd, SiteEdit, SiteList, UnitAdd, UnitEdit, UnitList, PriceRecap } from "@base/pages/Prices";
 import { RouteObject } from "react-router";
 
 export const priceRoute: RouteObject[] = [
@@ -34,12 +34,6 @@ export const priceRoute: RouteObject[] = [
                 path: 'edit/:id',
                 element: <PrivateRoute permission="article.edit">
                     <ArticleEdit />
-                </PrivateRoute>
-            },
-            {
-                path: 'show/:id',
-                element: <PrivateRoute permission="article.show">
-                    <ArticleShow />
                 </PrivateRoute>
             },
             {

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi, useAuthStore } from 'hooks'
+import { useApi } from 'hooks'
 import { useParams } from 'react-router-dom'
 import { Block, Button, Input, PageTitle, SecondaryButton, Select } from 'ui'
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
@@ -125,10 +125,10 @@ export function DetailsSurvey(): ReactNode {
 
     return (
         <>
-            <PageTitle title={`Détails de la mésure ${surveyDetails}`}>
+            <PageTitle title={`Détails de la mesure ${surveyDetails}`}>
                 <div className="d-flex">
                     <PrimaryLink permission="anthropometry.view" to="/anthropo-measure/survey/list" icon="list" className="me-2">
-                        Liste des mésures
+                        Liste des mesures
                     </PrimaryLink>
                     <InfoLink permission="anthropometry.import" to={`/anthropo-measure/survey/${id}/import-result`} icon="file-earmark-text">
                         Importer des résultat
@@ -141,7 +141,7 @@ export function DetailsSurvey(): ReactNode {
                     <thead>
                         <tr>
                             <th>Nombre d'étudiants</th>
-                            <th>Etablissement</th>
+                            <th>Établissement</th>
                             <th>Situation</th>
                             <th>Actions</th>
                         </tr>
@@ -216,6 +216,7 @@ export function DetailsSurvey(): ReactNode {
                         className="w-100 me-1"
                     />
                     <Button
+                        permission="*"
                         icon="search"
                         loading={RequestState.loading}
                         type="button"

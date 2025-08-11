@@ -1,5 +1,5 @@
 import { PrivateRoute } from "@base/components/Auth";
-import { AddClass, AddLevel, AddSchool, Classes, DetailsSchool, EditClass, EditLevel, EditSchool, Levels, SchoolList } from "@base/pages/School";
+import { AddClass, AddLevel, AddSchool, Classes, EditClass, EditLevel, EditSchool, Levels, SchoolList } from "@base/pages/School";
 import { RouteObject } from "react-router";
 
 const classRoute: RouteObject[] = [
@@ -61,12 +61,6 @@ export const schoolRoute: RouteObject[] = [
         path: 'edit/:id',
         element: <PrivateRoute permission="school.edit">
             <EditSchool />
-        </PrivateRoute>
-    },
-    {
-        path: 'details/:id',
-        element: <PrivateRoute permission="school.show">
-            <DetailsSchool />
         </PrivateRoute>
     },
     {
