@@ -1,46 +1,41 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { ReactNode, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Block } from 'ui'
-import { NavLink } from "@base/components"
+import { Block, PageTitle } from 'ui'
+import { PrimaryLink } from "@base/components"
 import { ArticleForm } from '@base/pages/Prices'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 export function ArticleEdit(): ReactNode {
     const { Client, data: article } = useApi<Article>({
-        url: '/prices/articles'
+        url: '/prices/articles',
+        key: 'data'
     })
 
     const { id } = useParams()
 
-    const getArticles = async (id: number): Promise<void> => {
+    const getArticle = async (id: number): Promise<void> => {
         await Client.find(id)
     }
 
     useEffect(() => {
-        getArticles(parseInt(id as string))
+        getArticle(parseInt(id as string))
     }, [])
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-5">
-                {article ? (
-                    <h3 className="m-0">{article.designation}</h3>
-                ) : (
-                    <Skeleton count={1} style={{ height: 40 }} containerClassName="w-50" />
-                )}
-                <NavLink to="/prices/articles/list" className="btn btn-primary">
-                    <i className="bi bi-list me-2"></i>Liste des articles
-                </NavLink>
-            </div>
+            <PageTitle
+                title={article ? article.designation : <Skeleton count={1} style={{ height: 40 }} containerClassName="w-50" />}
+            >
+                <PrimaryLink permission="article.view" to="/prices/articles/list" icon="list">
+                    Liste des articles
+                </PrimaryLink>
+            </PageTitle>
 
             <Block className="mb-5">
-                {article ? (
-                    <ArticleForm editedArticle={article} />
-                ) : (
-                    <Skeleton style={{ height: 40 }} count={4} />
-                )}
+                {article ? <ArticleForm editedArticle={article} /> : <Skeleton style={{ height: 40 }} count={4} />}
             </Block>
         </>
     )

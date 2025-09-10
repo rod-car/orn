@@ -1,80 +1,217 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-type AuthUser = User & {is_admin: boolean, is_super_user: boolean, is_visitor: boolean} | undefined | null;
+type AuthUser =
+    | User
+    | null
+    | undefined;
 
 interface AuthStore {
     isLoggedIn: boolean;
-    user: { username: string, name: string, email: string, role: string } | null,
-    isAdmin: boolean;
-    isSuperuser: boolean;
-    isVisitor: boolean;
+    user: {
+        username: string;
+        name: string;
+        email: string;
+        role: string;
+        school: School | null;
+    } | null;
     lastLogin?: string;
     token: string | null | undefined;
-    login: (Client: unknown, data: Record<string, unknown>) => Promise<any>;
-    register: (Client: unknown, data: Record<string, unknown>) => Promise<any>;
-    logout: (Client: unknown) => Promise<any>;
+    roles: string[];
+    permissions: string[];
+    login: (Client: any, data: Record<string, unknown>) => Promise<any>;
+    register: (Client: any, data: Record<string, unknown>) => Promise<any>;
+    logout: (Client: any) => Promise<any>;
     resetUser: () => void;
-    updateUser: (data: { username: string, name: string, email: string, role: string }) => void;
+    updateUser: (data: {
+        username: string;
+        name: string;
+        email: string;
+        role: string;
+        school: School | null;
+    }) => void;
+    isAllowed: (permission?: string | string[], schoolId?: number) => boolean;
+    hasRole: (role: string) => boolean;
+    isTokenValid: () => boolean;
+    refreshUser: (Client: any) => void;
 }
 
-const defaultState = { isLoggedIn: false, user: null, token: null, isAdmin: false, isSuperuser: false, isVisitor: false }
+const defaultState = {
+    isLoggedIn: false,
+    user: null,
+    token: null,
+    roles: [],
+    permissions: [],
+};
 
 export const useAuthStore = create(
     persist<AuthStore>(
         (set) => ({
-            isLoggedIn: false,
-            user: null,
-            token: null,
-            isAdmin: false,
-            isSuperuser: false,
-            isVisitor: false,
-            lastLogin: undefined,
-            login: async (Client, data) => {
-                await Client.get({ prefix: false, replace: 'api' }, '/sanctum/csrf-cookie')
-                const response = await Client.post(data, '/login')
+            ...defaultState,
 
-                if (response.ok) {
-                    const user: AuthUser = response.data.user
-                    if (user) set(getStoredUser(user, response.data.token))
-                    return response
+            login: async (Client, data) => {
+                await Client.get(
+                    { prefix: false, replace: "api" },
+                    "/sanctum/csrf-cookie"
+                );
+                const response = await Client.post(data, "/login");
+
+                if (response.ok && response.data.items) {
+                    const data = response.data.items;
+
+                    const user: AuthUser = data.user;
+                    const roles: string[] = data.roles ?? [];
+                    const permissions: string[] = data.permissions ?? [];
+
+                    const expirationMinutes = import.meta.env.VITE_SANCTUM_EXPIRATION_TIME ?? 1440;
+                    const expirationTime = Date.now() + expirationMinutes * 60 * 1000;
+                    localStorage.setItem("tokenExpiration", expirationTime.toString());
+
+                    if (user) {
+                        set({
+                            ...getStoredUser(user, data.token),
+                            roles,
+                            permissions,
+                        });
+                    }
+                    return response;
                 } else {
-                    localStorage.removeItem('token')
+                    localStorage.removeItem("token");
                     set(defaultState);
-                    return response.response
+                    return response.response;
                 }
             },
-            resetUser: () => { set(defaultState); },
-            updateUser: (data) => { set({user: data}) },
+
+            register: async (Client, data) => {
+                const response = await Client.post(data, "/register");
+                if (response.ok) {
+                    const user: AuthUser = response.data.user;
+                    const roles: string[] = response.data.roles ?? [];
+                    const permissions: string[] = response.data.permissions ?? [];
+
+                    if (user) {
+                        set({
+                            ...getStoredUser(user, response.data.token),
+                            roles,
+                            permissions,
+                        });
+                    }
+                    return response;
+                } else {
+                    set(defaultState);
+                    return response.response;
+                }
+            },
+
             logout: async (Client) => {
-                const response = await Client.post({}, '/logout')
+                const response = await Client.post({}, "/logout");
 
                 if (response.ok) {
                     set(defaultState);
                     localStorage.clear();
-                    return response
+                    return response;
                 } else {
-                    return response.response
+                    return response.response;
                 }
             },
-            register: async (Client, data): Promise<any> => {
-                const response = await Client.post(data, '/register')
-                if (response.ok) {
-                    const user: AuthUser | undefined | null = response.data.user
-                    if (user) set(getStoredUser(user, response.data.token))
-                    return response
-                } else {
+
+            resetUser: () => set(defaultState),
+
+            updateUser: (data) => {
+                set((state) => ({
+                    user: {
+                        ...state.user,
+                        ...data,
+                    },
+                }));
+            },
+
+            isAllowed: (permission?: string | string[], schoolId?: number | undefined): boolean => {
+                if (!permission) return false;
+
+                const { permissions, user } = useAuthStore.getState();
+                const userSchoolId = user?.school?.id;
+                let canEditSchool = true;
+
+                if (!permissions || permissions.length === 0) return false;
+
+                if (schoolId && userSchoolId) {
+                    if (userSchoolId === schoolId) canEditSchool = true;
+                    else canEditSchool = false;
+                }
+
+                if (Array.isArray(permission)) {
+                    return canEditSchool && permission.some(p => permissions.includes(p));
+                }
+                return canEditSchool && permissions.includes(permission);
+            },
+
+            hasRole: (role: string): boolean => {
+                const { roles } = useAuthStore.getState();
+                return roles.includes(role);
+            },
+
+            isTokenValid: () => {
+                const { token } = useAuthStore.getState();
+                if (!token) return false;
+
+                const expiration = localStorage.getItem('tokenExpiration');
+                const now = Date.now();
+
+                if (!expiration || now > parseInt(expiration)) {
+                    localStorage.removeItem('authStatus');
+                    return false;
+                }
+                return true;
+            },
+
+            refreshUser: async (Client) => {
+                try {
+                    const response = await Client.get({}, '/user');
+                    if (response.items) {
+                        const data = response.items;
+                        const user = data.user;
+                        const roles = data.roles ?? [];
+                        const permissions = data.permissions ?? [];
+
+                        if (user) {
+                            set({
+                                user: {
+                                    username: user.username,
+                                    email: user.email,
+                                    name: user.name,
+                                    school: user.school,
+                                    role: user.role,
+                                },
+                                roles,
+                                permissions,
+                                isLoggedIn: true,
+                                lastLogin: new Date().toDateString(),
+                            });
+                        }
+                    } else {
+                        set(defaultState);
+                        localStorage.removeItem('authStatus');
+                    }
+                } catch (error) {
+                    console.error('Erreur lors du rafraîchissement de l\'utilisateur :', error);
                     set(defaultState);
-                    return response.response
+                    localStorage.removeItem('authStatus');
                 }
             }
         }),
         {
-            name: 'authStatus',
+            name: "authStatus",
         }
     )
 );
 
+/**
+ * Get vlue structure of stored user
+ * @param user 
+ * @param token 
+ * @returns 
+ */
 function getStoredUser(user: AuthUser, token: string) {
     return {
         isLoggedIn: true,
@@ -82,12 +219,10 @@ function getStoredUser(user: AuthUser, token: string) {
             username: user!.username,
             email: user!.email,
             name: user!.name,
-            role: user?.is_super_user ? "SAdmin" : (user?.is_admin ? "Admin" : "Invité")
+            school: user!.school,
+            role: user!.role
         },
-        isVisitor: user?.is_visitor === true,
-        isAdmin: user?.is_admin === true,
-        isSuperuser: user?.is_super_user === true,
         token: token,
-        lastLogin: new Date().toDateString()
-    }
+        lastLogin: new Date().toDateString(),
+    };
 }

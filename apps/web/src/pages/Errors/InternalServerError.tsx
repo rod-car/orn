@@ -1,4 +1,5 @@
-import { ReactNode } from "react"
+import { ReactNode } from "react";
+import { Link } from "@base/components";
 
 export function InternalServerError(): ReactNode {
     return <div className="app-404-page">   	
@@ -12,11 +13,11 @@ export function InternalServerError(): ReactNode {
                         </a>
                     </div>
                     <div className="app-card p-5 text-center shadow-sm">
-                        <h1 className="page-title mb-4">500<br /><span className="font-weight-light">Page Not Found</span></h1>
+                        <h1 className="page-title mb-4">500<br /><span className="font-weight-light">Erreur interne du serveur</span></h1>
                         <div className="mb-4">
-                            Sorry, we can't find the page you're looking for. 
+                            Une erreur est survenue
                         </div>
-                        <a className="btn app-btn-primary" href="index.html">Go to home page</a>
+                        <Link permission="dashboard.view" className="btn app-btn-primary" to="/">Retourner à la page d'accueil</Link>
                     </div>
                 </div>
             </div>

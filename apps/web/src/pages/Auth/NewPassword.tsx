@@ -113,6 +113,7 @@ export function NewPassword(): ReactNode {
                                 <div className="text-center">
                                     <div className="d-flex justify-content-between align-items-center">
                                         <Button
+                                            permission="*"
                                             loading={RequestState.creating}
                                             type="submit"
                                             mode="primary"

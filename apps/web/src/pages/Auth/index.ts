@@ -3,8 +3,6 @@ export { ForgotPassword } from "./ForgotPassword.tsx";
 export { Profile } from "./Profile.tsx";
 export { Account } from "./Account.tsx";
 export { RegisterForm } from "./RegisterForm";
-export { AddUser } from "./AddUser";
-export { Users } from "./Users";
 export { AccessRequest } from "./AccessRequest";
 export { AuthRoot } from "./AuthRoot";
 export { Login } from "./Login";

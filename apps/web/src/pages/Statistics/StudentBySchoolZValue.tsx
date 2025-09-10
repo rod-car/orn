@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi, useAuthStore } from 'hooks'
+import { useApi } from 'hooks'
 import { ReactNode, useCallback, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { range } from 'functions'
@@ -13,8 +13,6 @@ export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNod
     const { Client: ExportClient, RequestState: ExportRequestState } = useApi<Survey>({
         url: '/surveys'
     })
-
-    const { isAdmin } = useAuthStore()
 
     const getData = useCallback(async () => {
         let url = '/state/student-school-z-value'
@@ -44,7 +42,7 @@ export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNod
                     <div className="d-flex align-items-center justify-content-between mb-4">
                         <h6 className="text-primary fw-bold m-0">Mesure {parts[1]} pour l'année {parts[2]}</h6>
                         <ExcelExportButton
-                            can={isAdmin}
+                            permission="export.student-school-z-value"
                             ExportClient={ExportClient}
                             loading={ExportRequestState.creating}
                             url={`/${parts[0]}/metrics-to-excel`}
@@ -63,7 +61,7 @@ export function StudentBySchoolZValue({surveyId}: {surveyId?: number}): ReactNod
 
                             return <div key={index} className='mb-3'>
                                 <h6 className="mb-3 fw-bold">{abaqueName}</h6>
-                                <table className="table table-striped table-bordered text-sm">
+                                <table className="table table-striped table-bordered table-hover text-sm">
                                     <thead>
                                         <tr className="text-nowrap">
                                             <th className='bg-primary text-white'></th>
@@ -104,7 +102,7 @@ function LoadingComponent(): ReactNode {
     return <div className="mb-5">
         <div className='mb-5'>
             <h5 className="mb-4 fw-bold"><Skeleton style={{height: 30, width: 300}} /></h5>
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr className="text-nowrap">
                         <th className="w-25"></th>

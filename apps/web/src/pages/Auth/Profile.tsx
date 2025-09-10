@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { AlertDanger } from "@base/components";
-import { config } from "@base/config";
-import { useApi, useAuthStore } from "hooks";
-import { FormEvent, ReactNode, useCallback, useEffect, useState } from "react"
-import Skeleton from "react-loading-skeleton";
-import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
-import { Block, Button, Input, PageTitle } from "ui";
+import { config } from '@base/config';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
+import { useApi, useAuthStore } from 'hooks';
+import Skeleton from 'react-loading-skeleton';
+import { AlertDanger } from '@base/components';
+import { Block, Button, Input, PageTitle } from 'ui';
+import { FormEvent, ReactNode, useCallback, useEffect, useState } from 'react'
 
 /**
  * Description placeholder
@@ -78,7 +78,7 @@ export function Profile(): ReactNode {
                         <Input name="password" type="password" label="Mot de passe" placeholder="Mot de passe" />
                     </div>
                 </div>
-                <Button icon="save" mode="primary" loading={RequestState.creating || RequestState.updating} type="submit">Enregistrer</Button>
+                <Button permission="*" icon="save" mode="primary" loading={RequestState.creating || RequestState.updating} type="submit">Enregistrer</Button>
             </form> : <ProfileLoading />}
         </Block>
     </>

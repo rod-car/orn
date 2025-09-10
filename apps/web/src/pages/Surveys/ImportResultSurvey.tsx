@@ -27,7 +27,7 @@ export function ImportResultSurvey(): ReactNode {
 
     const { id } = useParams()
 
-    const hanleDateChange = (e: InputChange) => {
+    const handleDateChange = (e: InputChange) => {
         setDate(e.target.value)
     }
 
@@ -111,7 +111,7 @@ export function ImportResultSurvey(): ReactNode {
     return (
         <>
             <PageTitle title={`Importer des résultats (${survey?.label ?? '-'})`}>
-                <PrimaryLink to={`/anthropo-measure/survey/details/${id}`} icon="folder">
+                <PrimaryLink permission="anthropometry.show" to={`/anthropo-measure/survey/details/${id}`} icon="folder">
                     Details de la mesure
                 </PrimaryLink>
             </PageTitle>
@@ -133,7 +133,7 @@ export function ImportResultSurvey(): ReactNode {
                                 value={date}
                                 required={false}
                                 label="Date de pesée"
-                                onChange={hanleDateChange}
+                                onChange={handleDateChange}
                             />
                         </Col>
                         <Col n={6}>
@@ -157,6 +157,7 @@ export function ImportResultSurvey(): ReactNode {
                     </h6>
                     {Object.keys(json as MultiSheet).length > 0 && (
                         <Button
+                            permission="survey.create"
                             loading={RequestState.creating}
                             icon="save"
                             type="button"
@@ -173,7 +174,7 @@ export function ImportResultSurvey(): ReactNode {
                     const jsonData = json[sheetName] as OneSheet
                     return <div key={index + 1} className="table-responsive mb-4">
                         <h6 className="fw-bold text-danger mb-3">{sheetName} - {jsonData.length} Étudiant(s)</h6>
-                        <table className="table table-striped table-bordered text-sm">
+                        <table className="table table-striped table-bordered table-hover text-sm">
                             <thead>
                                 <tr className="bg-danger">
                                     <th className="text-nowrap">Code</th>
@@ -213,6 +214,7 @@ export function ImportResultSurvey(): ReactNode {
 
                 {Object.keys(json).length > 0 && (
                     <Button
+                        permission="survey.create"
                         loading={RequestState.creating}
                         icon="save"
                         type="button"

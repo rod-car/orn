@@ -18,7 +18,7 @@ export function AddClass(): ReactNode {
     })
 
     const resetError = (name: string, value: string): void => {
-        if (value.length > 0) error.data.errors[name] = null
+        if (value.length > 0 && error) error.data.errors[name] = []
     }
 
     const handleChange = (target: EventTarget & (HTMLInputElement | HTMLSelectElement)): void => {
@@ -59,7 +59,7 @@ export function AddClass(): ReactNode {
     return (
         <>
             <PageTitle title="Ajouter une classe">
-                <PrimaryLink icon="list" to="/anthropo-measure/school/classes/list">
+                <PrimaryLink permission="class.view" icon="list" to="/anthropo-measure/school/classes/list">
                     Liste des classes
                 </PrimaryLink>
             </PageTitle>
@@ -101,6 +101,7 @@ export function AddClass(): ReactNode {
                     </div>
 
                     <PrimaryButton
+                        permission="class.create"
                         loading={RequestState.creating}
                         icon="save"
                         type="submit"

@@ -60,22 +60,21 @@ export function Survey(): ReactNode {
         })
     }, [])
 
-    const { isAdmin } = useAuthStore()
-
     return (
         <>
-            <PageTitle title="Liste des mésures">
+            <PageTitle title="Liste des mesures">
                 <div className="d-flex align-items-between">
                     <SecondaryButton
                         icon="arrow-clockwise"
                         className="me-2"
                         onClick={getDatas}
                         loading={RequestState.loading}
+                        permission="anthropometry.view"
                     >Recharger</SecondaryButton>
-                    <PrimaryLink can={isAdmin} icon="plus-lg" to="/anthropo-measure/survey/add" className="me-2">
-                        Nouvelle mésure
+                    <PrimaryLink permission="anthropometry.create" icon="plus-lg" to="/anthropo-measure/survey/add" className="me-2">
+                        Nouvelle mesure
                     </PrimaryLink>
-                    <InfoLink can={isAdmin} icon="plus-lg" to="/anthropo-measure/survey/add-student">
+                    <InfoLink permission="anthropometry.form" icon="plus-lg" to="/anthropo-measure/survey/add-student">
                         Formulaire de mesure
                     </InfoLink>
                 </div>
@@ -84,7 +83,7 @@ export function Survey(): ReactNode {
             <Block className="mb-5">
                 {error && <div className="alert alert-danger">{error.message}</div>}
 
-                <table className="table table-striped table-bordered text-sm">
+                <table className="table table-striped table-bordered table-hover text-sm">
                     <thead>
                         <tr>
                             <th>Mesure</th>
@@ -108,9 +107,9 @@ export function Survey(): ReactNode {
                                     <td>{format(survey.date, 'dd MMMM y')}</td>
                                     <td>{survey.scholar_year}</td>
                                     <td>
-                                        <DetailLink to={`/anthropo-measure/survey/details/${survey.id}`} />
-                                        <EditLink can={isAdmin} to={`/anthropo-measure/survey/edit/${survey.id}`} />
-                                        <DangerButton can={isAdmin} icon="trash" size="sm" onClick={() => handleDelete(survey.id) }/>
+                                        <DetailLink permission="anthropometry.show" to={`/anthropo-measure/survey/details/${survey.id}`} />
+                                        <EditLink permission="anthropometry.edit" to={`/anthropo-measure/survey/edit/${survey.id}`} />
+                                        <DangerButton permission="anthropometry.delete" icon="trash" size="sm" onClick={() => handleDelete(survey.id) }/>
                                     </td>
                                 </tr>
                             ))}

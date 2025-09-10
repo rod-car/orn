@@ -1,126 +1,204 @@
-import { Activity } from "@/app/components/Activity"
+import { Activity } from "@/components/Activity"
+import Carousel from "@/components/Carousel"
+import ClientLogo from "@/components/ClientLogo"
+import ServiceBlock from "@/components/ServiceBlock"
+import { config } from "@/utils/config"
+import Image from "next/image"
 import Link from "next/link"
-import ClientLogo from "@/app/components/ClientLogo"
 
 export const dynamic = 'force-dynamic'
 
+type ActivityType = {
+    data: {
+        images: {
+            path: string
+        }[],
+        id: number
+        title: string
+        date: string
+        details: string
+    }[]
+}
+
+type ServiceType = {
+    data: {
+        id: number
+        title: string
+        description: string
+        icon: string
+        link: string
+    }[]
+}
+
 export default async function Home() {
-    let activities: {
-        data: {
-            images: {
-                path: string
-            }[],
-            id: number
-            title: string
-            date: string
-            details: string
-        }[]
-    } = { data: [] }
+    let activities: ActivityType = { data: [] }
+    let services: ServiceType = { data: [] }
+
     try {
-        const data = await fetch('http://localhost:8000/api/activities?imagesCount=4&take=4')
+        const servicesData = await fetch(config.apiUrl + '/services', {
+            next: { revalidate: 0 },
+            cache: "no-cache"
+        })
+
+        services = await servicesData.json()
+    } catch (e) {
+    }
+
+    try {
+        const data = await fetch(config.apiUrl + '/activities?imagesCount=4&take=4&orderField=date&orderDirection=desc', {
+            next: { revalidate: 0 },
+            cache: "no-cache"
+        })
+
         activities = await data.json()
     } catch (e) {
-        console.log("Impossible de contacter le serveur")
     }
 
     return <>
         <section id="accueil" className="carousel-section-wrapper">
-            <div id="carouselExampleCaptions" className="carousel slide carousel-fade" data-ride="carousel">
-                <div className="carousel-inner">
-                    <div className="carousel-section carousel-item active clip-bg pt-225 pb-200 img-bg"
-                        style={{ backgroundImage: "url('/img/carousel/1.jpg')", backgroundPosition: "center" }}>
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-xl-8 col-lg-10 mx-auto">
-                                    <div className="carousel-content text-center">
-                                        <div className="section-title">
-                                            <h2 className="text-white">Office Regional de Nutrition Atsinanana</h2>
-                                            <p className="text-white">La nutrition, garant du développement social et économique pour Madagascar.</p>
-                                        </div>
-                                        <a href="javascript:void(0)" className="theme-btn border-btn">Voir plus</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div className="container-fluid row pl-0">
+                <div className="col-8 p-0">
+                    <div id="carouselExampleCaptions" className="carousel slide carousel-fade" data-ride="carousel">
+                        <div className="carousel-inner">
+                            <Carousel
+                                active
+                                title="Nutrition scolaire"
+                                description="Mise en place de programmes alimentaires équilibrés au sein des établissements scolaires, visant à améliorer la santé et les performances académiques des élèves en leur fournissant des repas adaptés à leurs besoins nutritionnels."
+                                background="/img/carousel/nutrition.jpg"
+                                more={{ link: "#services", text: "Voir plus" }}
+                            />
 
-                    <div className="carousel-section carousel-item clip-bg pt-225 pb-200 img-bg" style={{ backgroundImage: "url('/img/carousel/2.jpg')" }}>
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-xl-8 col-lg-10 mx-auto">
-                                    <div className="carousel-content text-center">
-                                        <div className="section-title">
-                                            <h2 className="text-white">Office Regional de Nutrition Atsinanana</h2>
-                                            <p className="text-white">L'approche systémique pour la nutrition est un moyen de renforcer les relations, et donc la coordination, entre les différents secteurs qui ont un impact sur la nutrition.</p>
-                                        </div>
-                                        <a href="javascript:void(0)" className="theme-btn border-btn">Voir plus</a>
-                                    </div>
-                                </div>
-                            </div>
+                            <Carousel
+                                title="Jardin scolaire"
+                                description="Le jardin scolaire consiste en la culture de plantes au sein des établissements scolaires, avec la collaboration des parents, afin d'enseigner aux élèves les principes d'une alimentation saine et durable."
+                                background="/img/carousel/jardin.jpg"
+                                more={{ link: "#services", text: "Voir plus" }}
+                            />
+
+                            <Carousel
+                                title="Mesure anthropométrique"
+                                description="La mesure anthropométrique consiste à évaluer les dimensions corporelles des élèves afin de suivre leur croissance et d'identifier les besoins nutritionnels spécifiques pour assurer leur développement optimal."
+                                background="/img/carousel/mesure.jpg"
+                                more={{ link: "#services", text: "Voir plus" }}
+                            />
+                        </div>
+
+                        <a className="carousel-control carousel-control-prev" href="#carouselExampleCaptions" role="button"
+                            data-slide="prev">
+                            <span className="carousel-control-prev-icon" aria-hidden="true"><i className="lni lni-arrow-left"></i></span>
+                            <span className="sr-only">Previous</span>
+                        </a>
+                        <a className="carousel-control carousel-control-next" href="#carouselExampleCaptions" role="button"
+                            data-slide="next">
+                            <span className="carousel-control-next-icon" aria-hidden="true"><i className="lni lni-arrow-right"></i></span>
+                            <span className="sr-only">Suivant</span>
+                        </a>
+                    </div>
+                </div>
+                <div className="col-4 p-0 pl-5 pt-4">
+                    <div className="section-title">
+                        <span>À propos</span>
+                        <p className="text-italic text-bold mb-4">Financé par <Link target="_blank" href="https://ambatovy.com/">Ambatovy SA</Link></p>
+                    </div>
+                    <div className="about-content">
+                        <div className="img-container">
+                            <Image width={1280} height={1280} style={{ objectFit: 'cover' }} className="w-100 h-100 rounded" src="/img/about/about-img.jpg" alt="About image" />
+                        </div>
+
+                        <p style={{fontSize: 14, color: "black"}} className="text-justify leading-relaxed mb-4">
+                            Le 12 septembre 2023, Ambatovy a signé une convention avec l'Office Régional de Nutrition pour la mise en place de cantine scolaire dans 10 écoles des districts de Toamasina I, Toamasina II et Brickaville, sur une période de 3 ans. Cette initiative bénéficiera à 2 500 élèves, répartis entre 8 Écoles Primaires Publiques (Vohitrambato, Ampihaonana, Soamahatsinjo, Tanandava, Amboakarivo, Ampasimadinika, Fanandrana, Tanambao) et 2 écoles maternelles (Tsaratsiry et Romialo).
+                        </p>
+                        {/*<p style={{fontSize: 14, color: "black"}} className="text-justify leading-relaxed mb-4">
+                            L'objectif principal est de renforcer la situation nutritionnelle des élèves afin d'améliorer leurs performances scolaire. Cette collaboration s'appuie sur un partenariat initié en 2018, avec des résultats encourageants : dans les EPP Vohitrambato, Ampihaonana et Soamahatsinjo, le taux de malnutrition chronique est passé de <strong>74 %</strong> en début d'année scolaire 2021-2022 à <strong>43 %</strong>.
+                        </p>*/}
+                        <p style={{fontSize: 14, color: "black"}} className="text-justify leading-relaxed mb-4">
+                            L'Office Régional de Nutrition est fier de contribuer à l'éducation et à la santé des enfants, en collaboration avec ses partenaires pour un avenir meilleur dans notre communauté.
+                        </p>
+
+                        <p className="font-italic">Source: <Link target="_blank" href={"https://ambatovy.com/en/fr/signature-dune-convention-avec-loffice-regional-de-nutrition/"}>Ambatovy le 12/09/2023</Link></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="activites" className="main-section" style={{ background: "#eff2f9" }}>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-xl-6 col-lg-7 col-md-9 mx-auto">
+                        <div className="section-title text-center mb-55">
+                            <span>Activités</span>
+                            <h2>Les activités récentes</h2>
+                            <p>
+                                Découvrez les initiatives clés récemment mises en œuvre pour promouvoir le bien-être et la nutrition dans la région.
+                            </p>
+                            <Link href="/activites" className="theme-btn">Voir toutes les activités</Link>
                         </div>
                     </div>
                 </div>
-                <a className="carousel-control carousel-control-prev" href="#carouselExampleCaptions" role="button"
-                    data-slide="prev">
-                    <span className="carousel-control-prev-icon" aria-hidden="true"><i className="lni lni-arrow-left"></i></span>
-                    <span className="sr-only">Previous</span>
-                </a>
-                <a className="carousel-control carousel-control-next" href="#carouselExampleCaptions" role="button"
-                    data-slide="next">
-                    <span className="carousel-control-next-icon" aria-hidden="true"><i className="lni lni-arrow-right"></i></span>
-                    <span className="sr-only">Suivant</span>
-                </a>
+
+                {activities.data.length === 0 && <p className="text-center">Aucune donnees</p>}
+
+                {activities.data.map((activity, index: number) => {
+                    return <div className="bg-white shadow p-5 mb-5 rounded-md" key={activity.id}>
+                        <Activity key={activity.id} index={index} activity={activity} />
+                    </div>
+                })}
             </div>
         </section>
 
         <section id="missions" className="main-section">
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-xl-7 col-lg-7 col-md-9 mx-auto">
                         <div className="section-title text-center mb-55">
-                            <span className="wow fadeInDown" data-wow-delay=".2s">Notre Mission</span>
-                            <h2 className="wow fadeInUp" data-wow-delay=".4s">Notre rôle dans la région</h2>
-                            <p className="wow fadeInUp" data-wow-delay=".6s">
-                                En tant qu'entité gouvernementale, nous sommes dédiée à la lutte contre la malnutrition
-                                et à la promotion de la sécurité alimentaire dans la région. Nous collaborons avec les autorités locales, les communautés et les partenaires pour un impact durable.
+                            <span>Objectif</span>
+                            <h2>L'objectif du projet</h2>
+                            <p>
+                                L'objectif principal de cette initiative est d'améliorer la performance scolaire en renforçant la situation nutritionnelle des élèves.
                             </p>
                         </div>
                     </div>
                 </div>
 
                 <div className="row">
-                    <div className="col-lg-4 col-md-6 wow fadeInLeft" data-wow-delay=".2s">
+                    <div className="col-lg-4 col-md-6 wow fadeInLeft">
                         <div className="feature-box h-100 mb-0 box-style">
-                            <div className="feature-icon box-icon-style wow fadeInDown" data-wow-delay=".2s">
-                                <i className="lni lni-map-marker"></i>
+                            <div className="feature-icon box-icon-style ">
+                                <i className="lni lni-graduation"></i>
                             </div>
                             <div className="box-content-style feature-content">
-                                <h4 className="wow fadeInDown" data-wow-delay=".2s">Action locale</h4>
-                                <p className="wow fadeInDown" data-wow-delay=".3s">Nous travaillons en étroite collaboration avec les communes et les communautés locales pour répondre efficacement aux besoins nutritionnels spécifiques de la région d'Atsinanana.</p>
+                                <h4>Améliorer la performance</h4>
+                                <p className="text-justify">
+                                    Fournir aux élèves des repas équilibrés contenant tous les nutriments essentiels, tels que les protéines, les vitamines et les minéraux, pour soutenir leur croissance et améliorer leurs capacités cognitives.
+                                </p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="col-lg-4 col-md-6 wow fadeInDown" data-wow-delay=".2s">
+                    <div className="col-lg-4 col-md-6 ">
                         <div className="feature-box h-100 mb-0 box-style">
-                            <div className="feature-icon box-icon-style wow fadeInDown" data-wow-delay=".2s">
-                                <i className="lni lni-users"></i>
+                            <div className="feature-icon box-icon-style ">
+                                <i className="lni lni-apple"></i>
                             </div>
                             <div className="box-content-style feature-content">
-                                <h4 className="wow fadeInDown" data-wow-delay=".2s">Renforcement des capacités</h4>
-                                <p className="wow fadeInDown" data-wow-delay=".3s">Nous formons et accompagnons les acteurs locaux, notamment dans la mise en œuvre de programmes éducatifs et de sensibilisation nutritionnelle.</p>
+                                <h4>Réduire le TMC</h4>
+                                <p className="text-justify">
+                                    Assurer un accès constant à des repas nutritifs, conçus pour répondre aux besoins spécifiques des enfants, afin de lutter efficacement contre la malnutrition chronique.
+                                </p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="col-lg-4 col-md-6 wow fadeInRight" data-wow-delay=".2s">
+                    <div className="col-lg-4 col-md-6 wow fadeInRight">
                         <div className="feature-box h-100 mb-0 box-style">
-                            <div className="feature-icon box-icon-style wow fadeInDown" data-wow-delay=".2s">
-                                <i className="lni lni-stats-up"></i>
+                            <div className="feature-icon box-icon-style ">
+                                <i className="lni lni-heart"></i>
                             </div>
                             <div className="box-content-style feature-content">
-                                <h4 className="wow fadeInDown" data-wow-delay=".2s">Suivi et évaluation</h4>
-                                <p className="wow fadeInDown" data-wow-delay=".3s">Nous assurons le suivi des indicateurs nutritionnels régionaux pour mesurer l'impact de nos actions et adapter nos interventions selon les besoins.</p>
+                                <h4>Renforcer la santé</h4>
+                                <p className="text-justify">
+                                    Favoriser le développement physique et mental des élèves en leur offrant un environnement sain, incluant une bonne nutrition, des soins de santé appropriés et un cadre propice à leur épanouissement.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -129,53 +207,42 @@ export default async function Home() {
         </section>
 
         <section id="a-propos" className="main-section" style={{ background: "#eff2f9" }}>
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-xl-6 col-lg-6 pr-4">
-                        <div className="wow fadeInLeft" data-wow-delay=".3s">
-                            <img className="w-100 mb-5 shadow" src="/img/about/about-img.jpg" alt="About image" />
-                            <img className="w-100 shadow" src="/img/about/about-img-2.png" alt="About image" />
+                        <div className="wow fadeInLeft">
+                            <div className="p-1 shadow bg-white mb-5 rounded">
+                                <Image width={1280} height={1280} style={{ objectFit: 'cover' }} className="w-100 h-100 rounded" src="/img/about/about-img.jpg" alt="About image" />
+                            </div>
+
+                            <div className="p-1 shadow bg-white mb-5 rounded">
+                                <Image width={1280} height={1280} style={{ objectFit: 'cover' }} className="w-100 h-100 rounded" src="/img/about/about-2.jpg" alt="About image" />
+                            </div>
                         </div>
                     </div>
 
                     <div className="col-xl-6 col-lg-6 pl-4">
                         <div className="about-content-wrapper">
                             <div className="section-title">
-                                <span className="wow fadeInUp" data-wow-delay=".2s">À propos de nous</span>
-                                <h2 className="mb-40 wow fadeInRight" data-wow-delay=".4s">Un pilier pour la nutrition à Atsinanana</h2>
+                                <span>À propos</span>
+                                <h2 className="mb-2 wow fadeInRight">Le projet "cantine scolaire"</h2>
+                                <p className="text-italic text-bold mb-4">Financé par <Link target="_blank" href="https://ambatovy.com/">Ambatovy SA</Link></p>
                             </div>
                             <div className="about-content">
-                                <p className="mb-45 wow fadeInUp" data-wow-delay=".6s">
-                                    L'Office Régional de Nutrition d'Atsinanana (ORN) est une institution publique engagée dans la lutte contre la malnutrition
-                                    et l'amélioration de la santé des communautés locales. Nos initiatives couvrent plusieurs domaines clés :
-                                    éducation nutritionnelle, sécurité alimentaire, soutien aux enfants vulnérables et suivi des indicateurs nutritionnels.
+                                <p className="text-justify text-gray-800 leading-relaxed mb-4">
+                                    Le 12 septembre 2023, Ambatovy a signé une convention avec l'Office Régional de Nutrition pour la mise en place de cantine scolaire dans 10 écoles des districts de Toamasina I, Toamasina II et Brickaville, sur une période de 3 ans. Cette initiative bénéficiera à 2 500 élèves, répartis entre 8 Écoles Primaires Publiques (Vohitrambato, Ampihaonana, Soamahatsinjo, Tanandava, Amboakarivo, Ampasimadinika, Fanandrana, Tanambao) et 2 écoles maternelles (Tsaratsiry et Romialo).
                                 </p>
-                                <ul className="wow fadeInUp" data-wow-delay=".7s">
-                                    <li>✅ Collaboration avec 50+ communes rurales et urbaines.</li>
-                                    <li>✅ Formation de plus de 200 agents communautaires en pratiques nutritionnelles.</li>
-                                    <li>✅ Sensibilisation de 30,000+ familles à travers des campagnes locales.</li>
-                                    <li>✅ Distribution de repas enrichis (Koba Aina, PObary) dans 10 écoles maternelles et primaires.</li>
-                                </ul>
+                                <p className="text-justify text-gray-800 leading-relaxed mb-4">
+                                    L'objectif principal est de renforcer la situation nutritionnelle des élèves afin d'améliorer leurs performances scolaire. Cette collaboration s'appuie sur un partenariat initié en 2018, avec des résultats encourageants : dans les EPP Vohitrambato, Ampihaonana et Soamahatsinjo, le taux de malnutrition chronique est passé de <strong>74 %</strong> en début d'année scolaire 2021-2022 à <strong>43 %</strong>.
+                                </p>
+                                <p className="text-justify text-gray-800 leading-relaxed">
+                                    L'Office Régional de Nutrition est fier de contribuer à l'éducation et à la santé des enfants, en collaboration avec ses partenaires pour un avenir meilleur dans notre communauté.
+                                </p>
 
-                                <div className="mt-5 counter-up wow fadeInUp" data-wow-delay=".8s">
-                                    <div className="counter">
-                                        <span id="client-count" className="countup count color-1" cup-end="50" cup-append="+">50</span>
-                                        <h4>Communes partenaires</h4>
-                                        <p>Collaboration directe avec les acteurs locaux pour des solutions adaptées aux besoins spécifiques.</p>
-                                    </div>
-                                    <div className="counter">
-                                        <span id="project-count" className="countup count color-2" cup-end="120" cup-append="+">120</span>
-                                        <h4>Projets réalisés</h4>
-                                        <p>Programmes de prévention, distribution alimentaire et suivi des enfants.</p>
-                                    </div>
-                                    <div className="counter">
-                                        <span id="impact-count" className="countup count color-3" cup-end="30000" cup-append="+">30,000</span>
-                                        <h4>Bénéficiaires directs</h4>
-                                        <p>Familles, enfants et femmes enceintes sensibilisés ou accompagnés.</p>
-                                    </div>
-                                </div>
+                                <p className="font-italic">Source: <Link target="_blank" href={"https://ambatovy.com/en/fr/signature-dune-convention-avec-loffice-regional-de-nutrition/"}>Ambatovy le 12/09/2023</Link></p>
+
                                 <div className="wow fadeInUp mt-40" data-wow-delay=".9s">
-                                    <Link href="/projets" className="btn btn-outline-primary">Voir nos projets</Link>
+                                    <Link href="/activites" className="theme-btn py-2">Voir les activités</Link>
                                 </div>
                             </div>
                         </div>
@@ -185,163 +252,39 @@ export default async function Home() {
         </section>
 
         <section id="services" className="main-section">
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-xl-7 col-lg-7 col-md-9 mx-auto">
                         <div className="section-title text-center mb-55">
-                            <span className="wow fadeInDown" data-wow-delay=".2s">Nos aports</span>
-                            <h2 className="wow fadeInUp" data-wow-delay=".4s">Engagés pour un avenir meilleur</h2>
-                            <p className="wow fadeInUp" data-wow-delay=".6s">
-                                Découvrez comment nous contribuons à améliorer la nutrition et le bien-être des communautés de la région d'Atsinanana.
+                            <span>Apports du projet</span>
+                            <h2>Les engagements du projet</h2>
+                            <p>
+                                Découvrez comment ce projet contribue à améliorer la nutrition et le bien-être des élèves, tout en renforçant leur performance scolaire.
                             </p>
                         </div>
                     </div>
                 </div>
 
                 <div className="row">
-                    <div className="col-lg-4 col-md-6 mb-4">
-                        <div className="service-box h-100 box-style">
-                            <div className="service-icon box-icon-style">
-                                <i className="lni lni-dinner"></i>
-                            </div>
-                            <div className="box-content-style service-content">
-                                <h4>Distribution Alimentaire</h4>
-                                <p>
-                                    Mise en place de programmes d'alimentation scolaire avec des repas enrichis tels que Koba Aina et PObary
-                                    pour lutter contre la malnutrition infantile.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-6 mb-4">
-                        <div className="service-box h-100 box-style">
-                            <div className="service-icon box-icon-style">
-                                <i className="lni lni-graduation"></i>
-                            </div>
-                            <div className="box-content-style service-content">
-                                <h4>Éducation Nutritionnelle</h4>
-                                <p>
-                                    Sensibilisation et formation des communautés sur les pratiques alimentaires saines
-                                    pour prévenir la malnutrition et promouvoir une meilleure santé.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-6 mb-4">
-                        <div className="service-box h-100 box-style">
-                            <div className="service-icon box-icon-style">
-                                <i className="lni lni-stats-up"></i>
-                            </div>
-                            <div className="box-content-style service-content">
-                                <h4>Suivi des Indicateurs</h4>
-                                <p>
-                                    Collecte et analyse des données nutritionnelles pour évaluer les progrès réalisés et
-                                    identifier les zones nécessitant une intervention prioritaire.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-6">
-                        <div className="service-box h-100 box-style">
-                            <div className="service-icon box-icon-style">
-                                <i className="lni lni-support"></i>
-                            </div>
-                            <div className="box-content-style service-content">
-                                <h4>Soutien aux Femmes et Enfants</h4>
-                                <p>
-                                    Programmes spécifiques pour les femmes enceintes et allaitantes ainsi que pour les enfants de moins de 5 ans,
-                                    afin de garantir un bon départ dans la vie.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6">
-                        <div className="service-box h-100 box-style">
-                            <div className="service-icon box-icon-style">
-                                <i className="lni lni-handshake"></i>
-                            </div>
-                            <div className="box-content-style service-content">
-                                <h4>Partenariats Locaux</h4>
-                                <p>
-                                    Collaboration avec les autorités locales, ONG et autres acteurs pour renforcer l’impact
-                                    des initiatives en nutrition dans la région.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6">
-                        <div className="service-box h-100 box-style">
-                            <div className="service-icon box-icon-style">
-                                <i className="lni lni-heart"></i>
-                            </div>
-                            <div className="box-content-style service-content">
-                                <h4>Assistance en Cas d'Urgence</h4>
-                                <p>
-                                    Réponse rapide en cas de crises alimentaires ou de catastrophes naturelles pour
-                                    assurer la sécurité alimentaire des populations vulnérables.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    {services.data.map((service, index) => <ServiceBlock key={index} title={service.title} icon={service.icon} link={`services/${service.id}`}>
+                        {service.description}
+                    </ServiceBlock>)}
                 </div>
             </div>
         </section>
 
-        <section id="activites" className="main-section" style={{ background: "#eff2f9" }}>
-            <div className="container">
-                <div className="row">
-                    <div className="col-xl-6 col-lg-7 col-md-9 mx-auto">
-                        <div className="section-title text-center mb-55">
-                            <span className="wow fadeInDown" data-wow-delay=".2s">Activités</span>
-                            <h2 className="wow fadeInUp" data-wow-delay=".4s">Nos Récentes Activités</h2>
-                            <p className="wow fadeInUp" data-wow-delay=".6s">
-                                Découvrez les initiatives clés récemment mises en œuvre pour promouvoir le bien-être et la nutrition dans la région.
-                            </p>
-                            <Link href="/activites" className="btn btn-primary">Voir tous les activites</Link>
-                        </div>
-                    </div>
-                </div>
-
-                {activities.data.length === 0 && <p className="text-center">Aucune donnees</p>}
-
-                {activities.data.map((activity, index: number) => <Activity key={activity.id} index={index} activity={activity} />)}
-            </div>
-        </section>
-
-        <section id="partenaries" className="client-logo-section main-section">
-            <div className="container">
+        <section id="partenaires" className="client-logo-section main-section">
+            <div className="container-fluid">
                 <div id="partenaireCarousel" className="test-section carousel slide" data-ride="carousel">
                     <div className="carousel-inner">
                         <div className="carousel-item active">
                             <div className="carousel-wrapper">
-                                <ClientLogo src="/img/client-logo/onn.png" alt="Office National de Nutrition" />
-                                <ClientLogo src="/img/client-logo/ambatovy.png" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/agrivet.png" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/dren.png" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/drsp.jpeg" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/fid.jpeg" alt="Ambatovy" />
-                            </div>
-                        </div>
-                        <div className="carousel-item">
-                            <div className="carousel-wrapper">
-                                <ClientLogo src="/img/client-logo/gret.jpeg" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/hina.png" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/instat.png" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/mcc.png" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/minae.png" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/mm.png" alt="Ambatovy" />
-                            </div>
-                        </div>
-                        <div className="carousel-item">
-                            <div className="carousel-wrapper">
-                                <ClientLogo src="/img/client-logo/nutri-zaza.png" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/refrigepeche.png" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/saf-fjkm.png" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/st-gabriel.jpg" alt="Ambatovy" />
-                                <ClientLogo src="/img/client-logo/tilapia-est.jpeg" alt="Ambatovy" />
+                                <ClientLogo src="/img/client-logo/onn.png" alt="Office National de Nutrition" url="https://office-nutrition.mg/" />
+                                <ClientLogo src="/img/client-logo/ambatovy.png" alt="Ambatovy" url="https://ambatovy.com/" />
+                                <ClientLogo src="/img/client-logo/dren.png" alt="DREN" url="https://www.education.gov.mg/atsinanana/" />
+                                <ClientLogo src="/img/client-logo/minae.png" alt="Agriculture et élevage" url="https://www.minae.gov.mg/" />
+                                <ClientLogo src="/img/client-logo/drsp.jpeg" alt="DRSP" url="http://www.sante.gov.mg/ministere-sante-publique/" />
+                                <ClientLogo src="/img/client-logo/nutri-zaza.png" alt="Nutri'ZAZA" url="https://nutrizaza.mg/" />
                             </div>
                         </div>
                     </div>
@@ -358,7 +301,7 @@ export default async function Home() {
         </section>
 
         <section id="contact" className="contact-section main-section" style={{ background: "#eff2f9" }}>
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-xl-4">
                         <div className="contact-item-wrapper">
@@ -390,11 +333,11 @@ export default async function Home() {
                                 <div className="col-12 col-md-6 col-xl-12">
                                     <div className="contact-item">
                                         <div className="contact-icon">
-                                            <i className="lni lni-alarm-clock"></i>
+                                            <i className="lni lni-facebook-original"></i>
                                         </div>
                                         <div className="contact-content">
                                             <h4>Facebook</h4>
-                                            <p>ORN Atsinanana</p>
+                                            <p><Link target="_blank" href="https://www.facebook.com/profile.php?id=100064364605571">ORN Atsinanana</Link></p>
                                         </div>
                                     </div>
                                 </div>
@@ -407,9 +350,9 @@ export default async function Home() {
                                 <div className="row">
                                     <div className="col-xl-10 col-lg-8 mx-auto">
                                         <div className="section-title text-center mb-50">
-                                            <span className="wow fadeInDown" data-wow-delay=".2s">Contactez-nous</span>
-                                            <h2 className="wow fadeInUp" data-wow-delay=".4s">Prêt à commencer</h2>
-                                            <p className="wow fadeInUp" data-wow-delay=".6s">At vero eos et accusamus et iusto odio dignissimos ducimus quiblanditiis praesentium</p>
+                                            <span>Contactez-nous</span>
+                                            <h2>Des suggestions ?</h2>
+                                            <p>Remplir le formulaire ci-dessous</p>
                                         </div>
                                     </div>
                                 </div>
@@ -424,7 +367,7 @@ export default async function Home() {
                                     </div>
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <input type="text" name="phone" id="phone" placeholder="Telephone" required />
+                                            <input type="text" name="phone" id="phone" placeholder="Téléphone" required />
                                         </div>
                                         <div className="col-md-6">
                                             <input type="text" name="subject" id="subject" placeholder="Objet" required />

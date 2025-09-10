@@ -54,7 +54,7 @@ export function ImportAbaque(): ReactNode {
     return (
         <>
             <PageTitle title="Importer une liste d'abaque">
-                <PrimaryLink icon="list" to="/anthropo-measure/abaques/list">
+                <PrimaryLink permission="abaque.view" icon="list" to="/anthropo-measure/abaques/list">
                     Liste des abaques
                 </PrimaryLink>
             </PageTitle>
@@ -93,6 +93,7 @@ export function ImportAbaque(): ReactNode {
                     </h6>
                     {json.length > 0 && (
                         <PrimaryButton
+                            permission="abaque.import"
                             loading={RequestState.creating}
                             icon="save"
                             onClick={save}
@@ -109,7 +110,7 @@ export function ImportAbaque(): ReactNode {
                         'length-age-male',
                         'length-age-female'
                     ].includes(abaqueType) && (
-                            <table className="table-bordered text-sm table table-striped">
+                            <table className="table-bordered text-sm table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>Age</th>
@@ -147,7 +148,7 @@ export function ImportAbaque(): ReactNode {
                         )}
 
                     {abaqueType === 'imc-age' && (
-                        <table className="table-bordered text-sm table table-striped">
+                        <table className="table-bordered text-sm table table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th>Age</th>
@@ -181,7 +182,7 @@ export function ImportAbaque(): ReactNode {
                     )}
 
                     {abaqueType === 'length-weight' && (
-                        <table className="table-bordered text-sm table table-striped">
+                        <table className="table-bordered text-sm table table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th>Taille</th>

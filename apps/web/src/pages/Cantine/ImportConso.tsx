@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {ChangeEvent, CSSProperties, ReactNode, useCallback, useEffect, useState} from 'react'
 import {useApi, useExcelReader} from 'hooks'
 import {PrimaryLink, ScholarYearSelectorServer} from '@base/components'
@@ -90,7 +91,7 @@ export function ImportConso(): ReactNode {
     return (
         <>
             <PageTitle title='Importer une consommation'>
-                <PrimaryLink icon='list' to="/cantine/list-conso">
+                <PrimaryLink permission="consommation.view" icon='list' to="/cantine/list-conso">
                     Liste des consommation
                 </PrimaryLink>
             </PageTitle>
@@ -142,14 +143,14 @@ export function ImportConso(): ReactNode {
             <Block>
                 <div className="d-flex justify-content-between align-items-center">
                     <h6 className="text-primary">Affichage temporaire des données</h6>
-                    {json.length > 0 && <PrimaryButton loading={importing || RequestState.loading | ConsommationRequestState.creating} icon="save" onClick={save}>
+                    {json.length > 0 && <PrimaryButton permission="consommation.import" loading={importing || RequestState.loading || ConsommationRequestState.creating} icon="save" onClick={save}>
                         Enregistrer
                     </PrimaryButton>}
                 </div>
                 <hr />
 
                 <div className="table-responsive">
-                    {classes.length > 0 && json.length > 0 ? <table className="table table-bordered table-striped text-sm">
+                    {classes.length > 0 && json.length > 0 ? <table className="table table-bordered table-striped table-hover text-sm">
                         <thead>
                         <tr>
                             <th style={styles.head}>#</th>
@@ -163,11 +164,11 @@ export function ImportConso(): ReactNode {
                         <tbody>
                         {json.map((data: Record<string, unknown>, index: number) => <tr key={index}>
                             <td>{index + 1}</td>
-                            <td>{data['Jour']}</td>
-                            <td>{data['Date'].toLocaleDateString()}</td>
-                            {classes.map((classe, index) => <td key={index}>{data[classe.notation]}</td>)}
-                            <td>{data['Ens']}</td>
-                            <td>{data['Cui']}</td>
+                            <td>{data['Jour'] as string}</td>
+                            <td>{(data['Date'] as Date).toLocaleDateString()}</td>
+                            {classes.map((classe, index) => <td key={index}>{data[classe.notation as string] as string}</td>)}
+                            <td>{data['Ens'] as number}</td>
+                            <td>{data['Cui'] as number}</td>
                         </tr>)}
                         </tbody>
                     </table> : <p className="text-center fw-bold">Aucune donnees</p>}

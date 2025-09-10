@@ -1,18 +1,24 @@
 import { PrivateRoute } from "@base/components/Auth";
-import {ZCalculator, ZCalculatorHistory} from "@base/pages/Tools";
+import {ZCalculator, ZCalculatorHistory, ValueRepartition} from "@base/pages/Tools";
 import { RouteObject } from "react-router";
 
 export const toolsRoute:RouteObject[] = [
     {
         path: "z-calculator",
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="tools.z-calculator">
             <ZCalculator />
         </PrivateRoute>
     },
     {
         path: "z-history",
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="tools.z-calculator">
             <ZCalculatorHistory />
+        </PrivateRoute>
+    },
+    {
+        path: "value-repartition",
+        element: <PrivateRoute permission="tools.value-repartition">
+            <ValueRepartition />
         </PrivateRoute>
     }
 ]

@@ -32,7 +32,7 @@ export function SchoolBySchoolYearClass(): ReactNode {
                             <div className="d-flex align-items-center justify-content-between mb-3">
                                 <h6 className="text-info m-0">Année scolaire: {scholar_year}</h6>
                             </div>
-                            <table className="table table-striped table-bordered text-sm">
+                            <table className="table table-striped table-bordered table-hover text-sm">
                                 <thead>
                                     <tr>
                                         <th className='bg-primary text-white'></th>

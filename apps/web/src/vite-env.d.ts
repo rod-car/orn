@@ -46,6 +46,8 @@ type MeasureLength = {
 }
 
 type Student = {
+    student: unknown;
+    student_id: unknown;
     id: number
     number: number
     lastname: string
@@ -111,16 +113,35 @@ type ElementMode =
 
 type ElementSize = 'sm' | 'md' | 'lg'
 
+type Stock = {
+    initial_stock: ReactNode;
+    id: number;
+    type: string;
+    date: string,
+    school_id: number,
+    food_id: number,
+    quantity: number,
+    label: string
+}
+
 type User = {
     id: number
     name: string
     occupation: string;
     email: string
-    role: number
+    role: string
     username: string
     password: string
     password_confirmation: string
     created_at: string;
+    school: School | null;
+    school_id?: number
+    is_valid: number;
+    roles: { id: number, name: string }[];
+    permissions: string[];
+    specific_permissions: string[];
+    roles_id: string[];
+    specific_permissions_id: string[];
 }
 
 type Survey = {
@@ -139,8 +160,15 @@ type Activity = {
     date: string
     place: string
     details: string
+    service_id: number;
     images?: {path: string, id: number}[]
     files: File[] | null
+    is_valid?: boolean;
+    validator?: User | null,
+    creator?: User | null,
+    editable?: boolean
+    deletable?: boolean,
+    service?: {title: string}
 }
 
 type Unit = {
@@ -158,17 +186,22 @@ type Site = {
 }
 
 type Article = {
-    id: number
-    designation: string
-    code?: string
-    description?: string
+    id: number;
+    designation: string;
+    code?: string;
+    description?: string;
+    unit_id?: number;
+    unit?: {
+        id: number;
+        name: string;
+    };
 }
 
 type ArticlePrice = {
     id: number
     site_id: number
     article_id: number
-    unit_id: number
+    unit_id?: number|null;
     year: number
     month: number
     price: number

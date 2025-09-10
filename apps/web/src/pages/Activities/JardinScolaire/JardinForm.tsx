@@ -182,7 +182,7 @@ export function JardinForm({ editedGarden }: GardenFormProps): ReactNode {
             <div className="row mb-3">
                 <div className="col-12">
                     <label htmlFor="" className="form-label text-primary fw-bold">Matériels</label>
-                    <table className="table table-striped table-bordered">
+                    <table className="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Désignation</th>
@@ -211,7 +211,7 @@ export function JardinForm({ editedGarden }: GardenFormProps): ReactNode {
             <div className="row mb-3">
                 <div className="col-12">
                     <label htmlFor="" className="form-label text-primary fw-bold">Engrais</label>
-                    <table className="table table-striped table-bordered">
+                    <table className="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Désignation</th>
@@ -240,7 +240,7 @@ export function JardinForm({ editedGarden }: GardenFormProps): ReactNode {
             <div className="row mb-3">
                 <div className="col-12">
                     <label htmlFor="" className="form-label text-primary fw-bold">Sémence</label>
-                    <table className="table table-striped table-bordered">
+                    <table className="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Désignation</th>

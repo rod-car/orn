@@ -1,5 +1,6 @@
-import { FormEvent, useState } from 'react'
-import { Button, Input, Textarea } from 'ui'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { FormEvent, ReactNode, useEffect, useState } from 'react'
+import { Button, Input, Select, Textarea } from 'ui'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
 import { toast } from 'react-toastify'
@@ -12,19 +13,19 @@ const defaultArticle: Article = {
     id: 0,
     designation: '',
     description: '',
-    code: ''
+    code: '',
+    unit_id: 0,
 }
 
 export function ArticleForm({ editedArticle }: ArticleFormProps): ReactNode {
     const [article, setArticle] = useState(defaultArticle)
-    const {
-        Client,
-        error,
-        RequestState
-    } = useApi<Article>({
-        
-        
+    const { Client, error, RequestState } = useApi<Article>({
         url: '/prices/articles',
+        key: 'data'
+    })
+
+    const { Client: UnitClient, datas: units } = useApi<Unit>({
+        url: '/prices/units',
         key: 'data'
     })
 
@@ -56,17 +57,22 @@ export function ArticleForm({ editedArticle }: ArticleFormProps): ReactNode {
         }
     }
 
-    if (editedArticle !== undefined && article.id === 0)
+    if (editedArticle !== undefined && article.id === 0) {
         setArticle({
             ...editedArticle,
         })
+    }
 
     const handleChange = (target: EventTarget & (HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement)): void => {
         setArticle({ ...article, [target.name]: target.value })
         if (target.value.length > 0 && error?.data.errors[target.name]) {
-            error.data.errors[target.name] = null
+            error.data.errors[target.name] = []
         }
     }
+
+    useEffect(() => {
+        UnitClient.get()
+    }, [])
 
     return (
         <form action="#" onSubmit={handleSubmit} method="post" encType="multipart/form-data">
@@ -93,7 +99,18 @@ export function ArticleForm({ editedArticle }: ArticleFormProps): ReactNode {
             </div>
 
             <div className="row mb-4">
-                <div className="col-xl-12">
+                <div className="col-xl-6">
+                    <Select
+                        name='unit_id'
+                        label="Unite de l'article"
+                        onChange={({ target }) => handleChange(target)}
+                        value={article.unit_id}
+                        options={units}
+                        config={{ optionKey: 'id', valueKey: 'name' }}
+                        controlled
+                    />
+                </div>
+                <div className="col-xl-6">
                     <Textarea
                         label="Description"
                         value={article.description}
@@ -106,6 +123,7 @@ export function ArticleForm({ editedArticle }: ArticleFormProps): ReactNode {
             </div>
 
             <Button
+                permission="article.create"
                 loading={RequestState.creating || RequestState.updating}
                 icon="save"
                 type="submit"

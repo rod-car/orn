@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi, useAuthStore } from 'hooks'
-import { DetailLink, EditLink, Link } from '@base/components'
+import { DetailLink, EditLink, PrimaryLink } from '@base/components'
 import { config } from '@base/config'
-import { ApiErrorMessage, Block, Button, PageTitle, SecondaryButton } from 'ui'
+import { ApiErrorMessage, Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
 import { ReactNode, useCallback, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
@@ -12,8 +12,6 @@ export function SchoolList(): ReactNode {
         url: '/schools',
         key: 'data'
     })
-
-    const { isAdmin } = useAuthStore()
 
     const getSchools = async () => {
         await Client.get()
@@ -60,6 +58,8 @@ export function SchoolList(): ReactNode {
         })
     }, [])
 
+    const { isAllowed } = useAuthStore();
+
     useEffect(() => {
         getSchools()
     }, [])
@@ -68,10 +68,12 @@ export function SchoolList(): ReactNode {
         <>
             <PageTitle title={`Liste des établissement ${schools.length > 0 ? '('+ schools.length +' école(s))' : ''}`}>
                 <div className="d-flex">
-                    <SecondaryButton onClick={getSchools} className="me-2" icon="arrow-clockwise" loading={RequestState.loading}>Rechargher</SecondaryButton>
-                    <Link can={isAdmin} to="/anthropo-measure/school/add" className="btn primary-link">
-                        <i className="bi bi-plus-lg me-2"></i>Nouveau
-                    </Link>
+                    <SecondaryButton permission="school.view" onClick={getSchools} className="me-2" icon="arrow-clockwise" loading={RequestState.loading}>
+                        Recharger
+                    </SecondaryButton>
+                    <PrimaryLink permission="school.create" to="/anthropo-measure/school/add" icon='plus-lg'>
+                        Nouveau établissement
+                    </PrimaryLink>
                 </div>
             </PageTitle>
 
@@ -86,7 +88,7 @@ export function SchoolList(): ReactNode {
                     />
                 )}
 
-                <table className="table table-striped table-bordered text-sm">
+                <table className="table table-striped table-bordered table-hover text-sm">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -116,10 +118,10 @@ export function SchoolList(): ReactNode {
                                     <td>{school.localisation}</td>
                                     <td>{school.responsable}</td>
                                     <td>
-                                        <DetailLink to={`/anthropo-measure/school/details/${school.id}`} />
-                                        <EditLink can={isAdmin} to={`/anthropo-measure/school/edit/${school.id}`} />
-                                        <Button can={isAdmin}
-                                            mode="danger"
+                                        <DetailLink permission="school.show" to={`/anthropo-measure/school/details/${school.id}`} />
+                                        {isAllowed("school.edit", school.id) && <EditLink permission="school.edit" to={`/anthropo-measure/school/edit/${school.id}`} />}
+                                        <DangerButton
+                                            permission="school.delete"
                                             icon="trash"
                                             size="sm"
                                             onClick={() => handleDelete(school.id)}

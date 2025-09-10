@@ -10,13 +10,8 @@ import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 import { Block, Button, PageTitle, Spinner } from "ui";
 
-function download(path: string) {
-    return window.open(path, 'blank')
-}
-
 export function DocumentShow(): ReactNode {
     const { Client, data: document, RequestState } = useApi<FileDocument>({
-        
         url: '/documents',
         key: 'data'
     })
@@ -65,11 +60,11 @@ export function DocumentShow(): ReactNode {
         })
     }, [id])
 
+    const { isAllowed } = useAuthStore();
+
     useEffect(() => {
         getDatas()
     }, [])
-
-    const {isAdmin} = useAuthStore()
 
     return <>
         <PageTitle title={document ? document.title : "Détails du document"}>
@@ -82,17 +77,17 @@ export function DocumentShow(): ReactNode {
                 <div className="d-flex justify-content-between">
                     <h5 className="m-0">Par: {document.creator?.name} <span className="badge text-sm bg-primary p-1 ms-3">{document.type?.toUpperCase()}</span></h5>
                     <div className="d-flex">
-                        <InfoLink className="me-2" target="_blank" rel="noreferrer noopener" icon="download" to={document.path as string}>Télécharger</InfoLink>
-                        {isAdmin && <form onSubmit={deleteDocument} method="post">
-                            <Button loading={RequestState.deleting} icon="trash" type="submit" mode="danger">Supprimer</Button>
+                        <InfoLink permission="document.download" className="me-2" target="_blank" rel="noreferrer noopener" icon="download" to={document.path as string}>Télécharger</InfoLink>
+                        {isAllowed("document.delete") && <form onSubmit={deleteDocument} method="post">
+                            <Button permission="document.delete" loading={RequestState.deleting} icon="trash" type="submit" mode="danger">Supprimer</Button>
                         </form>}
                     </div>
                 </div>
                 <span className="text-primary fst-italic">Le {format(document.date, 'd/MM/y')}</span>
                 <hr />
                 <div className="mt-3">
-                    <h6>Resumé</h6>
-                    <p dangerouslySetInnerHTML={{ __html: document.abstract as string }}></p>
+                    <h6>Résumé</h6>
+                    <p className="text-justify" dangerouslySetInnerHTML={{ __html: document.abstract as string }}></p>
                 </div>
             </Block>
 

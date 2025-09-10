@@ -5,25 +5,25 @@ import { RouteObject } from "react-router";
 export const documentRoute:RouteObject[] = [
     {
         path: "",
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="document.view">
             <DocumentHome />
         </PrivateRoute>
     },
     {
         path: "add",
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="document.create">
             <DocumentAdd />
         </PrivateRoute>
     },
     {
         path: "edit/:id",
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="document.edit">
             <DocumentEdit />
         </PrivateRoute>
     },
     {
         path: "show/:id",
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="document.show">
             <DocumentShow />
         </PrivateRoute>
     }

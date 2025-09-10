@@ -68,11 +68,18 @@ export function StudentList(): ReactNode {
         StudentClient.get(requestData)
     }, [requestData])
 
+    const { user, isAllowed } = useAuthStore()
+
     useEffect(() => {
-        getDatas()
+        if (user?.school) {
+            requestData.school_id = user.school.id
+            setSchool(user.school.id)
+        }
         SchoolClient.get()
         ClassClient.get()
         ScholarYearClient.get()
+
+        getDatas()
     }, [])
 
     /**
@@ -181,8 +188,6 @@ export function StudentList(): ReactNode {
         StudentClient.get({ ...requestData, page: data.page })
     }, [requestData])
 
-    const { isAdmin } = useAuthStore()
-
     return (
         <>
             <PageTitle title={`Liste des etudiants ${!SRequestState.loading ? '(' + students?.total + ')' : ''}`}>
@@ -192,16 +197,17 @@ export function StudentList(): ReactNode {
                         className="me-2"
                         onClick={getDatas}
                         loading={SRequestState.loading}
+                        permission="student.view"
                     >Recharger</SecondaryButton>
-                    <PrimaryLink can={isAdmin} to="/anthropo-measure/student/add" icon="plus" className="me-2">Nouveau</PrimaryLink>
-                    <InfoLink can={isAdmin} to="/anthropo-measure/student/import" icon="file-earmark-text">Importer une liste</InfoLink>
+                    <PrimaryLink permission="student.create" to="/anthropo-measure/student/add" icon="plus" className="me-2">Nouveau etudiant</PrimaryLink>
+                    <InfoLink permission="student.import" to="/anthropo-measure/student/import" icon="file-earmark-text">Importer une liste des etudiants</InfoLink>
                 </div>
             </PageTitle>
 
             {Serror && <div className="alert alert-danger">{Serror.message}</div>}
 
             <Block className="mb-5 mt-3">
-                <table className="table table-striped m-0 table-bordered">
+                <table className="table table-striped m-0 table-bordered table-hover text-sm">
                     <thead>
                         <tr>
                             <th>Établissement</th>
@@ -271,7 +277,7 @@ export function StudentList(): ReactNode {
                             </td>
                             <td>
                                 <ExcelExportButton
-                                    can={isAdmin}
+                                    permission="export.student-list"
                                     ExportClient={ExportClient}
                                     url={'/to-excel'}
                                     loading={ExportRequestState.creating}
@@ -297,10 +303,10 @@ export function StudentList(): ReactNode {
                         placeholder="Rechercher un étudiant..."
                         className="w-100 me-1"
                     />
-                    <PrimaryButton icon="search" loading={SRequestState.loading} size="sm" />
+                    <PrimaryButton permission="student.view" icon="search" loading={SRequestState.loading} size="sm" />
                 </div>
                 <div className="table-responsive mb-4">
-                    <table className="table table-striped table-bordered text-sm">
+                    <table className="table table-striped table-bordered table-hover text-sm">
                         <thead>
                             <tr>
                                 <th>Code</th>
@@ -336,13 +342,13 @@ export function StudentList(): ReactNode {
                                                 {classe.name} - {studentClass.school.name}
                                             </td>
                                             <td className="text-nowrap">
-                                                <DetailLink className="me-2" to={`/anthropo-measure/student/details/${student.id}`} />
-                                                <EditLink can={isAdmin} className="me-2" to={`/anthropo-measure/student/edit/${student.id}`} />
-                                                <DangerButton can={isAdmin} icon="trash" size="sm"
+                                                <DetailLink permission="student.show" to={`/anthropo-measure/student/details/${student.id}`} />
+                                                {isAllowed("student.edit", studentClass.school.id) && <EditLink permission="student.edit" to={`/anthropo-measure/student/edit/${student.id}`} />}
+                                                {isAllowed("student.delete", studentClass.school.id) && <DangerButton permission="student.delete" icon="trash" size="sm"
                                                     onClick={() => {
                                                         handleDelete(student.id)
                                                     }}
-                                                />
+                                                />}
                                             </td>
                                         </tr>
                                     )

@@ -25,7 +25,7 @@ export function ActivityEdit(): ReactNode {
     return (
         <>
             <PageTitle title={activity ? activity.title : "Chargement en cours"}>
-                <PrimaryLink to="/activities/admin/list" icon="list">
+                <PrimaryLink permission="activity.admin.view" to="/activities/admin/list" icon="list">
                     Liste des activités
                 </PrimaryLink>
             </PageTitle>

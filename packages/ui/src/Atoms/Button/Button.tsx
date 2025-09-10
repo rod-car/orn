@@ -1,5 +1,6 @@
 import { PropsWithChildren, ReactNode, useId } from 'react';
 import './Button.modules.scss';
+import { useAuthStore } from 'hooks';
 
 type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
     /**
@@ -18,7 +19,7 @@ type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
     icon?: string;
 
     /**
-     * Permet de deactiver le bouton
+     * Permet de désactiver le bouton
      */
     disabled?: boolean;
 
@@ -27,7 +28,11 @@ type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
      */
     loading?: boolean;
 
-    can?: boolean;
+
+    /**
+     * Permission pour l’accessibilité du bouton
+     */
+    permission: string|string[];
 
     /**
      * Lorsque le bouton est cliqué
@@ -39,12 +44,14 @@ type ButtonProps = PropsWithChildren & React.ComponentProps<"button"> & {
  * Composant bouton
  */
 export const Button = ({
-    mode = "default", size = 'md', type = "button", can = true, ...props
+    mode = "default", size = 'md', type = "button", permission, ...props
 }: ButtonProps): ReactNode => {
     let id = useId();
     if (props.id) id = props.id;
+    const { isAllowed } = useAuthStore();
+
     return <>
-        {can ? <button
+        {isAllowed(permission) || permission === "*" ? <button
             id={id}
             disabled={props.disabled || props.loading}
             onClick={props.onClick}

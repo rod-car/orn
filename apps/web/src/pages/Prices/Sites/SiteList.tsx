@@ -1,8 +1,9 @@
-import { useApi, useAuthStore } from "hooks";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Block, Button, PageTitle } from "ui";
+import { Block, DangerButton, PageTitle } from "ui";
 import { config } from '@base/config'
-import { SiteLoading, Link } from "@base/components";
+import { SiteLoading, PrimaryLink, EditLink } from "@base/components";
 import { Pagination } from '@base/components'
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
@@ -55,7 +56,7 @@ export function SiteList(): ReactNode {
                             })
                             getSites()
                         } else {
-                            toast('Erreur de suppréssion', {
+                            toast('Erreur de suppression', {
                                 closeButton: true,
                                 type: 'error',
                                 position: config.toastPosition
@@ -76,20 +77,17 @@ export function SiteList(): ReactNode {
         })
     }
 
-    const { isAdmin } = useAuthStore()
-
     return <>
         <PageTitle title="Liste des sites">
-            <h2>Liste des sites</h2>
-            <Link can={isAdmin} to="/prices/sites/add" className="btn secondary-link me-2">
-                <i className="bi bi-plus-lg me-2"></i>Ajouter un site
-            </Link>
+            <PrimaryLink permission="site.create" to="/prices/sites/add" icon="plus-lg">
+                Ajouter un site
+            </PrimaryLink>
         </PageTitle>
 
         {error && <div className="alert alert-danger mb-5">{error.message}</div>}
 
         {RequestState.loading ? <SiteLoading /> : <Block>
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Nom</th>
@@ -107,17 +105,12 @@ export function SiteList(): ReactNode {
                         <td>{site.commune?.name}</td>
                         <td>{site.district?.name}</td>
                         <td className="text-nowrap">
-                            <Link
-                                can={isAdmin}
-                                className="btn-sm me-2 btn btn-primary"
+                            <EditLink
+                                permission="site.edit"
                                 to={`/prices/sites/edit/${site.id}`}
-                            >
-                                <i className="bi bi-pencil-square"></i>
-                            </Link>
-                            <Button
-                                can={isAdmin}
-                                type="button"
-                                mode="danger"
+                            />
+                            <DangerButton
+                                permission="site.delete"
                                 icon="trash"
                                 size="sm"
                                 onClick={(): void => {

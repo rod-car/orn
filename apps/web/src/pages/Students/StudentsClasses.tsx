@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { toast } from 'react-toastify'
 import { class_categories, config } from '@base/config'
-import { Block, Button, Checkbox, DangerButton, PageTitle, Select } from 'ui'
+import { Block, Button, Checkbox, DangerButton, Input, PageTitle, Select } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
 import { format, in_array } from 'functions'
 import { ChangeEvent, FormEvent, ReactNode, useCallback, useEffect, useState } from 'react'
@@ -21,30 +21,29 @@ export function StudentsClasses(): ReactNode {
     const [studentsClasses, setStudentsClasses] = useState<number[]>([])
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRequestState } = useApi<School>({
-        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClassesClient, datas: classes, RequestState: ClassesRequestState } = useApi<Classes>({
-        
         url: '/classes',
         key: 'data'
     })
 
     const { Client: StudentClient, datas: students, setDatas: setStudents, RequestState: StudentRequestState } = useApi<Student>({
-        
         url: '/students',
         key: 'data'
     })
 
     const { Client: NextStudentClient } = useApi<Student>({
-        
         url: '/students',
         key: 'data'
     })
 
+    const {user} = useAuthStore()
+
     useEffect(() => {
+        if (user?.school) setSchoolId(user.school.id)
         SchoolClient.get()
         ClassesClient.get()
     }, [])
@@ -79,7 +78,7 @@ export function StudentsClasses(): ReactNode {
 
             if (response.length) {
                 const studentIds = response.map((student: Student) => student.student_id)
-                setStudentsClasses(studentIds)
+                setStudentsClasses(studentIds as number[])
             }
         }
     }, [schoolId, nextScholarYear, nextClassId, nextCategory])
@@ -93,7 +92,7 @@ export function StudentsClasses(): ReactNode {
     }, [schoolId, nextScholarYear, nextClassId, nextCategory])
 
     /**
-     * Traiter si un étudiant est selectionné
+     * Traiter si un étudiant est sélectionné
      * @param studentId 
      */
     function handleStudentCheck(studentId: number) {
@@ -107,8 +106,8 @@ export function StudentsClasses(): ReactNode {
     }
 
     /**
-     * Generer les parametres de la requête
-     * @param addParams Parametres additionnel
+     * Générer les paramètres de la requête
+     * @param addParams Paramètres additionnel
      * @returns 
      */
     function getParams(addParams: Record<string, unknown> = {}): Record<string, unknown> {
@@ -126,7 +125,7 @@ export function StudentsClasses(): ReactNode {
     }
 
     /**
-     * Permet de traiter la soumission du formumlaire
+     * Permet de traiter la soumission du formulaire
      * @param e FormEvent
      */
     async function handleSubmit(e: FormEvent) {
@@ -202,7 +201,7 @@ export function StudentsClasses(): ReactNode {
     return (
         <>
             <PageTitle title="Mise à jour des classes des étudiants">
-                <PrimaryLink to="/anthropo-measure/student/list" icon="list">
+                <PrimaryLink permission="student.view" to="/anthropo-measure/student/list" icon="list">
                     Liste des étudiants
                 </PrimaryLink>
             </PageTitle>
@@ -211,12 +210,12 @@ export function StudentsClasses(): ReactNode {
                 <form onSubmit={handleSubmit} action="" method="post">
                     <div className="row mb-3">
                         <div className="col-12">
-                            <SchoolSelector
+                        {user?.school ? <Input label='Établissement' auto disabled defaultValue={user.school.name} /> : <SchoolSelector
                                 datas={schools}
                                 schoolId={schoolId}
                                 loading={SchoolRequestState.loading}
                                 setSchoolId={setSchoolId}
-                            />
+                            />}
                         </div>
                     </div>
 
@@ -304,12 +303,13 @@ export function StudentsClasses(): ReactNode {
                                             className="me-3 border-1"
                                             mode="primary"
                                             checked={in_array(studentsClasses, studentClass.student_id)}
-                                            onCheck={() => handleStudentCheck(studentClass.student_id)}
+                                            onCheck={() => handleStudentCheck(studentClass.student_id as number)}
                                             label="Admis" />}
                                         <DangerButton
+                                            permission="student.delete"
                                             icon="trash"
                                             size="sm"
-                                            onClick={() => removeStudent(studentClass.student_id)}
+                                            onClick={() => removeStudent(studentClass.student_id as number)}
                                         />
                                     </td>
                                 </tr>)}
@@ -326,6 +326,7 @@ export function StudentsClasses(): ReactNode {
                     </div>
 
                     {studentsClasses.length > 0 && canDisplayCheckbox() && <Button
+                        permission="student.update-class"
                         type="submit"
                         mode="primary"
                         icon="check"

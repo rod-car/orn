@@ -27,7 +27,7 @@ export function DetailsStudent(): ReactNode {
     return (
         <>
             <PageTitle title={student && student.fullname}>
-                <PrimaryLink to="/anthropo-measure/student/list" icon="list">
+                <PrimaryLink permission="student.view" to="/anthropo-measure/student/list" icon="list">
                     Liste des étudiants
                 </PrimaryLink>
             </PageTitle>
@@ -45,12 +45,12 @@ export function DetailsStudent(): ReactNode {
             <Block className="mb-4">
                 <h6>Détails de la classe</h6>
                 <hr />
-                <table className="table table-striped table-bordered text-sm m-0">
+                <table className="table table-striped table-bordered table-hover text-sm m-0">
                     <thead>
                         <tr>
                             <th>Classe</th>
-                            <th>Annee scolaire</th>
-                            <th>Etablissement</th>
+                            <th>Année scolaire</th>
+                            <th>Établissement</th>
                         </tr>
                     </thead>
                     <tbody>

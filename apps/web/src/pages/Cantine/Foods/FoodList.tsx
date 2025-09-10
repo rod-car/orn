@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi, useAuthStore } from 'hooks'
+import { useApi } from 'hooks'
 import { PrimaryLink, EditLink } from '@base/components'
 import { config } from '@base/config'
 import { Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
@@ -55,17 +55,15 @@ export function FoodList(): ReactNode {
         })
     }, [])
 
-    const { isAdmin } = useAuthStore()
-
     return (
         <>
-            <PageTitle title="Liste des aliments">
+            <PageTitle title="Liste des collations">
                 <div className="d-flex justify-content-between">
-                    <SecondaryButton icon="arrow-clockwise" className="me-2" onClick={getDatas} loading={RequestState.loading}>
+                    <SecondaryButton permission="food.view" icon="arrow-clockwise" className="me-2" onClick={getDatas} loading={RequestState.loading}>
                         Recharger
                     </SecondaryButton>
-                    <PrimaryLink can={isAdmin}  icon="plus-lg" to="/cantine/foods/add">
-                        Nouveau aliment
+                    <PrimaryLink permission="food.create"  icon="plus-lg" to="/cantine/foods/add">
+                        Nouveau
                     </PrimaryLink>
                 </div>
             </PageTitle>
@@ -73,7 +71,7 @@ export function FoodList(): ReactNode {
             <Block className="mb-5">
                 {error && <div className="alert alert-danger">{error.message}</div>}
 
-                <table className="table table-striped table-bordered text-sm">
+                <table className="table table-striped table-bordered table-hover text-sm">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -97,8 +95,8 @@ export function FoodList(): ReactNode {
                                     <td>{food.label}</td>
                                     <td>{food.unit}</td>
                                     <td>
-                                        <EditLink can={isAdmin} to={`/cantine/foods/edit/${food.id}`} />
-                                        <DangerButton can={isAdmin} icon="trash" size="sm" onClick={() => handleDelete(food.id) }/>
+                                        <EditLink permission="food.edit" to={`/cantine/foods/edit/${food.id}`} />
+                                        <DangerButton permission="food.delete" icon="trash" size="sm" onClick={() => handleDelete(food.id) }/>
                                     </td>
                                 </tr>
                             ))

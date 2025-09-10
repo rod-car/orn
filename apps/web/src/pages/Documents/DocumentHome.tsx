@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { BasicCard, Link } from "@base/components";
+import { BasicCard, EditLink, PrimaryLink } from "@base/components";
 import { Col, Row } from "@base/components/Bootstrap";
 import { ChangeEvent, memo, ReactNode, useEffect, useState } from "react";
 import { Input, PageTitle, PrimaryButton } from "ui";
 import icons from "@base/assets/icons";
-import { useApi, useAuthStore } from "hooks";
+import { useApi } from "hooks";
 import { Pagination } from '@base/components';
 import { range } from "functions";
 import Skeleton from "react-loading-skeleton";
@@ -52,11 +52,11 @@ export function DocumentHome(): ReactNode {
         setTimeoutId(newTimeoutId)
     }
 
-    const { isAdmin } = useAuthStore()
-
     return <>
         <PageTitle title="Les derniers documents">
-            <Link can={isAdmin} className="btn btn-primary" to="/documents/add"><i className="bi bi-plus-lg me-2"></i>Ajouter</Link>
+            <PrimaryLink permission="document.create" to="/documents/add" icon="plus-lg">
+                Ajouter un document
+            </PrimaryLink>
         </PageTitle>
 
         <div className="mb-5 mt-3 d-flex">
@@ -68,6 +68,7 @@ export function DocumentHome(): ReactNode {
                 className="w-100 me-1"
             />
             <PrimaryButton
+                permission="document.view"
                 icon="search"
                 loading={RequestState.loading}
                 size="sm"
@@ -118,7 +119,7 @@ const DocumentCardLoading = memo(function(): ReactNode {
 })
 
 /**
- * Card pour representer le document
+ * Card pour représente le document
  *
  * @param {{document: FileDocument}} param0
  * @param {FileDocument} param0.document
@@ -130,8 +131,6 @@ function DocumentCard({document}: {document: FileDocument}): ReactNode {
     if (document.type === "word") icon = icons.word;
     if (document.type === "powerpoint") icon = icons.pptx;
 
-    const { isAdmin } = useAuthStore()
-
     return <>
         <BasicCard title={document.title} actionLabel="Voir détails" actionLink={`/documents/show/${document.id}`}>
             <div className="text-center">
@@ -139,7 +138,7 @@ function DocumentCard({document}: {document: FileDocument}): ReactNode {
             </div>
             <p className="fst-italic text-primary text-center text-sm">{document.date}</p>
             <p className="text-center text-sm">Par: {document.creator && document.creator.name}</p>
-            <Link can={isAdmin} className="text-center d-block" to={`/documents/edit/${document.id}`}>Editer le document</Link>
+            <EditLink permission="document.edit" className="text-center d-block" to={`/documents/edit/${document.id}`}>Éditer le document</EditLink>
         </BasicCard>
     </>
 }

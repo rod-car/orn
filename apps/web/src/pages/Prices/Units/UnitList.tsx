@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Block, Button } from "ui";
+import { Block, DangerButton, PageTitle } from "ui";
 import { config } from '@base/config'
-import { UnitLoading, Link } from "@base/components";
+import { UnitLoading, PrimaryLink, EditLink } from "@base/components";
 import { Pagination } from '@base/components'
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
@@ -14,8 +15,6 @@ export function UnitList(): ReactNode {
         RequestState,
         error
     } = useApi<Unit>({
-        
-        
         url: '/prices/units'
     })
 
@@ -56,7 +55,7 @@ export function UnitList(): ReactNode {
                             })
                             getUnits()
                         } else {
-                            toast('Erreur de suppréssion', {
+                            toast('Erreur de suppression', {
                                 closeButton: true,
                                 type: 'error',
                                 position: config.toastPosition
@@ -78,17 +77,16 @@ export function UnitList(): ReactNode {
     }
 
     return <>
-        <div className="mb-5 d-flex justify-content-between align-items-center">
-            <h2>Liste des unités</h2>
-            <Link to="/prices/units/add" className="btn secondary-link me-2">
-                <i className="bi bi-plus-lg me-2"></i>Ajouter une unité
-            </Link>
-        </div>
+        <PageTitle title="Liste des unités">
+            <PrimaryLink permission="unit.create" to="/prices/units/add" icon="plus">
+                Ajouter une unité
+            </PrimaryLink>
+        </PageTitle>
 
         {error && <div className="alert alert-danger mb-5">{error.message}</div>}
 
         {RequestState.loading ? <UnitLoading /> : <Block>
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -106,15 +104,12 @@ export function UnitList(): ReactNode {
                         <td>{unit.name}</td>
                         <td>{unit.notation}</td>
                         <td className="text-nowrap">
-                            <Link
-                                className="btn-sm me-2 btn btn-primary"
+                            <EditLink
+                                permission="unit.edit"
                                 to={`/prices/units/edit/${unit.id}`}
-                            >
-                                <i className="bi bi-pencil-square"></i>
-                            </Link>
-                            <Button
-                                type="button"
-                                mode="danger"
+                            />
+                            <DangerButton
+                                permission="unit.delete"
                                 icon="trash"
                                 size="sm"
                                 onClick={(): void => {
@@ -125,7 +120,8 @@ export function UnitList(): ReactNode {
                     </tr>)}
                 </tbody>
             </table>
+
+            {units?.meta?.total > units?.meta?.per_page && <Pagination changePage={changePage} data={units} />}
         </Block>}
-        {units?.meta?.total > units?.meta?.per_page && <Pagination changePage={changePage} data={units} />}
     </>
 }

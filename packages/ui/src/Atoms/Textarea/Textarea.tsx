@@ -1,4 +1,4 @@
-import { ChangeEvent, useId } from "react"
+import { ChangeEvent, CSSProperties, useId } from "react"
 
 import './Textarea.module.scss'
 import { RequiredSign } from "../RequiredSign/RequiredSign";
@@ -10,6 +10,7 @@ type TextareaProps = {
     rows?: number;
     cols?: number;
     name?: string;
+    placeholder?: string;
     value?: string | number;
     error?: string[];
     onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
@@ -19,7 +20,7 @@ export function Textarea({ label, onChange, controlled = true, required = true, 
     const id = useId()
 
     return <div className="form-group">
-        {label && <label className="form-label" htmlFor={id}>
+        {label && <label style={styles.small} className="form-label fw-semibold" htmlFor={id}>
             {label}
             <RequiredSign value={required} />
         </label>}
@@ -27,11 +28,19 @@ export function Textarea({ label, onChange, controlled = true, required = true, 
             id={id}
             value={controlled ? props.value : undefined}
             onChange={controlled ? onChange : () => { }}
-            className="form-control"
+            className="form-control shadow shadow-sm"
             name={props.name}
             rows={props.rows ?? 5}
             cols={props.cols ?? 1}
+            placeholder={props.placeholder}
+            style={styles.small}
         />
         {error && error.length > 0 && <span className="text-danger d-block mt-1">{error.at(0)}</span>}
     </div>
+}
+
+const styles: Record<string, CSSProperties> = {
+    small: {
+        fontSize: 'small'
+    }
 }

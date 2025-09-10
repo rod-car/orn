@@ -1,24 +1,24 @@
 import { PrivateRoute } from "@base/components/Auth/";
-import { ArticleAdd, ArticleEdit, ArticleList, ArticleShow, PriceAdd, PriceHome, PriceList, SiteAdd, SiteEdit, SiteList, UnitAdd, UnitEdit, UnitList } from "@base/pages/Prices";
+import { ArticleAdd, ArticleEdit, ArticleList, PriceAdd, PriceList, SiteAdd, SiteEdit, SiteList, UnitAdd, UnitEdit, UnitList, PriceRecap } from "@base/pages/Prices";
 import { RouteObject } from "react-router";
 
 export const priceRoute: RouteObject[] = [
     {
-        path: 'manage',
-        element: <PrivateRoute can={['admin']}>
-            <PriceHome />
-        </PrivateRoute>
-    },
-    {
         path: 'manage/add',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="price.create">
             <PriceAdd />
         </PrivateRoute>
     },
     {
         path: 'manage/list',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="price.view">
             <PriceList />
+        </PrivateRoute>
+    },
+    {
+        path: 'manage/recap',
+        element: <PrivateRoute permission="price.show">
+            <PriceRecap />
         </PrivateRoute>
     },
     {
@@ -26,25 +26,19 @@ export const priceRoute: RouteObject[] = [
         children: [
             {
                 path: 'add',
-                element: <PrivateRoute can={['admin']}>
+                element: <PrivateRoute permission="article.create">
                     <ArticleAdd />
                 </PrivateRoute>
             },
             {
                 path: 'edit/:id',
-                element: <PrivateRoute can={['admin']}>
+                element: <PrivateRoute permission="article.edit">
                     <ArticleEdit />
                 </PrivateRoute>
             },
             {
-                path: 'show/:id',
-                element: <PrivateRoute can={['admin']}>
-                    <ArticleShow />
-                </PrivateRoute>
-            },
-            {
                 path: 'list',
-                element: <PrivateRoute>
+                element: <PrivateRoute permission="article.view">
                     <ArticleList />
                 </PrivateRoute>
             }
@@ -55,19 +49,19 @@ export const priceRoute: RouteObject[] = [
         children: [
             {
                 path: 'add',
-                element: <PrivateRoute can={['admin']}>
+                element: <PrivateRoute permission="unit.create">
                     <UnitAdd />
                 </PrivateRoute>
             },
             {
                 path: 'edit/:id',
-                element: <PrivateRoute can={['admin']}>
+                element: <PrivateRoute permission="unit.edit">
                     <UnitEdit />
                 </PrivateRoute>
             },
             {
                 path: 'list',
-                element: <PrivateRoute>
+                element: <PrivateRoute permission="unit.view">
                     <UnitList />
                 </PrivateRoute>
             }
@@ -78,19 +72,19 @@ export const priceRoute: RouteObject[] = [
         children: [
             {
                 path: 'add',
-                element: <PrivateRoute can={['admin']}>
+                element: <PrivateRoute permission="site.create">
                     <SiteAdd />
                 </PrivateRoute>
             },
             {
                 path: 'edit/:id',
-                element: <PrivateRoute can={['admin']}>
+                element: <PrivateRoute permission="site.edit">
                     <SiteEdit />
                 </PrivateRoute>
             },
             {
                 path: 'list',
-                element: <PrivateRoute>
+                element: <PrivateRoute permission="site.view">
                     <SiteList />
                 </PrivateRoute>
             }

@@ -12,7 +12,7 @@ export default defineConfig({
       threshold: 10240,
       algorithm: 'gzip',
       ext: '.gz'
-    }),
+    })
   ],
   resolve: {
     alias: [{ find: '@base', replacement: path.resolve(__dirname, 'src') }]

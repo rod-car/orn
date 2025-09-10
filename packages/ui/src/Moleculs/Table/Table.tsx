@@ -10,7 +10,7 @@ type TableProps<T> = {
 export function Table<T> ({ theads, datas }: TableProps<T>) {
     const keys = Object.keys(theads);
 
-    return <table className="table table-striped w-100">
+    return <table className="table table-striped table-hover text-sm">
         <thead>
             <tr>
                 {Object.values(theads).map(head => <th key={head}>{head}</th>)}

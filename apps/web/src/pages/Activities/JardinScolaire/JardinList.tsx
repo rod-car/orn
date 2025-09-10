@@ -1,7 +1,7 @@
 import { useApi, useAuthStore } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Block, Button, PageTitle } from "ui";
-import { Link, Pagination } from '@base/components'
+import { Block, Button, DangerButton, PageTitle } from "ui";
+import { EditLink, InfoLink, Link, Pagination, PrimaryLink } from '@base/components'
 import { range } from "functions";
 import Skeleton from "react-loading-skeleton";
 
@@ -35,17 +35,15 @@ export function JardinList(): ReactNode {
         alert(id)
     }
 
-    const { isAdmin } = useAuthStore()
-
     return <>
         <PageTitle title="Jardin scolaires (Distribution)">
-            <Link can={isAdmin} to="/scholar-garden/add" className="btn btn-primary">
-                <i className="bi bi-plus-lg me-2"></i>Nouveau jardin
-            </Link>
+            <PrimaryLink permission="garden.view" icon="plus-lg" to="/scholar-garden/add">
+                Nouveau jardin
+            </PrimaryLink>
         </PageTitle>
 
         <Block>
-            <table className="table table-bordered table-striped">
+            <table className="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Ecole</th>
@@ -80,9 +78,9 @@ export function JardinList(): ReactNode {
                         <td><ul>{jardin.semences?.map((semence: Semence) => <li key={semence.id}>{semence.name}: {semence.pivot.quantity} {semence.unit}</li>)}</ul></td>
                         <td>{Object.keys(jardin.steps ?? {}).length}</td>
                         <td>
-                            <Link to={`/scholar-garden/show/${jardin.id}`} className="btn btn-info btn-sm me-2"><i className="bi bi-folder"></i></Link>
-                            <Link can={isAdmin} to={`/scholar-garden/edit/${jardin.id}`} className="btn btn-primary btn-sm me-2"><i className="bi bi-pencil-square"></i></Link>
-                            <Button can={isAdmin} icon="trash" mode="danger" size="sm" onClick={() => handleDelete(jardin.id)} />
+                            <InfoLink permission="garden.edit" to={`/scholar-garden/show/${jardin.id}`} />
+                            <EditLink permission="garden.edit" to={`/scholar-garden/edit/${jardin.id}`} />
+                            <DangerButton permission="garden.delete" icon="trash" size="sm" onClick={() => handleDelete(jardin.id)} />
                         </td>
                     </tr>)}
                 </tbody>

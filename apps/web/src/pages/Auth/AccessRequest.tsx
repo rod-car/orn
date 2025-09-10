@@ -1,7 +1,8 @@
-import { useApi, useAuthStore } from 'hooks'
-import { Link, PrimaryLink } from '@base/components'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useApi } from 'hooks'
+import { InfoLink, PrimaryLink } from '@base/components'
 import { config } from '@base/config'
-import { Block, Button, PageTitle, Select } from 'ui'
+import { Block, Button, PageTitle, SecondaryButton, Select } from 'ui'
 import { ReactNode, useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast } from 'react-toastify'
@@ -120,27 +121,24 @@ export function AccessRequest(): ReactNode {
         }
     }
 
-    const { isAdmin } = useAuthStore()
-
     return (
         <>
             <PageTitle title="Demande d'accès">
                 <div className="d-flex align-items-between">
-                    <Button
+                    <SecondaryButton
+                        permission="user.view"
                         icon="arrow-clockwise"
-                        mode="secondary"
-                        type="button"
                         className="me-2"
                         onClick={getDatas}
                         loading={RequestState.loading}
                     >
                         Recharger
-                    </Button>
-                    <Link can={isAdmin} to="/auth/add-user" className="btn secondary-link me-2">
-                        <i className="bi bi-plus-lg me-2"></i>Nouveau utilisateur
-                    </Link>
-                    <PrimaryLink can={isAdmin} to="/auth/users">
-                        <i className="bi bi-file-earmark-text me-2"></i>Liste des utilisateurs
+                    </SecondaryButton>
+                    <InfoLink permission="user.create" to="/user/create" className="me-2" icon='plus-lg'>
+                        Nouveau utilisateur
+                    </InfoLink>
+                    <PrimaryLink permission="user.view" to="/user/list" icon='file-earmark-text'>
+                        Liste des utilisateurs
                     </PrimaryLink>
                 </div>
             </PageTitle>
@@ -148,7 +146,7 @@ export function AccessRequest(): ReactNode {
             {error && <div className="alert alert-danger">{error.message}</div>}
 
             <Block className="mb-5 mt-3">
-                <table className="table table-striped text-sm">
+                <table className="table table-striped table-hover table-hover text-sm">
                     <thead>
                         <tr>
                             <th>Elements</th>
@@ -173,7 +171,7 @@ export function AccessRequest(): ReactNode {
 
             <Block>
                 <div className="table-responsive">
-                    <table className="table table-striped table-bordered text-sm">
+                    <table className="table table-striped table-bordered table-hover text-sm">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -204,11 +202,12 @@ export function AccessRequest(): ReactNode {
                                 <td>{user.occupation}</td>
                                 <td>{user.email}</td>
                                 <td>{user.username}</td>
-                                <td><UserRole role={user.role} /></td>
+                                <td><UserRole roles={user.roles} /></td>
                                 <td className="text-nowrap">{format(user.created_at, "dd-MM-y")}</td>
                                 <td><UserStatus valid={user.is_valid} /></td>
                                 <td className="text-nowrap">
                                     <Button
+                                        permission="user.create"
                                         type="button"
                                         mode="success"
                                         icon="check"
@@ -217,6 +216,7 @@ export function AccessRequest(): ReactNode {
                                         onClick={() => validate(user)}
                                     />
                                     <Button
+                                        permission="user.delete"
                                         type="button"
                                         mode="danger"
                                         icon="x-lg"
@@ -225,7 +225,7 @@ export function AccessRequest(): ReactNode {
                                     />
                                 </td>
                             </tr>)}
-                            {!RequestState.loading && users.total === 0 && (
+                            {!RequestState.loading && users?.items?.length === 0 && (
                                 <tr>
                                     <td colSpan={9} className="text-center">
                                         Aucune données
@@ -243,14 +243,13 @@ export function AccessRequest(): ReactNode {
     )
 }
 
-const roles = ["Invite", "Administrateur", "Super administrateur"]
 const classes = ["primary", "danger", "success"]
 const userStatus = ["valide", "Non valide"]
 
-function UserRole({ role }: { role: number }) {
-    return <span className={`badge rounded-pill p-2 bg-${classes[role]}`}>
-        {roles[role]}
-    </span>
+function UserRole({ roles }: { roles: {id: number, name: string}[] }) {
+    return roles.map(role => <span key={role.id} className={`badge rounded-pill p-2 bg-primary`}>
+        {role.name}
+    </span>)
 }
 
 function UserStatus({ valid }: { valid: number }) {

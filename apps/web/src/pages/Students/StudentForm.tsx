@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ChangeEvent, FormEvent, ReactNode, useCallback, useEffect, useState } from 'react'
 import { Input, PrimaryButton, Select } from 'ui'
-import { useApi } from 'hooks'
+import { useApi, useAuthStore } from 'hooks'
 import { config, class_categories } from '@base/config'
 import { toast } from 'react-toastify'
 import { gender, ucWords } from 'functions'
@@ -29,21 +29,18 @@ const defaultStudent = {
 
 export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
     const [student, setStudent] = useState<Partial<typeof defaultStudent>>(defaultStudent)
-    const [scholarYear, setScholarYear] = useState<string|number>(defaultStudent.scholar_year)
+    const [scholarYear, setScholarYear] = useState<string | number>(defaultStudent.scholar_year)
 
     const { Client: SClient, RequestState: SRequestState, error } = useApi<typeof defaultStudent>({
-        
         url: '/students'
     })
 
     const { Client: ScClient, datas: schools, RequestState: ScRequestState } = useApi<School>({
-        
         url: '/schools',
         key: 'data'
     })
 
     const { Client: ClClient, datas: ClDatas, RequestState: ClRequestState } = useApi<Classes>({
-        
         url: '/classes',
         key: 'data'
     })
@@ -51,7 +48,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
 
-        const data = {...student, scholar_year: scholarYear as number}
+        const data = { ...student, scholar_year: scholarYear as number }
 
         setStudent(data)
 
@@ -59,7 +56,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
             ? await SClient.patch(editedStudent.id, data)
             : await SClient.post(data)
 
-        const message = editedStudent ? 'Mis à jour' : 'Enregistré - Code: ' + data.number
+        const message = editedStudent ? "Mis à jour" : "Enregistré"
 
         if (response.ok) {
             toast(message, {
@@ -86,8 +83,16 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
         }
     }
 
+    const { user } = useAuthStore()
+
     const getClasses = async (): Promise<Classes[]> => await ClClient.get()
-    const getSchools = async (): Promise<Classes[]> => await ScClient.get()
+    const getSchools = async (): Promise<void> => {
+        await ScClient.get()
+        if (user?.school) {
+            const schoolId = user.school.id.toString();
+            setStudent({...student, school: schoolId})
+        }
+    }
     const getNumber = async (): Promise<void> => {
         const number = await SClient.get({}, '/get-id')
         setStudent({ ...student, number: number as unknown as number })
@@ -104,10 +109,6 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
             father: editedStudent.father ?? '',
             mother: editedStudent.mother ?? '',
             parents: editedStudent.parents ?? '',
-            /*school: editedStudent?.schools?.at(0)?.id ?? '',
-            classes: editedStudent?.classes?.at(0)?.id ?? '',
-            scholar_year: editedStudent?.classes?.at(0)?.pivot?.scholar_year ?? '',
-            category: editedStudent?.classes?.at(0)?.pivot?.category ?? ''*/
         })
     }
 
@@ -125,8 +126,12 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
     }, [setStudent, student, error])
 
     useEffect(() => {
-        getClasses()
-        getSchools()
+        const getData = async () => {
+            await getClasses()
+            await getSchools()
+        }
+
+        getData()
         if (!editedStudent) getNumber()
     }, [])
 
@@ -194,7 +199,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
 
             {editedStudent === undefined && <div className="row mb-4">
                 <div className="col-xl-3">
-                    <Select
+                    {user?.school ? <Input label='Établissement' auto disabled defaultValue={user.school.name} /> : <Select
                         value={student.school}
                         onChange={handleChange}
                         label="Etablissement"
@@ -204,7 +209,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
                         error={error?.data?.errors?.school}
                         loading={ScRequestState.loading}
                         controlled
-                    />
+                    />}
                 </div>
                 <div className="col-xl-3">
                     <Select
@@ -242,6 +247,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
             </div>}
 
             <PrimaryButton
+                permission="student.create"
                 loading={SRequestState.creating || SRequestState.updating}
                 icon="save"
                 type="submit"

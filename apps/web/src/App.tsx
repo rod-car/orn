@@ -5,12 +5,12 @@ import { cantineRoute } from '@base/routes/cantine/cantine';
 import { PrivateRoute } from '@base/components/Auth';
 import { activityRoute } from '@base/routes/activities/activities';
 import { authRoute, userRoute } from '@base/routes/auth';
-import { scholarGardenRoute } from '@base/routes/scholar-garden/';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { AppRoot, About, Contributors, HomePage } from '@base/pages/App';
 import { studentRoute, abaqueRoute, schoolRoute, surveyRoute, statisticRoute } from '@base/routes/anthropo-measure';
 import { documentRoute } from '@base/routes/document/documents';
 import { toolsRoute } from '@base/routes/tools/tools';
+import { securityRoute } from './routes/user';
 
 const router = createBrowserRouter([
     {
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
             {
                 path: '',
                 element: (
-                    <PrivateRoute>
+                    <PrivateRoute permission={["dashboard.view"]}>
                         <HomePage />
                     </PrivateRoute>
                 ),
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
             {
                 path: 'about',
                 element: (
-                    <PrivateRoute>
+                    <PrivateRoute permission={["dashboard.view"]}>
                         <About />
                     </PrivateRoute>
                 ),
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
             {
                 path: 'contributors',
                 element: (
-                    <PrivateRoute>
+                    <PrivateRoute permission={["app.contributors"]}>
                         <Contributors />
                     </PrivateRoute>
                 ),
@@ -57,7 +57,6 @@ const router = createBrowserRouter([
             },
             { path: 'cantine', children: cantineRoute },
             { path: 'activities', children: activityRoute },
-            { path: 'scholar-garden', children: scholarGardenRoute },
             { path: 'prices', children: priceRoute },
             { path: 'documents', children: documentRoute },
             { path: 'tools', children: toolsRoute },
@@ -68,6 +67,12 @@ const router = createBrowserRouter([
         element: <AuthRoot />,
         errorElement: <AuthRoot error={true} />,
         children: userRoute,
+    },
+    {
+        path: 'user',
+        element: <AppRoot />,
+        errorElement: <AppRoot error={true} />,
+        children: securityRoute,
     },
     {
         path: 'forbidden',

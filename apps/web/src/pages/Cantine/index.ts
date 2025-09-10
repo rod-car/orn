@@ -1,10 +1,10 @@
-
-export { FoodAdd } from './Foods/FoodAdd.tsx';
-export { FoodList } from './Foods/FoodList.tsx';
-
+export { StockIn } from './StockIn';
+export { StockOut } from './StockOut';
+export { FoodAdd } from './Foods/FoodAdd';
+export { FoodList } from './Foods/FoodList';
 export {RecapConso} from "./RecapConso";
-export { HomeCantine } from './HomeCantine';
 export { AddConso } from './AddConso';
 export { ListConso } from './ListConso';
 export { EditConso } from './EditConso';
 export { ImportConso } from './ImportConso';
+export { Stock } from './Stock';

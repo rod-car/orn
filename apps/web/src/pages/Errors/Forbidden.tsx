@@ -14,11 +14,11 @@ export function Forbidden(): ReactNode {
                         </a>
                     </div>
                     <div className="app-card p-5 text-center shadow-sm">
-                        <h1 className="page-title mb-4">403<br /><span className="font-weight-light">Acces non autorise</span></h1>
+                        <h1 className="page-title mb-4">403<br /><span className="font-weight-light">Accès non autorise</span></h1>
                         <div className="mb-4">
                             Vous n'avez pas l'autorisation de voir cette page.
                         </div>
-                        <Link className="btn app-btn-primary" to="/">Retourner à la page d'accueil</Link>
+                        <Link permission="dashboard.view" className="btn app-btn-primary" to="/">Retourner à la page d'accueil</Link>
                     </div>
                 </div>
             </div>

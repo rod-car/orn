@@ -1,8 +1,9 @@
-import { useApi, useAuthStore } from "hooks";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useApi } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Block, Button, PageTitle } from "ui";
+import { Block, DangerButton, PageTitle } from "ui";
 import { config } from '@base/config'
-import { ArticleLoading, Link, PrimaryLink } from "@base/components";
+import { ArticleLoading, EditLink, PrimaryLink } from "@base/components";
 import { Pagination } from '@base/components'
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
@@ -70,22 +71,20 @@ export function ArticleList(): ReactNode {
         })
     }
 
-    const { isAdmin } = useAuthStore()
-
     return <>
         <PageTitle title="Liste des articles">
-            <PrimaryLink can={isAdmin} to="/prices/articles/add" className="btn secondary-link me-2">
-                <i className="bi bi-plus-lg me-2"></i>Nouveau article
+            <PrimaryLink permission="article.create" to="/prices/articles/add" icon="plus-lg">
+                Nouveau article
             </PrimaryLink>
         </PageTitle>
 
         {RequestState.loading ? <ArticleLoading /> : <Block className="mb-4">
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Code</th>
                         <th>Désignation</th>
-                        <th>Prix</th>
+                        <th>Unité</th>
                         <th>Description</th>
                         <th>Actions</th>
                     </tr>
@@ -94,20 +93,12 @@ export function ArticleList(): ReactNode {
                     {articles && articles.data?.map((article: Article) => <tr key={article.id}>
                         <td>{article.code ?? '-'}</td>
                         <td>{article.designation}</td>
+                        <td>{article.unit ? article.unit.name : '-'}</td>
                         <td>{article.description ?? '-'}</td>
-                        <td>-</td>
                         <td className="text-nowrap">
-                            <Link
-                                can={isAdmin}
-                                className="btn-sm me-2 btn btn-primary"
-                                to={`/prices/articles/edit/${article.id}`}
-                            >
-                                <i className="bi bi-pencil-square"></i>
-                            </Link>
-                            <Button
-                                can={isAdmin}
-                                type="button"
-                                mode="danger"
+                            <EditLink permission="article.edit" to={`/prices/articles/edit/${article.id}`} />
+                            <DangerButton
+                                permission="article.delete"
                                 icon="trash"
                                 size="sm"
                                 onClick={(): void => {

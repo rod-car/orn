@@ -67,6 +67,7 @@ export function ForgotPassword(): ReactNode {
                                 </div>
                                 <div className="text-center">
                                     <Button
+                                        permission="*"
                                         loading={RequestState.creating}
                                         type="submit"
                                         mode="primary"
@@ -77,7 +78,7 @@ export function ForgotPassword(): ReactNode {
                             </form>
                             <div className="auth-option text-center pt-5">
                                 <Link className="app-link" to="/auth/login" >Se connecter</Link> 
-                                <span className="px-2">|</span> 
+                                <span className="px-2">|</span>
                                 <Link className="app-link" to="/auth/register" >Demander un accès</Link>
                             </div>
                         </div>

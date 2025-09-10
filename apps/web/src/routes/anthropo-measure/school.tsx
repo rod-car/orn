@@ -1,23 +1,23 @@
 import { PrivateRoute } from "@base/components/Auth";
-import { AddClass, AddLevel, AddSchool, Classes, DetailsSchool, EditClass, EditLevel, EditSchool, Levels, SchoolList } from "@base/pages/School";
+import { AddClass, AddLevel, AddSchool, Classes, EditClass, EditLevel, EditSchool, Levels, SchoolList } from "@base/pages/School";
 import { RouteObject } from "react-router";
 
 const classRoute: RouteObject[] = [
     {
         path: 'list',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="class.view">
             <Classes />
         </PrivateRoute>
     },
     {
         path: 'add',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="class.create">
             <AddClass />
         </PrivateRoute>
     },
     {
         path: 'edit/:id',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="class.edit">
             <EditClass />
         </PrivateRoute>
     }
@@ -26,19 +26,19 @@ const classRoute: RouteObject[] = [
 const levelRoute: RouteObject[] = [
     {
         path: 'list',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="level.view">
             <Levels />
         </PrivateRoute>
     },
     {
         path: 'add',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="level.create">
             <AddLevel />
         </PrivateRoute>
     },
     {
         path: 'edit/:id',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="level.edit">
             <EditLevel />
         </PrivateRoute>
     }
@@ -47,26 +47,20 @@ const levelRoute: RouteObject[] = [
 export const schoolRoute: RouteObject[] = [
     {
         path: 'list',
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="school.view">
             <SchoolList />
         </PrivateRoute>
     },
     {
         path: 'add',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="school.create">
             <AddSchool />
         </PrivateRoute>
     },
     {
         path: 'edit/:id',
-        element: <PrivateRoute can={['admin']}>
+        element: <PrivateRoute permission="school.edit">
             <EditSchool />
-        </PrivateRoute>
-    },
-    {
-        path: 'details/:id',
-        element: <PrivateRoute can={['admin']}>
-            <DetailsSchool />
         </PrivateRoute>
     },
     {

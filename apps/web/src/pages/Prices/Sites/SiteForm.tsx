@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
@@ -31,8 +32,6 @@ export function SiteForm({ editedSite }: SiteFormProps): ReactNode {
         Client: CommuneClient,
         datas: communes
     } = useApi<Commune>({
-        
-        
         url: '/communes'
     })
 
@@ -72,7 +71,7 @@ export function SiteForm({ editedSite }: SiteFormProps): ReactNode {
     const handleChange = (target: EventTarget & (HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement)): void => {
         setSite({ ...site, [target.name]: target.value })
         if (target.value.length > 0 && error?.data.errors[target.name]) {
-            error.data.errors[target.name] = null
+            error.data.errors[target.name] = []
         }
     }
 
@@ -104,6 +103,7 @@ export function SiteForm({ editedSite }: SiteFormProps): ReactNode {
             </div>
 
             <Button
+                permission="site.create"
                 loading={RequestState.creating || RequestState.updating}
                 icon="save"
                 type="submit"

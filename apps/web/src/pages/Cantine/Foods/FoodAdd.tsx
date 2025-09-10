@@ -33,7 +33,7 @@ export function FoodAdd(): ReactNode {
             : await Client.patch(id, food)
 
         if (response.ok) {
-            const message = id === undefined ? "Enregistré" : "Modifé"
+            const message = id === undefined ? "Enregistré" : "Modifié"
 
             toast(message, {
                 type: 'success',
@@ -72,9 +72,9 @@ export function FoodAdd(): ReactNode {
 
     return (
         <>
-            <PageTitle title={id === undefined ? "Nouveau aliment" : "Modifier un aliment"}>
-                <PrimaryLink icon="list" to="/cantine/foods/list">
-                    Liste des aliments
+            <PageTitle title={id === undefined ? "Nouvelle collation" : "Modifier la collation"}>
+                <PrimaryLink permission="food.view" icon="list" to="/cantine/foods/list">
+                    Liste des collations
                 </PrimaryLink>
             </PageTitle>
 
@@ -103,7 +103,7 @@ export function FoodAdd(): ReactNode {
                         </div>
                     </div>
 
-                    <PrimaryButton loading={RequestState.creating || RequestState.loading || RequestState.updating} icon="save" type="submit">
+                    <PrimaryButton permission="food.create" loading={RequestState.creating || RequestState.updating} icon="save" type="submit">
                         Enregistrer
                     </PrimaryButton>
                 </form>

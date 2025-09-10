@@ -1,7 +1,8 @@
-import { useApi, useAuthStore } from "hooks";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useApi } from "hooks";
 import { ReactNode, useEffect, useState } from "react";
-import { Block, Button, Select } from "ui";
-import { Link, Pagination } from '@base/components'
+import { Block, Button, PageTitle, Select } from "ui";
+import { Link, Pagination, PrimaryLink } from '@base/components'
 import { useSearchParams } from "react-router-dom";
 import { formatPrice, range } from "functions";
 import Skeleton from "react-loading-skeleton";
@@ -73,21 +74,18 @@ export function PriceList(): ReactNode {
         getArticlePrices(getSearchParams())
     }, [])
 
-    const { isAdmin } = useAuthStore()
-
     return <>
-        <div className="mb-5 d-flex justify-content-between align-items-center">
-            <h2 className="mb-0">Les prix des articles</h2>
+        <PageTitle title="Liste des prix d'articles">
             <div className="d-flex justify-content-between">
-                <Button onClick={() => getArticlePrices()} icon="arrow-clockwise" type="button" mode="secondary" className="me-2">Recharger</Button>
-                <Link can={isAdmin} to="/prices/add" className="btn btn-primary">
-                    <i className="bi bi-plus-lg me-2"></i>Ajouter un prix d'articles
-                </Link>
+                <Button permission="price.view" onClick={() => getArticlePrices()} icon="arrow-clockwise" type="button" mode="secondary" className="me-2">Recharger</Button>
+                <PrimaryLink permission="price.create" to="/prices/add" icon="plus-lg">
+                    Ajouter un prix d'articles
+                </PrimaryLink>
             </div>
-        </div>
+        </PageTitle>
 
         <Block className="mb-5">
-            <table className="table table-striped">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Site</th>
@@ -108,7 +106,7 @@ export function PriceList(): ReactNode {
         </Block>
 
         <Block>
-            <table className="table table-striped mb-4">
+            <table className="table table-striped table-bordered mb-4 table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Site</th>

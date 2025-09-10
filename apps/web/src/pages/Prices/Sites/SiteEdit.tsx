@@ -1,15 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { ReactNode, useEffect } from 'react'
-import { NavLink, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Block } from 'ui'
 import { SiteForm } from '@base/pages/Prices'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { PrimaryLink } from '@base/components'
 
 export function SiteEdit(): ReactNode {
     const { Client, data: site } = useApi<Site>({
-        
-        
         url: '/prices/sites'
     })
 
@@ -31,9 +31,9 @@ export function SiteEdit(): ReactNode {
                 ) : (
                     <Skeleton count={1} style={{ height: 40 }} containerClassName="w-50" />
                 )}
-                <NavLink to="/prices/sites/list" className="btn btn-primary">
-                    <i className="bi bi-list me-2"></i>Liste des sites
-                </NavLink>
+                <PrimaryLink permission="site.view" icon='list' to="/prices/sites/list">
+                    Liste des sites
+                </PrimaryLink>
             </div>
 
             <Block className="mb-5">

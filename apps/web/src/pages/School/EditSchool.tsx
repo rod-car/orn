@@ -26,7 +26,7 @@ export function EditSchool(): ReactNode {
     return (
         <>
             <PageTitle title="Editer un école">
-                <PrimaryLink icon="list" to="/anthropo-measure/school/list">Liste des établissements</PrimaryLink>
+                <PrimaryLink permission="school.view" icon="list" to="/anthropo-measure/school/list">Liste des établissements</PrimaryLink>
             </PageTitle>
 
             <Block className="mb-5">

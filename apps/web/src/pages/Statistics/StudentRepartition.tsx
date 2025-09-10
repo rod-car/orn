@@ -6,7 +6,7 @@ import { SchoolBySchoolYearClass } from "./SchoolBySchoolYearClass.tsx";
 export function StudentRepartition(): ReactNode {
     return <>
         <PageTitle title="Repartition des étudiants">
-            <PrimaryLink to="/" icon="speedometer">Tableau de bord</PrimaryLink>
+            <PrimaryLink permission="dashboard.view" to="/" icon="speedometer">Tableau de bord</PrimaryLink>
         </PageTitle>
 
         <SchoolBySchoolYearClass />

@@ -1,4 +1,5 @@
 //react/no-unescaped-entities
+import NextTopLoader from 'nextjs-toploader';
 
 import "./custom.css";
 import type { Metadata } from "next";
@@ -6,8 +7,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import React from "react";
 
-import {Header} from "@/app/components/Header"
-import {Footer} from "@/app/components/Footer"
+import { Header } from "@/components/Header"
+import { Footer } from "@/components/Footer"
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -20,10 +21,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "ORN Atsinanana",
-    description: "Site officiel de l'Office Regional de Nutrition Atsinanana",
-    abstract: "Site officiel de l'Office Regional de Nutrition Atsinanana",
-    keywords: "Nutrition, Malnutrition, Atsinanana"
+    title: "Cantine scolaire - ORN Atsinanana",
+    description: "Site officiel du projet cantine scolaire dans la region atsinanana en partenatiat avec Ambatovy",
+    abstract: "Site officiel du projet cantine scolaire dans la region atsinanana en partenatiat avec Ambatovy",
+    keywords: "Nutrition, Malnutrition, Atsinanana, Cantine scolaire"
 };
 
 export default function RootLayout({ children }: Readonly<{
@@ -32,6 +33,12 @@ export default function RootLayout({ children }: Readonly<{
     return <>
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100 text-gray-800`}>
+                <NextTopLoader
+                    color="#071E78"
+                    initialPosition={0.1}
+                    crawlSpeed={300}
+                    height={4}
+                />
                 <div className="preloader">
                     <div className="loader">
                         <div className="ytp-spinner">
@@ -58,10 +65,10 @@ export default function RootLayout({ children }: Readonly<{
                 <a href="#" className="scroll-top">
                     <i className="lni lni-arrow-up"></i>
                 </a>
-                <Script src="/js/bootstrap.bundle-5.0.0.alpha-min.js"/>
-                <Script src="/js/count-up.min.js"/>
-                <Script src="/js/imagesloaded.min.js"/>
-                <Script src="/js/main.js"/>
+                <Script src="/js/bootstrap.bundle-5.0.0.alpha-min.js" />
+                <Script src="/js/count-up.min.js" />
+                <Script src="/js/imagesloaded.min.js" />
+                <Script src="/js/main.js" />
             </body>
         </html>
     </>

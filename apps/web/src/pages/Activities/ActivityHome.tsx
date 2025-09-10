@@ -14,7 +14,9 @@ export function ActivityHome(): ReactNode {
     const getActivities = async () => {
         await Client.get({
             imagesCount: 4,
-            take: 5
+            take: 5,
+            orderField: 'date',
+            orderDirection: 'desc'
         })
     }
 
@@ -24,7 +26,7 @@ export function ActivityHome(): ReactNode {
 
     return <>
         <PageTitle title="Nos dernières activités">
-            <PrimaryLink to="/activities/list" icon="list">
+            <PrimaryLink permission="activity.view" to="/activities/list" icon="list">
                 Tous nos activités
             </PrimaryLink>
         </PageTitle>
@@ -33,8 +35,10 @@ export function ActivityHome(): ReactNode {
 
         {activities && activities.length === 0 && <Block><h6 className="text-center m-0">Aucun activités récentes</h6></Block>}
 
-        {activities && activities.map((activity, index) => {
-            return <ActivityBlock activity={activity} index={index} />
-        })}
+        <div className="row">
+            {activities && activities.map((activity, index) => {
+                return <ActivityBlock activity={activity} key={index} />
+            })}
+        </div>
     </>
 }

@@ -1,17 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useApi, useAuthStore } from 'hooks'
+import { useApi } from 'hooks'
 import { ChangeEvent, ReactNode, useCallback, useEffect, useState } from 'react'
 import { createSearchParams } from 'react-router-dom'
 import { config, abaque } from '@base/config'
-import { Block, Button, PageTitle, Select } from 'ui'
+import { Block, DangerButton, PageTitle, Select } from 'ui'
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
-import { Link, PrimaryLink } from '@base/components'
+import { EditLink, PrimaryLink } from '@base/components'
 
 export function ListAbaque(): ReactNode {
     const [abaqueType, setAbaqueType] = useState(abaque.abaqueTypes[0].id)
     const { Client, RequestState, datas: abaques } = useApi<MeasureLength>({
-        
         url: '/measures'
     })
 
@@ -28,8 +27,6 @@ export function ListAbaque(): ReactNode {
     const handleTypeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
         setAbaqueType(e.target.value)
     }
-
-    const { isAdmin } = useAuthStore()
 
     const remove = async (abaqueId: number): Promise<void> => {
         confirmAlert({
@@ -72,7 +69,7 @@ export function ListAbaque(): ReactNode {
     return (
         <>
             <PageTitle title="Liste des abaques">
-                <PrimaryLink can={isAdmin} icon="plus-lg" to="/anthropo-measure/abaques/add">
+                <PrimaryLink permission="abaque.view" icon="plus-lg" to="/anthropo-measure/abaques/add">
                     Ajouter un abaque
                 </PrimaryLink>
             </PageTitle>
@@ -141,25 +138,21 @@ export function ListAbaque(): ReactNode {
                                             <td>{abaque['Z+90']}</td>
                                             <td>{abaque['Z+97']}</td>
                                             <td>
-                                                <Link
-                                                    can={isAdmin}
-                                                    className="me-2 btn btn-primary btn-sm"
+                                                <EditLink
+                                                    permission="abaque.edit"
+                                                    className="me-2 btn-sm"
                                                     to={{
                                                         pathname: `/anthropo-measure/abaques/edit/${abaque.id}`,
                                                         search: `?${createSearchParams({
                                                             type: abaqueType
                                                         })}`
                                                     }}
-                                                >
-                                                    <i className="bi bi-pencil-square"></i>
-                                                </Link>
+                                                />
 
-                                                <Button
-                                                    can={isAdmin}
+                                                <DangerButton
+                                                    permission="abaque.delete"
                                                     onClick={() => remove(abaque.id)}
-                                                    type="button"
                                                     icon="trash"
-                                                    mode="danger"
                                                     size="sm"
                                                 />
                                             </td>
@@ -206,8 +199,8 @@ export function ListAbaque(): ReactNode {
                                         <td>{abaque['Z+1']}</td>
                                         <td>{abaque['Z+2']}</td>
                                         <td>
-                                            <Link
-                                                can={isAdmin}
+                                            <EditLink
+                                                permission="abaque.edit"
                                                 className="me-2 btn btn-primary btn-sm"
                                                 to={{
                                                     pathname: `/anthropo-measure/abaques/edit/${abaque.id}`,
@@ -215,15 +208,12 @@ export function ListAbaque(): ReactNode {
                                                         type: abaqueType
                                                     })}`
                                                 }}
-                                            >
-                                                <i className="bi bi-pencil-square"></i>
-                                            </Link>
+                                            />
 
-                                            <Button
-                                                onClick={(): Promise<void> => remove(abaque.id)}
-                                                type="button"
+                                            <DangerButton
+                                                permission="abaque.delete"
+                                                onClick={() => remove(abaque.id)}
                                                 icon="trash"
-                                                mode="danger"
                                                 size="sm"
                                             />
                                         </td>
@@ -272,24 +262,21 @@ export function ListAbaque(): ReactNode {
                                         <td>{abaque['NORMAL-1']}</td>
                                         <td>{abaque['MEDIAN-0']}</td>
                                         <td>
-                                            <Link
-                                                can={isAdmin}
-                                                className="me-2 btn btn-primary btn-sm"
+                                            <EditLink
+                                                permission="abaque.edit"
+                                                className="me-2 btn-sm"
                                                 to={{
                                                     pathname: `/anthropo-measure/abaques/edit/${abaque.id}`,
                                                     search: `?${createSearchParams({
                                                         type: abaqueType
                                                     })}`
                                                 }}
-                                            >
-                                                <i className="bi bi-pencil-square"></i>
-                                            </Link>
+                                            />
 
-                                            <Button
-                                                onClick={(): Promise<void> => remove(abaque.id)}
-                                                type="button"
+                                            <DangerButton
+                                                permission="abaque.delete"
+                                                onClick={() => remove(abaque.id)}
                                                 icon="trash"
-                                                mode="danger"
                                                 size="sm"
                                             />
                                         </td>

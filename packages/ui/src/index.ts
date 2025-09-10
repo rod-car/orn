@@ -11,3 +11,4 @@ export { PageTitle } from "./Atoms/Nav";
 export { SearchableSelect, type Option, type Value } from './Atoms/SearchableSelect/SearchableSelect';
 export { HomeCard } from './Atoms/HomeCard/HomeCard';
 export { Block } from './Atoms/Block/Block';
+export * from "lucide-react";

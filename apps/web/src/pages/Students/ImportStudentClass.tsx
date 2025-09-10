@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Block, Input, PageTitle, PrimaryButton, Select, Spinner } from 'ui'
-import { useApi, useExcelReader } from 'hooks'
+import { useApi, useAuthStore, useExcelReader } from 'hooks'
 import { ChangeEvent, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { ClassSelector, PrimaryLink, ScholarYearSelectorServer, SchoolSelector } from '@base/components'
 import { class_categories, config } from '@base/config'
 import { isDate } from 'functions'
 import { toast } from 'react-toastify'
 import { Col, Modal, Row } from '@base/components/Bootstrap';
+import { Forbidden } from '../Errors/index.ts'
 
 export function ImportStudentClass(): ReactNode {
     const [isOpen, setIsOpen] = useState(false)
@@ -15,6 +16,7 @@ export function ImportStudentClass(): ReactNode {
     const [schoolId, setSchoolId] = useState<number>(0)
     const [category, setCategory] = useState<string>('')
     const [sheet, setSheet] = useState<string>('')
+    const [forbidden, setForbidden] = useState(false)
 
     const fileRef = useRef()
 
@@ -33,18 +35,15 @@ export function ImportStudentClass(): ReactNode {
 
     const { json, importing, sheets, getSheets, toJSON, resetJSON } = useExcelReader()
     const { Client, RequestState } = useApi<StudentImport>({
-        
         url: '/students'
     })
 
     const { Client: ClasseClient, datas: classes, RequestState: ClasseRs } = useApi<Classes>({
-        
         url: '/classes',
         key: 'data'
     })
 
     const { Client: SchoolClient, datas: schools, RequestState: SchoolRs } = useApi<School>({
-        
         url: '/schools',
         key: 'data'
     })
@@ -52,6 +51,12 @@ export function ImportStudentClass(): ReactNode {
     useEffect(() => {
         SchoolClient.get()
         ClasseClient.get()
+    }, [])
+
+    const {user} = useAuthStore()
+
+    useEffect(() => {
+        if (user?.school) setForbidden(true)
     }, [])
 
     const handleFileChange = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
@@ -119,12 +124,12 @@ export function ImportStudentClass(): ReactNode {
     return (
         <>
             <PageTitle title="Importer une liste des étudiants">
-                <PrimaryLink to="/anthropo-measure/student/list" icon="list">
+                <PrimaryLink permission="" to="/anthropo-measure/student/list" icon="list">
                     Liste des étudiants
                 </PrimaryLink>
             </PageTitle>
 
-            <Block className="mb-5">
+            {forbidden ? <Forbidden /> : <Block className="mb-5">
                 <Modal title="Consignes" isOpen={isOpen} onClose={() => setIsOpen(false)}>
                     <p className='text-justify'>Les colonnes dans le fichier Excel a importer doit avoir le même ordre que celui du tableau en dessous. En utilisant les nomenclatures suivante: 
                         <ul>
@@ -132,11 +137,11 @@ export function ImportStudentClass(): ReactNode {
                             <li><span className="fw-bold">noms: </span> le nom complet</li>
                             <li><span className="fw-bold">date_naissance: </span> la date de naissance</li>
                             <li><span className="fw-bold">sexe: </span> le sexe (Garçon ou Fille)</li>
-                            <li><span className="fw-bold">parents: </span> le nom des parents separé part "et"</li>
+                            <li><span className="fw-bold">parents: </span> le nom des parents séparé part "et"</li>
                         </ul>
                     </p>
 
-                    <p className='text-justify'><b><u>NB:</u></b> A bien respecter ces nomenclatures (les accents a respecter ainsi que les majuscules et miniscules) afin d'éviter des problèmes de fonctionnement de l'importation.</p>
+                    <p className='text-justify'><b><u>NB:</u></b> A bien respecter ces nomenclatures (les accents a respecter ainsi que les majuscules et miniscule) afin d'éviter des problèmes de fonctionnement de l'importation.</p>
                 </Modal>
                 <form>
                     <Row>
@@ -202,9 +207,10 @@ export function ImportStudentClass(): ReactNode {
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <h6 className='text-primary'>
                         Affichage de la liste{' '}
-                        {json.length > 0 && `(${json.length} Etudiant(s))`}
+                        {json.length > 0 && `(${json.length} Étudiant(s))`}
                     </h6>
                     {json.length > 0 && scholarYear as number > 0 && <PrimaryButton
+                        permission="student.import"
                         loading={RequestState.creating}
                         icon="save"
                         onClick={save}
@@ -212,7 +218,7 @@ export function ImportStudentClass(): ReactNode {
                 </div>
 
                 <div className="table-responsive border">
-                    <table className="table table-striped text-sm">
+                    <table className="table table-striped table-hover text-sm">
                         <thead>
                             <tr>
                                 <th className='bg-primary text-white'>N</th>
@@ -252,11 +258,12 @@ export function ImportStudentClass(): ReactNode {
                 {importing && <Spinner className="mt-4 text-center" isBorder />}
 
                 {canDisplayButton() && <PrimaryButton
+                    permission="student.import"
                     loading={RequestState.creating}
                     icon="save"
                     onClick={save}
                 >Enregistrer</PrimaryButton>}
-            </Block>
+            </Block>}
         </>
     )
 }

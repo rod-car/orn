@@ -1,8 +1,8 @@
 import { useApi, useAuthStore } from "hooks";
 import { ReactNode, useEffect } from "react";
-import { Block } from "ui";
+import { Block, PageTitle } from "ui";
 import { config } from '@base/config'
-import { ActivityLoading, Link } from "@base/components";
+import { ActivityLoading, Link, PrimaryLink } from "@base/components";
 import { toast } from "react-toastify";
 import { confirmAlert } from "react-confirm-alert";
 
@@ -70,18 +70,15 @@ export function ActivityTypeList(): ReactNode {
         })
     }
 
-    const { isAdmin } = useAuthStore()
-
     return <>
-        <div className="mb-5 d-flex justify-content-between align-items-center">
-            <h2>Types d'activités</h2>
-            <Link can={isAdmin} to="/activities/types/add" className="btn secondary-link me-2">
-                <i className="bi bi-plus-lg me-2"></i>Nouveau
-            </Link>
-        </div>
+        <PageTitle title="Types d'activités">
+            <PrimaryLink permission="activity-type.create" to="/activities/types/add" icon="plus-lg">
+                Nouveau type
+            </PrimaryLink>
+        </PageTitle>
 
         {RequestState.loading ? <ActivityLoading admin={true} /> : <Block>
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                     <tr>
                         <th>Nom de l'activité</th>

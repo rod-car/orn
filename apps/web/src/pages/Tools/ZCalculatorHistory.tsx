@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {ReactNode, useEffect} from "react";
 import {Block, PageTitle, Spinner} from "ui";
 import {PrimaryLink, Z} from "@base/components";
@@ -15,18 +16,18 @@ export function ZCalculatorHistory(): ReactNode {
 
     return <>
         <PageTitle title="Historique">
-            <PrimaryLink to="/tools/z-calculator" icon="plus">Calculateur de Z</PrimaryLink>
+            <PrimaryLink permission="tools.z-calculator" to="/tools/z-calculator" icon="plus">Calculateur de Z</PrimaryLink>
         </PageTitle>
 
         <Block>
-            {RequestState.loading ? <Spinner isBorder className="text-center" /> : <table className="table table-striped table-bordered">
+            {RequestState.loading ? <Spinner isBorder className="text-center" /> : <table className="table table-striped table-bordered table-hover text-sm">
                 <thead>
                 <tr>
                     <th>Code</th>
                     <th>Nom complet</th>
                     <th>Taille</th>
                     <th>Poids</th>
-                    <th>Resultats</th>
+                    <th>Résultats</th>
                 </tr>
                 </thead>
                 <tbody>

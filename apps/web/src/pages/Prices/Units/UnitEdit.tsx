@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
 import { ReactNode, useEffect } from 'react'
 import { useParams } from 'react-router-dom'

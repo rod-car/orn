@@ -127,7 +127,7 @@ export function DocumentForm({ editedDocument }: { editedDocument?: FileDocument
                 </div>
             </div>
 
-            <Button loading={RequestState.creating || RequestState.updating} icon="save" type="submit" mode="primary">
+            <Button permission="document.create" loading={RequestState.creating || RequestState.updating} icon="save" type="submit" mode="primary">
                 Enregistrer
             </Button>
         </form>

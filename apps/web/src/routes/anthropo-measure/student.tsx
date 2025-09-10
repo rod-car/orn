@@ -5,43 +5,43 @@ import { RouteObject } from "react-router";
 export const studentRoute: RouteObject[] = [
     {
         path: 'list',
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="student.view">
             <StudentList />
         </PrivateRoute>,
     },
     {
         path: 'add',
-        element: <PrivateRoute can={["admin"]}>
+        element: <PrivateRoute permission="student.create">
             <AddStudent />
         </PrivateRoute>
     },
     {
         path: 'edit/:id',
-        element: <PrivateRoute can={["super"]}>
+        element: <PrivateRoute permission="student.edit">
             <EditStudent />
         </PrivateRoute>
     },
     {
         path: 'import',
-        element: <PrivateRoute can={["admin"]}>
+        element: <PrivateRoute permission="student.import">
             <ImportStudent />
         </PrivateRoute>
     },
     {
         path: 'import-class',
-        element: <PrivateRoute can={["admin"]}>
+        element: <PrivateRoute permission="student.import-class">
             <ImportStudentClass />
         </PrivateRoute>
     },
     {
         path: 'details/:id',
-        element: <PrivateRoute>
+        element: <PrivateRoute permission="student.show">
             <DetailsStudent />
         </PrivateRoute>
     },
     {
         path: 'students-classes',
-        element: <PrivateRoute can={["admin"]}>
+        element: <PrivateRoute permission="student.update-class">
             <StudentsClasses />
         </PrivateRoute>
     }
