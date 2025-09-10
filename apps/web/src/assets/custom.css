@@ -337,3 +337,7 @@ border: 1px solid #071E78;
   margin-right: 1%;
   max-width: 98%;
 }
+
+.lazy-load-image-loaded {
+  width: 100%!important;
+}

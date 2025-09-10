@@ -139,7 +139,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
 
     useEffect(() => {
         ServiceClient.get()
-    }, [ServiceClient])
+    }, [])
 
     return (
         <form onSubmit={handleSubmit} method="post">

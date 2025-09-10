@@ -35,8 +35,10 @@ export function ActivityHome(): ReactNode {
 
         {activities && activities.length === 0 && <Block><h6 className="text-center m-0">Aucun activités récentes</h6></Block>}
 
-        {activities && activities.map((activity, index) => {
-            return <ActivityBlock activity={activity} key={index} index={index} />
-        })}
+        <div className="row">
+            {activities && activities.map((activity, index) => {
+                return <ActivityBlock activity={activity} key={index} />
+            })}
+        </div>
     </>
 }

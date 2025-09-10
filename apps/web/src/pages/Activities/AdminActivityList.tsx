@@ -78,7 +78,7 @@ export function AdminActivityList(): ReactNode {
                 {
                     label: 'Oui',
                     onClick: async (): Promise<void> => {
-                        const response = await Client.patch(id, {is_valid: true})
+                        const response = await Client.patch(id, {is_valid: false})
                         if (response.ok) {
                             toast('Validé', {
                                 type: 'success',
