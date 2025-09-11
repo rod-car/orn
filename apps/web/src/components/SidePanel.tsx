@@ -22,6 +22,7 @@ export function SidePanel(): ReactNode {
                     <GroupSeparator permission={["student.view", "school.view", "abaque.view", "anthropometry.view"]} title="Mesure anthropométrique" />
                     <DropDown icon="people" base="/anthropo-measure/student" label="Étudiants" permission="student.view" menus={[
                         { label: "Liste des étudiants", to: "/list", permission: "student.view" },
+                        { label: "Evolution des étudiants", to: "/evolutions", permission: "student.view" },
                         { label: "Ajouter un étudiant", to: "/add", permission: "student.create" },
                         { label: "Importer une liste globale", to: "/import", permission: "student.import" },
                         { label: "Mise a jour des classes", to: "/students-classes", permission: "student.update-class" },

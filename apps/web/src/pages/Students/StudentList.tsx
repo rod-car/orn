@@ -83,7 +83,7 @@ export function StudentList(): ReactNode {
     }, [])
 
     /**
-     * Traiter la suppréssion d'un étudiant
+     * Traiter la suppression d'un étudiant
      * @param id 
      */
     const handleDelete = useCallback(async (id: number) => {
@@ -190,7 +190,7 @@ export function StudentList(): ReactNode {
 
     return (
         <>
-            <PageTitle title={`Liste des etudiants ${!SRequestState.loading ? '(' + students?.total + ')' : ''}`}>
+            <PageTitle title={`Liste des étudiants ${!SRequestState.loading ? '(' + students?.total + ')' : ''}`}>
                 <div className="d-flex align-items-between">
                     <SecondaryButton
                         icon="arrow-clockwise"
@@ -199,8 +199,8 @@ export function StudentList(): ReactNode {
                         loading={SRequestState.loading}
                         permission="student.view"
                     >Recharger</SecondaryButton>
-                    <PrimaryLink permission="student.create" to="/anthropo-measure/student/add" icon="plus" className="me-2">Nouveau etudiant</PrimaryLink>
-                    <InfoLink permission="student.import" to="/anthropo-measure/student/import" icon="file-earmark-text">Importer une liste des etudiants</InfoLink>
+                    <PrimaryLink permission="student.create" to="/anthropo-measure/student/add" icon="plus" className="me-2">Nouveau étudiant</PrimaryLink>
+                    <InfoLink permission="student.import" to="/anthropo-measure/student/import" icon="file-earmark-text">Importer une liste des étudiants</InfoLink>
                 </div>
             </PageTitle>
 

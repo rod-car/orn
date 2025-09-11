@@ -1,5 +1,5 @@
 import { PrivateRoute } from "@base/components/Auth";
-import { AddStudent, DetailsStudent, EditStudent, ImportStudent, ImportStudentClass, StudentList, StudentsClasses } from "@base/pages/Students";
+import { AddStudent, DetailsStudent, EditStudent, ImportStudent, ImportStudentClass, StudentList, StudentsClasses, StudentEvolutions } from "@base/pages/Students";
 import { RouteObject } from "react-router";
 
 export const studentRoute: RouteObject[] = [
@@ -7,6 +7,12 @@ export const studentRoute: RouteObject[] = [
         path: 'list',
         element: <PrivateRoute permission="student.view">
             <StudentList />
+        </PrivateRoute>,
+    },
+    {
+        path: 'evolutions',
+        element: <PrivateRoute permission="student.view">
+            <StudentEvolutions />
         </PrivateRoute>,
     },
     {
