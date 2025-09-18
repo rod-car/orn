@@ -324,6 +324,8 @@ type StudentImport = Student & {
 }
 
 type Food = {
+    threshold_critical?: number;
+    threshold_warning?: number;
     id: number;
     label: string;
     unit: string;

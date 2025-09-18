@@ -341,3 +341,40 @@ border: 1px solid #071E78;
 .lazy-load-image-loaded {
   width: 100%!important;
 }
+
+.border-left-4 {
+  border-left: 4px solid !important;
+}
+
+.border-danger {
+  border-left-color: #dc3545 !important;
+}
+
+.border-warning {
+  border-left-color: #ffc107 !important;
+}
+
+.card-header h5 {
+  color: #495057;
+  font-weight: 600;
+}
+
+.badge {
+  font-size: 0.875rem;
+}
+
+.list-group-item {
+  transition: background-color 0.15s ease-in-out;
+  
+  &:hover {
+    background-color: #f8f9fa;
+  }
+}
+
+.table-responsive {
+  .table th {
+    border-top: none;
+    font-weight: 600;
+    color: #495057;
+  }
+}

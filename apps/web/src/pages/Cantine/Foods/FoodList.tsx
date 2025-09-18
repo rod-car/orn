@@ -77,13 +77,15 @@ export function FoodList(): ReactNode {
                             <th>#</th>
                             <th>Désignation</th>
                             <th>Unité</th>
+                            <th>Seuil d'alerte</th>
+                            <th>Seuil critique</th>
                             <th className="w-15">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {RequestState.loading && (
                             <tr>
-                                <td colSpan={4} className="text-center">
+                                <td colSpan={6} className="text-center">
                                     Chargement...
                                 </td>
                             </tr>
@@ -94,6 +96,8 @@ export function FoodList(): ReactNode {
                                     <td className="fw-bold">{index + 1}</td>
                                     <td>{food.label}</td>
                                     <td>{food.unit}</td>
+                                    <td>{food.threshold_warning}</td>
+                                    <td>{food.threshold_critical}</td>
                                     <td>
                                         <EditLink permission="food.edit" to={`/cantine/foods/edit/${food.id}`} />
                                         <DangerButton permission="food.delete" icon="trash" size="sm" onClick={() => handleDelete(food.id) }/>
@@ -103,7 +107,7 @@ export function FoodList(): ReactNode {
                         }
                         {!RequestState.loading && foods.length <= 0 && (
                             <tr>
-                                <td colSpan={4} className="text-center">
+                                <td colSpan={6} className="text-center">
                                     Aucune données
                                 </td>
                             </tr>

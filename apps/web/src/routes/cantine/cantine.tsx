@@ -9,7 +9,8 @@ import {
     RecapConso,
     Stock,
     StockIn,
-    StockOut
+    StockOut,
+    StockDashboard
 } from "@base/pages/Cantine"
 import { RouteObject } from "react-router"
 
@@ -74,6 +75,12 @@ export const cantineRoute: RouteObject[] = [
                 path: 'recap',
                 element: <PrivateRoute permission={['stock.recap']}>
                     <Stock />
+                </PrivateRoute>
+            },
+            {
+                path: 'dashboard',
+                element: <PrivateRoute permission={['stock.recap']}>
+                    <StockDashboard />
                 </PrivateRoute>
             },
         ]
