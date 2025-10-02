@@ -1,28 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks'
-import { ReactNode, useCallback, useEffect, useState, useMemo } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { Button, PageTitle, Select, Spinner } from 'ui'
 import { CardState } from '@base/components'
 import { scholar_years } from 'functions'
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
-  TooltipProps
-} from 'recharts'
-import { AlertTriangle, Package, TrendingDown, School } from 'lucide-react'
+import { AlertTriangle, Package, TrendingDown, School, ShoppingCart, Clock } from 'lucide-react'
 
-// Interfaces améliorées avec des types plus précis
+// Interfaces
 interface FoodItem {
   id: number
   label: string
@@ -31,11 +15,23 @@ interface FoodItem {
   threshold_critical: number
 }
 
+interface ForecastData {
+  quantity: number
+  unit: string
+  current_stock: number
+  difference: number
+  coverage_percentage: number | null
+  days_remaining: number | null
+  status: 'normal' | 'warning' | 'critical'
+  needs_order: boolean
+}
+
 interface SchoolStockStatus {
   school_id: number
   school_name: string
   current_stock: number
   status: 'normal' | 'warning' | 'critical'
+  forecast?: ForecastData
 }
 
 interface StockAlert {
@@ -44,17 +40,31 @@ interface StockAlert {
   message: string
 }
 
+interface ForecastSummary {
+  total_items: number
+  items_needing_order: number
+  critical_forecast: number
+  warning_forecast: number
+  schools_with_needs: number
+}
+
 interface StockSummary {
   total_foods: number
   critical_alerts: number
   warning_alerts: number
   total_schools: number
+  forecast_summary: ForecastSummary
 }
 
 interface StockData {
   food: FoodItem
   schools: SchoolStockStatus[]
   total_stock: number
+  forecast_summary?: {
+    total_quantity_needed: number
+    schools_needing_order: number
+    total_schools: number
+  }
 }
 
 interface DashboardData {
@@ -73,20 +83,12 @@ interface School {
   name: string
 }
 
-interface StockHistoryItem {
-  date: string
-  stock: number
-  entries: number
-  exits: number
-}
-
-// Composants enfants pour une meilleure organisation
+// Composants
 interface StatusBadgeProps {
   status: 'normal' | 'warning' | 'critical'
-  count: number
 }
 
-const StatusBadge: React.FC<StatusBadgeProps> = ({ status, count }) => {
+const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
   const statusConfig = {
     critical: { label: 'Critique', class: 'bg-red-100 text-red-800 border-red-200' },
     warning: { label: 'Attention', class: 'bg-yellow-100 text-yellow-800 border-yellow-200' },
@@ -97,7 +99,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, count }) => {
 
   return (
     <span className={`px-2 py-1 rounded-full text-xs font-medium border ${config.class}`}>
-      {count} {config.label}
+      {config.label}
     </span>
   )
 }
@@ -137,7 +139,10 @@ const DashboardFilters: React.FC<DashboardFiltersProps> = ({
           onChange={(e) => onSchoolChange(e.target.value)}
           options={
             schools
-              ? schools.map((s) => ({ id: s.id.toString(), label: s.name }))
+              ? [
+                  { id: '', label: 'Toutes les écoles' },
+                  ...schools.map((s) => ({ id: s.id.toString(), label: s.name }))
+                ]
               : []
           }
           placeholder="Toutes les écoles"
@@ -155,7 +160,7 @@ interface StatsCardsProps {
 
 const StatsCards: React.FC<StatsCardsProps> = ({ dashboardData, isLoading }) => {
   return (
-    <div className="row mb-5">
+    <div className="row mb-4">
       <div className="col-3">
         <CardState
           title="Collations suivis"
@@ -167,17 +172,23 @@ const StatsCards: React.FC<StatsCardsProps> = ({ dashboardData, isLoading }) => 
       <div className="col-3">
         <CardState
           title="Alertes critiques"
-          link="#"
+          link="#alerts"
           value={isLoading ? <Spinner /> : dashboardData?.summary?.critical_alerts || 0}
           icon={<AlertTriangle className="h-6 w-6 text-red-500" />}
         />
       </div>
       <div className="col-3">
         <CardState
-          title="Alertes attention"
-          link="#"
-          value={isLoading ? <Spinner /> : dashboardData?.summary?.warning_alerts || 0}
-          icon={<TrendingDown className="h-6 w-6 text-yellow-500" />}
+          title="Commandes nécessaires"
+          link="#stock-table"
+          value={
+            isLoading ? (
+              <Spinner />
+            ) : (
+              dashboardData?.summary?.forecast_summary?.items_needing_order || 0
+            )
+          }
+          icon={<ShoppingCart className="h-6 w-6 text-orange-500" />}
         />
       </div>
       <div className="col-3">
@@ -194,15 +205,16 @@ const StatsCards: React.FC<StatsCardsProps> = ({ dashboardData, isLoading }) => 
 
 interface AlertsSectionProps {
   alerts: StockAlert[]
+  stocks: StockData[]
 }
 
-const AlertsSection: React.FC<AlertsSectionProps> = ({ alerts }) => {
+const AlertsSection: React.FC<AlertsSectionProps> = ({ alerts, stocks }) => {
   return (
-    <div className="row mb-5">
+    <div className="row mb-4" id="alerts">
       <div className="col-12">
         <div className="card">
           <div className="card-header d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">🚨 Alertes de Stock</h5>
+            <h5 className="mb-0">🚨 Alertes de Stock Actuelles</h5>
             <small className="text-muted">
               Mise à jour: {new Date().toLocaleTimeString('fr-FR')}
             </small>
@@ -210,28 +222,91 @@ const AlertsSection: React.FC<AlertsSectionProps> = ({ alerts }) => {
           <div className="card-body">
             {alerts.length > 0 ? (
               <div className="list-group list-group-flush">
-                {alerts.map((alert, index) => (
-                  <div
-                    key={`${alert.food.id}-${alert.school.school_id}-${index}`}
-                    className={`list-group-item d-flex justify-content-between align-items-center border-left-4 ${
-                      alert.school.status === 'critical' ? 'border-danger' : 'border-warning'
-                    }`}
-                  >
-                    <div>
-                      <strong>{alert.food.label}</strong> - {alert.school.school_name}
-                      <br />
-                      <small className="text-muted">
-                        Stock actuel: {alert.school.current_stock} {alert.food.unit}
-                        (Seuil {alert.school.status === 'critical' ? 'critique' : 'attention'}:{
-                          alert.school.status === 'critical'
-                            ? alert.food.threshold_critical
-                            : alert.food.threshold_warning
-                        } {alert.food.unit})
-                      </small>
+                {alerts.map((alert, index) => {
+                  // Trouver les données de stock et forecast pour cette alerte
+                  const stockItem = stocks.find(s => s.food.id === alert.food.id)
+                  const schoolData = stockItem?.schools.find(
+                    s => s.school_id === alert.school.school_id
+                  )
+                  const forecast = schoolData?.forecast
+                  const hasForecast = forecast && forecast.quantity > 0
+
+                  return (
+                    <div
+                      key={`${alert.food.id}-${alert.school.school_id}-${index}`}
+                      className={`list-group-item border-start border-4 ${
+                        alert.school.status === 'critical' ? 'border-danger' : 'border-warning'
+                      }`}
+                    >
+                      <div className="d-flex justify-content-between align-items-start">
+                        <div className="flex-grow-1">
+                          <div className="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                              <strong className="d-block">{alert.food.label}</strong>
+                              <span className="text-muted small">{alert.school.school_name}</span>
+                            </div>
+                            <StatusBadge status={alert.school.status} />
+                          </div>
+
+                          <div className="row g-2 mt-2">
+                            <div className="col-md-6">
+                              <div className="p-2 bg-light rounded">
+                                <small className="text-muted d-block">Stock actuel</small>
+                                <strong>
+                                  {alert.school.current_stock} {alert.food.unit}
+                                </strong>
+                                <small className="text-muted d-block mt-1">
+                                  Seuil {alert.school.status === 'critical' ? 'critique' : 'attention'}:{' '}
+                                  {alert.school.status === 'critical'
+                                    ? alert.food.threshold_critical
+                                    : alert.food.threshold_warning}{' '}
+                                  {alert.food.unit}
+                                </small>
+                              </div>
+                            </div>
+
+                            {hasForecast && (
+                              <div className="col-md-6">
+                                <div className="p-2 bg-warning bg-opacity-10 rounded border border-warning">
+                                  <small className="text-muted d-block">
+                                    Prévision (2 semaines)
+                                  </small>
+                                  <strong className="text-warning">
+                                    {forecast.quantity} {forecast.unit}
+                                  </strong>
+                                  <div className="mt-1">
+                                    <span
+                                      className={`badge ${
+                                        forecast.difference < 0 ? 'bg-danger' : 'bg-success'
+                                      } me-1`}
+                                    >
+                                      {forecast.difference >= 0 ? '+' : ''}
+                                      {forecast.difference.toFixed(1)} {forecast.unit}
+                                    </span>
+                                    {forecast.days_remaining !== null && (
+                                      <span className="badge bg-secondary">
+                                        <Clock className="h-3 w-3 d-inline me-1" />
+                                        {forecast.days_remaining} jours
+                                      </span>
+                                    )}
+                                  </div>
+                                  {forecast.needs_order && (
+                                    <div className="mt-2">
+                                      <span className="badge bg-danger">
+                                        <ShoppingCart className="h-3 w-3 d-inline me-1" />
+                                        Commande nécessaire
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <StatusBadge status={alert.school.status} count={1} />
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             ) : (
               <div className="text-center py-4 text-success">
@@ -245,156 +320,19 @@ const AlertsSection: React.FC<AlertsSectionProps> = ({ alerts }) => {
   )
 }
 
-interface ChartsSectionProps {
-  stocks: StockData[]
-}
-
-const ChartsSection: React.FC<ChartsSectionProps> = ({ stocks }) => {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'critical': return '#ef4444'
-      case 'warning': return '#f59e0b'
-      default: return '#10b981'
-    }
-  }
-
-  // Préparer les données pour les graphiques avec useMemo pour éviter des recalculs inutiles
-  const stocksByStatus = useMemo(() => {
-    return stocks.reduce((acc, item) => {
-      item.schools.forEach(school => {
-        acc[school.status] = (acc[school.status] || 0) + 1
-      })
-      return acc
-    }, {} as Record<string, number>)
-  }, [stocks])
-
-  const pieChartData = useMemo(() => {
-    return Object.entries(stocksByStatus).map(([status, count]) => ({
-      name: status === 'critical' ? 'Critique' : status === 'warning' ? 'Attention' : 'Normal',
-      value: count,
-      color: getStatusColor(status)
-    }))
-  }, [stocksByStatus])
-
-  const stockLevelsData = useMemo(() => {
-    return stocks.map(item => ({
-      food: item.food.label,
-      stock: item.total_stock,
-      warning: item.food.threshold_warning,
-      critical: item.food.threshold_critical,
-      unit: item.food.unit
-    }))
-  }, [stocks])
-
-  // Custom tooltip pour le graphique à barres
-  const CustomBarTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      const unit = payload[0]?.payload?.unit || ''
-      const labels: Record<string, string> = {
-        stock: 'Stock actuel',
-        warning: 'Seuil attention',
-        critical: 'Seuil critique'
-      }
-
-      return (
-        <div className="custom-tooltip bg-white p-2 border border-gray-200 rounded shadow">
-          <p className="font-weight-bold">{label}</p>
-          {payload.map((entry, index) => (
-            <p key={`item-${index}`} style={{ color: entry.color }}>
-              {`${labels[entry.dataKey as string] || entry.dataKey}: ${entry.value} ${unit}`}
-            </p>
-          ))}
-        </div>
-      )
-    }
-    return null
-  }
-
-  return (
-    <div className="row mb-5">
-      <div className="col-8">
-        <div className="card">
-          <div className="card-header">
-            <h5 className="mb-0">📊 Niveaux de Stock par Collation</h5>
-          </div>
-          <div className="card-body">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={stockLevelsData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="food" />
-                <YAxis />
-                <Tooltip content={<CustomBarTooltip />} />
-                <Legend
-                  formatter={(value) => {
-                    const labels: Record<string, string> = {
-                      stock: 'Stock actuel',
-                      warning: 'Seuil attention',
-                      critical: 'Seuil critique'
-                    }
-                    return labels[value] || value
-                  }}
-                />
-                <Bar dataKey="stock" fill="#3b82f6" name="stock" />
-                <Bar dataKey="warning" fill="#f59e0b" name="warning" />
-                <Bar dataKey="critical" fill="#ef4444" name="critical" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
-      <div className="col-4">
-        <div className="card">
-          <div className="card-header">
-            <h5 className="mb-0">🎯 Répartition des Statuts</h5>
-          </div>
-          <div className="card-body">
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={pieChartData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={120}
-                  dataKey="value"
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                >
-                  {pieChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 interface StockTableProps {
   stocks: StockData[]
-  schools: School[] | null
   selectedSchool: string
-  onFoodSelect: (foodId: number, foodName: string) => void
   onRefresh: () => void
 }
 
-const StockTable: React.FC<StockTableProps> = ({
-  stocks,
-  schools,
-  selectedSchool,
-  onFoodSelect,
-  onRefresh
-}) => {
+const StockTable: React.FC<StockTableProps> = ({ stocks, selectedSchool, onRefresh }) => {
   return (
-    <div className="row mb-5">
+    <div className="row mb-4" id="stock-table">
       <div className="col-12">
         <div className="card">
           <div className="card-header d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">📋 État Détaillé des Stocks</h5>
+            <h5 className="mb-0">📋 Stocks et Prévisions (2 semaines)</h5>
             <button
               className="btn btn-outline-primary btn-sm"
               onClick={onRefresh}
@@ -405,54 +343,121 @@ const StockTable: React.FC<StockTableProps> = ({
           </div>
           <div className="card-body">
             <div className="table-responsive">
-              <table className="table table-hover">
-                <thead>
+              <table className="table table-hover align-middle">
+                <thead className="table-light">
                   <tr>
                     <th>Collation</th>
-                    <th>Stock Total</th>
-                    <th>Unité</th>
-                    <th>Seuil Attention</th>
-                    <th>Seuil Critique</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
+                    {!selectedSchool && <th className="text-center">Écoles concernées</th>}
+                    <th className="text-end">Stock Actuel</th>
+                    <th className="text-end">Besoin (2 sem.)</th>
+                    <th className="text-end">Différence</th>
+                    <th className="text-center">Couverture</th>
+                    <th className="text-center">Jours restants</th>
+                    <th className="text-center">Statut</th>
+                    <th className="text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {stocks.map((item) => {
-                    const minStatus = item.schools.reduce((min, school) => {
-                      if (school.status === 'critical') return 'critical'
-                      if (school.status === 'warning' && min !== 'critical') return 'warning'
-                      return min
-                    }, 'normal' as const)
+                    // Si une école est sélectionnée, prendre ses données
+                    const schoolData = selectedSchool
+                      ? item.schools.find((s) => s.school_id.toString() === selectedSchool)
+                      : null
+
+                    // Pour toutes les écoles, calculer les totaux
+                    const totalStock = selectedSchool
+                      ? schoolData?.current_stock || 0
+                      : item.total_stock
+
+                    const totalForecast = selectedSchool
+                      ? schoolData?.forecast?.quantity || 0
+                      : item.forecast_summary?.total_quantity_needed || 0
+
+                    const difference = totalStock - totalForecast
+                    const coverage = totalForecast > 0 
+                      ? ((totalStock / totalForecast) * 100).toFixed(0) 
+                      : null
+
+                    const daysRemaining = selectedSchool && schoolData?.forecast
+                      ? schoolData.forecast.days_remaining
+                      : totalForecast > 0
+                      ? ((totalStock / totalForecast) * 14).toFixed(1)
+                      : null
+
+                    const status = selectedSchool && schoolData?.forecast
+                      ? schoolData.forecast.status
+                      : totalStock <= totalForecast * 0.5
+                      ? 'critical'
+                      : totalStock <= totalForecast
+                      ? 'warning'
+                      : 'normal'
+
+                    const needsOrder = difference < 0
 
                     return (
-                      <tr key={item.food.id}>
+                      <tr key={item.food.id} className={needsOrder ? 'table-warning' : ''}>
                         <td>
                           <strong>{item.food.label}</strong>
                           <br />
-                          <small className="text-muted">
-                            {item.schools.length} école(s) concernée(s)
-                          </small>
+                          <small className="text-muted">{item.food.unit}</small>
                         </td>
-                        <td>
-                          <span className="badge badge-primary">
-                            {item.total_stock}
+                        {!selectedSchool && (
+                          <td className="text-center">
+                            <span className="badge bg-secondary">
+                              {item.forecast_summary?.schools_needing_order || 0} /{' '}
+                              {item.forecast_summary?.total_schools || 0}
+                            </span>
+                          </td>
+                        )}
+                        <td className="text-end">
+                          <strong>{totalStock.toFixed(2)}</strong>
+                        </td>
+                        <td className="text-end">
+                          <strong>{totalForecast.toFixed(2)}</strong>
+                        </td>
+                        <td className="text-end">
+                          <span className={difference < 0 ? 'text-danger' : 'text-success'}>
+                            {difference >= 0 ? '+' : ''}
+                            {difference.toFixed(2)}
                           </span>
                         </td>
-                        <td>{item.food.unit}</td>
-                        <td>{item.food.threshold_warning}</td>
-                        <td>{item.food.threshold_critical}</td>
-                        <td><StatusBadge status={minStatus} count={1} /></td>
-                        <td>
-                          <Button
-                            permission="*"
-                            className="btn-outline-info btn-sm"
-                            onClick={() => onFoodSelect(item.food.id, item.food.label)}
-                            disabled={!selectedSchool}
-                            aria-label={`Voir l'historique de ${item.food.label}`}
-                          >
-                            📈 Historique
-                          </Button>
+                        <td className="text-center">
+                          {coverage ? (
+                            <span
+                              className={`badge ${
+                                parseFloat(coverage) < 50
+                                  ? 'bg-danger'
+                                  : parseFloat(coverage) < 100
+                                  ? 'bg-warning'
+                                  : 'bg-success'
+                              }`}
+                            >
+                              {coverage}%
+                            </span>
+                          ) : (
+                            <span className="text-muted">-</span>
+                          )}
+                        </td>
+                        <td className="text-center">
+                          {daysRemaining ? (
+                            <span className="d-flex align-items-center justify-content-center gap-1">
+                              <Clock className="h-4 w-4" />
+                              {daysRemaining} j
+                            </span>
+                          ) : (
+                            <span className="text-muted">-</span>
+                          )}
+                        </td>
+                        <td className="text-center">
+                          <StatusBadge status={status} />
+                        </td>
+                        <td className="text-center">
+                          {needsOrder && (
+                            <span className="badge bg-danger">
+                              <ShoppingCart className="h-3 w-3 d-inline me-1" />
+                              Commander
+                            </span>
+                          )}
                         </td>
                       </tr>
                     )
@@ -467,110 +472,52 @@ const StockTable: React.FC<StockTableProps> = ({
   )
 }
 
-interface HistoryChartProps {
-  stockHistory: StockHistoryItem[] | null
-  selectedFoodName: string
+interface SchoolDetailProps {
+  stocks: StockData[]
   selectedSchool: string
   schools: School[] | null
-  onClose: () => void
 }
 
-const HistoryChart: React.FC<HistoryChartProps> = ({
-  stockHistory,
-  selectedFoodName,
-  selectedSchool,
-  schools,
-  onClose
-}) => {
-  // Custom tooltip pour le graphique d'historique
-  const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="custom-tooltip bg-white p-2 border border-gray-200 rounded shadow">
-          <p className="font-weight-bold">{new Date(label).toLocaleDateString('fr-FR')}</p>
-          {payload.map((entry, index) => {
-            const labels: Record<string, string> = {
-              stock: 'Stock actuel',
-              entries: 'Entrées',
-              exits: 'Sorties'
-            }
-            return (
-              <p key={`item-${index}`} style={{ color: entry.color }}>
-                {`${labels[entry.dataKey as string] || entry.dataKey}: ${entry.value}`}
-              </p>
-            )
-          })}
-        </div>
-      )
-    }
-    return null
-  }
+const SchoolDetail: React.FC<SchoolDetailProps> = ({ stocks, selectedSchool, schools }) => {
+  const school = schools?.find((s) => s.id.toString() === selectedSchool)
+  
+  // Compter les items nécessitant une commande
+  const itemsNeedingOrder = stocks.filter((item) => {
+    const schoolData = item.schools.find((s) => s.school_id.toString() === selectedSchool)
+    return schoolData?.forecast?.needs_order
+  }).length
+
+  const criticalItems = stocks.filter((item) => {
+    const schoolData = item.schools.find((s) => s.school_id.toString() === selectedSchool)
+    return schoolData?.forecast?.status === 'critical'
+  }).length
 
   return (
-    <div className="row mb-5">
+    <div className="row mb-4">
       <div className="col-12">
-        <div className="card">
-          <div className="card-header d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">
-              📈 Évolution du Stock - {selectedFoodName}
-              {selectedSchool && schools && (
-                <small className="text-muted ms-2">
-                  ({schools.find((s) => s.id.toString() === selectedSchool)?.name || 'École sélectionnée'})
-                </small>
-              )}
-            </h5>
-            <Button
-              permission="*"
-              className="btn-outline-secondary btn-sm"
-              onClick={onClose}
-              aria-label="Fermer l'historique"
-            >
-              Fermer
-            </Button>
-          </div>
-          <div className="card-body">
-            {stockHistory ? (
-              <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={stockHistory}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="date"
-                    tickFormatter={(date) => new Date(date).toLocaleDateString('fr-FR')}
-                  />
-                  <YAxis />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="stock"
-                    stroke="#3b82f6"
-                    strokeWidth={2}
-                    name="Stock actuel"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="entries"
-                    stroke="#10b981"
-                    strokeWidth={1}
-                    strokeDasharray="5 5"
-                    name="Entrées"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="exits"
-                    stroke="#ef4444"
-                    strokeWidth={1}
-                    strokeDasharray="5 5"
-                    name="Sorties"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="text-center py-4">
-                <Spinner />
-                <p>Chargement de l'historique...</p>
+        <div className="alert alert-info">
+          <h6 className="alert-heading mb-3">
+            📊 Résumé pour: <strong>{school?.name}</strong>
+          </h6>
+          <div className="row">
+            <div className="col-4">
+              <div className="text-center">
+                <div className="h3 mb-0">{itemsNeedingOrder}</div>
+                <small className="text-muted">Articles à commander</small>
               </div>
-            )}
+            </div>
+            <div className="col-4">
+              <div className="text-center">
+                <div className="h3 mb-0 text-danger">{criticalItems}</div>
+                <small className="text-muted">Niveaux critiques</small>
+              </div>
+            </div>
+            <div className="col-4">
+              <div className="text-center">
+                <div className="h3 mb-0">{stocks.length}</div>
+                <small className="text-muted">Total collations</small>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -582,35 +529,20 @@ const HistoryChart: React.FC<HistoryChartProps> = ({
 export function StockDashboard(): ReactNode {
   const [scholarYear, setScholarYear] = useState<string>(scholar_years().at(0) as string)
   const [selectedSchool, setSelectedSchool] = useState<string>('')
-  const [selectedFood, setSelectedFood] = useState<number | null>(null)
-  const [selectedFoodName, setSelectedFoodName] = useState<string>('')
 
-  // API calls avec gestion d'erreur améliorée
-  const { 
-    Client: DashboardClient, 
-    datas: dashboardData, 
-    loading: dashboardLoading, 
-    error: dashboardError 
+  // API calls
+  const {
+    Client: DashboardClient,
+    datas: dashboardData,
+    loading: dashboardLoading,
+    error: dashboardError
   } = useApi<DashboardData>({
     url: '/stocks/dashboard',
     key: 'data'
   })
 
-  const { 
-    Client: SchoolClient, 
-    datas: schools,
-    loading: schoolsLoading 
-  } = useApi<{ data: School[] }>({
-    url: '/schools',
-  })
-
-  const { 
-    Client: HistoryClient, 
-    data: stockHistory,
-    loading: historyLoading 
-  } = useApi<StockHistoryItem[]>({
-    url: `/stocks/history`,
-    key: 'data'
+  const { Client: SchoolClient, datas: schools } = useApi<{ data: School[] }>({
+    url: '/schools'
   })
 
   const loadDashboard = useCallback(async () => {
@@ -632,40 +564,11 @@ export function StockDashboard(): ReactNode {
     }
   }, [SchoolClient])
 
-  const loadHistory = useCallback(async () => {
-    if (selectedFood === null) return
-    const params: { year: number; school_id?: string } = { year: parseInt(scholarYear) }
-    if (selectedSchool) params.school_id = selectedSchool
-
-    try {
-      await HistoryClient.find(selectedFood, params)
-    } catch (error) {
-      console.error('Erreur lors du chargement de l\'historique:', error)
-    }
-  }, [selectedFood, scholarYear, selectedSchool, HistoryClient])
-
   useEffect(() => {
     loadDashboard()
     loadSchools()
   }, [scholarYear, selectedSchool])
 
-  useEffect(() => {
-    if (selectedFood !== null) {
-      loadHistory()
-    }
-  }, [selectedFood, scholarYear, selectedSchool])
-
-  const handleFoodSelection = (foodId: number, foodName: string) => {
-    setSelectedFood(foodId)
-    setSelectedFoodName(foodName)
-  }
-
-  const closeFoodHistory = () => {
-    setSelectedFood(null)
-    setSelectedFoodName('')
-  }
-
-  // Gestion des états de chargement et d'erreur
   if (dashboardError) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -676,7 +579,7 @@ export function StockDashboard(): ReactNode {
 
   return (
     <>
-      <PageTitle title="Tableau de Bord - Suivi des Stocks" />
+      <PageTitle title="Tableau de Bord - Stocks et Prévisions" />
 
       <DashboardFilters
         scholarYear={scholarYear}
@@ -686,35 +589,25 @@ export function StockDashboard(): ReactNode {
         schools={schools?.data || null}
       />
 
-      <StatsCards 
-        dashboardData={dashboardData || null} 
-        isLoading={dashboardLoading} 
-      />
+      <StatsCards dashboardData={dashboardData || null} isLoading={dashboardLoading} />
 
-      {dashboardData && dashboardData.alerts && (
-        <AlertsSection alerts={dashboardData.alerts} />
+      {selectedSchool && dashboardData && (
+        <SchoolDetail
+          stocks={dashboardData.stocks}
+          selectedSchool={selectedSchool}
+          schools={schools?.data || null}
+        />
+      )}
+
+      {dashboardData && dashboardData.alerts && dashboardData.alerts.length > 0 && (
+        <AlertsSection alerts={dashboardData.alerts} stocks={dashboardData.stocks} />
       )}
 
       {dashboardData && dashboardData.stocks && (
-        <>
-          <ChartsSection stocks={dashboardData.stocks} />
-          <StockTable
-            stocks={dashboardData.stocks}
-            schools={schools?.data || null}
-            selectedSchool={selectedSchool}
-            onFoodSelect={handleFoodSelection}
-            onRefresh={loadDashboard}
-          />
-        </>
-      )}
-
-      {selectedFood !== null && (
-        <HistoryChart
-          stockHistory={stockHistory || null}
-          selectedFoodName={selectedFoodName}
+        <StockTable
+          stocks={dashboardData.stocks}
           selectedSchool={selectedSchool}
-          schools={schools?.data || null}
-          onClose={closeFoodHistory}
+          onRefresh={loadDashboard}
         />
       )}
     </>
