@@ -7,7 +7,7 @@ import { config } from '@base/config'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router'
 
-const defaultFood = { label: '', unit: '' }
+const defaultFood = { label: '', unit: '', threshold_critical: 0, threshold_warning: 0 }
 
 export function FoodAdd(): ReactNode {
     const [food, setFood] = useState(defaultFood)
@@ -81,7 +81,7 @@ export function FoodAdd(): ReactNode {
             <Block>
                 <form onSubmit={handleSubmit} method="post">
                     <div className="row mb-4">
-                        <div className="col-xl-6">
+                        <div className="col-xl-6 mb-3">
                             <Input
                                 onChange={handleInputChange}
                                 value={food.label}
@@ -91,7 +91,7 @@ export function FoodAdd(): ReactNode {
                                 name="label"
                             />
                         </div>
-                        <div className="col-xl-6">
+                        <div className="col-xl-6 mb-3">
                             <Input
                                 onChange={handleInputChange}
                                 value={food.unit}
@@ -99,6 +99,26 @@ export function FoodAdd(): ReactNode {
                                 label="Unité"
                                 placeholder="Ex: Kg"
                                 name="unit"
+                            />
+                        </div>
+                        <div className="col-xl-6">
+                            <Input
+                                type='number'
+                                onChange={handleInputChange}
+                                value={food.threshold_warning}
+                                error={error?.data?.errors?.label}
+                                label="Seuil d'alerte"
+                                name="threshold_warning"
+                            />
+                        </div>
+                        <div className="col-xl-6">
+                            <Input
+                                type='number'
+                                onChange={handleInputChange}
+                                value={food.threshold_critical}
+                                error={error?.data?.errors?.unit}
+                                label="Seuil critique"
+                                name="threshold_critical"
                             />
                         </div>
                     </div>

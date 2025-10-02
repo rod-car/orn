@@ -57,6 +57,7 @@ export function SidePanel(): ReactNode {
                         { to: '/statistics', label: 'Récapitulatifs', permission: "consommation.statistics" }
                     ]}/>
                     <DropDown label="Gestion de stocks" base="/cantine/stocks" icon="file" permission="stock.view" menus={[
+                        { to: '/dashboard', label: 'Tableau de bord', permission: "stock.recap" },
                         { to: '/in', label: 'Entree', permission: "stock.in" },
                         { to: '/out', label: 'Sortie', permission: "stock.out" },
                         { to: '/recap', label: 'Fiche de stock', permission: "stock.recap" },
