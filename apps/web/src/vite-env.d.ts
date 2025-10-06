@@ -336,3 +336,17 @@ type InputChange = ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAr
 type OneSheet = Record<string, string>[];
 type MultiSheet = Record<string, OneSheet>
 type ScholarYear = { id: string; label: string }
+
+type Justificative = {
+    id?: number; // Optional for creation, required for updates and display
+    name: string; // The name of the justificative document
+    file_path?: string; // The storage path of the uploaded file (returned by API)
+    file_type?: string; // The MIME type of the file (e.g., application/pdf)
+    file_size?: number; // The size of the file in bytes
+    file?: File; // The file object for form uploads (used in JustificativeForm)
+    creator?: {
+        name: string; // The name of the user who uploaded the justificative
+    }; // Derived from the uploaded_by foreign key
+    created_at?: string; // Timestamp for when the justificative was created
+    updated_at?: string; // Timestamp for when the justificative was last updated
+}

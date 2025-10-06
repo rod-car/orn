@@ -9,6 +9,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { AppRoot, About, Contributors, HomePage } from '@base/pages/App';
 import { studentRoute, abaqueRoute, schoolRoute, surveyRoute, statisticRoute } from '@base/routes/anthropo-measure';
 import { documentRoute } from '@base/routes/document/documents';
+import { justificativeRoute } from '@base/routes/justificative/justificative';
 import { toolsRoute } from '@base/routes/tools/tools';
 import { securityRoute } from './routes/user';
 
@@ -59,6 +60,7 @@ const router = createBrowserRouter([
             { path: 'activities', children: activityRoute },
             { path: 'prices', children: priceRoute },
             { path: 'documents', children: documentRoute },
+            { path: 'justificatives', children: justificativeRoute },
             { path: 'tools', children: toolsRoute },
         ],
     },

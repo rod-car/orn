@@ -27,7 +27,7 @@ export function BasicCard({title, body, icon, actionLabel = "Click me", actionLi
             <div className="intro">{body ? body : props.children}</div>
         </div>
         {typeof actionLabel === 'object' ? <div className="app-card-footer p-4 mt-auto">{actionLabel}</div> : (actionLink && <div className="app-card-footer p-4 mt-auto">
-            <Link className="btn app-btn-secondary" to={actionLink}>{actionLabel}</Link>
+            <Link permission="justificative.show" className="btn app-btn-secondary" to={actionLink}>{actionLabel}</Link>
         </div>)}
     </div>
 }
