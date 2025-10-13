@@ -94,7 +94,7 @@ export function StudentList(): ReactNode {
                 {
                     label: 'Oui',
                     onClick: async () => {
-                        const response = await StudentClient.destroy(id)
+                        const response = await StudentClient.destroy(id, {scholar_year_id: scholarYear})
                         if (response.ok) {
                             toast('Supprime', {
                                 closeButton: true,
@@ -178,7 +178,7 @@ export function StudentList(): ReactNode {
         }, 500)
 
         setTimeoutId(newTimeoutId)
-    }, [setQuery, setTimeoutId, filterStudents])
+    }, [timeoutId, filterStudents])
 
     /**
      * Changer de la page de la pagination

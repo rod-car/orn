@@ -130,20 +130,41 @@ export function StudentsClasses(): ReactNode {
      */
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
-        const response = await StudentClient.post(getParams(), '/update-classes')
 
-        if (response.ok) {
-            toast("Enregistré", { position: config.toastPosition, type: 'success' })
-            setActualScholarYear(nextScholarYear)
-            setNextScholarYear('')
+        confirmAlert({
+            title: 'Question',
+            message: 'Voulez-vous enregistrer ?',
+            buttons: [
+                {
+                    label: 'Oui',
+                    onClick: async () => {
+                        const response = await StudentClient.post(getParams(), '/update-classes')
 
-            setActualClassId(nextClassId)
-            setNextClassId(0)
+                        if (response.ok) {
+                            toast("Enregistré", { position: config.toastPosition, type: 'success' })
+                            setActualScholarYear(nextScholarYear)
+                            setNextScholarYear('')
 
-            setStudentsClasses([])
-        } else {
-            toast("Erreur de soumission", { position: config.toastPosition, type: 'error' })
-        }
+                            setActualClassId(nextClassId)
+                            setNextClassId(0)
+
+                            setStudentsClasses([])
+                        } else {
+                            toast("Erreur de soumission", { position: config.toastPosition, type: 'error' })
+                        }
+                    }
+                },
+                {
+                    label: 'Non',
+                    onClick: () =>
+                        toast('Annulé', {
+                            closeButton: true,
+                            type: 'info',
+                            position: config.toastPosition
+                        })
+                }
+            ]
+        })
     }
 
     /**
@@ -285,6 +306,7 @@ export function StudentsClasses(): ReactNode {
                             <thead>
                                 <tr>
                                     <th>N°</th>
+                                    <th>Code</th>
                                     <th>Nom et prénoms</th>
                                     <th>Date de naissance</th>
                                     <th>Sexe</th>
@@ -292,9 +314,10 @@ export function StudentsClasses(): ReactNode {
                                 </tr>
                             </thead>
                             <tbody>
-                                {StudentRequestState.loading && <TableLoading cols={5} rows={10} />}
-                                {students && students.map((studentClass, index) => <tr key={studentClass.id}>
+                                {StudentRequestState.loading && <TableLoading cols={6} rows={10} />}
+                                {students && students.filter(studentClass => studentClass.student !== null && studentClass.student !== undefined).map((studentClass, index) => <tr key={studentClass.id}>
                                     <td>{index + 1}</td>
+                                    <td>{studentClass.student.number}</td>
                                     <td>{studentClass.student.firstname} {studentClass.student.lastname}</td>
                                     <td>{studentClass.student.birth_date && format(studentClass.student.birth_date, "dd/MM/y")}</td>
                                     <td>{studentClass.student.gender}</td>
@@ -316,7 +339,7 @@ export function StudentsClasses(): ReactNode {
 
                                 {!StudentRequestState.loading && students.length === 0 && (
                                     <tr>
-                                        <td colSpan={5} className="text-center">
+                                        <td colSpan={6} className="text-center">
                                             Aucune données
                                         </td>
                                     </tr>
