@@ -4,7 +4,7 @@ import { useApi } from "hooks";
 import { ReactNode, useEffect, useState } from "react";
 import { confirmAlert } from "react-confirm-alert";
 import Skeleton from "react-loading-skeleton";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 import { Button, Block, Input, Textarea } from "ui";
 
 export function Materiel(): ReactNode {
@@ -43,15 +43,13 @@ export function Materiel(): ReactNode {
                         if (response.ok) {
                             toast('Supprimé', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             setDatas(materiels.filter(mat => mat.id !== id))
                         } else {
                             toast('Erreur de suppréssion', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -61,8 +59,7 @@ export function Materiel(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]
@@ -81,7 +78,6 @@ export function Materiel(): ReactNode {
 
         if (response.ok) {
             toast(materiel.id === 0 ? 'Crée' : 'Modifié', {
-                position: config.toastPosition,
                 type: 'success'
             })
             setMateriel(defaultMateriel)
@@ -96,7 +92,6 @@ export function Materiel(): ReactNode {
             }
         } else {
             toast(materiel.id === 0 ? 'Echec de création' : 'Echec de mise a jour', {
-                position: config.toastPosition,
                 type: 'error'
             })
         }

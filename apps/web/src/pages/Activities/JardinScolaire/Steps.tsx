@@ -4,7 +4,7 @@ import { useApi } from "hooks";
 import { ReactNode, useEffect, useState } from "react";
 import { confirmAlert } from "react-confirm-alert";
 import Skeleton from "react-loading-skeleton";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 import { Button, Block, Input, Textarea, Select } from "ui";
 
 type StepsDetails = { label: string, dataType: string, unit: string, referenceColumn?: string, referenceType?: string }
@@ -56,15 +56,13 @@ export function Steps(): ReactNode {
                         if (response.ok) {
                             toast('Supprimé', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             setDatas(datas.filter(step => step.id !== id))
                         } else {
                             toast('Erreur de suppréssion', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -74,8 +72,7 @@ export function Steps(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]
@@ -94,7 +91,6 @@ export function Steps(): ReactNode {
 
         if (response.ok) {
             toast(step.id === 0 ? 'Crée' : 'Modifié', {
-                position: config.toastPosition,
                 type: 'success'
             })
             setStep(defaultSteps)
@@ -109,7 +105,6 @@ export function Steps(): ReactNode {
             }
         } else {
             toast(step.id === 0 ? 'Echec de création' : 'Echec de mise a jour', {
-                position: config.toastPosition,
                 type: 'error'
             })
         }

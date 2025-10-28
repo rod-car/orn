@@ -3,7 +3,7 @@ import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import { Button, Input, Select, Textarea } from 'ui'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 
 type ArticleFormProps = {
     editedArticle?: Article
@@ -44,15 +44,13 @@ export function ArticleForm({ editedArticle }: ArticleFormProps): ReactNode {
             const message = editedArticle ? 'Mis à jour' : 'Enregistré'
             toast(message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             editedArticle === undefined && setArticle(defaultArticle)
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

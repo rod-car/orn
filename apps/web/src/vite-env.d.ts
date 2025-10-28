@@ -338,7 +338,7 @@ type MultiSheet = Record<string, OneSheet>
 type ScholarYear = { id: string; label: string }
 
 type Justificative = {
-    id?: number; // Optional for creation, required for updates and display
+    id: number; // Optional for creation, required for updates and display
     name: string; // The name of the justificative document
     file_path?: string; // The storage path of the uploaded file (returned by API)
     file_type?: string; // The MIME type of the file (e.g., application/pdf)
@@ -349,4 +349,8 @@ type Justificative = {
     }; // Derived from the uploaded_by foreign key
     created_at?: string; // Timestamp for when the justificative was created
     updated_at?: string; // Timestamp for when the justificative was last updated
+    uploaded_by: { id: number; name: string; email: string };
+    file_size_human: string;
+    url: string;
+    folder_id?: number;
 }

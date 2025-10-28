@@ -29,6 +29,7 @@
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-avatar": "^5.0.3",
+    "react-bootstrap": "^2.10.10",
     "react-chartjs-2": "^5.2.0",
     "react-confirm-alert": "^3.0.6",
     "react-documents": "^1.2.1",

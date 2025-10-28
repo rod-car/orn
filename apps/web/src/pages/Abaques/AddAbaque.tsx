@@ -3,7 +3,7 @@ import { ChangeEvent, FormEvent, ReactNode, useState } from 'react'
 import { PrimaryLink } from '@base/components'
 import { config, abaque } from '@base/config'
 import { Block, Button, DangerButton, Input, PageTitle, PrimaryButton, Select } from 'ui'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 
 export function AddAbaque(): ReactNode {
     const [abaqueType, setAbaqueType] = useState(abaque.abaqueTypes[0].id)
@@ -45,15 +45,13 @@ export function AddAbaque(): ReactNode {
         if (response.ok) {
             toast(response.message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             setAbaqueFields([{ ...abaque.defaultFields }])
         } else {
             toast(response.message, {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

@@ -1,3 +1,5 @@
+export { StudentListDuplicates } from './StudentListDuplicates';
+
 export { ImportStudentClass } from './ImportStudentClass';
 export { AddStudent } from './AddStudent';
 export { DetailsStudent } from './DetailsStudent';

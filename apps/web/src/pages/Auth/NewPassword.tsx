@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router';
 import { config } from '@base/config';
 import { useApi } from 'hooks';
 import { Button, Input } from 'ui';
-import { toast } from 'react-toastify';
+import { toast } from '@base/ui';
 
 export function NewPassword(): ReactNode {
     const { token } = useParams()
@@ -33,7 +33,6 @@ export function NewPassword(): ReactNode {
 
         if (response === undefined) {
             toast("Impossible de contacter le serveur", {
-                position: config.toastPosition,
                 type: 'error'
             })
             return
@@ -41,8 +40,7 @@ export function NewPassword(): ReactNode {
 
         if (response.ok) {
             toast(message, {
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             navigate('/auth/login', { replace: true })
         }

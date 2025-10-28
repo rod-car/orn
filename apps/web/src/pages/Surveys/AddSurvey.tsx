@@ -4,7 +4,7 @@ import { Block, Input, PageTitle, PrimaryButton } from 'ui'
 import { PrimaryLink, ScholarYearSelectorServer } from '@base/components'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 
 type SurveyFormState = {
     phase: string;
@@ -39,15 +39,13 @@ export function AddSurvey(): ReactNode {
         if (response.ok) {
             toast('Enregistré', {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             setSurvey({ phase: '', date: '' })
         } else {
             toast('Formulaire invalide', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }, [Client, survey])

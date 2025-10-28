@@ -5,7 +5,7 @@ import { ChangeEvent, ReactNode, useCallback, useEffect, useRef, useState } from
 import { ClassSelector, PrimaryLink, ScholarYearSelectorServer, SchoolSelector } from '@base/components'
 import { class_categories, config } from '@base/config'
 import { isDate } from 'functions'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { Col, Modal, Row } from '@base/components/Bootstrap';
 import { Forbidden } from '../Errors/index.ts'
 
@@ -28,8 +28,7 @@ export function ImportStudentClass(): ReactNode {
         toJSON(fileRef.current as unknown as HTMLInputElement, target.value)
         setSheet(target.value)
         toast('Affichage des données en cours', {
-            type: 'info',
-            position: config.toastPosition
+            type: 'info'
         })
     }
 
@@ -65,8 +64,7 @@ export function ImportStudentClass(): ReactNode {
 
         toast('Recuperation des feuilles', {
             type: 'info',
-            isLoading: importing,
-            position: config.toastPosition
+            isLoading: importing
         })
 
         toJSON(event.target)
@@ -76,8 +74,7 @@ export function ImportStudentClass(): ReactNode {
         toast('Importation en cours', {
             type: 'info',
             closeButton: false,
-            isLoading: RequestState.creating,
-            position: config.toastPosition
+            isLoading: RequestState.creating
         })
 
         const data = json.map(d => {
@@ -99,8 +96,7 @@ export function ImportStudentClass(): ReactNode {
         if (response.ok) {
             toast(response.message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
 
             setSchoolId(0)
@@ -110,8 +106,7 @@ export function ImportStudentClass(): ReactNode {
         } else {
             toast(response.message, {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }, [json, category, schoolId, classeId, scholarYear])

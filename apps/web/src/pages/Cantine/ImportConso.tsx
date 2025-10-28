@@ -49,8 +49,7 @@ export function ImportConso(): ReactNode {
         toast('Importation en cours', {
             type: 'info',
             closeButton: false,
-            isLoading: RequestState.creating,
-            position: config.toastPosition
+            isLoading: RequestState.creating
         })
 
         const data = json.map(d => {
@@ -71,8 +70,7 @@ export function ImportConso(): ReactNode {
         if (response.ok) {
             toast(response.message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
 
             setSchoolId(0)
@@ -82,8 +80,7 @@ export function ImportConso(): ReactNode {
         } else {
             toast(response.message, {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }, [json, foodId, schoolId, scholarYear])

@@ -5,7 +5,7 @@ import { config } from '@base/config'
 import { Block, Button, PageTitle, SecondaryButton, Select } from 'ui'
 import { ReactNode, useEffect, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { format, number_array, range } from 'functions'
 
 import { Pagination } from '@base/components'
@@ -52,12 +52,12 @@ export function AccessRequest(): ReactNode {
 
                             setUsers(users)
                             toast("Demande non approuvé", {
-                                position: config.toastPosition,
+                                
                                 type: "success"
                             })
                         } else {
                             toast("Erreur de validation", {
-                                position: config.toastPosition,
+                                
                                 type: "error"
                             })
                         }
@@ -68,8 +68,7 @@ export function AccessRequest(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]
@@ -98,7 +97,7 @@ export function AccessRequest(): ReactNode {
      */
     async function validate(user: User) {
         toast("Validation en cours", {
-            position: config.toastPosition,
+            
             type: "info"
         })
 
@@ -110,12 +109,10 @@ export function AccessRequest(): ReactNode {
 
             setUsers(users)
             toast("Validé", {
-                position: config.toastPosition,
                 type: "success"
             })
         } else {
             toast("Erreur de validation", {
-                position: config.toastPosition,
                 type: "error"
             })
         }

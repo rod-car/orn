@@ -4,7 +4,7 @@ import { Block, Input, PageTitle, PrimaryButton } from 'ui'
 import { PrimaryLink } from '@base/components'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { useNavigate, useParams } from 'react-router'
 
 const defaultFood = { label: '', unit: '', threshold_critical: 0, threshold_warning: 0 }
@@ -36,21 +36,18 @@ export function FoodAdd(): ReactNode {
             const message = id === undefined ? "Enregistré" : "Modifié"
 
             toast(message, {
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             id === undefined && setFood(defaultFood)
         } else {
             const r = response?.response;
             if (r.status === 403) {
                 toast('Accès non autorisé', {
-                    type: 'error',
-                    position: config.toastPosition
+                    type: 'error'
                 })
             } else {
                 toast('Formulaire invalide', {
-                    type: 'error',
-                    position: config.toastPosition
+                    type: 'error'
                 })
             }
         }

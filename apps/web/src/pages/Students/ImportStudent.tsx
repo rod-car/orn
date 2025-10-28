@@ -5,7 +5,7 @@ import { ChangeEvent, ReactNode, useCallback, useEffect, useState } from 'react'
 import { PrimaryLink, ScholarYearSelectorServer } from '@base/components'
 import { config } from '@base/config'
 import { isDate } from 'functions'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { Col, Modal, Row } from '@base/components/Bootstrap';
 import { Forbidden } from '../Errors/Forbidden.tsx'
 
@@ -23,8 +23,7 @@ export function ImportStudent(): ReactNode {
         toJSON(event.target)
 
         toast('Affichage des données en cours', {
-            type: 'info',
-            position: config.toastPosition
+            type: 'info'
         })
     }, [toJSON])
 
@@ -32,8 +31,7 @@ export function ImportStudent(): ReactNode {
         toast('Importation en cours', {
             type: 'info',
             closeButton: false,
-            isLoading: RequestState.creating,
-            position: config.toastPosition
+            isLoading: RequestState.creating
         })
 
         const response = await Client.post({...json as unknown as Student, scholar_year: scholarYear}, '/import')
@@ -41,15 +39,13 @@ export function ImportStudent(): ReactNode {
         if (response.ok) {
             toast(response.message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             resetJSON()
         } else {
             toast(response.message, {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }, [json])

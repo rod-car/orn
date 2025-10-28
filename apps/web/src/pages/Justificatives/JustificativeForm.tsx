@@ -2,7 +2,7 @@
 import { useApi } from "hooks";
 import { config } from "@base/config";
 import { ChangeEvent, FormEvent, ReactNode, useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 import { Block, Button, Input } from "ui";
 
 interface Justificative {
@@ -55,7 +55,6 @@ export function JustificativeForm({ editedJustificative }: { editedJustificative
             toast(message, {
                 closeButton: true,
                 type: "success",
-                position: config.toastPosition,
             });
 
             if (!editedJustificative) {
@@ -66,7 +65,6 @@ export function JustificativeForm({ editedJustificative }: { editedJustificative
             toast("Erreur de soumission", {
                 closeButton: true,
                 type: "error",
-                position: config.toastPosition,
             });
             setJustificative({ ...justificative, file: undefined });
             if (fileRef.current) fileRef.current.value = "";

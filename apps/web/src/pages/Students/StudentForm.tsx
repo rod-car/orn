@@ -3,7 +3,7 @@ import { ChangeEvent, FormEvent, ReactNode, useCallback, useEffect, useState } f
 import { Input, PrimaryButton, Select } from 'ui'
 import { useApi, useAuthStore } from 'hooks'
 import { config, class_categories } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { gender, ucWords } from 'functions'
 import { ScholarYearSelectorServer } from '@base/components/index.ts'
 import { confirmAlert } from 'react-confirm-alert'
@@ -69,8 +69,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
                         if (response.ok) {
                             toast(message, {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             if (editedStudent === undefined) {
                                 setStudent({
@@ -85,8 +84,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
                         } else {
                             toast('Erreur de soumission', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -96,8 +94,7 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'info',
-                            position: config.toastPosition
+                            type: 'info'
                         })
                 }
             ]

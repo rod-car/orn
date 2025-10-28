@@ -2,7 +2,7 @@
 import { useApi } from "hooks";
 import { config } from "@base/config";
 import { ChangeEvent, FormEvent, ReactNode, useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 import { Block, Button, Input } from "ui";
 import 'react-quill/dist/quill.snow.css';
 import { format } from "functions";
@@ -54,8 +54,7 @@ export function DocumentForm({ editedDocument }: { editedDocument?: FileDocument
             const message = editedDocument ? 'Mis à jour' : 'Enregistré'
             toast(message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
 
             if (editedDocument === undefined) {
@@ -66,8 +65,7 @@ export function DocumentForm({ editedDocument }: { editedDocument?: FileDocument
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
             setDocument({...document, file: undefined})
             if (fileRef.current) fileRef.current.value = ''

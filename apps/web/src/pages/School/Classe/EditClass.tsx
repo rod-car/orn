@@ -2,7 +2,7 @@ import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import { Button, Input, PageTitle, Select } from 'ui'
 import { config } from '@base/config'
 import { useApi } from 'hooks'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { useParams } from 'react-router-dom'
 import { PrimaryLink } from '@base/components'
 
@@ -44,14 +44,12 @@ export function EditClass(): ReactNode {
         if (response.ok) {
             toast('Enregistré', {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

@@ -4,7 +4,7 @@ import { config } from '@base/config'
 import { useApi } from 'hooks'
 import { ApiErrorMessage, Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
 import { confirmAlert } from 'react-confirm-alert'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { EditLink, PrimaryLink } from '@base/components'
 
 export function Levels(): ReactNode {
@@ -33,8 +33,7 @@ export function Levels(): ReactNode {
                         if (success)
                             toast('Supprimé', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                         getData()
                     }
@@ -44,8 +43,7 @@ export function Levels(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]

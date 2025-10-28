@@ -3,7 +3,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { years, months } from 'functions'
 
 type AddInfo = {
@@ -110,14 +110,12 @@ export function PriceForm(): React.ReactNode {
         if (response.ok) {
             toast('Enregistré', {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

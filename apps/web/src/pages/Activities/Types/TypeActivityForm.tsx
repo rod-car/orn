@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react'
 import { Button, Input, Textarea } from 'ui'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 
 type TypeActivityFormProps = {
     editedActivity?: Activity
@@ -45,15 +45,13 @@ export function TypeActivityForm({ editedActivity }: TypeActivityFormProps): Rea
             const message = editedActivity ? 'Mis à jour' : 'Enregistré'
             toast(message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             editedActivity === undefined && setActivity(defaultActivity)
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

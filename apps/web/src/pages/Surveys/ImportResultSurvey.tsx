@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { Block, Button, Input, PageTitle, Spinner } from 'ui'
 import { config } from '@base/config'
 import { ChangeEvent, ReactNode, useCallback, useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { PrimaryLink, SchoolSelector } from '@base/components'
 import { format, isDate } from 'functions'
 import { Row, Col } from '@base/components/Bootstrap'
@@ -35,8 +35,7 @@ export function ImportResultSurvey(): ReactNode {
         event.preventDefault()
 
         toast('Importation des donnees', {
-            type: 'info',
-            position: config.toastPosition
+            type: 'info'
         })
 
         toJSON(event.target, undefined, true)
@@ -60,8 +59,7 @@ export function ImportResultSurvey(): ReactNode {
     const save = async (): Promise<void> => {
         toast('Enregistrement en cours', {
             type: 'info',
-            isLoading: RequestState.creating,
-            position: config.toastPosition
+            isLoading: RequestState.creating
         })
 
         Object.keys(json as MultiSheet).map(async sheetName => {
@@ -84,8 +82,7 @@ export function ImportResultSurvey(): ReactNode {
             if (response.ok) {
                 toast(response.message + ' ' + sheetName, {
                     closeButton: true,
-                    type: 'success',
-                    position: config.toastPosition
+                    type: 'success'
                 })
                 resetJSON()
                 setSchoolId(0)
@@ -93,8 +90,7 @@ export function ImportResultSurvey(): ReactNode {
             } else {
                 toast(response.message + ' ' + sheetName, {
                     closeButton: true,
-                    type: 'error',
-                    position: config.toastPosition
+                    type: 'error'
                 })
             }
         })
@@ -157,7 +153,7 @@ export function ImportResultSurvey(): ReactNode {
                     </h6>
                     {Object.keys(json as MultiSheet).length > 0 && (
                         <Button
-                            permission="survey.create"
+                            permission="anthropometry.create"
                             loading={RequestState.creating}
                             icon="save"
                             type="button"
@@ -214,7 +210,7 @@ export function ImportResultSurvey(): ReactNode {
 
                 {Object.keys(json).length > 0 && (
                     <Button
-                        permission="survey.create"
+                        permission="anthropometry.create"
                         loading={RequestState.creating}
                         icon="save"
                         type="button"

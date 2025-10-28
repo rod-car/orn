@@ -4,7 +4,7 @@ import { ChangeEvent, ReactNode, useCallback, useEffect, useState } from 'react'
 import { createSearchParams } from 'react-router-dom'
 import { config, abaque } from '@base/config'
 import { Block, DangerButton, PageTitle, Select } from 'ui'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { confirmAlert } from 'react-confirm-alert'
 import { EditLink, PrimaryLink } from '@base/components'
 
@@ -40,15 +40,13 @@ export function ListAbaque(): ReactNode {
                         if (response.ok) {
                             toast('Supprimé', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getAbaques()
                         } else {
                             toast('Erreur de soumission', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -58,8 +56,7 @@ export function ListAbaque(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]

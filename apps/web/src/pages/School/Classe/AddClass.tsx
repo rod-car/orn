@@ -3,7 +3,7 @@ import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import { Block, Input, PageTitle, PrimaryButton, Select } from 'ui'
 import { config } from '@base/config'
 import { useApi } from 'hooks'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { PrimaryLink } from '@base/components'
 
 export function AddClass(): ReactNode {
@@ -39,15 +39,13 @@ export function AddClass(): ReactNode {
         if (response.ok) {
             toast('Enregistré', {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             setClasses({ id: 0, name: '', notation: '', level_id: 0 })
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

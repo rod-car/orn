@@ -5,7 +5,7 @@ import { config } from '@base/config'
 import { Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
 import { ReactNode, useCallback, useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 
 export function FoodList(): ReactNode {
     const { Client, RequestState, error, datas: foods } = useApi<Food>({
@@ -31,14 +31,12 @@ export function FoodList(): ReactNode {
                         const response = await Client.destroy(id)
                         if (response.ok) {
                             toast('Enregistré', {
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getDatas()
                         } else {
                             toast('Erreur de soumission', {
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -47,8 +45,7 @@ export function FoodList(): ReactNode {
                     label: 'Non',
                     onClick: () =>
                         toast('Annulé', {
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]

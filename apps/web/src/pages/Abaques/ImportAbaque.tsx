@@ -3,7 +3,7 @@ import { ChangeEvent, ReactNode, useState } from 'react'
 import { PrimaryLink } from '@base/components'
 import { Block, Button, Input, PageTitle, PrimaryButton, Select, Spinner } from 'ui'
 import { config, abaque } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 
 export function ImportAbaque(): ReactNode {
     const [abaqueType, setAbaqueType] = useState(abaque.abaqueTypes[0].id)
@@ -27,8 +27,7 @@ export function ImportAbaque(): ReactNode {
         toast('Importation en cours', {
             type: 'info',
             closeButton: false,
-            isLoading: RequestState.creating,
-            position: config.toastPosition
+            isLoading: RequestState.creating
         })
 
         const response = await Client.post(json as unknown as MeasureLength, '/import', {
@@ -38,15 +37,13 @@ export function ImportAbaque(): ReactNode {
         if (response.ok) {
             toast(response.message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             resetJSON()
         } else {
             toast(response.message, {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

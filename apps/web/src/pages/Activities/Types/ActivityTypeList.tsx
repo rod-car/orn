@@ -3,7 +3,7 @@ import { ReactNode, useEffect } from "react";
 import { Block, PageTitle } from "ui";
 import { config } from '@base/config'
 import { ActivityLoading, Link, PrimaryLink } from "@base/components";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 import { confirmAlert } from "react-confirm-alert";
 
 export function ActivityTypeList(): ReactNode {
@@ -44,15 +44,13 @@ export function ActivityTypeList(): ReactNode {
                         if (response.ok) {
                             toast('Enregistré', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getActivities()
                         } else {
                             toast('Erreur de soumission', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -62,8 +60,7 @@ export function ActivityTypeList(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]

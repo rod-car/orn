@@ -1,5 +1,5 @@
 import { Button, Input } from 'ui';
-import { toast } from 'react-toastify';
+import { toast } from '@base/ui';
 import { useConfigStore } from 'hooks';
 import { useAuth } from 'hooks';
 import { config as baseConfig } from '@base/config'
@@ -32,7 +32,6 @@ export function RegisterForm(): ReactNode {
 
         if (response === undefined) {
             toast("Impossible de contacter le serveur", {
-                position: baseConfig.toastPosition,
                 type: 'error'
             })
             return
@@ -41,14 +40,12 @@ export function RegisterForm(): ReactNode {
         if (response.ok) {
             toast(message, {
                 type: 'success',
-                position: baseConfig.toastPosition
             })
             setUser(defaultUser)
         } else {
             setErrors(response.data.errors)
             toast(response.statusText, {
                 type: 'error',
-                position: baseConfig.toastPosition
             })
         }
     }

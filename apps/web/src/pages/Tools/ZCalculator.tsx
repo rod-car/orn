@@ -46,7 +46,6 @@ export function ZCalculator(): ReactNode {
 
         if (response.ok) {
             toast("Enregistre avec succès", {
-                position: config.toastPosition,
                 type: "success"
             })
 
@@ -54,7 +53,6 @@ export function ZCalculator(): ReactNode {
             response.data && setResult((response.data as unknown as {person: Person}).person as unknown as Person)
         } else {
             toast("Erreur d'enregistrement", {
-                position: config.toastPosition,
                 type: "error"
             })
         }

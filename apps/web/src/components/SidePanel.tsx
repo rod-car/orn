@@ -26,7 +26,8 @@ export function SidePanel(): ReactNode {
                         { label: "Ajouter un étudiant", to: "/add", permission: "student.create" },
                         { label: "Importer une liste globale", to: "/import", permission: "student.import" },
                         { label: "Mise a jour des classes", to: "/students-classes", permission: "student.update-class" },
-                        { label: "Importer une liste par classe", to: "/import-class", permission: "student.import-class" }
+                        { label: "Importer une liste par classe", to: "/import-class", permission: "student.import-class" },
+                        { label: "Liste des doublons", to: "/list-duplicates", permission: "student.duplicates" },
                     ]} />
                     <DropDown base="/anthropo-measure/school" icon="houses" label="Ecoles" permission="school.view" menus={[
                         { label: "Liste des écoles", to: "/list", permission: "school.view" },
