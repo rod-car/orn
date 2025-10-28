@@ -2,7 +2,7 @@ import { config } from "@base/config";
 import { years } from "functions";
 import { useApi } from "hooks";
 import { FormEvent, ReactNode, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 import { Button, Block, Select, Input } from "ui";
 
 type RelationType = 'material' | 'semence' | 'engrais'
@@ -73,12 +73,12 @@ export function StepsData(): ReactNode {
             }
         })
         if (response.ok) {
-            toast("Enregistré", { type: "success", position: config.toastPosition })
+            toast("Enregistré", { type: "success" })
             setFormData({ year: 2024, school_id: 0, step_id: 0, files: [] })
             setAddData({})
             setColumnsData({})
         } else {
-            toast("Impossible d'enregistrer", { type: "error", position: config.toastPosition })
+            toast("Impossible d'enregistrer", { type: "error" })
         }
     }
 

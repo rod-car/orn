@@ -6,7 +6,7 @@ import { config } from '@base/config'
 import { SiteLoading, PrimaryLink, EditLink } from "@base/components";
 import { Pagination } from '@base/components'
 import { confirmAlert } from "react-confirm-alert";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 
 export function SiteList(): ReactNode {
     const {
@@ -51,15 +51,13 @@ export function SiteList(): ReactNode {
                         if (response.ok) {
                             toast('Supprimé', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getSites()
                         } else {
                             toast('Erreur de suppression', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -69,8 +67,7 @@ export function SiteList(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]

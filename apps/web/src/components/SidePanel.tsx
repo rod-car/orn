@@ -26,7 +26,8 @@ export function SidePanel(): ReactNode {
                         { label: "Ajouter un étudiant", to: "/add", permission: "student.create" },
                         { label: "Importer une liste globale", to: "/import", permission: "student.import" },
                         { label: "Mise a jour des classes", to: "/students-classes", permission: "student.update-class" },
-                        { label: "Importer une liste par classe", to: "/import-class", permission: "student.import-class" }
+                        { label: "Importer une liste par classe", to: "/import-class", permission: "student.import-class" },
+                        { label: "Liste des doublons", to: "/list-duplicates", permission: "student.duplicates" },
                     ]} />
                     <DropDown base="/anthropo-measure/school" icon="houses" label="Ecoles" permission="school.view" menus={[
                         { label: "Liste des écoles", to: "/list", permission: "school.view" },
@@ -90,8 +91,9 @@ export function SidePanel(): ReactNode {
                         { to: '/list', label: 'Liste des sites', permission: "site.view" }
                     ]}/>
 
-                    <GroupSeparator permission={["document.view", "tools.z-calculator", "tools.value-repartition"]} title="Divers" />
+                    <GroupSeparator permission={["document.view", "justificative.view", "tools.z-calculator", "tools.value-repartition"]} title="Divers" />
                     <NavItem icon="file-earmark-text-fill" active={pathname.includes("/documents")} to="/documents" permission="document.view" label="Documents" />
+                    <NavItem icon="file-earmark-text" active={pathname.includes("/justificatives")} to="/justificatives" permission="justificative.view" label="Pieces justificatives" />
                     <DropDown label="Outils" base="/tools" icon="tools" permission={["tools.z-calculator", "tools.value-repartition"]} menus={[
                         { to: '/z-calculator', label: 'Calculateur de Z', permission: "tools.z-calculator" },
                         { to: '/value-repartition', label: 'Repartition de valeur', permission: "tools.value-repartition" },

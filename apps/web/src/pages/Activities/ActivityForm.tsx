@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from 'react'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { RichTextEditor } from '@base/components'
 import imageCompression from 'browser-image-compression';
 import 'react-lazy-load-image-component/src/effects/blur.css';
@@ -44,7 +44,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
         for (let i = 0; i < files.length; i++) {
             const resizedImage = await browserResizer(files[i]);
             resizedImages.push(resizedImage);
-            // toast(`Image ${i + 1} optimisée`, { position: config.toastPosition, type: 'success' })
+            // toast(`Image ${i + 1} optimisée`, {  type: 'success' })
         }
 
         return resizedImages as File[]
@@ -63,8 +63,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
 
         if (activity.files) {
             toast("Optimisation des images en cours", {
-                type: "info",
-                position: config.toastPosition
+                type: "info"
             })
 
             setOptimizing(true)
@@ -72,7 +71,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
             setOptimizing(false)
         }
 
-        toast(`Enregistrement des donnees`, { position: config.toastPosition, type: 'info' })
+        toast(`Enregistrement des donnees`, {  type: 'info' })
 
         const response = editedActivity
             ? await Client.post({ ...activity, files: optimizedImages, details: details }, `/${activity.id}`, { _method: 'PATCH' }, headers)
@@ -82,8 +81,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
             const message = editedActivity ? 'Mis à jour' : 'Enregistré'
             toast(message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             if (editedActivity === undefined) {
                 setActivity(defaultActivity)
@@ -92,8 +90,7 @@ export function ActivityForm({ editedActivity }: ActivityFormProps): ReactNode {
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

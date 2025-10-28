@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useApi } from 'hooks';
-import { toast } from 'react-toastify';
+import { toast } from '@base/ui';
 import { config } from '@base/config';
 import { Input, PrimaryButton, Textarea } from 'ui';
 import { useState, useEffect, FormEvent } from 'react';
@@ -61,7 +61,6 @@ export function PermissionForm({ editPermission = null }: Props) {
 
         if (response === undefined) {
             toast("Impossible de contacter le serveur. Vérifiez votre connexion internet.", {
-                position: config.toastPosition,
                 type: 'error'
             });
             return;
@@ -69,14 +68,12 @@ export function PermissionForm({ editPermission = null }: Props) {
 
         if (response.ok) {
             toast(message, {
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             });
             if (!editPermission) setPermission(defaultPermission);
         } else {
             toast(response.message, {
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             });
         }
     };

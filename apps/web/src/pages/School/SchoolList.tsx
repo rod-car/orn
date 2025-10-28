@@ -4,7 +4,7 @@ import { DetailLink, EditLink, PrimaryLink } from '@base/components'
 import { config } from '@base/config'
 import { ApiErrorMessage, Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
 import { ReactNode, useCallback, useEffect } from 'react'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { confirmAlert } from 'react-confirm-alert'
 
 export function SchoolList(): ReactNode {
@@ -30,15 +30,13 @@ export function SchoolList(): ReactNode {
                         if (response.ok) {
                             toast('Enregistré', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getSchools()
                         } else {
                             toast('Erreur de soumission', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -49,8 +47,7 @@ export function SchoolList(): ReactNode {
                     onClick: () => {
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                     }
                 }

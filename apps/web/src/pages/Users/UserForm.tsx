@@ -3,7 +3,7 @@
 import { useState, useEffect, FormEvent } from 'react';
 import ReactSelect from 'react-select';
 import { useApi } from 'hooks';
-import { toast } from 'react-toastify';
+import { toast } from '@base/ui';
 import { Input, PrimaryButton, Select } from 'ui';
 import { config } from '@base/config';
 
@@ -98,7 +98,6 @@ export function UserForm({ editUser = null }: Props) {
 
         if (response === undefined) {
             toast("Impossible de contacter le serveur. Verifier votre connexion internet.", {
-                position: config.toastPosition,
                 type: 'error'
             })
             return
@@ -106,15 +105,13 @@ export function UserForm({ editUser = null }: Props) {
 
         if (response.ok) {
             toast(message, {
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             if (!editUser) setUser(defaultUser)
         } else {
             setErrors(response.data.errors)
             toast(response.message, {
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     };

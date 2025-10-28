@@ -49,6 +49,7 @@
 	
 	.app-card-header {
 		border-bottom: 1px solid $theme-border-color;
+		max-width: 100%;
 	}
 	
 	.app-card-title {
@@ -170,6 +171,7 @@
 		display: inline-block;
 		background: lighten($theme-color-primary, 60%);
 		color: $theme-color-primary;
+		min-width: 50px;
 		width: 50px;
 	    height: 50px;
 		padding-top: 10px;

@@ -3,7 +3,7 @@ import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import { Button, Input, Select } from 'ui'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 
 type SiteFormProps = {
     editedSite?: Site
@@ -50,15 +50,13 @@ export function SiteForm({ editedSite }: SiteFormProps): ReactNode {
             const message = editedSite ? 'Mis à jour' : 'Enregistré'
             toast(message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             editedSite === undefined && setSite(defaultSite)
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

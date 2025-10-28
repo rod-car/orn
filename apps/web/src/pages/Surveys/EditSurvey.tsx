@@ -4,7 +4,7 @@ import { Block, Input, PageTitle, PrimaryButton } from 'ui'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { PrimaryLink } from '@base/components'
 
 export function EditSurvey(): ReactNode {
@@ -27,15 +27,13 @@ export function EditSurvey(): ReactNode {
         if (response.ok) {
             toast('Enregistré', {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             form.reset()
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

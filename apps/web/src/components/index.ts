@@ -1,3 +1,11 @@
+
+export { MoveModal } from "./Modal/MoveModal.tsx";
+export { ShowFileModal } from "./Modal/ShowFileModal.tsx";
+export { EditFileModal } from "./Modal/EditFileModal.tsx";
+export { UploadFileModal } from "./Modal/UploadFileModal.tsx";
+export { CreateFolderModal } from "./Modal/CreateFolderModal.tsx";
+export { RenameFolderModal } from "./Modal/RenameFolderModal.tsx";
+
 export {Z} from "@base/components/Z.tsx";
 
 export { Loading, ActivityBlock } from './Activities.tsx';

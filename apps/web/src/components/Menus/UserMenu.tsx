@@ -2,7 +2,7 @@ import { Button } from "ui";
 import {  ReactNode } from "react";
 import { excerpt } from "functions";
 import { config } from "@base/config";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 import { NavLink } from "@base/components";
 import { useApi, useAuthStore } from "hooks";
 import avatar from '@base/assets/images/user.svg';
@@ -14,19 +14,16 @@ export function UserMenu(): ReactNode {
     const handleLogout = async () => {
         toast('Déconnexion en cours', {
             type: 'info',
-            isLoading: RequestState.creating,
-            position: config.toastPosition
+            isLoading: RequestState.creating
         })
         const response = await logout(Client)
         if (response.ok) {
             toast('Déconnecté', {
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
         } else {
             toast(response.statusText, {
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

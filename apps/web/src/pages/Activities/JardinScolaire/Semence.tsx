@@ -4,7 +4,7 @@ import { config } from '@base/config'
 import { useApi } from "hooks";
 import { range } from "functions";
 import Skeleton from "react-loading-skeleton";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 import { confirmAlert } from "react-confirm-alert";
 
 export function Semence(): ReactNode {
@@ -43,15 +43,13 @@ export function Semence(): ReactNode {
                         if (response.ok) {
                             toast('Supprimé', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             setDatas(semences.filter(semence => semence.id !== id))
                         } else {
                             toast('Erreur de suppréssion', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -61,8 +59,7 @@ export function Semence(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]
@@ -81,7 +78,6 @@ export function Semence(): ReactNode {
 
         if (response.ok) {
             toast(semence.id === 0 ? 'Crée' : 'Modifié', {
-                position: config.toastPosition,
                 type: 'success'
             })
             setSemence(defaultSemence)
@@ -96,7 +92,6 @@ export function Semence(): ReactNode {
             }
         } else {
             toast(semence.id === 0 ? 'Echec de création' : 'Echec de mise a jour', {
-                position: config.toastPosition,
                 type: 'error'
             })
         }

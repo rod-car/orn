@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useApi } from 'hooks';
 import { config } from '@base/config';
-import { toast } from 'react-toastify';
+import { toast } from '@base/ui';
 import Skeleton from 'react-loading-skeleton';
 import { Pagination } from '@base/components';
 import { number_array, range } from 'functions';
@@ -45,12 +45,10 @@ export function ListUser(): ReactNode {
                         if (response.ok) {
                             await getDatas()
                             toast("Compte utilisateur supprime", {
-                                position: config.toastPosition,
                                 type: "success"
                             })
                         } else {
                             toast("Erreur de validation", {
-                                position: config.toastPosition,
                                 type: "error"
                             })
                         }
@@ -61,8 +59,7 @@ export function ListUser(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]

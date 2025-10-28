@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { Button, Input, Select, Textarea } from 'ui'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { years } from 'functions'
 
 type GardenFormProps = {
@@ -69,8 +69,7 @@ export function JardinForm({ editedGarden }: GardenFormProps): ReactNode {
             const message = editedGarden ? 'Mis à jour' : 'Enregistré'
             toast(message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             if (editedGarden === undefined) {
                 setGarden(defaultGarden)
@@ -81,8 +80,7 @@ export function JardinForm({ editedGarden }: GardenFormProps): ReactNode {
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

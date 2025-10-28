@@ -3,7 +3,7 @@ import { ReactNode, useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { config } from '@base/config'
 import { useApi } from 'hooks'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { ApiErrorMessage, Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
 import { EditLink, PrimaryLink } from '@base/components'
 
@@ -29,15 +29,13 @@ export function Classes(): ReactNode {
                         if (response.ok) {
                             toast('Supprimé', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getData()
                         } else {
                             toast('Impossible de supprimer cette classe', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -47,8 +45,7 @@ export function Classes(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]

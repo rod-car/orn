@@ -6,7 +6,7 @@ import { format } from 'functions';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { Col } from '@base/components/Bootstrap';
 import { confirmAlert } from 'react-confirm-alert';
-import { toast } from 'react-toastify';
+import { toast } from '@base/ui';
 import { config } from '@base/config/index.ts';
 
 export function ListConso(): ReactNode {
@@ -90,22 +90,19 @@ export function ListConso(): ReactNode {
 
             if (response.ok) {
                 toast('Modification enregistrée', {
-                    type: 'success',
-                    position: config.toastPosition
+                    type: 'success'
                 });
                 setShowEditModal(false);
                 getConso();
             } else {
                 const message = response?.response?.data?.message ?? "Une erreur s'est produite. Verifier les donnees.";
                 toast(message, {
-                    type: 'error',
-                    position: config.toastPosition
+                    type: 'error'
                 });
             }
         } catch (error) {
             toast('Erreur lors de la modification', {
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             });
         }
     };
@@ -206,15 +203,13 @@ export function ListConso(): ReactNode {
                         if (response.ok) {
                             toast('Supprimé', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getDatas()
                         } else {
                             toast('Erreur de soumission', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -224,8 +219,7 @@ export function ListConso(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]
@@ -244,15 +238,13 @@ export function ListConso(): ReactNode {
                         if (response.ok) {
                             toast('Supprime', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getDatas()
                         } else {
                             toast('Erreur de soumission', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -262,8 +254,7 @@ export function ListConso(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]

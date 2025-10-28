@@ -4,7 +4,7 @@ import { ChangeEvent, FormEvent, ReactNode, useCallback, useEffect, useState } f
 import { useParams, useSearchParams } from 'react-router-dom'
 import { config, abaque as abaqueConfig } from '@base/config'
 import { Block, Input, PageTitle, PrimaryButton } from 'ui'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { PrimaryLink } from '@base/components'
 
 export function EditAbaque(): ReactNode {
@@ -40,14 +40,12 @@ export function EditAbaque(): ReactNode {
         if (response.ok) {
             toast(response.message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
         } else {
             toast(response.message, {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

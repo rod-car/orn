@@ -3,7 +3,7 @@
 import { useApi } from 'hooks';
 import { useEffect } from 'react';
 import { config } from '@base/config';
-import { toast } from 'react-toastify';
+import { toast } from '@base/ui';
 import { confirmAlert } from 'react-confirm-alert';
 import { Block, DangerButton, PageTitle } from 'ui';
 import { EditLink, Pagination, PrimaryLink } from '@base/components';
@@ -45,12 +45,12 @@ export function ListPermission() {
                         if (response.ok) {
                             await getDatas()
                             toast("Permission supprime", {
-                                position: config.toastPosition,
+                                
                                 type: "success"
                             })
                         } else {
                             toast("Erreur de suppression", {
-                                position: config.toastPosition,
+                                
                                 type: "error"
                             })
                         }
@@ -61,8 +61,7 @@ export function ListPermission() {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]

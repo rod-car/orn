@@ -3,7 +3,7 @@ import { useApi, useAuthStore } from 'hooks'
 import { ReactNode, useEffect, useState } from 'react'
 import { class_categories, config } from '@base/config'
 import { Input, Select, Block, Button, PageTitle } from 'ui'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { PrimaryLink, SurveySelector } from '@base/components'
 
 type StudentData = {
@@ -94,14 +94,12 @@ export function AddSurveyStudent(): ReactNode {
         if (height > 0 && weight > 0) {
             if ((selectedStudent.precedentHeight && selectedStudent.precedentHeight > height)) {
                 toast("La taille de l'étudiant ne doit pas être inférieur a la taille précédente", {
-                    position: config.toastPosition,
                     type: "error"
                 })
                 return
             }
 
             toast("Enregistrement en cours", {
-                position: config.toastPosition,
                 type: "info"
             })
 
@@ -117,20 +115,17 @@ export function AddSurveyStudent(): ReactNode {
             const response = await SurveyClient.post(datas, `/${surveyId}/add-student`)
             if (response.ok) {
                 toast("Enregistré", {
-                    position: config.toastPosition,
                     type: "success"
                 })
                 formData.students[index].saved = true
                 setFormData({ ...formData })
             } else {
                 toast("Erreur d'enregistrement", {
-                    position: config.toastPosition,
                     type: "error"
                 })
             }
         } else {
             toast("La taille ou le poids ne doit pas être zero", {
-                position: config.toastPosition,
                 type: "error"
             })
         }
@@ -143,14 +138,13 @@ export function AddSurveyStudent(): ReactNode {
 
         if (height <= 0 && weight <= 0) {
             toast("Non enregistré", {
-                position: config.toastPosition,
                 type: "error"
             })
             return
         }
 
         toast("Suppression en cours", {
-            position: config.toastPosition,
+            
             type: "info"
         })
 
@@ -162,7 +156,6 @@ export function AddSurveyStudent(): ReactNode {
         const response = await SurveyClient.post(formDatas, `/${surveyId}/remove-student`)
         if (response.ok) {
             toast("Supprimé", {
-                position: config.toastPosition,
                 type: "success"
             })
             formData.students[index].saved = false
@@ -231,7 +224,6 @@ export function AddSurveyStudent(): ReactNode {
 
         } else {
             toast("Formulaire invalide", {
-                position: config.toastPosition,
                 type: "error"
             })
         }
@@ -302,12 +294,12 @@ export function AddSurveyStudent(): ReactNode {
                     </div>
 
                     <div className="d-flex justify-content-between">
-                        <Button permission="survey.create" disabled={!isValid(formData)} loading={SurveyRequestState.loading || StudentRequestState.loading} icon="check" mode="primary" onClick={getStudents}>Valider</Button>
+                        <Button permission="anthropometry.create" disabled={!isValid(formData)} loading={false} icon="check" mode="primary" onClick={getStudents}>Valider</Button>
                     </div>
                 </form>
             </Block>
 
-            {canDisplayTable() && <Block>
+            {canDisplayTable() && <Block className='mt-4'>
                 <table className='table table-striped table-bordered text-sm'>
                     <thead>
                         <tr>
@@ -337,7 +329,7 @@ export function AddSurveyStudent(): ReactNode {
                                 <Input onChange={({ target }) => handleChange(target, index)} name="students.weight" type='number' placeholder='Poids' value={student.weight} />
                             </td>
                             <td className="d-flex justify-content-center align-items-center h-full">
-                                <Button permission="survey.create" onClick={() => saveData(index)} icon="save" mode="primary" size="sm" className="me-2" />
+                                <Button permission="anthropometry.create" onClick={() => saveData(index)} icon="save" mode="primary" size="sm" className="me-2" />
                                 <Button permission="survey.delete" onClick={() => removeData(index)} icon="trash" mode="danger" size="sm" />
                             </td>
                             <td className="text-center">

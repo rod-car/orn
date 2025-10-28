@@ -6,7 +6,7 @@ import { config } from '@base/config'
 import { ArticleLoading, EditLink, PrimaryLink } from "@base/components";
 import { Pagination } from '@base/components'
 import { confirmAlert } from "react-confirm-alert";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 
 export function ArticleList(): ReactNode {
     const { Client, datas: articles, RequestState } = useApi<Article>({
@@ -45,15 +45,13 @@ export function ArticleList(): ReactNode {
                         if (response.ok) {
                             toast('Enregistré', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getArticles()
                         } else {
                             toast('Erreur de soumission', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -63,8 +61,7 @@ export function ArticleList(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]

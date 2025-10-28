@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useApi } from 'hooks';
-import { toast } from 'react-toastify';
+import { toast } from '@base/ui';
 import { config } from '@base/config';
 import { Input, PrimaryButton } from 'ui';
 import { PrimaryLink } from '@base/components';
@@ -107,7 +107,6 @@ export function RoleForm({ editRole = null }: Props) {
 
         if (response === undefined) {
             toast("Impossible de contacter le serveur. Vérifiez votre connexion internet.", {
-                position: config.toastPosition,
                 type: 'error'
             });
             return;
@@ -115,14 +114,12 @@ export function RoleForm({ editRole = null }: Props) {
 
         if (response.ok) {
             toast(message, {
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             });
             if (!editRole) setRole(defaultRole);
         } else {
             toast(response.message, {
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             });
         }
     };

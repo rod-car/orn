@@ -269,6 +269,16 @@ border: 1px solid #071E78;
     transform: rotate(180deg);
 }
 
+.app-card {
+  cursor: pointer;
+}
+
+.app-card:hover {
+  outline: 1px solid var(--PrimaryColor);
+  transition-property: all;
+  transition-duration: .3s;
+}
+
 .app-card-link-mask {
   transition: all;
   transition-duration: .4s;

@@ -7,7 +7,7 @@ import { FormEvent, ReactNode, useCallback, useEffect } from "react";
 import { confirmAlert } from "react-confirm-alert";
 import { DocumentViewer } from "react-documents";
 import { useNavigate, useParams } from "react-router";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 import { Block, Button, PageTitle, Spinner } from "ui";
 
 export function DocumentShow(): ReactNode {
@@ -28,7 +28,7 @@ export function DocumentShow(): ReactNode {
         event.preventDefault()
 
         if (!id) {
-            toast("Une erreur s'est produite", { type: 'error', position: config.toastPosition })
+            toast("Une erreur s'est produite", { type: 'error' })
             navigate("/", { replace: true })
             return
         }
@@ -44,17 +44,17 @@ export function DocumentShow(): ReactNode {
                     onClick: async () => {
                         const response = await Client.destroy(parseInt(id))
                         if (response.ok) {
-                            toast("Document supprimé", { type: 'success', position: config.toastPosition })
+                            toast("Document supprimé", { type: 'success' })
                             navigate("/documents", { replace: true })
                         } else {
-                            toast("Erreur de suppression", { type: 'error', position: config.toastPosition })
+                            toast("Erreur de suppression", { type: 'error' })
                         }
                     }
                 },
                 {
                     label: "Non",
                     className: "btn btn-primary",
-                    onClick: () => toast("Annulé", { type: 'warning', position: config.toastPosition })
+                    onClick: () => toast("Annulé", { type: 'warning' })
                 }
             ]
         })

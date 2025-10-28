@@ -3,9 +3,10 @@ import { ChangeEvent, FormEvent, ReactNode, useCallback, useEffect, useState } f
 import { Input, PrimaryButton, Select } from 'ui'
 import { useApi, useAuthStore } from 'hooks'
 import { config, class_categories } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { gender, ucWords } from 'functions'
 import { ScholarYearSelectorServer } from '@base/components/index.ts'
+import { confirmAlert } from 'react-confirm-alert'
 
 type StudentFormProps = {
     editedStudent?: Student
@@ -48,39 +49,56 @@ export function StudentForm({ editedStudent }: StudentFormProps): ReactNode {
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault()
 
-        const data = { ...student, scholar_year: scholarYear as number }
+        confirmAlert({
+            title: 'Question',
+            message: 'Voulez-vous enregistrer ?',
+            buttons: [
+                {
+                    label: 'Oui',
+                    onClick: async () => {
+                        const data = { ...student, scholar_year: scholarYear as number }
 
-        setStudent(data)
+                        setStudent(data)
 
-        const response = editedStudent
-            ? await SClient.patch(editedStudent.id, data)
-            : await SClient.post(data)
+                        const response = editedStudent
+                            ? await SClient.patch(editedStudent.id, data)
+                            : await SClient.post(data)
 
-        const message = editedStudent ? "Mis à jour" : "Enregistré"
+                        const message = editedStudent ? "Mis à jour" : "Enregistré"
 
-        if (response.ok) {
-            toast(message, {
-                closeButton: true,
-                type: 'success',
-                position: config.toastPosition
-            })
-            if (editedStudent === undefined) {
-                setStudent({
-                    ...defaultStudent,
-                    scholar_year: data.scholar_year,
-                    school: data.school,
-                    classes: data.classes,
-                    category: data.category
-                })
-                //setScholarYear(0)
-            }
-        } else {
-            toast('Erreur de soumission', {
-                closeButton: true,
-                type: 'error',
-                position: config.toastPosition
-            })
-        }
+                        if (response.ok) {
+                            toast(message, {
+                                closeButton: true,
+                                type: 'success'
+                            })
+                            if (editedStudent === undefined) {
+                                setStudent({
+                                    ...defaultStudent,
+                                    scholar_year: data.scholar_year,
+                                    school: data.school,
+                                    classes: data.classes,
+                                    category: data.category,
+                                    gender: data.gender
+                                })
+                            }
+                        } else {
+                            toast('Erreur de soumission', {
+                                closeButton: true,
+                                type: 'error'
+                            })
+                        }
+                    }
+                },
+                {
+                    label: 'Non',
+                    onClick: () =>
+                        toast('Annulé', {
+                            closeButton: true,
+                            type: 'info'
+                        })
+                }
+            ]
+        })
     }
 
     const { user } = useAuthStore()

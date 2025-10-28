@@ -6,7 +6,7 @@ import { useApi, useAuthStore } from "hooks";
 import { CSSProperties, FormEvent, MouseEventHandler, PropsWithChildren, ReactNode, useCallback, useEffect, useMemo, useState } from "react"
 import { confirmAlert } from "react-confirm-alert";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 import { Button, Checkbox, Input, PageTitle } from "ui";
 
 
@@ -76,14 +76,12 @@ export function Account(): ReactNode {
                             if (response.ok) {
                                 toast('Compte supprimé', {
                                     closeButton: true,
-                                    type: 'success',
-                                    position: config.toastPosition
+                                    type: 'success'
                                 })
                             } else {
                                 toast('Erreur de suppression', {
                                     closeButton: true,
-                                    type: 'error',
-                                    position: config.toastPosition
+                                    type: 'error'
                                 })
                             }
                         }
@@ -93,8 +91,7 @@ export function Account(): ReactNode {
                         onClick: () =>
                             toast('Annulé', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                     }
                 ]
@@ -300,7 +297,7 @@ function ChangePasswordComponent({onClose, user}: {onClose: () => void, user?: U
                 new_password_confirmation: data.get('new_password_confirmation'),
             })
             if (response.ok) {
-                toast("Mot de passe modifié", { type: 'success', position: config.toastPosition })
+                toast("Mot de passe modifié", { type: 'success' })
 
                 if (disconnect) {
                     const logoutResponse = await logout(LogoutClient)
@@ -308,7 +305,7 @@ function ChangePasswordComponent({onClose, user}: {onClose: () => void, user?: U
                 }
                 onClose()
             } else {
-                toast("Erreur de modification", { type: "error", position: config.toastPosition })
+                toast("Erreur de modification", { type: "error" })
             }
         }
     }, [disconnect])
@@ -361,14 +358,14 @@ function ChangeFieldComponent({onClose, user, field}: ChangeFieldComponentProps)
         if (user) {
             const response = await Client.patch(user.id, {[field]: data.get(field), password: data.get('password'), security: false})
             if (response.ok) {
-                toast("Modifié", { type: 'success', position: config.toastPosition })
+                toast("Modifié", { type: 'success' })
                 if (currentUser) updateUser({
                     ...currentUser,
                     [field]: data.get(field) as string,
                 })
                 onClose(true)
             } else {
-                toast("Erreur de modification", { type: "error", position: config.toastPosition })
+                toast("Erreur de modification", { type: "error" })
                 setPassword("");
             }
         }

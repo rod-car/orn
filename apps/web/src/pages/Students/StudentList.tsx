@@ -5,7 +5,7 @@ import { class_categories, config } from '@base/config'
 import { Block, DangerButton, Input, PageTitle, PrimaryButton, SecondaryButton, Select } from 'ui'
 import { ChangeEvent, Key, memo, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { ageFull, format, number_array, range } from 'functions'
 import { Pagination } from '@base/components'
 import Skeleton from 'react-loading-skeleton'
@@ -94,19 +94,17 @@ export function StudentList(): ReactNode {
                 {
                     label: 'Oui',
                     onClick: async () => {
-                        const response = await StudentClient.destroy(id)
+                        const response = await StudentClient.destroy(id, {scholar_year_id: scholarYear})
                         if (response.ok) {
                             toast('Supprime', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getDatas()
                         } else {
                             toast('Erreur de soumission', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -116,13 +114,12 @@ export function StudentList(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]
         })
-    }, [])
+    }, [scholarYear])
 
     /**
      * Filtrer la liste des étudiants
@@ -178,7 +175,7 @@ export function StudentList(): ReactNode {
         }, 500)
 
         setTimeoutId(newTimeoutId)
-    }, [setQuery, setTimeoutId, filterStudents])
+    }, [timeoutId, filterStudents])
 
     /**
      * Changer de la page de la pagination

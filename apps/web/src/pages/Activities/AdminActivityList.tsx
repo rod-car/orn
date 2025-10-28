@@ -2,7 +2,7 @@
 import { useApi } from "hooks";
 import { Block, DangerButton, PageTitle, PrimaryButton } from "ui";
 import { config } from '@base/config'
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 import { DetailLink, EditLink, Pagination, PrimaryLink } from '@base/components'
 import { ReactNode, useEffect } from "react";
 import { confirmAlert } from "react-confirm-alert";
@@ -46,14 +46,12 @@ export function AdminActivityList(): ReactNode {
                         const response = await Client.destroy(id)
                         if (response.ok) {
                             toast('Supprimé', {
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getActivities()
                         } else {
                             toast('Erreur de soumission', {
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -62,8 +60,7 @@ export function AdminActivityList(): ReactNode {
                     label: 'Non',
                     onClick: () =>
                         toast('Annulé', {
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]
@@ -81,14 +78,12 @@ export function AdminActivityList(): ReactNode {
                         const response = await Client.patch(id, {is_valid: false})
                         if (response.ok) {
                             toast('Validé', {
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getActivities()
                         } else {
                             toast('Erreur de soumission', {
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -97,8 +92,7 @@ export function AdminActivityList(): ReactNode {
                     label: 'Non',
                     onClick: () =>
                         toast('Annulé', {
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]

@@ -4,7 +4,7 @@ import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Block, Button, Input, PageTitle } from 'ui'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { PrimaryLink } from '@base/components'
 
 export function EditLevel(): ReactNode {
@@ -30,14 +30,12 @@ export function EditLevel(): ReactNode {
         if (response.ok) {
             toast('Mis à jour', {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

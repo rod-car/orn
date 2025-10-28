@@ -2,7 +2,7 @@ import { useApi } from 'hooks'
 import { ChangeEvent, FormEvent, ReactNode, useState } from 'react'
 import { Block, PrimaryButton, Input, PageTitle } from 'ui'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { PrimaryLink } from '@base/components'
 
 export function AddLevel(): ReactNode {
@@ -28,15 +28,13 @@ export function AddLevel(): ReactNode {
         if (response.ok) {
             toast('Enregistré', {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             setLevel({ id: 0, label: '', description: '' })
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

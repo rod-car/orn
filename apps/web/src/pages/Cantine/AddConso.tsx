@@ -4,7 +4,7 @@ import { Block, DangerButton, Input, PageTitle, PrimaryButton, SecondaryButton, 
 import { PrimaryLink, ScholarYearSelectorServer } from '@base/components'
 import { useApi, useAuthStore } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { Col, Row } from '@base/components/Bootstrap'
 
 let defaultConsommation: Consommation = {}
@@ -90,21 +90,18 @@ export function AddConso({editedConso = undefined}: {editedConso?: ConsommationM
             const message = editedConso === undefined ? "Enregistré" : "Modifié"
 
             toast(message, {
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             editedConso === undefined && setConsommations([defaultConsommation])
         } else {
             const r = response?.response;
             if (r.status === 403) {
                 toast('Accès non autorisé', {
-                    type: 'error',
-                    position: config.toastPosition
+                    type: 'error'
                 })
             } else {
                 toast('Formulaire invalide', {
-                    type: 'error',
-                    position: config.toastPosition
+                    type: 'error'
                 })
             }
         }

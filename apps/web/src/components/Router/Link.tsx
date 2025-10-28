@@ -26,7 +26,7 @@ export function InfoLink(props: LinkProps): ReactNode {
 
 export function EditLink(props: LinkProps): ReactNode {
     return <Link {...props} className="btn-sm me-2 btn btn-primary shadow">
-        <i className="bi bi-pencil-square"></i>
+        <i className="bi bi-pencil"></i>
         {props.children && <span className="ms-2">{props.children}</span>}
     </Link>
 }

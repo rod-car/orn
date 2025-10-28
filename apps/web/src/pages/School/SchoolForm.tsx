@@ -3,7 +3,7 @@ import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import { Input, PrimaryButton, Select } from 'ui'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 
 type SchoolFormProps = {
     editedSchool?: School
@@ -41,15 +41,13 @@ export function SchoolForm({ editedSchool }: SchoolFormProps): ReactNode {
         if (response.ok) {
             toast(message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             editedSchool === undefined && setSchool(defaultSchool)
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

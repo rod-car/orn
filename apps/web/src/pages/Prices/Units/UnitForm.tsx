@@ -2,7 +2,7 @@ import { FormEvent, ReactNode, useState } from 'react'
 import { Button, Input } from 'ui'
 import { useApi } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 
 type UnitFormProps = {
     editedUnit?: Unit
@@ -36,15 +36,13 @@ export function UnitForm({ editedUnit }: UnitFormProps): ReactNode {
             const message = editedUnit ? 'Mis à jour' : 'Enregistré'
             toast(message, {
                 closeButton: true,
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             editedUnit === undefined && setUnit(defaultUnit)
         } else {
             toast('Erreur de soumission', {
                 closeButton: true,
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

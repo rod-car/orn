@@ -4,7 +4,7 @@ import { Block, Input, PageTitle, PrimaryButton, Select } from 'ui'
 import { PrimaryLink } from '@base/components'
 import { useApi, useAuthStore } from 'hooks'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { Col, Row } from '@base/components/Bootstrap'
 
 export function StockIn(): ReactNode {
@@ -61,20 +61,17 @@ export function StockIn(): ReactNode {
             setQuantity(0)
 
             toast(message, {
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
         } else {
             const r = response?.response;
             if (r.status === 403) {
                 toast('Accès non autorisé', {
-                    type: 'error',
-                    position: config.toastPosition
+                    type: 'error'
                 })
             } else {
                 toast('Formulaire invalide', {
-                    type: 'error',
-                    position: config.toastPosition
+                    type: 'error'
                 })
             }
         }

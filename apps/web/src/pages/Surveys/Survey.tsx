@@ -5,7 +5,7 @@ import { config } from '@base/config'
 import { Block, DangerButton, PageTitle, SecondaryButton } from 'ui'
 import { ReactNode, useCallback, useEffect } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { format } from 'functions'
 
 export function Survey(): ReactNode {
@@ -34,15 +34,13 @@ export function Survey(): ReactNode {
                         if (response.ok) {
                             toast('Enregistré', {
                                 closeButton: true,
-                                type: 'success',
-                                position: config.toastPosition
+                                type: 'success'
                             })
                             getDatas()
                         } else {
                             toast('Erreur de soumission', {
                                 closeButton: true,
-                                type: 'error',
-                                position: config.toastPosition
+                                type: 'error'
                             })
                         }
                     }
@@ -52,8 +50,7 @@ export function Survey(): ReactNode {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]

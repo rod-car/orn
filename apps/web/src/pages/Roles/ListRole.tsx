@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useApi } from 'hooks';
 import { config } from '@base/config';
-import { toast } from 'react-toastify';
+import { toast } from '@base/ui';
 import { EditLink, PrimaryLink } from '@base/components';
 import { confirmAlert } from 'react-confirm-alert';
 import { Block, DangerButton, PageTitle } from 'ui';
@@ -40,12 +40,12 @@ export function ListRole() {
                         if (response.ok) {
                             await getDatas()
                             toast("Role supprime", {
-                                position: config.toastPosition,
+                                
                                 type: "success"
                             })
                         } else {
                             toast("Erreur de suppression", {
-                                position: config.toastPosition,
+                                
                                 type: "error"
                             })
                         }
@@ -56,8 +56,7 @@ export function ListRole() {
                     onClick: () =>
                         toast('Annulé', {
                             closeButton: true,
-                            type: 'error',
-                            position: config.toastPosition
+                            type: 'error'
                         })
                 }
             ]
