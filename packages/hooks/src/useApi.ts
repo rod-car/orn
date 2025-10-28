@@ -55,7 +55,7 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
     const [success, setSuccess] = useState(false);
     const [RequestState, setRequestState] = useState<RequestState>(defaultRequestState)
 
-    type PostResponse = { ok: boolean, data: T | null, message: string, status?: number }
+    type PostResponse = { ok: boolean, data: T | null, message: string, status?: number, response: any }
 
     const resetError = useCallback((key?: string) => {
         if (key === undefined) setError(null)
@@ -222,14 +222,14 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
 
             if (response.status >= 200 || response.status < 300) {
                 setSuccess(true);
-                res = { ok: true, status: response.status, message: response.statusText, data: response.data }
+                res = { ok: true, status: response.status, message: response.statusText, data: response.data, response: {...response} }
                 setData(response.data);
             } else {
                 setError({
                     message: response.statusText,
                     status: response.status
                 });
-                res = { ok: false, status: response.status, message: response.statusText, data: response.data }
+                res = { ok: false, status: response.status, message: response.statusText, data: response.data, response: {...response} }
             }
         }
         catch (e) {

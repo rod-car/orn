@@ -5,7 +5,7 @@ import { useApi, useAuthStore } from "hooks";
 import { FormEvent, ReactNode, useCallback, useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import { toast } from "@base/ui";
 import { Block, Button, Input, PageTitle } from "ui";
 
 /**
@@ -32,7 +32,7 @@ export function Profile(): ReactNode {
         if (user) {
             const response = await UpdateClient.patch(user.id, {...data, security: false})
             if (response.ok) {
-                toast("Modifié", { type: 'success', position: config.toastPosition })
+                toast("Modifié", { type: 'success' })
                 if (currentUser) updateUser({
                     ...currentUser,
                     username: data.username as string,
@@ -41,7 +41,7 @@ export function Profile(): ReactNode {
                 })
                 navigate("/auth/account", { replace: true })
             } else {
-                toast("Erreur de modification", { type: "error", position: config.toastPosition })
+                toast("Erreur de modification", { type: "error" })
             }
         }
     }, [user])

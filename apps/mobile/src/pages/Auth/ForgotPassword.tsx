@@ -2,7 +2,7 @@ import { useApi } from 'hooks'
 import { FormEvent, ReactNode, useState } from 'react'
 import { Button, Input } from 'ui'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { Footer, Link } from '@base/components'
 import logo from '@base/assets/images/logo.png'
 
@@ -16,7 +16,6 @@ export function ForgotPassword(): ReactNode {
 
         if (response === undefined) {
             toast("Impossible de contacter le serveur", {
-                position: config.toastPosition,
                 type: 'error'
             })
             return
@@ -24,14 +23,12 @@ export function ForgotPassword(): ReactNode {
 
         if (response.ok) {
             toast('Un lien de réinitialisation est envoyé dans votre boite e-mail', {
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
             setEmail("");
         } else {
             toast("Données du formulaire invalide", {
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
         }
     }

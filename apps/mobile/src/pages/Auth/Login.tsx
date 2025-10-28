@@ -2,7 +2,7 @@ import { useApi, useAuthStore } from 'hooks'
 import { FormEvent, ReactNode, useState } from 'react'
 import { Button, Checkbox, Input } from 'ui'
 import { config } from '@base/config'
-import { toast } from 'react-toastify'
+import { toast } from '@base/ui';
 import { Footer, Link } from '@base/components'
 import logo from '@base/assets/images/logo.png'
 
@@ -23,7 +23,6 @@ export function Login(): ReactNode {
 
         if (response === undefined) {
             toast("Impossible de contacter le serveur", {
-                position: config.toastPosition,
                 type: 'error'
             })
             setLoading(false)
@@ -32,14 +31,12 @@ export function Login(): ReactNode {
 
         if (response.ok) {
             toast('Connecté', {
-                type: 'success',
-                position: config.toastPosition
+                type: 'success'
             })
         } else {
             setErrors(response.data.errors)
             toast("Données du formulaire invalide", {
-                type: 'error',
-                position: config.toastPosition
+                type: 'error'
             })
             setPassword("")
         }
