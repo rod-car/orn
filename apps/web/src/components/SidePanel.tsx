@@ -105,6 +105,19 @@ export function SidePanel(): ReactNode {
                             { to: '/role', label: 'Roles', permission: "role.view" },
                             { to: '/permission', label: 'Permissions', permission: "permission.view" },
                         ]}/>
+                        <DropDown
+                            label="Actions"
+                            base="/actions"
+                            icon="lightning"
+                            permission={["action.import-kobo-data"]}
+                            menus={[
+                                {
+                                    to: '/kobo-import',
+                                    label: 'Importation des données KoboCollect',
+                                    permission: 'action.import-kobo-data'
+                                }
+                            ]}
+                        />
                         <DropDown label="Paramètres" base="/settings" icon="gear" permission="settings.view" menus={[
                             { to: '/jardin', label: 'Jardin scolaire', permission: "jardin.view" },
                             { to: '/services', label: 'Services', permission: "service.view" },
