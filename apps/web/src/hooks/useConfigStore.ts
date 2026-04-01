@@ -10,7 +10,7 @@ type Config = {
 export const useConfigStore = create(
     persist<Config>(
         (set) => ({
-            pageTitle: "ORN Atsinanana",
+            pageTitle: "SIG-CS",
             firstTime: true,
             alreadyPassed: () => {
                 set({ firstTime: false })

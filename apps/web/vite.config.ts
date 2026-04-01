@@ -1,32 +1,23 @@
 import path from 'path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import viteCompression from 'vite-plugin-compression'
+// ✅ Utilisez la version 2 du plugin
+import { compression } from 'vite-plugin-compression2' 
 
 export default defineConfig({
   plugins: [
     react(),
 
-    // ✅ GZIP (compatibilité)
-    viteCompression({
-      algorithm: 'gzip',
-      ext: '.gz',
-      threshold: 1024,
-      compressionOptions: {
-        level: 9,
-      },
-      deleteOriginFile: false,
+    // ✅ GZIP corrigé
+    compression({
+      algorithms: ['gzip'],
+      exclude: [/\.(br)$/, /\.(gz)$/],
     }),
 
-    // ✅ BROTLI (meilleure compression)
-    viteCompression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-      threshold: 1024,
-      compressionOptions: {
-        level: 11,
-      },
-      deleteOriginFile: false,
+    // ✅ BROTLI corrigé
+    compression({
+      algorithms: ['brotliCompress'],
+      exclude: [/\.(br)$/, /\.(gz)$/],
     }),
   ],
 
@@ -38,8 +29,6 @@ export default defineConfig({
 
   build: {
     target: 'es2020',
-
-    // 🔥 Optimisation globale
     minify: 'esbuild',
     cssMinify: true,
     cssCodeSplit: true,
@@ -52,25 +41,18 @@ export default defineConfig({
       polyfill: true,
     },
 
-    // 🔥 CHUNKING INTELLIGENT
     rollupOptions: {
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            const parts = id.split('node_modules/')[1].split('/')
-            const lib = parts[0]
-
-            // Regroupement stratégique
-            if (['react', 'react-dom'].includes(lib)) {
-              return 'vendor-react'
+            if (
+              id.includes('react') || 
+              id.includes('react-dom') || 
+              id.includes('react-router')
+            ) {
+              return 'vendor-core'
             }
-
-            if (['react-router-dom'].includes(lib)) {
-              return 'vendor-router'
-            }
-
-            // 1 chunk par lib (cache optimal)
-            return `vendor-${lib}`
+            return 'vendor-libs'
           }
         },
 
@@ -91,21 +73,15 @@ export default defineConfig({
           return 'assets/[name]-[hash][extname]'
         },
       },
-
-      treeshake: {
-        moduleSideEffects: false,
-        propertyReadSideEffects: false,
-      },
+      // 🔥 LE BLOC TREESHAKE A ÉTÉ SUPPRIMÉ ICI
     },
   },
 
-  // 🔥 Nettoyage du code
   esbuild: {
     drop: ['console', 'debugger'],
     legalComments: 'none',
   },
 
-  // ⚡ Pré-bundling deps
   optimizeDeps: {
     include: [
       'react',

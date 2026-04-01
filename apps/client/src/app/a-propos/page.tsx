@@ -21,7 +21,7 @@ export default async function About() {
                     <div className="about-content-wrapper">
                         <div className="section-title">
                             <span>À propos</span>
-                            <h2 className="mb-2 wow fadeInRight">Le projet "cantine scolaire"</h2>
+                            <h2 className="mb-2 wow fadeInRight">Le projet "SIG-CS"</h2>
                             <p className="text-italic text-bold mb-4">Financé par <Link target="_blank" href="https://ambatovy.com/">Ambatovy SA</Link></p>
                         </div>
                         <div className="about-content">

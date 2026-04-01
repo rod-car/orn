@@ -10,7 +10,7 @@ export function SidePanel(): ReactNode {
     return <div id="app-sidepanel" className="app-sidepanel sidepanel-visible">
         <div id="sidepanel-drop" className="sidepanel-drop"></div>
         <div className="sidepanel-inner d-flex flex-column">
-            <AppTitle appLogo={logo} appName="ORN ATSINANANA" />
+            <AppTitle appLogo={logo} appName="SIG-CS" />
             <nav id="app-nav-main" className="app-nav app-nav-main flex-grow-1">
                 <ul className="app-menu list-unstyled accordion" id="menu-accordion">
                     <NavItem icon="speedometer" active={pathname === "/"} to="" label="Tableau de bord" />

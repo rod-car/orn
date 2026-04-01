@@ -8,7 +8,7 @@ export function Footer() {
                     <div className="footer-widget mb-60 wow fadeInLeft" data-wow-delay=".2s">
                         <Link href="/" className="logo mb-30">
                             <img style={{ width: 50, height: "auto" }} src="/img/logo/logo.png" alt="logo" />
-                            <span className="font-weight-bold ml-3 font-size-xl">Cantine scolaire</span>
+                            <span className="font-weight-bold ml-3 font-size-xl">SIG-CS</span>
                         </Link>
                         <p className="mb-30 footer-desc text-justify">La nutrition, garant du développement social et économique pour Madagascar.</p>
                     </div>
@@ -63,7 +63,7 @@ export function Footer() {
                         </div>
                     </div>
                     <div className="col-md-6">
-                        <p className="wow fadeInUp" data-wow-delay=".3s">ORN Atsinanana</p>
+                        <p className="wow fadeInUp" data-wow-delay=".3s">SIG-CS</p>
                     </div>
                 </div>
             </div>

@@ -21,10 +21,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Cantine scolaire - ORN Atsinanana",
-    description: "Site officiel du projet cantine scolaire dans la region atsinanana en partenatiat avec Ambatovy",
-    abstract: "Site officiel du projet cantine scolaire dans la region atsinanana en partenatiat avec Ambatovy",
-    keywords: "Nutrition, Malnutrition, Atsinanana, Cantine scolaire"
+    title: "SIG-CS - Système d'Information et de Gestion des Cantines Scolaires",
+    description: "Système d'Information et de Gestion des Cantines Scolaires dans la region Atsinanana en partenariat avec Ambatovy",
+    abstract: "Système d'Information et de Gestion des Cantines Scolaires dans la region Atsinanana en partenariat avec Ambatovy",
+    keywords: "SIG-CS, Nutrition, Malnutrition, Atsinanana, Cantine scolaire, Système d'Information"
 };
 
 export default function RootLayout({ children }: Readonly<{
