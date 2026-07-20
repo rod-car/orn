@@ -127,7 +127,7 @@ export const useAuthStore = create(
             },
 
             isAllowed: (permission?: string | string[], schoolId?: number | undefined): boolean => {
-                if (!permission) return false;
+                if (!permission || (Array.isArray(permission) && permission.length === 0)) return true;
 
                 const { permissions, user } = useAuthStore.getState();
                 const userSchoolId = user?.school?.id;

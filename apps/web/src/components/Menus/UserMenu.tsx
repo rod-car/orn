@@ -37,9 +37,9 @@ export function UserMenu(): ReactNode {
             {excerpt(user?.name)} ({user?.role})
         </a>
         <ul className="dropdown-menu" aria-labelledby="user-dropdown-toggle">
-            <li><NavLink permission="user.show" className="dropdown-item" to="/auth/account">Mon compte</NavLink></li>
+            <li><NavLink permission="user.show" className="dropdown-item" to="/settings/account">Mon compte</NavLink></li>
             <li><NavLink permission="user.view" className="dropdown-item" to="/user/list">Utilisateurs</NavLink></li>
-            <li><NavLink permission="access-request.view" className="dropdown-item" to="/auth/access-request">Demandes d'accès</NavLink></li>
+            <li><NavLink permission="access-request.view" className="dropdown-item" to="/settings/access-request">Demandes d'accès</NavLink></li>
             <li><hr className="dropdown-divider" /></li>
             <li><Button permission="*" onClick={handleLogout} className="dropdown-item shadow-none fw-normal">Se déconnecter</Button></li>
         </ul>

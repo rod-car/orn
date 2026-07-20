@@ -233,10 +233,16 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
             }
         }
         catch (e) {
-            const error = e as AxiosError
-            setError(error.response as unknown as APIError);
-            res = error
-            // res = { ok: false, status: error?.response?.status, message: error.message, data: null }
+            const error = e as AxiosError<{ message?: string; errors?: Record<string, string[]> }>
+            const status = error.response?.status ?? 0
+            const data = error.response?.data
+            setError({ message: data?.message ?? error.message, status, data: { errors: data?.errors ?? {} } })
+            res = {
+                ok: false,
+                status,
+                message: data?.message ?? error.message ?? "Une erreur est survenue.",
+                data: (data ?? null) as unknown as T
+            }
         }
 
         setRequestState({ creating: false });
@@ -275,9 +281,16 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
             }
         }
         catch (e) {
-            const error = e as AxiosError
-            setError(error.response as unknown as APIError);
-            res = error
+            const error = e as AxiosError<{ message?: string; errors?: Record<string, string[]> }>
+            const status = error.response?.status ?? 0
+            const data = error.response?.data
+            setError({ message: data?.message ?? error.message, status, data: { errors: data?.errors ?? {} } })
+            res = {
+                ok: false,
+                status,
+                message: data?.message ?? error.message ?? "Une erreur est survenue.",
+                data: (data ?? null) as unknown as T
+            }
         }
 
         setRequestState({ updating: false });
@@ -320,12 +333,16 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
             }
         }
         catch (e) {
-            /* const error = e as APIError
-            setError(error);
-            res = { ok: false, status: error.status, message: error.message, data: null } */
-            const error = e as AxiosError
-            setError(error.response as unknown as APIError);
-            res = error
+            const error = e as AxiosError<{ message?: string; errors?: Record<string, string[]> }>
+            const status = error.response?.status ?? 0
+            const data = error.response?.data
+            setError({ message: data?.message ?? error.message, status, data: { errors: data?.errors ?? {} } })
+            res = {
+                ok: false,
+                status,
+                message: data?.message ?? error.message ?? "Une erreur est survenue.",
+                data: (data ?? null) as unknown as T
+            }
         }
 
         setRequestState({ updating: false });

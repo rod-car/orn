@@ -39,7 +39,7 @@ export function Profile(): ReactNode {
                     email: data.email as string,
                     name: data.name as string
                 })
-                navigate("/auth/account", { replace: true })
+                navigate("/settings/account", { replace: true })
             } else {
                 toast("Erreur de modification", { type: "error", position: config.toastPosition })
             }

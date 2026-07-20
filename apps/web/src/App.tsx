@@ -13,6 +13,7 @@ import { toolsRoute } from '@base/routes/tools/tools';
 import { securityRoute } from './routes/user';
 import { actionsRoute } from './routes/actions/actions.tsx';
 
+
 const router = createBrowserRouter([
     {
         element: <AppRoot />,
@@ -43,7 +44,7 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: 'auth',
+                path: 'settings',
                 children: authRoute,
             },
             {

@@ -2,9 +2,9 @@
 import { useApi } from "hooks";
 import { ReactNode, useEffect, useState } from "react";
 import { Block, Button, PageTitle, Select } from "ui";
-import { Link, Pagination, PrimaryLink } from '@base/components'
+import { Pagination, PrimaryLink } from '@base/components'
 import { useSearchParams } from "react-router-dom";
-import { formatPrice, range } from "functions";
+import { formatPrice, months, range } from "functions";
 import Skeleton from "react-loading-skeleton";
 
 export function PriceList(): ReactNode {
@@ -112,8 +112,8 @@ export function PriceList(): ReactNode {
                         <th>Site</th>
                         <th>Article</th>
                         <th>Unité</th>
+                        <th>Période</th>
                         <th>Prix (Ar)</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -122,8 +122,8 @@ export function PriceList(): ReactNode {
                         <td>{articlePrice.site?.name}</td>
                         <td>{articlePrice.article?.designation}</td>
                         <td>{articlePrice.unit?.name}</td>
+                        <td>{months.find(m => m.id === articlePrice.month)?.label} {articlePrice.year}</td>
                         <td>{formatPrice(articlePrice.price)}</td>
-                        <td><Link to="" className="btn btn-primary btn-sm"><i className="bi bi-folder"></i></Link></td>
                     </tr>)}
                 </tbody>
             </table>
