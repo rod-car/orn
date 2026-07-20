@@ -1,9 +1,8 @@
 import { ToastPosition } from 'react-toastify'
 
 export const config = {
-    // baseUrl: 'https://api.clinique-hugney.mg/api',
-    baseUrl: 'http://localhost:8000/api',
-    toastPosition: 'top-center' as ToastPosition,
+    baseUrl: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api',
+    toastPosition: 'bottom-right' as ToastPosition,
     pagination: {
         containerClass: 'pagination justify-content-center pagination-sm',
         buttonIcons: false,

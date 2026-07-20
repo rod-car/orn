@@ -127,7 +127,7 @@ export function Account(): ReactNode {
         <PageTitle title="Mon compte"/>
 		<div className="row gy-4">
 			<div className="col-12 col-lg-6">
-				<CardAccount title="Profil" icon="person" action={{ label: "Modifier mon profil", action: "/auth/profile" }}>
+				<CardAccount title="Profil" icon="person" action={{ label: "Modifier mon profil", action: "/settings/profile" }}>
                     <CardAccountItem
                         showComponent={showChangeName}
                         action={{

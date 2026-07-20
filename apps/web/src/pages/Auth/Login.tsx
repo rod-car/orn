@@ -50,7 +50,7 @@ export function Login(): ReactNode {
                 <div className="d-flex flex-column align-content-end">
                     <div className="app-auth-body mx-auto">
                         <div className="app-auth-branding mb-4">
-                            <Link className="app-logo" to="/register">
+                            <Link className="app-logo" to="/">
                                 <img className="logo-icon me-2" src={logo} alt="logo" />
                             </Link>
                         </div>
@@ -112,7 +112,7 @@ export function Login(): ReactNode {
                                     </Button>
                                 </div>
                             </form>
-                            <div className="auth-option text-center pt-5">Pas de compte? Demander un accès <Link className="text-link" to="/auth/register">ici</Link>.</div>
+                            <div className="auth-option text-center pt-5">Pas de compte? <Link className="text-link" to="/auth/register">Demander un accès</Link></div>
                         </div>
                     </div>
                     <Footer className="app-auth-footer" />
@@ -125,3 +125,4 @@ export function Login(): ReactNode {
         </div>
     </div>
 }
+ 

@@ -421,9 +421,9 @@ importers:
       vite:
         specifier: ^5.2.0
         version: 5.4.14(@types/node@16.18.21)(sass@1.83.4)(terser@5.39.0)
-      vite-plugin-compression:
-        specifier: ^0.5.1
-        version: 0.5.1(vite@5.4.14(@types/node@16.18.21)(sass@1.83.4)(terser@5.39.0))
+      vite-plugin-compression2:
+        specifier: ^2.5.3
+        version: 2.5.3(rollup@4.31.0)
 
   packages/functions:
     dependencies:
@@ -5957,6 +5957,9 @@ packages:
   tar-fs@2.1.2:
     resolution: {integrity: sha512-EsaAXwxmx8UB7FRKqeozqEPop69DXcmYwTQwXvyAPF352HJsPdkVhvTaDPYqfNgruveJIJy3TA2l+2zj8LJIJA==}
 
+  tar-mini@0.2.0:
+    resolution: {integrity: sha512-+qfUHz700DWnRutdUsxRRVZ38G1Qr27OetwaMYTdg8hcPxf46U0S1Zf76dQMWRBmusOt2ZCK5kbIaiLkoGO7WQ==}
+
   tar-stream@2.2.0:
     resolution: {integrity: sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ==}
     engines: {node: '>=6'}
@@ -6291,6 +6294,9 @@ packages:
     resolution: {integrity: sha512-de6HJgzC+TFzOu0NTC4RAIsyf/DY/ibWDYQUcuEA84EMHhcefTUGkjFHKKEJhQN4A+6I0u++kr3l36ZF2d7XRw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
+
+  vite-plugin-compression2@2.5.3:
+    resolution: {integrity: sha512-ItPgqQWkcnBbVw7is9OKwiZ8v6+ju9rYROl5Lp6QfQDEx/d55AwJQb/KLpsQqsU9HoigYBsZ8tK6I02UwJNvEw==}
 
   vite-plugin-compression@0.5.1:
     resolution: {integrity: sha512-5QJKBDc+gNYVqL/skgFAP81Yuzo9R+EAf19d+EtsMF/i8kFUpNi3J/H01QD3Oo8zBQn+NzoCIFkpPLynoOzaJg==}
@@ -9898,7 +9904,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@7.18.0(eslint@9.18.0(jiti@1.21.7))(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.7.0)(eslint@9.18.0(jiti@1.21.7)):
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@7.18.0(eslint@9.18.0(jiti@1.21.7))(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0)(eslint@9.18.0(jiti@1.21.7)))(eslint@9.18.0(jiti@1.21.7)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -9920,7 +9926,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.18.0(jiti@1.21.7)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@7.18.0(eslint@9.18.0(jiti@1.21.7))(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.7.0)(eslint@9.18.0(jiti@1.21.7))
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@7.18.0(eslint@9.18.0(jiti@1.21.7))(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0)(eslint@9.18.0(jiti@1.21.7)))(eslint@9.18.0(jiti@1.21.7))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
@@ -13145,6 +13151,8 @@ snapshots:
       tar-stream: 2.2.0
     optional: true
 
+  tar-mini@0.2.0: {}
+
   tar-stream@2.2.0:
     dependencies:
       bl: 4.1.0
@@ -13525,6 +13533,13 @@ snapshots:
       - sugarss
       - supports-color
       - terser
+
+  vite-plugin-compression2@2.5.3(rollup@4.31.0):
+    dependencies:
+      '@rollup/pluginutils': 5.1.4(rollup@4.31.0)
+      tar-mini: 0.2.0
+    transitivePeerDependencies:
+      - rollup
 
   vite-plugin-compression@0.5.1(vite@5.4.14(@types/node@16.18.21)(sass@1.83.4)(terser@5.39.0)):
     dependencies:

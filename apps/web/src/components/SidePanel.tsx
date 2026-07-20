@@ -10,7 +10,7 @@ export function SidePanel(): ReactNode {
     return <div id="app-sidepanel" className="app-sidepanel sidepanel-visible">
         <div id="sidepanel-drop" className="sidepanel-drop"></div>
         <div className="sidepanel-inner d-flex flex-column">
-            <AppTitle appLogo={logo} appName="ORN ATSINANANA" />
+            <AppTitle appLogo={logo} appName="SIG-CS" />
             <nav id="app-nav-main" className="app-nav app-nav-main flex-grow-1">
                 <ul className="app-menu list-unstyled accordion" id="menu-accordion">
                     <NavItem icon="speedometer" active={pathname === "/"} to="/" permission="dashboard.view" label="Tableau de bord" />
@@ -109,6 +109,19 @@ export function SidePanel(): ReactNode {
                             { to: '/role', label: 'Roles', permission: "role.view" },
                             { to: '/permission', label: 'Permissions', permission: "permission.view" },
                         ]}/>
+                        <DropDown
+                            label="Actions"
+                            base="/actions"
+                            icon="lightning"
+                            permission={["action.import-kobo-data"]}
+                            menus={[
+                                {
+                                    to: '/kobo-import',
+                                    label: 'Importation des données KoboCollect',
+                                    permission: 'action.import-kobo-data'
+                                }
+                            ]}
+                        />
                         <DropDown label="Paramètres" base="/settings" icon="gear" permission="settings.view" menus={[
                             { to: '/jardin', label: 'Jardin scolaire', permission: "jardin.view" },
                             { to: '/services', label: 'Services', permission: "service.view" },

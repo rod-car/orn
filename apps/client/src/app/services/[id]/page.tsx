@@ -82,7 +82,7 @@ export default async function Activities({ searchParams, params }: { searchParam
                 })}
             </>}
 
-            {(!activities || activities && activities.data.length === 0) && <p className="text-center">Aucune activités</p>}
+            {(!activities || activities && activities.data.length === 0) && <p className="text-center">Aucune activité</p>}
 
             <Pagination
                 hasNextPage={page * perPage < total}

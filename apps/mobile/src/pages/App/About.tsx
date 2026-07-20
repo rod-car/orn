@@ -53,11 +53,11 @@ export function About(): ReactNode {
                 <div className="d-inline-flex align-items-center justify-content-center rounded-circle mb-4" style={{ width: 80, height: 80, background: "linear-gradient(90deg, #3b82f6, #10b981)" }}>
                     <Utensils className="text-white fs-2" />
                 </div>
-                <h2 className="fw-semibold text-secondary mb-3">Plateforme Cantine Scolaire</h2>
+                <h2 className="fw-semibold text-secondary mb-3">SIG-CS</h2>
             </div>
             <p className="lead text-center mx-auto" style={{ maxWidth: 640 }}>
-                Bienvenue sur la plateforme <span className="fw-semibold text-primary">Cantine Scolaire</span>,
-                un système innovant conçu pour faciliter la gestion et le suivi des données liées à la restauration scolaire.
+                Bienvenue sur la plateforme <span className="fw-semibold text-primary">SIG-CS (Système d'Information et de Gestion des Cantines Scolaires)</span>,
+                un système innovant conçu pour faciliter la gestion et le suivi des données liées à la cantine scolaire.
                 Notre solution vise à offrir une visibilité claire et en temps réel sur les repas servis, les inscriptions des élèves,
                 ainsi que les préférences alimentaires.
             </p>
@@ -138,7 +138,7 @@ export function About(): ReactNode {
         <Block className="text-center py-4">
             <div className="d-inline-flex align-items-center gap-2 text-muted">
                 <div className="rounded-circle" style={{ width: 12, height: 12, background: "linear-gradient(90deg, #3b82f6, #10b981)" }}></div>
-                <span>Ensemble pour une restauration scolaire moderne et durable</span>
+                <span>Ensemble pour une cantine scolaire moderne et durable</span>
                 <div className="rounded-circle" style={{ width: 12, height: 12, background: "linear-gradient(90deg, #3b82f6, #10b981)" }}></div>
             </div>
         </Block>

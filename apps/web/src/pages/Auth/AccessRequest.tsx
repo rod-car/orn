@@ -20,7 +20,7 @@ export function AccessRequest(): ReactNode {
 
     const { Client, RequestState, error, datas: users, setDatas: setUsers } = useApi<User>({
         url: '/auth/users',
-        key: 'data'
+        key: 'items'
     })
 
     const requestData = {
@@ -47,8 +47,8 @@ export function AccessRequest(): ReactNode {
                     onClick: async (): Promise<void> => {
                         const response = await Client.post(user, "/" + user.id + "/invalidate")
                         if (response.ok) {
-                            const datas = users.data.filter((u: User) => u.id !== user.id);
-                            users.data = datas
+                            const datas = users.filter((u: User) => u.id !== user.id);
+                            setUsers(datas) 
 
                             setUsers(users)
                             toast("Demande non approuvé", {
@@ -104,8 +104,8 @@ export function AccessRequest(): ReactNode {
         const response = await Client.post(user, "/" + user.id + "/validate")
 
         if (response.ok) {
-            const datas = users.data.filter((u: User) => u.id !== user.id);
-            users.data = datas
+            const datas = users.filter((u: User) => u.id !== user.id);
+            setUsers(datas)
 
             setUsers(users)
             toast("Validé", {
@@ -193,7 +193,7 @@ export function AccessRequest(): ReactNode {
                                         ))}
                                     </tr>
                                 ))}
-                            {users.data?.length > 0 && users.data.map((user: User, index: number) => <tr key={user.id}>
+                            {users?.length > 0 && users.map((user: User, index: number) => <tr key={user.id}>
                                 <td>{index + 1}</td>
                                 <td className="text-nowrap">{user.name}</td>
                                 <td>{user.occupation}</td>

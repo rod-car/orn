@@ -31,7 +31,7 @@ export async function Header() {
                 <nav className="navbar navbar-expand-lg">
                     <Link className="navbar-brand" href="/">
                         <img style={{ width: 50, height: "auto" }} src="/img/logo/logo.png" alt="Logo" />
-                        <span className="ml-3 text-x-large font-weight-bold">Cantine scolaire</span>
+                        <span className="ml-3 text-x-large font-weight-bold">SIG-CS</span>
                     </Link>
                     <button className="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

@@ -136,7 +136,7 @@ export default async function Home() {
                     </div>
                 </div>
 
-                {activities.data.length === 0 && <p className="text-center">Aucune donnees</p>}
+                {activities.data.length === 0 && <p className="text-center">Aucune donnée</p>}
 
                 {activities.data.map((activity, index: number) => {
                     return <div className="bg-white shadow p-5 mb-5 rounded-md" key={activity.id}>
@@ -225,7 +225,7 @@ export default async function Home() {
                         <div className="about-content-wrapper">
                             <div className="section-title">
                                 <span>À propos</span>
-                                <h2 className="mb-2 wow fadeInRight">Le projet "cantine scolaire"</h2>
+                                <h2 className="mb-2 wow fadeInRight">Le projet "SIG-CS"</h2>
                                 <p className="text-italic text-bold mb-4">Financé par <Link target="_blank" href="https://ambatovy.com/">Ambatovy SA</Link></p>
                             </div>
                             <div className="about-content">

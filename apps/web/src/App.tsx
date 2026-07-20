@@ -12,6 +12,8 @@ import { documentRoute } from '@base/routes/document/documents';
 import { justificativeRoute } from '@base/routes/justificative/justificative';
 import { toolsRoute } from '@base/routes/tools/tools';
 import { securityRoute } from './routes/user';
+import { actionsRoute } from './routes/actions/actions.tsx';
+
 
 const router = createBrowserRouter([
     {
@@ -43,7 +45,7 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: 'auth',
+                path: 'settings',
                 children: authRoute,
             },
             {
@@ -62,6 +64,7 @@ const router = createBrowserRouter([
             { path: 'documents', children: documentRoute },
             { path: 'justificatives', children: justificativeRoute },
             { path: 'tools', children: toolsRoute },
+            { path: 'actions', children: actionsRoute }
         ],
     },
     {

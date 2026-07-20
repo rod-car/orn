@@ -97,7 +97,7 @@ export function ListUser(): ReactNode {
                     <PrimaryLink permission="user.create" to="/user/create" icon='plus-lg' className="me-2">
                         Nouveau utilisateur
                     </PrimaryLink>
-                    <PrimaryLink permission="access-request.view" icon='file-earmark-text' to="/auth/access-request">
+                    <PrimaryLink permission="access-request.view" icon='file-earmark-text' to="/settings/access-request">
                         Liste des demande d'accès
                     </PrimaryLink>
                 </div>
