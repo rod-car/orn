@@ -1,0 +1,34 @@
+# Fichier .htaccess pour une app React avec React Router
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Redirige les requêtes vers index.html sauf si ce sont des fichiers ou dossiers existants
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+
+  # Rediriger vers index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Facultatif : activer la compression gzip
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Facultatif : config pour le cache navigateur
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "index\.html$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+  </FilesMatch>
+</IfModule>
+
+# Facultatif : désactiver directory listing
+Options -Indexes

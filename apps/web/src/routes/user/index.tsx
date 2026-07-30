@@ -3,6 +3,7 @@ import { PrivateRoute } from '@base/components/Auth';
 import { CreateUser, ListUser, EditUser, ViewUser } from '@base/pages/Users';
 import { CreateRole, EditRole, ListRole } from '@base/pages/Roles';
 import { CreatePermission, EditPermission, ListPermission } from '@base/pages/permissions';
+import { ActivityLogList } from '@base/pages/App/ActivityLogList';
 
 export const securityRoute: RouteObject[] = [
     {
@@ -57,6 +58,12 @@ export const securityRoute: RouteObject[] = [
         path: 'permission/create',
         element: <PrivateRoute permission={['permission.create']}>
             <CreatePermission />
+        </PrivateRoute>
+    },
+    {
+        path: 'activity-logs',
+        element: <PrivateRoute permission={['activity-log.view']}>
+            <ActivityLogList />
         </PrivateRoute>
     },
     {

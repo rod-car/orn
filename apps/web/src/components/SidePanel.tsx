@@ -10,7 +10,7 @@ export function SidePanel(): ReactNode {
     return <div id="app-sidepanel" className="app-sidepanel sidepanel-visible">
         <div id="sidepanel-drop" className="sidepanel-drop"></div>
         <div className="sidepanel-inner d-flex flex-column">
-            <AppTitle appLogo={logo} appName="SIG-CS" />
+            <AppTitle appLogo={logo} appName="GSN-CS" />
             <nav id="app-nav-main" className="app-nav app-nav-main flex-grow-1">
                 <ul className="app-menu list-unstyled accordion" id="menu-accordion">
                     <NavItem icon="speedometer" active={pathname === "/"} to="/" permission="dashboard.view" label="Tableau de bord" />
@@ -104,10 +104,11 @@ export function SidePanel(): ReactNode {
             <div className="app-sidepanel-footer">
                 <nav className="app-nav app-nav-footer">
                     <ul className="app-menu footer-menu list-unstyled">
-                        <DropDown label="Gestion des utilisateurs" base="/user" icon="people" permission={["user.view", "role.view", "permission.view"]} menus={[
+                        <DropDown label="Gestion des utilisateurs" base="/user" icon="people" permission={["user.view", "role.view", "permission.view", "activity-log.view"]} menus={[
                             { to: '/list', label: 'Utilisateurs', permission: "user.view" },
                             { to: '/role', label: 'Roles', permission: "role.view" },
                             { to: '/permission', label: 'Permissions', permission: "permission.view" },
+                            { to: '/activity-logs', label: 'Journal d\'activité', permission: "activity-log.view" },
                         ]}/>
                         <DropDown
                             label="Actions"

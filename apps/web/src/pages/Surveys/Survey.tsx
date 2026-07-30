@@ -100,7 +100,7 @@ export function Survey(): ReactNode {
                         {surveys &&
                             surveys.map((survey) => (
                                 <tr key={survey.id}>
-                                    <td className="fw-bold">{survey.phase}</td>
+                                    <td className="fw-bold">Phase {survey.phase}</td>
                                     <td>{format(survey.date, 'dd MMMM y')}</td>
                                     <td>{survey.scholar_year}</td>
                                     <td>

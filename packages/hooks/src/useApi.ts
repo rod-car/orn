@@ -367,7 +367,7 @@ export function useApi<T>({ baseUrl, url, key = undefined }: APIProps) {
                 }
             });
 
-            if (response.status === 204) {
+            if (response.status === 200 || response.status === 204) {
                 setSuccess(true);
                 setData(null);
                 res = { ok: true }

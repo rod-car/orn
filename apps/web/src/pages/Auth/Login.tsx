@@ -51,7 +51,7 @@ export function Login(): ReactNode {
                     <div className="app-auth-body mx-auto">
                         <div className="app-auth-branding mb-4">
                             <Link className="app-logo" to="/">
-                                <img className="logo-icon me-2" src={logo} alt="logo" />
+                                <img className="logo-icon me-2" src={logo} alt="logo" style={{ width: '150px', height: 'auto' }} />
                             </Link>
                         </div>
                         <h2 className="auth-heading text-center text-primary mb-5">Se connecter</h2>

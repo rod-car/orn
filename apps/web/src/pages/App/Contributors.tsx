@@ -95,8 +95,17 @@ export function Contributors(): ReactNode {
             description: "Architecture technique et développement de la plateforme",
             color: "#3b82f6 #2563eb", // bleu clair -> bleu foncé (pour dégradé inline)
         },
+        
         {
-            names: ["Prisca", "Franco", "Toky"],
+        names: ["RAHARINIRINA Jean Ans-Lee"],
+        role: "Co-développeur",  // 
+        icon: <Code className="fs-4" />,
+        description: "Maintenance, corrections et évolution de la plateforme",
+        color: "#f59e0b #d97706",
+    },
+
+        {
+            names: ["Prisca", "Franco", "Toky", "Marjorie"],
             role: "Agents de Saisie",
             icon: <Users className="fs-4" />,
             description: "Gestion des données et saisie des informations",
@@ -105,7 +114,7 @@ export function Contributors(): ReactNode {
     ];
 
     const stats = [
-        { number: "4", label: "Contributeurs actifs", icon: <Users className="fs-5" /> },
+        { number: "6", label: "Contributeurs actifs", icon: <Users className="fs-5" /> },
         { number: "2", label: "Équipes spécialisées", icon: <Award className="fs-5" /> },
         { number: "100%", label: "Engagement", icon: <Heart className="fs-5" /> },
     ];

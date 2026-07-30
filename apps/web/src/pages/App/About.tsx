@@ -53,10 +53,10 @@ export function About(): ReactNode {
                 <div className="d-inline-flex align-items-center justify-content-center rounded-circle mb-4" style={{ width: 80, height: 80, background: "linear-gradient(90deg, #3b82f6, #10b981)" }}>
                     <Utensils className="text-white fs-2" />
                 </div>
-                <h2 className="fw-semibold text-secondary mb-3">SIG-CS</h2>
+                <h2 className="fw-semibold text-secondary mb-3">GSN-CS</h2>
             </div>
             <p className="lead text-center mx-auto" style={{ maxWidth: 640 }}>
-                Bienvenue sur la plateforme <span className="fw-semibold text-primary">SIG-CS (Système d'Information et de Gestion des Cantines Scolaires)</span>,
+                Bienvenue sur la plateforme de <span className="fw-semibold text-primary">Gestion & Suivi Nutritionnel des cantines scolaires</span>,
                 un système innovant conçu pour faciliter la gestion et le suivi des données liées à la cantine scolaire.
                 Notre solution vise à offrir une visibilité claire et en temps réel sur les repas servis, les inscriptions des élèves,
                 ainsi que les préférences alimentaires.

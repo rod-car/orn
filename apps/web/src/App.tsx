@@ -13,6 +13,7 @@ import { justificativeRoute } from '@base/routes/justificative/justificative';
 import { toolsRoute } from '@base/routes/tools/tools';
 import { securityRoute } from './routes/user';
 import { actionsRoute } from './routes/actions/actions.tsx';
+import { ActivityLogList } from '@base/pages/App/ActivityLogList';
 
 
 const router = createBrowserRouter([

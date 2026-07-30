@@ -13,7 +13,7 @@ export function Register(): ReactNode {
                     <div className="app-auth-body mx-auto" style={{ width: 425 }}>	
                         <div className="app-auth-branding mb-4">
                             <Link className="app-logo" to="/">
-                                <img className="logo-icon me-2" src={logo} alt="logo" />
+                                <img className="logo-icon me-2" src={logo} alt="logo" style={{ width: '150px', height: 'auto' }} />
                             </Link>
                         </div>
                         <h2 className="auth-heading text-center mb-4">Demander un accès</h2>

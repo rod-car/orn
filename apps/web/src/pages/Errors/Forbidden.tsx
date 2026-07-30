@@ -10,7 +10,7 @@ export function Forbidden(): ReactNode {
                     <div className="app-branding text-center mb-5">
                         <a className="app-logo" href="index.html">
                             <img className="logo-icon me-2" src={logo} alt="logo" />
-                            <span className="logo-text">SIG-CS</span>
+                            <span className="logo-text">GSN-CS</span>
                         </a>
                     </div>
                     <div className="app-card p-5 text-center shadow-sm">
