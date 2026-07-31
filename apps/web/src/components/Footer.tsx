@@ -11,4 +11,4 @@ export function Footer(): ReactNode {
             </p>
         </div>
     </footer>
-}
+}   

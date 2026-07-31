@@ -46,7 +46,7 @@ export function SidePanel(): ReactNode {
                         { to: '/add-student', label: 'Mesurer des étudiants', permission: "anthropometry.form" }
                     ]} />
 
-                    <GroupSeparator permission={["food.view", "consommation.view", "stock.view"]} title="Cantine scolaire" />
+                    <GroupSeparator permission={["food.view", "consommation.view", "stock.view"]} title="Cantine Scolaire" />
                     <DropDown label="Collations" base="/cantine/foods" icon="cookie" permission="food.view" menus={[
                         { to: '/add', label: 'Ajouter', permission: "food.create" },
                         { to: '/list', label: 'Liste des collations', permission: "food.view" }
