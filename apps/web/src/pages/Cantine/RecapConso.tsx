@@ -90,7 +90,11 @@ export function RecapConso() {
         
         if (scholarYearId > 0) {
             const scholarYear = scholarYears?.find((sy: ScholarYear) => sy.id as unknown as number === scholarYearId)
-            return scholarYear?.label || 'Année scolaire'
+            if (scholarYear?.label) {
+                const [startYear, endYear] = scholarYear.label.split('-')
+                return `Septembre ${startYear} → Juin ${endYear}`
+            }
+            return 'Année scolaire'
         }
         
         if (startDate && endDate) {
