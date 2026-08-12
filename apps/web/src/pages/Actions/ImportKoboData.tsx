@@ -23,11 +23,11 @@ type PaginatedResponse = {
 };
 
 const STEPS = [
-    { key: 'consommation',     label: 'Consommations' },
-    { key: 'stock_in',         label: 'Entrées de stock' },
-    { key: 'stock_out',        label: 'Sorties de stock' },
-    { key: 'activity',         label: 'Activités' },
-    { key: 'student',          label: 'Ajout d\'étudiants' },
+    { key: 'consommation',    label: 'Consommations' },
+    { key: 'stock_in',        label: 'Entrées de stock' },
+    { key: 'stock_out',       label: 'Sorties de stock' },
+    { key: 'activity',        label: 'Activités' },
+    { key: 'student',         label: 'Ajout d\'étudiants' },
     { key: 'anthropo_measure', label: 'Anthropométrie' },
 ];
 
@@ -35,16 +35,16 @@ type StepStatus = 'idle' | 'running' | 'done' | 'error';
 
 export function ImportKoboData() {
     const [importing, setImporting]       = useState(false);
-    const [runningStep, setRunningStep]   = useState<string | null>(null);
     const [stepStatuses, setStepStatuses] = useState<Record<string, StepStatus>>(
         Object.fromEntries(STEPS.map(s => [s.key, 'idle']))
     );
     const [errorMsg, setErrorMsg]         = useState<string | null>(null);
 
-    const [paginatedData, setPaginatedData] = useState< | null>(null);
+    const [paginatedData, setPaginatedData] = useState<PaginatedResponse | null>(null);
     const [historyLoading, setHistoryLoading] = useState(true);
 
     const { Client } = useApi<Schedule>({ url: '/actions/kobo' });
+    const { Client: KoboExportClient, RequestState: KoboExportState } = useApi({ url: '/students' });
 
     const loadHistory = async (page = 1) => {
         setHistoryLoading(true);
@@ -61,9 +61,6 @@ export function ImportKoboData() {
     const setStep = (key: string, status: StepStatus) =>
         setStepStatuses(prev => ({ ...prev, [key]: status }));
 
-    /**
-     * Lance l'import complet (tous les formulaires), via le bouton principal.
-     */
     const handleImport = async () => {
         setImporting(true);
         setErrorMsg(null);
@@ -97,36 +94,13 @@ export function ImportKoboData() {
         }
     };
 
-    /**
-     * Lance l'import d'UN SEUL formulaire précis, en cliquant sur son bouton individuel.
-     */
-    const handleImportOne = async (key: string, label: string) => {
-        if (importing || runningStep) return;
-
-        setRunningStep(key);
-        setErrorMsg(null);
-        setStep(key, 'running');
-
-        try {
-            const response = await Client.post({ service: key }, '/import');
-
-            if (response.ok) {
-                setStep(key, 'done');
-                toast(`Import "${label}" réussi`, { type: 'success', position: config.toastPosition });
-                await loadHistory(1);
-            } else {
-                const msg = (response.data as { message?: string })?.message ?? 'Erreur inconnue';
-                setErrorMsg(msg);
-                setStep(key, 'error');
-                toast(`Échec de l'import "${label}"`, { type: 'error', position: config.toastPosition });
-            }
-        } catch (e: unknown) {
-            const msg = e instanceof Error ? e.message : 'Erreur réseau';
-            setErrorMsg(msg);
-            setStep(key, 'error');
-            toast('Erreur réseau', { type: 'error', position: config.toastPosition });
-        } finally {
-            setRunningStep(null);
+    const handleExportKobo = async () => {
+        const response = await KoboExportClient.post({}, '/export-kobo');
+        if (response.ok && (response.data as { url?: string })?.url) {
+            window.open((response.data as { url: string }).url, '_blank');
+            toast('Fichier généré avec succès', { type: 'success', position: config.toastPosition });
+        } else {
+            toast("Échec de la génération du fichier", { type: 'error', position: config.toastPosition });
         }
     };
 
@@ -148,10 +122,35 @@ export function ImportKoboData() {
         loadHistory(page);
     };
 
-    const anyRunning = importing || runningStep !== null;
-
     return <>
         <PageTitle title="Importation KoboCollect" />
+
+        {/* Export spécial - fichier students.csv pour Kobo */}
+        <div className="card h-100 border-0 shadow-sm border-start border-4 border-primary mb-3">
+            <div className="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div className="d-flex align-items-start gap-3">
+                    <div className="bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: 48, height: 48 }}>
+                        <i className="bi bi-file-earmark-spreadsheet text-primary fs-4" />
+                    </div>
+                    <div>
+                        <h6 className="mb-1 fw-semibold">Export spécial</h6>
+                        <p className="text-muted small mb-0">
+                            Génère le fichier CSV à jour pour alimenter la liste déroulante "Code Étudiant" du formulaire Kobo "Anthropometrie avec listes".
+                        </p>
+                    </div>
+                </div>
+                <button
+                    onClick={handleExportKobo}
+                    disabled={KoboExportState.creating}
+                    className="btn btn-primary flex-shrink-0"
+                >
+                    {KoboExportState.creating
+                        ? <span className="spinner-border spinner-border-sm me-2" />
+                        : <i className="bi bi-cloud-download me-2" />}
+                    Exporter toute la liste des étudiants pour Kobo
+                </button>
+            </div>
+        </div>
 
         <div className="row g-3 mb-3">
             {/* Carte statut dernier import */}
@@ -202,45 +201,32 @@ export function ImportKoboData() {
                             <button
                                 className="btn btn-primary px-4"
                                 onClick={handleImport}
-                                disabled={anyRunning}
+                                disabled={importing}
                             >
                                 {importing
                                     ? <><span className="spinner-border spinner-border-sm me-2" />En cours...</>
-                                    : <><i className="bi bi-cloud-download me-2" />Tout importer</>
+                                    : <><i className="bi bi-cloud-download me-2" />Importer</>
                                 }
                             </button>
                         </div>
 
-                        {/* Étapes, chacune avec son propre bouton de lancement individuel */}
+                        {/* Étapes */}
                         <div className="row g-2">
                             {STEPS.map(step => (
                                 <div key={step.key} className="col-6">
-                                    <div className={`d-flex align-items-center justify-content-between gap-2 rounded p-2
+                                    <div className={`d-flex align-items-center gap-2 rounded p-2
                                         ${stepStatuses[step.key] === 'done'    ? 'bg-success-subtle' : ''}
                                         ${stepStatuses[step.key] === 'error'   ? 'bg-danger-subtle'  : ''}
                                         ${stepStatuses[step.key] === 'running' ? 'bg-primary-subtle' : ''}
                                         ${stepStatuses[step.key] === 'idle'    ? 'bg-light'          : ''}
                                     `}>
-                                        <div className="d-flex align-items-center gap-2">
-                                            {stepIcon(stepStatuses[step.key])}
-                                            <div>
-                                                <div className="small fw-semibold lh-1">{step.label}</div>
-                                                <div className="text-muted" style={{ fontSize: '0.7rem' }}>
-                                                    {stepLabel(stepStatuses[step.key])}
-                                                </div>
+                                        {stepIcon(stepStatuses[step.key])}
+                                        <div>
+                                            <div className="small fw-semibold lh-1">{step.label}</div>
+                                            <div className="text-muted" style={{ fontSize: '0.7rem' }}>
+                                                {stepLabel(stepStatuses[step.key])}
                                             </div>
                                         </div>
-                                        <button
-                                            className="btn btn-sm btn-outline-secondary"
-                                            title={`Importer seulement "${step.label}"`}
-                                            onClick={() => handleImportOne(step.key, step.label)}
-                                            disabled={anyRunning}
-                                        >
-                                            {runningStep === step.key
-                                                ? <span className="spinner-border spinner-border-sm" />
-                                                : <i className="bi bi-play-fill" />
-                                            }
-                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -253,7 +239,7 @@ export function ImportKoboData() {
                             </div>
                         )}
 
-                        {anyRunning && (
+                        {importing && (
                             <p className="text-muted small fst-italic mt-2 mb-0">
                                 <i className="bi bi-info-circle me-1" />
                                 Cette opération peut prendre plusieurs minutes, veuillez patienter.

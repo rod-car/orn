@@ -38,6 +38,13 @@ const actionLabels: Record<string, { label: string; color: string }> = {
 }
 
 export function ActivityLogList(): ReactNode {
+
+    const handleExportLog = async () => {
+        const response = await Client.post(queryParams, '/export');
+        if (response.ok && (response.data as { url?: string })?.url) {
+            window.open((response.data as { url: string }).url, '_blank');
+        }
+    };
     const [searchParams, setSearchParams] = useSearchParams()
 
     const { Client, datas: logs, RequestState } = useApi<PaginatedLogs>({
@@ -75,14 +82,21 @@ export function ActivityLogList(): ReactNode {
     }, [])
 
     return <>
-        <PageTitle title="Journal d'activité" />
-
+       <PageTitle title="Journal d'activité">
+            <button onClick={handleExportLog} className="btn btn-outline-primary btn-sm">
+                <i className="bi bi-download me-2"></i>
+                Exporter le journal
+            </button>
+        </PageTitle>
+        
         <Block className="mb-4">
             <div className="row gy-3">
                 <div className="col-12 col-md-3">
                     <Select
                         label="Type d'action"
-                        defaultOption="Toutes les actions"
+                        placeholder="Toutes les actions"
+                        value={queryParams.action}
+                        controlled
                         options={(availableActions ?? []).map((a) => ({ id: a, label: actionLabels[a]?.label ?? a }))}
                         onChange={(e) => updateQueryParam(e.target.value, 'action')}
                     />
