@@ -94,6 +94,34 @@ export function ImportKoboData() {
         }
     };
 
+    const handleImportOne = async (key: string) => {
+        setImporting(true);
+        setErrorMsg(null);
+        setStep(key, 'running');
+
+        try {
+            const response = await Client.post({ service: key }, '/import');
+
+            if (response.ok) {
+                setStep(key, 'done');
+                toast('Importation réussie', { type: 'success', position: config.toastPosition });
+                await loadHistory(1);
+            } else {
+                const msg = (response.data as { message?: string })?.message ?? 'Erreur inconnue';
+                setErrorMsg(msg);
+                setStep(key, 'error');
+                toast("Échec de l'importation", { type: 'error', position: config.toastPosition });
+            }
+        } catch (e: unknown) {
+            const msg = e instanceof Error ? e.message : 'Erreur réseau';
+            setErrorMsg(msg);
+            setStep(key, 'error');
+            toast('Erreur réseau', { type: 'error', position: config.toastPosition });
+        } finally {
+            setImporting(false);
+        }
+    };
+
     const handleExportKobo = async () => {
         const response = await KoboExportClient.post({}, '/export-kobo');
         if (response.ok && (response.data as { url?: string })?.url) {
@@ -213,13 +241,14 @@ export function ImportKoboData() {
                         {/* Étapes */}
                         <div className="row g-2">
                             {STEPS.map(step => (
-                                <div key={step.key} className="col-6">
-                                    <div className={`d-flex align-items-center gap-2 rounded p-2
-                                        ${stepStatuses[step.key] === 'done'    ? 'bg-success-subtle' : ''}
-                                        ${stepStatuses[step.key] === 'error'   ? 'bg-danger-subtle'  : ''}
-                                        ${stepStatuses[step.key] === 'running' ? 'bg-primary-subtle' : ''}
-                                        ${stepStatuses[step.key] === 'idle'    ? 'bg-light'          : ''}
-                                    `}>
+                            <div key={step.key} className="col-6">
+                                <div className={`d-flex align-items-center justify-content-between gap-2 rounded p-2
+                                    ${stepStatuses[step.key] === 'done'    ? 'bg-success-subtle' : ''}
+                                    ${stepStatuses[step.key] === 'error'   ? 'bg-danger-subtle'  : ''}
+                                    ${stepStatuses[step.key] === 'running' ? 'bg-primary-subtle' : ''}
+                                    ${stepStatuses[step.key] === 'idle'    ? 'bg-light'          : ''}
+                                `}>
+                                    <div className="d-flex align-items-center gap-2">
                                         {stepIcon(stepStatuses[step.key])}
                                         <div>
                                             <div className="small fw-semibold lh-1">{step.label}</div>
@@ -228,8 +257,17 @@ export function ImportKoboData() {
                                             </div>
                                         </div>
                                     </div>
+                                    <button
+                                        className="btn btn-sm btn-outline-primary"
+                                        onClick={() => handleImportOne(step.key)}
+                                        disabled={importing}
+                                        title={`Importer seulement : ${step.label}`}
+                                    >
+                                        <i className="bi bi-play-fill"></i>
+                                    </button>
                                 </div>
-                            ))}
+                            </div>
+                        ))}
                         </div>
 
                         {errorMsg && (
